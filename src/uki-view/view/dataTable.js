@@ -25,6 +25,10 @@ var DataTable = view.newClass('DataTable', Container, {
         return this;
     },
 
+    header: function() {
+      return this._header;
+    },
+
     columnWidths: function(v) {
         if (!arguments.length) {
             return utils.pluck(this.columns(), 'width');
@@ -44,6 +48,8 @@ var DataTable = view.newClass('DataTable', Container, {
         this._dom = dom.createElement('div', {className: 'uki-dataTable'});
 
         var c = build([
+
+
             { view: initArgs.headerView || DataTableHeader, as: 'header',
               addClass: 'uki-dataTable-header-container',
               on: { resizeColumn: fun.bind(this._resizeColumn, this) } },
@@ -61,6 +67,7 @@ var DataTable = view.newClass('DataTable', Container, {
         this._header = c.view('header');
         this._header.on('render', fun.bindOnce(this._updateHeaderHeight, this));
         this._container = c.view('container');
+        this._container.dom().tabIndex = -1; // Remove tab focusablity
         this._list = c.view('list');
     },
 
@@ -103,13 +110,36 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
 
     _createDom: function(initArgs) {
         Base.prototype._createDom.call(this, initArgs);
+        this._draggableColumn = -1;
         this.on('draggesturestart', this._dragStart);
         this.on('draggesture', this._drag);
-        this.on('draggestureend', this._drag);
+        this.on('draggestureend', this._dragEnd);
+        this.on('click', this._click);
     },
 
     scrollTo: function(offset) {
         this._dom.firstChild.style.marginLeft = -offset + 'px';
+    },
+
+    _click: function(e) {
+      // We do NOT want to run the standard table click handler on a header click
+      e.stopPropagation();
+
+      if (this._draggableColumn != -1) return;
+
+      if (e.target.nextSibling && dom.hasClass(e.target.nextSibling, "uki-dataTable-resizer")) {
+        var index = e.target.nextSibling.className.match(/uki-dataTable-resizer_pos-(\d+)/)[1];
+        this.trigger({
+          type: "columnClick",
+          column: this.columns()[index],
+          columnIndex: index
+        });
+      }
+    },
+
+    _dragEnd: function(e) {
+      this._drag(e);
+      this._draggableColumn = -1;
     },
 
     _dragStart: function(e) {
@@ -145,7 +175,7 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
         }
         column.width = width;
         var tr = this.dom().firstChild.firstChild.firstChild,
-            td = tr.childNodes[column.visiblePos];
+            td = tr.childNodes[column.pos];
         td.style.width = width + 'px';
 
         this.dom().firstChild.style.width =
@@ -156,7 +186,7 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
         return {
             pos: col.pos,
             label: col.label,
-            style: 'width:' + col.width + 'px',
+            style: (col.visible) ? "width:" + col.width + "px" : 'display: none',
             className: col.className +
                 (col.width != col.maxWidth || col.width != col.minWidth ?
                     ' uki-dataTable-header-cell_resizable' : '')

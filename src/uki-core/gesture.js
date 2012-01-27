@@ -19,13 +19,13 @@ var addDraggestures = {
             el[mark]++;
         } else {
             el[mark] = 1;
-            evt.on(el, 'mousedown', dragGestureStart);
+            evt.on(el, 'mousedown touchstart', dragGestureStart);
         }
     },
     teardown: function(el) {
         el[mark]--;
         if (!el[mark]) {
-            evt.removeListener(el, 'mousedown', dragGestureStart);
+            evt.removeListener(el, 'mousedown touchstart', dragGestureStart);
         }
     }
 };
@@ -44,18 +44,18 @@ function startGesture (el, e) {
         gesture.cursor = env.doc.body.style.cursor;
         env.doc.body.style.cursor = e.cursor;
     }
-    evt.on(env.doc, 'mousemove scroll', dragGesture);
-    evt.on(env.doc, 'mouseup dragend', dragGestureEnd);
-    evt.on(env.doc, 'selectstart mousedown', evt.preventDefaultHandler);
+    evt.on(env.doc, 'mousemove scroll touchmove', dragGesture);
+    evt.on(env.doc, 'mouseup dragend touchend', dragGestureEnd);
+    evt.on(env.doc, 'selectstart mousedown touchstart', evt.preventDefaultHandler);
 }
 
 function stopGesture () {
     gesture.draggable = null;
     env.doc.body.style.cursor = gesture.cursor;
     gesture.cursor = null;
-    evt.removeListener(env.doc, 'mousemove scroll', dragGesture);
-    evt.removeListener(env.doc, 'mouseup dragend', dragGestureEnd);
-    evt.removeListener(env.doc, 'selectstart mousedown', evt.preventDefaultHandler);
+    evt.removeListener(env.doc, 'mousemove scroll touchmove', dragGesture);
+    evt.removeListener(env.doc, 'mouseup dragend touchend', dragGestureEnd);
+    evt.removeListener(env.doc, 'selectstart mousedown touchstart', evt.preventDefaultHandler);
 }
 
 function addOffset(e) {

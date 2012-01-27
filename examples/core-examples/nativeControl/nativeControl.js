@@ -2,10 +2,11 @@
 @example_title Native Controls
 @example_order 30
 @example_html
+ <script src="/src/pkg/uki.js"></script>
     <script src="nativeControl.js"></script>
 */
 
-var uki = require('uki');
+//var uki = require('uki');
 
 uki(
     { view: 'Flow', horizontal: true, spacing: 'large', pos: 'l:10px t:10px',

@@ -23,6 +23,7 @@ app.get('/examples/', function(req, res) {
     var exampleList = listExamples(examplesPath).map(function(name) {
         var filePath = path.join(examplesPath, name),
             code = getExampleCode(filePath);
+            name = name.replace("\\","/");
 
         return {
             path: name + '/',
@@ -73,7 +74,7 @@ app.get('/examples/*.js', function(req, res) {
 app.get('/*.js', sr.getHandler({
     searchPaths: [
       fs.realpathSync(path.join(__dirname, 'src'))
-    ].concat(require.paths)
+    ]
 }));
 
 app.get('/*', function(req, res) {
