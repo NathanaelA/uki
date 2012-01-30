@@ -81,76 +81,108 @@ fun.delegateProp(Checkbox.prototype, 'html', '_label', 'innerHTML');
 
 
 /**
-* Text input
-* build({ view: 'nativeControl.Text', value: 'John Smith', placeholder: 'Name?' })
-*/
+ * Text input
+ * build({ view: 'nativeControl.Text', value: 'John Smith', placeholder: 'Name?' })
+ */
 var Text = view.newClass('nativeControl.Text', NativeControl, {
 
+  _createDom: function(initArgs) {
+    this._input = dom.createElement('input',
+        { className: 'uki-nc-text__input', type: 'text' });
+    this._dom = dom.createElement(initArgs.tagName || 'span',
+        { className: 'uki-nc-text' });
+    this.dom().appendChild(this._input);
+  },
+
+  placeholder: fun.newProp('placeholder', function(v) {
+    this._placeholder = v;
+    if (this._input.placeholder !== undefined) {
+      this._input.placeholder = v;
+    } else {
+      this._initPlaceholder();
+      this._placeholderDom.innerHTML = dom.escapeHTML(v);
+    }
+  }),
+
+  _layout: function() {
+    this._updatePlaceholderHeight();
+    // manual resize box-sizing: border-box for ie 7
+    if (ieResize) {
+      this._input.style.width = this.dom().offsetWidth - 6;
+    }
+  },
+
+  _initPlaceholder: function() {
+    if (this._initedPlaceholder) return;
+
+    this._initedPlaceholder = true;
+    this.addClass('uki-nc-text_with-placeholder');
+    this._placeholderDom = dom.createElement('span',
+        { className: 'uki-nc-text__placholder' });
+    this.dom().insertBefore(this._placeholderDom, this.dom().firstChild);
+    evt.on(this._placeholderDom, 'click', fun.bindOnce(function() {
+      this.focus();
+    }, this));
+    this.on('focus blur change keyup', this._updatePlaceholderVis);
+    if (this._input.offsetHeight) {
+      this._updatePlaceholderHeight();
+    }
+  },
+
+  _updatePlaceholderVis: function() {
+    this._placeholderDom.style.display =
+        (this.hasFocus() || this.value()) ? 'none' : '';
+  },
+
+  _updatePlaceholderHeight: function() {
+    if (!this._placeholderDom) return;
+    var targetStyle = this._placeholderDom.style,
+        sourceStyle = dom.computedStyle(this._input);
+
+    utils.forEach(['font', 'fontFamily', 'fontSize',
+      'paddingLeft', 'paddingTop', 'padding'], function(name) {
+      if (sourceStyle[name] !== undefined) {
+        targetStyle[name] = sourceStyle[name];
+      }
+    });
+    targetStyle.lineHeight = this._input.offsetHeight +
+        (parseInt(sourceStyle.marginTop, 10) || 0)*2 + 'px';
+    targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft, 10) || 0) +
+        (parseInt(sourceStyle.borderLeftWidth, 10) || 0) + 'px';
+    textProto._updatePlaceholderHeight = fun.FS;
+  }
+});
+
+
+/**
+* Text input
+* build({ view: 'nativeControl.TextArea', value: 'John Smith', rows: 6 })
+*/
+var TextArea = view.newClass('nativeControl.TextArea', NativeControl, {
+
     _createDom: function(initArgs) {
-        this._input = dom.createElement('input',
-            { className: 'uki-nc-text__input', type: 'text' });
+        this._input = dom.createElement('textarea',
+            { className: 'uki-nc-textarea__input', type: 'text' });
         this._dom = dom.createElement(initArgs.tagName || 'span',
-            { className: 'uki-nc-text' });
+            { className: 'uki-nc-textarea' });
         this.dom().appendChild(this._input);
     },
 
-    placeholder: fun.newProp('placeholder', function(v) {
-        this._placeholder = v;
-        if (this._input.placeholder !== undefined) {
-            this._input.placeholder = v;
-        } else {
-            this._initPlaceholder();
-            this._placeholderDom.innerHTML = dom.escapeHTML(v);
-        }
+    rows: fun.newProp('rows', function(v) {
+      this._input.rows = v;
     }),
 
+    cols: fun.newProp('cols', function(v) {
+      this._input.cols = v;
+    }),
+
+
     _layout: function() {
-        this._updatePlaceholderHeight();
-        // manual resize box-sizing: border-box for ie 7
         if (ieResize) {
             this._input.style.width = this.dom().offsetWidth - 6;
         }
-    },
-
-    _initPlaceholder: function() {
-        if (this._initedPlaceholder) return;
-
-        this._initedPlaceholder = true;
-        this.addClass('uki-nc-text_with-placeholder');
-        this._placeholderDom = dom.createElement('span',
-            { className: 'uki-nc-text__placholder' });
-        this.dom().insertBefore(this._placeholderDom, this.dom().firstChild);
-        evt.on(this._placeholderDom, 'click', fun.bindOnce(function() {
-            this.focus();
-        }, this));
-        this.on('focus blur change keyup', this._updatePlaceholderVis);
-        if (this._input.offsetHeight) {
-            this._updatePlaceholderHeight();
-        }
-    },
-
-    _updatePlaceholderVis: function() {
-        this._placeholderDom.style.display =
-            (this.hasFocus() || this.value()) ? 'none' : '';
-    },
-
-    _updatePlaceholderHeight: function() {
-        if (!this._placeholderDom) return;
-        var targetStyle = this._placeholderDom.style,
-            sourceStyle = dom.computedStyle(this._input);
-
-        utils.forEach(['font', 'fontFamily', 'fontSize',
-            'paddingLeft', 'paddingTop', 'padding'], function(name) {
-            if (sourceStyle[name] !== undefined) {
-                targetStyle[name] = sourceStyle[name];
-            }
-        });
-        targetStyle.lineHeight = this._input.offsetHeight +
-            (parseInt(sourceStyle.marginTop, 10) || 0)*2 + 'px';
-        targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft, 10) || 0) +
-            (parseInt(sourceStyle.borderLeftWidth, 10) || 0) + 'px';
-        textProto._updatePlaceholderHeight = fun.FS;
     }
+
 });
 
 
@@ -232,5 +264,6 @@ exports.nativeControl = {
     Checkbox:      Checkbox,
     Text:          Text,
     Button:        Button,
-    Select:        Select
+    Select:        Select,
+    TextArea:      TextArea
 };

@@ -42,7 +42,12 @@ uki(
                 ]},
                 { text: 'Custom', value: '' }
             ], value: '1264522' }
+        ]},
+        { view: 'Flow', childViews: [
+          { view: 'Label', text: 'Text Area' },
+          { view: 'nativeControl.TextArea', value: 'TextArea', rows: 3 },
         ]}
+
 
     ]}
 ).attach();

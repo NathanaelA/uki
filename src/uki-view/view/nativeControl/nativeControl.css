@@ -3,13 +3,13 @@
 }
 
 
-.uki-nc-text {
+.uki-nc-text, .uki-nc-textarea {
     display: inline-block;
     *display: inline;
     *zoom: 1;
 }
 
-.uki-nc-text__input {
+.uki-nc-text__input, .uki-nc-textarea__input {
     margin: 0;
     width: 100%;
     *width: auto;
