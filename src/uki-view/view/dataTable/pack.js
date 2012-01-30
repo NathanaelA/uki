@@ -62,6 +62,7 @@ var Pack = fun.newClass(Base, {
 
     _formatColumns: function(row, pos, first) {
         var cols = [];
+        if (this.parent() == null) return;
         this.parent().columns().forEach(function(col, i) {
             if (!col.visible) { return; }
             var val = col.key ? utils.prop(row, col.key) : row[i];
