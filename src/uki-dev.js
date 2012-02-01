@@ -2241,6 +2241,8 @@
                 this._input.rows = v;
             }),
             cols: fun.newProp("cols", function(v) {
+                this._input.style.width = "auto";
+                this._dom.style.width = "auto";
                 this._input.cols = v;
             }),
             _layout: function() {
