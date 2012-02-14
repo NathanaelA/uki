@@ -12,6 +12,7 @@ var fun   = require('../../uki-core/function'),
     Base      = require('../../uki-core/view/base').Base,
     Container = require('../../uki-core/view/container').Container,
     Focusable = require('./focusable').Focusable;
+    evt       = require('../../uki-core/event');
 
 
 var DataTable = view.newClass('DataTable', Container, {
@@ -19,7 +20,7 @@ var DataTable = view.newClass('DataTable', Container, {
         if (!arguments.length) {
             return this._list.columns();
         }
-        cols = table.addColumnDefatuls(cols);
+        cols = table.addColumnDefaults(cols);
         this._list.columns(cols);
         this._header.columns(cols);
         return this;
@@ -48,7 +49,6 @@ var DataTable = view.newClass('DataTable', Container, {
         this._dom = dom.createElement('div', {className: 'uki-dataTable'});
 
         var c = build([
-
 
             { view: initArgs.headerView || DataTableHeader, as: 'header',
               addClass: 'uki-dataTable-header-container',
@@ -100,13 +100,18 @@ fun.delegateCall(DataTable.prototype, [
     'scrollToIndex', 'triggerSelection', 'redrawRow'
 ], 'list');
 
-
+fun.delegateProp(DataTable.prototype, ['hasfilter'], 'header');
 
 
 
 var DataTableHeader = view.newClass('DataTableHeader', Base, {
     template: fun.newProp('template'),
     _template: requireText('dataTable/header.html'),
+    hasfilter: fun.newProp('hasfilter'),
+    _hasfilter: false,
+    filtertimeout: fun.newProp('filtertimeout'),
+    _filtertimeout: 1500,
+    _intervalId: null,
 
     _createDom: function(initArgs) {
         Base.prototype._createDom.call(this, initArgs);
@@ -137,12 +142,65 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
       }
     },
 
+    _filter: function(e) {
+      var self = e.target.self;
+      var eles = self._dom.getElementsByClassName("uki-dataTable-filter");
+      var values = {};
+      for(var i=0;i<eles.length;i++) {
+        values[eles[i].name.substring(6)] = eles[i].value;
+      }
+      self.trigger({
+        type: "columnFilter",
+        fields: values
+      });
+    },
+
+    _filterpresstimeout: function(e)
+    {
+      this._clearfilterInterval();
+      var hasFocus = false;
+      if (document.activeElement && document.activeElement == e.target) hasFocus = true;
+      e.target.blur();
+      if (hasFocus) e.target.focus();
+    },
+
+    _clearfilterInterval: function()
+    {
+      if (this._intervalId) {
+        clearInterval(this._intervalId);
+        this._intervalId = null;
+      }
+    },
+
+    _filterpress: function(e) {
+      var self = e.target.self;
+      if (e.keyCode == 13) {
+         self._clearfilterInterval();
+         self._filterpresstimeout(e);
+         e.preventDefault();
+         e.cancelBubble = true;
+      }
+      else if (e.keyCode == 9) {
+        self._clearfilterInterval();
+      }
+      if (e.charCode == 0) return;
+
+      self._clearfilterInterval();
+      self._intervalId = setInterval(
+           (function(self, target) { return function() {
+                self._clearfilterInterval();
+                self._filterpresstimeout(target); } } )(self, e),
+           self._filtertimeout);
+    },
+
     _dragEnd: function(e) {
       this._drag(e);
       this._draggableColumn = -1;
     },
 
     _dragStart: function(e) {
+        if ((e.target.tagName && e.target.tagName == "INPUT")) { e.target.focus(); }
+
         if (dom.hasClass(e.target, 'uki-dataTable-resizer')) {
             e.draggbale = e.target;
             e.cursor = dom.computedStyle(e.target, null).cursor;
@@ -151,11 +209,12 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
             this._draggableColumn = index;
             this._initialWidth = this.columns()[index].width;
         } else {
-            e.preventDefault();
+           e.preventDefault();
         }
     },
 
     _drag: function(e) {
+        if (this._draggableColumn == -1) return;
         var width = this._initialWidth + e.dragOffset.x;
 
         this._resizeColumn(this._draggableColumn, width);
@@ -187,6 +246,8 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
             pos: col.pos,
             label: col.label,
             style: (col.visible) ? "width:" + col.width + "px" : 'display: none',
+            filter: 'filter'+col.label,
+            filterstyle: this._hasfilter ? '' : 'display:none',
             className: col.className +
                 (col.width != col.maxWidth || col.width != col.minWidth ?
                     ' uki-dataTable-header-cell_resizable' : '')
@@ -194,6 +255,7 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
     },
 
     columns: fun.newProp('columns', function(cols) {
+        this._clearfilterInterval();
         this._columns = cols;
         fun.deferOnce(fun.bindOnce(this._render, this));
     }),
@@ -205,8 +267,23 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
                 columns: this.columns().map(this._formatColumn, this),
                 style: 'width:' + table.totalWidth(this.columns()) + 'px'
             });
+        if (this._hasfilter) {
+          this._setupFilters();
+        }
         this.trigger({ type: 'render' });
+    },
+
+    _setupFilters: function()
+    {
+      var eles = this._dom.getElementsByClassName("uki-dataTable-filter");
+      for(var i=0;i<eles.length;i++) {
+        eles[i].self = this;
+        evt.addListener(eles[i],"change", this._filter);
+        //evt.addListener(eles[i],"blur", this._filter);
+        evt.addListener(eles[i],"keypress", this._filterpress);
+      }
     }
+
 });
 
 
@@ -260,7 +337,7 @@ var table = {
         }, 0);
     },
 
-    addColumnDefatuls: function(columns) {
+    addColumnDefaults: function(columns) {
         var visiblePos = 0;
         return columns.map(function(col, pos) {
             col = utils.extend({

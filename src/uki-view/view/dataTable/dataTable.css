@@ -123,3 +123,9 @@
     padding-left: 0;
     padding-right: 0;
 }
+
+.uki-dataTable-filter {
+  margin-left: -2px;
+  padding: 1px;
+  width: 100%;
+}
