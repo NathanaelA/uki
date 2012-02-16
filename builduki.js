@@ -4,7 +4,7 @@ var express = require('express'),
     fs   = require('fs');
 
 var HOST = '0.0.0.0',
-    PORT = 8000;
+    PORT = 8001;
 
 var examplesPath = path.join(__dirname, 'examples');
 

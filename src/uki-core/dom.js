@@ -47,12 +47,18 @@ module.exports = {
 
     createStylesheet: function(code) {
         var style = env.doc.createElement('style');
-        env.doc.getElementsByTagName('head')[0].appendChild(style);
+        var ss = env.doc.getElementsByTagName('head')[0];
         if (style.styleSheet) { //IE
             style.styleSheet.cssText = code;
         } else {
             style.appendChild(env.doc.createTextNode(code));
         }
+      if (ss.firstChild) {
+        ss.insertBefore(style, ss.firstChild);
+      }
+      else {
+        ss.appendChild(style);
+      }
         return style;
     },
 
