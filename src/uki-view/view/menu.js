@@ -22,6 +22,21 @@ var Menu = view.newClass('Menu', Base, {
       while (target.parentNode && target.tagName != "A") {
         target = target.parentNode;
       }
+
+      // Find the Parent "UL" to make it hide
+      var parentUl = target;
+      while (parentUl.parentNode && parentUl.tagName != "UL") {
+        parentUl = parentUl.parentNode;
+      }
+
+      // As long as this isn't the "main" menu, we will do this code
+      if (!dom.hasClass(parentUl, "uki-menu-horizontal")) {
+        parentUl.style.display="none";
+        // We have to give the ui enough time to make the menu disappear, before we allow the normal css to handle open/closing again
+        setTimeout(function() {parentUl.style.display="";}, 200);
+      }
+
+      // Publish event
       var name = target.name;
       if (target.href == "javascript:void(0)") {
         this.trigger({

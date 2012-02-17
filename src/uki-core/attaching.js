@@ -25,15 +25,22 @@ var Attaching = fun.newClass(Container, {
 
 var instances = null;
 
-Attaching.attach = function(dom, view) {
+Attaching.attach = function(dom, view, isRelative) {
     dom = dom || env.doc.body;
     var id = dom[env.expando] = dom[env.expando] || env.guid++;
     if (!instances || !instances[id]) {
         register(new Attaching({ dom: dom }));
     }
+    if (isRelative) dom.addClass("uki-attaching-relative");
     instances[id].appendChild(view);
     view.layout();
 };
+
+Attaching.attachRelative = function(dom, view) {
+  dom.addClass(view, "uki-attaching-relative");
+  this.attach(dom, view);
+};
+
 
 Attaching.instances = function() {
     var atts = [];

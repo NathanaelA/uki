@@ -9,7 +9,7 @@
 //var uki = require('uki');
 
 uki(
-    { view: 'Menu', on: { menuClick: function(event) { console.log(event); alert("You clicked on the "+event.name+" menu item"); }}, options: [
+    { view: 'Menu', on: { menuClick: function(event) { alert("You clicked on the "+event.name+" menu item"); }}, options: [
           { html: '<img border=0 src="../button/settings.png">', options: [ 'Hi', 'Hello'] },
                 { text: 'Menu 2', options: [
                   { html: '<font color=red>Red</font>', name: 'red'},
