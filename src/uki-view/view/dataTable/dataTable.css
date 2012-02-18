@@ -8,6 +8,14 @@
     width: 100%;
 }
 
+.uki-dataTable-sort-down {
+  background: url(down.gif) no-repeat 98% center;
+}
+
+.uki-dataTable-sort-up {
+  background: url(up.gif) no-repeat 98% center;
+}
+
 .uki-dataTable-header,
 .uki-dataTable-pack {
     border-spacing: 0;
@@ -86,6 +94,7 @@
     margin: 0;
     border-right: 1px solid #CCC;
     padding: 0 4px 0 5px;
+    vertical-align: top;
 }
 
 .uki-dataTable-header-wrap {
@@ -100,6 +109,7 @@
     height: 14px;
     font-size: 11px;
     line-height: 14px;
+
 }
 
 .uki-dataTable-resizer {

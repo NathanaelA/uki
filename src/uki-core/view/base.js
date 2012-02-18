@@ -17,7 +17,8 @@ var POS_RULES = [
         l: 'left', b: 'bottom',
         w: 'width', h: 'height',
         ml: 'marginLeft', mr: 'marginRight',
-        mt: 'marginTop', mb: 'marginBottom'
+        mt: 'marginTop', mb: 'marginBottom',
+        p: 'position'
     };
 
 function styleToString(style) {
@@ -343,7 +344,7 @@ var Base = view.newClass('Base', {
         utils.forEach(POS_MAP, function(longRule, shortRule) {
             if (pos[shortRule]) pos[longRule] = pos[shortRule];
         });
-        pos.position = 'absolute';
+        if (!pos.position) pos.position = 'absolute';
         return pos;
     },
 

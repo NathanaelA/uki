@@ -52,7 +52,8 @@ var DataTable = view.newClass('DataTable', Container, {
 
             { view: initArgs.headerView || DataTableHeader, as: 'header',
               addClass: 'uki-dataTable-header-container',
-              on: { resizeColumn: fun.bind(this._resizeColumn, this) } },
+              on: { resizeColumn: fun.bind(this._resizeColumn, this) ,
+                    scroll: fun.bind(this._scrollChild, this) } },
 
             { view: Container, pos: 't:0 l:0 r:0 b:0',
               addClass: 'uki-dataTable-container', as: 'container',
@@ -82,7 +83,20 @@ var DataTable = view.newClass('DataTable', Container, {
     },
 
     _scrollHeader: function(e) {
-        this._header.scrollTo(this._container.scrollLeft());
+      var lastHeader = this._header.scrollLeft();
+      var newHeader = this._container.scrollLeft();
+      if (lastHeader != newHeader) {
+        this._header.scrollLeft(newHeader);
+      }
+    },
+
+    _scrollChild: function(e) {
+      var lastHeader = this._container.scrollLeft();
+      var newHeader = this._header.scrollLeft();
+      if (lastHeader != newHeader) {
+        this._container.scrollLeft(newHeader);
+      }
+
     },
 
     _resizeColumn: function(e) {
@@ -100,17 +114,19 @@ fun.delegateCall(DataTable.prototype, [
     'scrollToIndex', 'triggerSelection', 'redrawRow'
 ], 'list');
 
-fun.delegateProp(DataTable.prototype, ['hasfilter'], 'header');
+fun.delegateProp(DataTable.prototype, ['hasFilter', 'filterTimeout', 'sortable'], 'header');
 
 
 
 var DataTableHeader = view.newClass('DataTableHeader', Base, {
     template: fun.newProp('template'),
     _template: requireText('dataTable/header.html'),
-    hasfilter: fun.newProp('hasfilter'),
-    _hasfilter: false,
-    filtertimeout: fun.newProp('filtertimeout'),
-    _filtertimeout: 1500,
+    hasFilter: fun.newProp('hasFilter'),
+    _hasFilter: false,
+    filterTimeout: fun.newProp('filterTimeout'),
+    _filterTimeout: 1500,
+    sortable: fun.newProp('sortable'),
+    _sortable: false,
     _intervalId: null,
 
     _createDom: function(initArgs) {
@@ -127,16 +143,53 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
     },
 
     _click: function(e) {
-      // We do NOT want to run the standard table click handler on a header click
-      e.stopPropagation();
-
       if (this._draggableColumn != -1) return;
+      e.isDefaultPrevented = fun.FF;
 
-      if (e.target.nextSibling && dom.hasClass(e.target.nextSibling, "uki-dataTable-resizer")) {
-        var index = e.target.nextSibling.className.match(/uki-dataTable-resizer_pos-(\d+)/)[1];
+      if (e.target.nextSibling && e.target.nextSibling.nextSibling && dom.hasClass(e.target.nextSibling.nextSibling, "uki-dataTable-resizer")) {
+        var index = e.target.nextSibling.nextSibling.className.match(/uki-dataTable-resizer_pos-(\d+)/)[1];
+        var col = this.columns();
+        var eles = this._dom.getElementsByClassName("uki-dataTable-header-text");
+
+        if ( this._sortable && col[index].sortable !== false) {
+          // Handle Sorting
+          if ( !e.shiftKey ) {
+            for ( var i = 0; i < col.length; i++ ) {
+              if ( i == index ) {
+                continue;
+              }
+              if ( col[i].sort != 0 && col[i].sortable !== false) {
+                dom.removeClass( eles[i], "uki-dataTable-sort-down uki-dataTable-sort-up" );
+                col[i].sort = 0;
+              }
+            }
+          }
+
+          // Clear old Sort index on this field
+          if ( col[index].sort != 0 ) {
+            dom.removeClass( eles[index], "uki-dataTable-sort-down uki-dataTable-sort-up" );
+          }
+          col[index].sort++;
+          if ( col[index].sort == 1 ) {
+            dom.addClass( eles[index], "uki-dataTable-sort-down" );
+          } else if ( col[index].sort == 2 ) {
+            dom.addClass( eles[index], "uki-dataTable-sort-up" );
+          } else {
+            col[index].sort = 0;
+          }
+
+          var sortfields = {};
+          for ( i = 0; i < col.length; i++ ) {
+            if ( col[i].sort > 0 ) {
+              sortfields[col[i].label] = col[i].sort;
+            }
+          }
+        }
+
         this.trigger({
           type: "columnClick",
           column: this.columns()[index],
+          sort: sortfields,
           columnIndex: index
         });
       }
@@ -183,14 +236,14 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
       else if (e.keyCode == 9) {
         self._clearfilterInterval();
       }
-      if (e.charCode == 0) return;
+      if (e.charCode == 0 && e.keyCode != 8) return;
 
       self._clearfilterInterval();
       self._intervalId = setInterval(
            (function(self, target) { return function() {
                 self._clearfilterInterval();
                 self._filterpresstimeout(target); } } )(self, e),
-           self._filtertimeout);
+           self._filterTimeout);
     },
 
     _dragEnd: function(e) {
@@ -199,7 +252,10 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
     },
 
     _dragStart: function(e) {
-        if ((e.target.tagName && e.target.tagName == "INPUT")) { e.target.focus(); }
+        if ((e.target.tagName && e.target.tagName == "INPUT")) {
+          e.isDefaultPrevented = fun.FT;
+          return;
+        }
 
         if (dom.hasClass(e.target, 'uki-dataTable-resizer')) {
             e.draggbale = e.target;
@@ -242,15 +298,18 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
     },
 
     _formatColumn: function(col) {
+        var filterable = this._hasFilter;
+        if (filterable && col.filterable === false) filterable = false;
         return {
             pos: col.pos,
             label: col.label,
             style: (col.visible) ? "width:" + col.width + "px" : 'display: none',
             filter: 'filter'+col.label,
-            filterstyle: this._hasfilter ? '' : 'display:none',
+            filterstyle: filterable ? '' : 'display:none',
             className: col.className +
                 (col.width != col.maxWidth || col.width != col.minWidth ?
-                    ' uki-dataTable-header-cell_resizable' : '')
+                    ' uki-dataTable-header-cell_resizable' : ''),
+            sortClass: (col.sort === 1 ? ' uki-dataTable-sort-down' : (col.sort === 2 ? ' uki-dataTable-sort-up' : ''))
         };
     },
 
@@ -267,7 +326,7 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
                 columns: this.columns().map(this._formatColumn, this),
                 style: 'width:' + table.totalWidth(this.columns()) + 'px'
             });
-        if (this._hasfilter) {
+        if (this._hasFilter) {
           this._setupFilters();
         }
         this.trigger({ type: 'render' });
@@ -307,12 +366,15 @@ var DataTableList = view.newClass('DataTableList', DataList, {
      *                              not
      *   label: 'My Label',      // optional='', used by header
      *   formatter: function(){} // optional, formats value before rendering
+     *   sort: 0                 // optional, sort (1 = Asc, 2 = Desc, 0 = none)
+     *   sortable: true          // optional, sets sortable on column if sorting is enabled
+     *   filterable: true        // optional, sets filterable on column is filtering is enabled
      *                           // (ex: numberFormatter, dateFormatter)
      * }
      */
     columns: fun.newProp('columns'),
     _columns: [],
-    
+
     _template: requireText('dataTable/pack.html'),
 
     _createDom: function(initArgs) {
@@ -347,6 +409,7 @@ var table = {
                 name: '',
                 className: '',
                 visible: true,
+                sort: 0,
                 formatter: dom.escapeHTML
             }, col);
             col.minWidth = Math.min(col.minWidth || 20, col.width);
