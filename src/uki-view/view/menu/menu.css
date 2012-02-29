@@ -52,7 +52,7 @@
 
 .uki-menu-horizontal ul {  display:none; }
 
-.uki-menu-horizontal :hover > ul {display: block;}
+.uki-menu-horizontal :hover > ul { display: block; }
 
 .uki-menu-horizontal ul ul {
   position:absolute; top:0px; left:10em;
@@ -63,3 +63,6 @@
   background: url(horiz_arrow.gif) no-repeat 98% center;
 }
 
+.uki-menu-vertical .uki-menu-submenu {
+  background: url(vert_arrow.gif) no-repeat 98% center;
+}

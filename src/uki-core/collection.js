@@ -96,9 +96,9 @@ var Collection = fun.newClass({
         return this;
     },
 
-    attach: function(dom) {
+    attach: function(dom, insertIt) {
         this.forEach(function(view) {
-            require('./attaching').Attaching.attach(dom, view);
+            require('./attaching').Attaching.attach(dom, view, insertIt);
         });
         return this;
     },

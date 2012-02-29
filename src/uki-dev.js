@@ -11,7 +11,7 @@
     }
     var require_modules = require.modules = [];
     var require_cache = require.cache = [];
-    var __requiredCss = ".uki-attaching {font-size: 12px; font-family: Arial, Helvetica, sans-serif;}\n.uki-attaching-relative {position: relative;}\n\n.uki-button {border: 1px solid #999; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-bottom-color: #777; border-radius: 3px; background: #D7DAE4 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAADwCAIAAAB5d1ZWAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MzFBNzRBRjgzMUMxMTFFMDk4MTVBMTVDMDE2MEQyRTMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MzFBNzRBRjkzMUMxMTFFMDk4MTVBMTVDMDE2MEQyRTMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4OTY5QTk2MTMxQzAxMUUwOTgxNUExNUMwMTYwRDJFMyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4OTY5QTk2MjMxQzAxMUUwOTgxNUExNUMwMTYwRDJFMyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PipBo48AAAKSSURBVHja7N1BTsMwEAXQOun9DwQbJJZcBLFD7KBpuMKfxSiy9eYIT3/Gdpw243ieN5XVHVUB60Yrx9KFBazjgFDAopW3oT4srIbnk0LehrAKbWhmFbAky2rYkixYktWDZcBLlpllU2pTamZJlh08LFiwJsI6T09K82QxiGtDAAvW5TOLl2TBggULFiwEsGDBgrVmDc+zCmdDWLB6sLyAW8GSLMlqwnJlIVmSJVnzYB2SVUjWIVmSZWZZDSVLsmBJVo7lqUOOdUqWZPUkC1ZcrsJgwYIFa9XV8DYgxFhjo5VjiZaZBQsWLFiwFCxYsGCtedx5f3ulEJ8Nh7NhjLVtOhEWrKux9p1CirVvsArJ0oZ5srShNpQsWLYOkiVZBnxlNbTPsintwBoDVmFmwYKlDa/G8jJbAcvLbJU2hBVjCVYFi1ZclsLagFdmlpllZsGCBUvBggULFixYKq3x+e0DtvHZ0B/3aMOuZEGIsXRhAevXP+DmWA+LYaENGVSShSvH8p+uOdYBy2rYgvVnNSwk6yFZhWTBshpaDc2siZLFSrLMrOtXQ8nKsezgDfgWLJ+SqWCxisu9ISxY188sPzeULFiwYMGChQAWLFiw1qzx9eNRaXw29M3tCpbXlXMsV2GlZEGIsdwbVrAshjmWXJlZXW1Iy9ahZzWEYOugDQ14W4c12xCWNtSGsGY6SMOSrI5yFQYLFixYsJRXuytYPo6iDWHBggULFgJYsGDBWvS48/H+QiE/GzocOkh3YO2+I51jbR5o5Vj3faeQY2lDbagNtaE2XDNZd22YJ8sW3szShtpwpoO0NpQsyboaS7BKWLTMLMkys6YpS6E2lCxYsOyzlGTBggULFiwFCxYsWDPVvwADALDE/Hh4isZ/AAAAAElFTkSuQmCC) repeat-x 0 0; white-space: nowrap; vertical-align: top; text-align: center; font-size: 12px; font-family: Arial, Helvetica, sans-serif; color: #111; padding: 0; height: 22px; text-shadow: rgba(255, 255, 255, 0.5) 0 1px 0px; position: relative; z-index: 10; outline: 0; _zoom: 1; _display: inline; -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; *background-image: url(-view\\view\\button\\button.png);}\n.uki-button::-moz-focus-inner {padding: 0; border: 0;}\n.uki-button:hover {background-color: #F5F7FD; background-position: 0 -40px;}\n.uki-button:active {border-color: #666; background-color: #C5C7CD; background-position: 0 -80px; -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset; -moz-box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset; box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset;}\n.uki-button__text {margin: 0 5px;}\n.uki-button:focus {border-color: #7594D2; -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px; -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px; box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px;}\n.uki-button__icon {vertical-align: top; margin-top: -1px; margin-bottom: -1px;}\n.uki-button_disabled,\r\n.uki-button_disabled:active,\r\n.uki-button_disabled:hover {color: #999; background-color: #eee; background-image: none; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; border-color: #AAA;}\n.uki-button_disabled .uki-button__icon {opacity: 0.5;}\n.uki-button_image-only .uki-button__text {display: none;}\n.uki-button_confirm {background-position: 0 -120px; border-color: #999; border-bottom-color: #779;}\n.uki-button_confirm:hover {background-position: 0 -160px;}\n.uki-button_confirm:active {background-position: 0 -200px; border-color: #77A;}\n.uki-button_confirm.uki-button_disabled,\r\n.uki-button_confirm.uki-button_disabled:active,\r\n.uki-button_confirm.uki-button_disabled:hover {background-color: #EEEEFA; border-color: #AAC;}\n\n.uki-flow {display: block; padding: 0; margin: 0;}\n.uki-flow-item {display: block; padding: 0; margin: 0;}\n.uki-flow_horizontal:after {clear: both; content: '.'; display: block; height: 0px; line-height: 0; visibility: hidden;}\n.uki-flow_horizontal {*zoom: 1;}\n.uki-flow_horizontal > .uki-flow-item {float: left;}\n.uki-flow_spacing-small {margin: 0;}\n.uki-flow_spacing-small > .uki-flow-item {margin: 5px 0 0 0;}\n.uki-flow_spacing-medium > .uki-flow-item {margin: 10px 0 0 0;}\n.uki-flow_spacing-large > .uki-flow-item {margin: 20px 0 0 0;}\n.uki-flow .uki-flow-item:first-child {margin-top: 0;}\n.uki-flow_horizontal.uki-flow_spacing-small > .uki-flow-item {margin: 0 0 0 5px;}\n.uki-flow_horizontal.uki-flow_spacing-medium > .uki-flow-item {margin: 0 0 0 10px;}\n.uki-flow_horizontal.uki-flow_spacing-large > .uki-flow-item {margin: 0 0 0 20px;}\n.uki-flow_horizontal.uki-flow > .uki-flow-item:first-child {margin-left: 0;}\n\n.uki-nc-select {margin: 0;}\n.uki-nc-text, .uki-nc-textarea {display: inline-block; *display: inline; *zoom: 1;}\n.uki-nc-text__input, .uki-nc-textarea__input {margin: 0; width: 100%; *width: auto; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}\n.uki-nc-text_with-placeholder, .uki-nc-textarea_with-placeholder {position: relative;}\n.uki-nc-text__placholder, .uki-nc-textarea__placholder {position: absolute; color: #888; opacity: 0.5;}\n\n.uki-text-p {line-height: 1.3; margin: 0 0 1em 0;}\n.uki-header {margin: 0 0 5px 0; font-weight: normal;}\n.uki-header_size_large {font-size: 18px;}\n.uki-header_size_medium {font-size: 15px;}\n.uki-header_size_small {font-size: 12px; font-weight: bold;}\n\n.uki-splitPane-handle,\r\n.uki-splitPane-handle-bar {z-index: 200; position: absolute;}\n.uki-splitPane-handle {background: #999;}\n.uki-splitPane-handle-bar {display: none; background: #999; overflow: hidden;}\n.uki-splitPane-handle-ext {background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAyCAYAAACZDmG3AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMTIvMjEvMTCej/OTAAAAJklEQVQokWMoLi7+////f4b///8zMPHw8DDAABMDEhjljHJozAEAwzEI2ZZEXDIAAAAASUVORK5CYII=); position: absolute; *background-image: url(-view\\view\\splitPane\\extv.png);}\n.uki-splitPane-handle_h {cursor: row-resize; width: 100%;}\n.uki-splitPane-handle-bar_h {width: 100%; height: 1px; left: 0px; top: 2px;}\n.uki-splitPane-handle_v {cursor: col-resize; height: 100%;}\n.uki-splitPane-handle-bar_v {height: 100%; width: 1px; top: 0px; left: 2px;}\n.uki-splitPane-handle_thin .uki-splitPane-handle-bar {display: block;}\n.uki-splitPane-handle_thin.uki-splitPane-handle {background: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEHAAEALAAAAAABAAEAAAICTAEAOw==); *background-image: url(-view\\view\\splitPane\\x.gif);}\n.uki-splitPane-handle_thin.uki-splitPane-handle_v {width: 5px !important; margin-left: -2px;}\n.uki-splitPane-handle_thin.uki-splitPane-handle_h {height: 5px !important; margin-top: -2px;}\n\n.uki-menu-horizontal {list-style: none; padding: 0; margin: 0;}\n.uki-menu-horizontal li {color: black; background-color: white; position: relative;}\n.uki-menu-horizontal li ul {z-index: 500; position: absolute; left: 0; width: 10em;}\n.uki-menu-horizontal ul {padding: 0; margin: 0px -1px; list-style: none; border: 1px solid black; background-color: white;}\n.uki-menu-horizontal > li {position: relative; float: left; text-align: left;}\n.uki-menu-horizontal a {display: block; padding: 0px 4px; color: black; text-decoration: none;}\n.uki-menu-horizontal :hover > a {background-color: black; color: white;}\n.uki-menu-horizontal ul {display: none;}\n.uki-menu-horizontal :hover > ul {display: block;}\n.uki-menu-horizontal ul ul {position: absolute; top: 0px; left: 10em;}\n.uki-menu-horizontal .uki-menu-submenu {background: url(data:image/gif;base64,R0lGODlhBwARALMAAAAAAP8AAP///////////////////////////////////////////////////////yH5BAEAAAEALAAAAAAHABEAAAQUMMhJq704AAs27Z4EhuAXilmqZhEAOw==) no-repeat 98% center; *background-image: url(-view\\view\\menu\\horiz_arrow.gif);}\n\n.uki-dataList {position: relative; outline: none;}\n.uki-dataList-pack {left: 0; width: 100%; display: block; list-style: none; position: absolute; padding: 0; margin: 0;}\n.uki-dataList-row {cursor: default; display: block; padding: 5px; margin: 0; height: 14px; font-size: 11px; line-height: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; background-color: #FFFFFF;}\n.uki-dataList-row_odd {background-color: #EDF3FE;}\n.uki-dataList-row_selected {background-color: #3875D7; color: #FFF; padding-top: 4px; padding-bottom: 4px; border: 1px solid #2760C0; border-left: none; border-right: none;}\n.uki-dataList-row_selected + .uki-dataList-row_selected {border-top: none; padding-top: 5px;}\n.uki-dataList_blured .uki-dataList-row_selected {background-color: #CCC; border-color: #AAA; color: #000;}\n\n.uki-dataTable-container {overflow: auto;}\n.uki-dataTable {position: relative; height: 100%; width: 100%;}\n.uki-dataTable-sort-down {background: url(data:image/gif;base64,R0lGODlhCgAJAIABAF9fX////yH5BAEAAAEALAAAAAAKAAkAAAINjI+py50AI0ByPsgsKgA7) no-repeat 98% center; *background-image: url(-view\\view\\dataTable\\down.gif);}\n.uki-dataTable-sort-up {background: url(data:image/gif;base64,R0lGODlhCgAJAIABAF9fX////yH5BAEAAAEALAAAAAAKAAkAAAINjGGZwHrcFoSu2ovzLQA7) no-repeat 98% center; *background-image: url(-view\\view\\dataTable\\up.gif);}\n.uki-dataTable-header,\n.uki-dataTable-pack {border-spacing: 0; table-layout: fixed;}\n.uki-dataTable-pack {width: 100%;}\n.uki-dataTable-row {display: table-row;}\n.uki-dataTable-cell {border: none; padding: 2px 5px; margin: 0; height: 14px; font-size: 11px; line-height: 14px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; cursor: default;}\n.uki-dataTable-row_selected {background-color: #3875D7; color: #FFF;}\n.uki-dataTable-row_selected .uki-dataTable-cell {padding-top: 1px; padding-bottom: 1px; border-top: 1px solid #2760C0; border-bottom: 1px solid #2760C0;}\n.uki-dataTable-row_selected + .uki-dataTable-row_selected .uki-dataTable-cell {border-top: none; padding-top: 2px;}\n.uki-dataList_blured .uki-dataTable-row_selected {background-color: #CCC; color: #000;}\n.uki-dataList_blured .uki-dataTable-row_selected .uki-dataTable-cell {border-color: #AAA;}\n.uki-dataTable-wrap {width: 100%;}\n.uki-dataTable-cell_number {text-align: right;}\n.uki-dataTable-header-container {box-shadow: 0 1px 0 rgba(0, 0, 0, .1); -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, .1); -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .1); z-index: 100; position: relative; background-color: #EFEFEF; border-bottom: 1px solid #999; overflow: hidden; cursor: default;}\n.uki-dataTable-header-cell {margin: 0; border-right: 1px solid #CCC; padding: 0 4px 0 5px; vertical-align: top;}\n.uki-dataTable-header-wrap {position: relative;}\n.uki-dataTable-header-text {text-overflow: ellipsis; white-space: nowrap; overflow: hidden; padding: 2px 0; height: 14px; font-size: 11px; line-height: 14px;}\n.uki-dataTable-resizer {display: none; overflow: hidden; position: absolute; width: 5px; top: 0; right: -7px; height: 100%; text-indent: 1em; cursor: col-resize;}\n.uki-dataTable-header-cell_resizable .uki-dataTable-resizer {display: block;}\n.uki-dataTable-spacer {padding-left: 0; padding-right: 0;}\n.uki-dataTable-filter {margin-left: -2px; padding: 1px; width: 100%;}\n";
+    var __requiredCss = ".uki-attaching {font-size: 12px; font-family: Arial, Helvetica, sans-serif;}\n.uki-attaching-relative {position: relative;}\n\n.uki-button {border: 1px solid #999; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-bottom-color: #777; border-radius: 3px; background: #D7DAE4 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAADwCAIAAAB5d1ZWAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MzFBNzRBRjgzMUMxMTFFMDk4MTVBMTVDMDE2MEQyRTMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MzFBNzRBRjkzMUMxMTFFMDk4MTVBMTVDMDE2MEQyRTMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4OTY5QTk2MTMxQzAxMUUwOTgxNUExNUMwMTYwRDJFMyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4OTY5QTk2MjMxQzAxMUUwOTgxNUExNUMwMTYwRDJFMyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PipBo48AAAKSSURBVHja7N1BTsMwEAXQOun9DwQbJJZcBLFD7KBpuMKfxSiy9eYIT3/Gdpw243ieN5XVHVUB60Yrx9KFBazjgFDAopW3oT4srIbnk0LehrAKbWhmFbAky2rYkixYktWDZcBLlpllU2pTamZJlh08LFiwJsI6T09K82QxiGtDAAvW5TOLl2TBggULFiwEsGDBgrVmDc+zCmdDWLB6sLyAW8GSLMlqwnJlIVmSJVnzYB2SVUjWIVmSZWZZDSVLsmBJVo7lqUOOdUqWZPUkC1ZcrsJgwYIFa9XV8DYgxFhjo5VjiZaZBQsWLFiwFCxYsGCtedx5f3ulEJ8Nh7NhjLVtOhEWrKux9p1CirVvsArJ0oZ5srShNpQsWLYOkiVZBnxlNbTPsintwBoDVmFmwYKlDa/G8jJbAcvLbJU2hBVjCVYFi1ZclsLagFdmlpllZsGCBUvBggULFixYKq3x+e0DtvHZ0B/3aMOuZEGIsXRhAevXP+DmWA+LYaENGVSShSvH8p+uOdYBy2rYgvVnNSwk6yFZhWTBshpaDc2siZLFSrLMrOtXQ8nKsezgDfgWLJ+SqWCxisu9ISxY188sPzeULFiwYMGChQAWLFiw1qzx9eNRaXw29M3tCpbXlXMsV2GlZEGIsdwbVrAshjmWXJlZXW1Iy9ahZzWEYOugDQ14W4c12xCWNtSGsGY6SMOSrI5yFQYLFixYsJRXuytYPo6iDWHBggULFgJYsGDBWvS48/H+QiE/GzocOkh3YO2+I51jbR5o5Vj3faeQY2lDbagNtaE2XDNZd22YJ8sW3szShtpwpoO0NpQsyboaS7BKWLTMLMkys6YpS6E2lCxYsOyzlGTBggULFiwFCxYsWDPVvwADALDE/Hh4isZ/AAAAAElFTkSuQmCC) repeat-x 0 0; white-space: nowrap; vertical-align: top; text-align: center; font-size: 12px; font-family: Arial, Helvetica, sans-serif; color: #111; padding: 0; height: 22px; text-shadow: rgba(255, 255, 255, 0.5) 0 1px 0px; position: relative; z-index: 10; outline: 0; _zoom: 1; _display: inline; -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; *background-image: url(-view\\view\\button\\button.png);}\n.uki-button::-moz-focus-inner {padding: 0; border: 0;}\n.uki-button:hover {background-color: #F5F7FD; background-position: 0 -40px;}\n.uki-button:active {border-color: #666; background-color: #C5C7CD; background-position: 0 -80px; -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset; -moz-box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset; box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset;}\n.uki-button__text {margin: 0 5px;}\n.uki-button:focus {border-color: #7594D2; -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px; -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px; box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px;}\n.uki-button__icon {vertical-align: top; margin-top: -1px; margin-bottom: -1px;}\n.uki-button_disabled,\r\n.uki-button_disabled:active,\r\n.uki-button_disabled:hover {color: #999; background-color: #eee; background-image: none; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; border-color: #AAA;}\n.uki-button_disabled .uki-button__icon {opacity: 0.5;}\n.uki-button_image-only .uki-button__text {display: none;}\n.uki-button_confirm {background-position: 0 -120px; border-color: #999; border-bottom-color: #779;}\n.uki-button_confirm:hover {background-position: 0 -160px;}\n.uki-button_confirm:active {background-position: 0 -200px; border-color: #77A;}\n.uki-button_confirm.uki-button_disabled,\r\n.uki-button_confirm.uki-button_disabled:active,\r\n.uki-button_confirm.uki-button_disabled:hover {background-color: #EEEEFA; border-color: #AAC;}\n\n.uki-flow {display: block; padding: 0; margin: 0;}\n.uki-flow-item {display: block; padding: 0; margin: 0;}\n.uki-flow_horizontal:after {clear: both; content: '.'; display: block; height: 0px; line-height: 0; visibility: hidden;}\n.uki-flow_horizontal {*zoom: 1;}\n.uki-flow_horizontal > .uki-flow-item {float: left;}\n.uki-flow_spacing-small {margin: 0;}\n.uki-flow_spacing-small > .uki-flow-item {margin: 5px 0 0 0;}\n.uki-flow_spacing-medium > .uki-flow-item {margin: 10px 0 0 0;}\n.uki-flow_spacing-large > .uki-flow-item {margin: 20px 0 0 0;}\n.uki-flow .uki-flow-item:first-child {margin-top: 0;}\n.uki-flow_horizontal.uki-flow_spacing-small > .uki-flow-item {margin: 0 0 0 5px;}\n.uki-flow_horizontal.uki-flow_spacing-medium > .uki-flow-item {margin: 0 0 0 10px;}\n.uki-flow_horizontal.uki-flow_spacing-large > .uki-flow-item {margin: 0 0 0 20px;}\n.uki-flow_horizontal.uki-flow > .uki-flow-item:first-child {margin-left: 0;}\n\n.uki-nc-select {margin: 0;}\n.uki-nc-text, .uki-nc-textarea {display: inline-block; *display: inline; *zoom: 1;}\n.uki-nc-text__input, .uki-nc-textarea__input {margin: 0; width: 100%; *width: auto; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}\n.uki-nc-text_with-placeholder, .uki-nc-textarea_with-placeholder {position: relative;}\n.uki-nc-text__placholder, .uki-nc-textarea__placholder {position: absolute; color: #888; opacity: 0.5;}\n\n.uki-text-p {line-height: 1.3; margin: 0 0 1em 0;}\n.uki-header {margin: 0 0 5px 0; font-weight: normal;}\n.uki-header_size_large {font-size: 18px;}\n.uki-header_size_medium {font-size: 15px;}\n.uki-header_size_small {font-size: 12px; font-weight: bold;}\n\n.uki-splitPane-handle,\r\n.uki-splitPane-handle-bar {z-index: 200; position: absolute;}\n.uki-splitPane-handle {background: #999;}\n.uki-splitPane-handle-bar {display: none; background: #999; overflow: hidden;}\n.uki-splitPane-handle-ext {background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAyCAYAAACZDmG3AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMTIvMjEvMTCej/OTAAAAJklEQVQokWMoLi7+////f4b///8zMPHw8DDAABMDEhjljHJozAEAwzEI2ZZEXDIAAAAASUVORK5CYII=); position: absolute; *background-image: url(-view\\view\\splitPane\\extv.png);}\n.uki-splitPane-handle_h {cursor: row-resize; width: 100%;}\n.uki-splitPane-handle-bar_h {width: 100%; height: 1px; left: 0px; top: 2px;}\n.uki-splitPane-handle_v {cursor: col-resize; height: 100%;}\n.uki-splitPane-handle-bar_v {height: 100%; width: 1px; top: 0px; left: 2px;}\n.uki-splitPane-handle_thin .uki-splitPane-handle-bar {display: block;}\n.uki-splitPane-handle_thin.uki-splitPane-handle {background: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEHAAEALAAAAAABAAEAAAICTAEAOw==); *background-image: url(-view\\view\\splitPane\\x.gif);}\n.uki-splitPane-handle_thin.uki-splitPane-handle_v {width: 5px !important; margin-left: -2px;}\n.uki-splitPane-handle_thin.uki-splitPane-handle_h {height: 5px !important; margin-top: -2px;}\n\n.uki-menu-horizontal {list-style: none; padding: 0; margin: 0;}\n.uki-menu-horizontal li {color: black; background-color: white; position: relative;}\n.uki-menu-horizontal li ul {z-index: 500; position: absolute; left: 0; width: 10em;}\n.uki-menu-horizontal ul {padding: 0; margin: 0px -1px; list-style: none; border: 1px solid black; background-color: white;}\n.uki-menu-horizontal > li {position: relative; float: left; text-align: left;}\n.uki-menu-horizontal a {display: block; padding: 0px 4px; color: black; text-decoration: none;}\n.uki-menu-horizontal :hover > a {background-color: black; color: white;}\n.uki-menu-horizontal ul {display: none;}\n.uki-menu-horizontal :hover > ul {display: block;}\n.uki-menu-horizontal ul ul {position: absolute; top: 0px; left: 10em;}\n.uki-menu-horizontal .uki-menu-submenu {background: url(data:image/gif;base64,R0lGODlhBwARALMAAAAAAP8AAP///////////////////////////////////////////////////////yH5BAEAAAEALAAAAAAHABEAAAQUMMhJq704AAs27Z4EhuAXilmqZhEAOw==) no-repeat 98% center; *background-image: url(-view\\view\\menu\\horiz_arrow.gif);}\n.uki-menu-vertical .uki-menu-submenu {background: url(data:image/gif;base64,R0lGODlhEQAHAPMAAAAAAP8AAP///////////////////////////////////////////////////////yH5BAEAAAEALAAAAAARAAcAAwQTMMhJq714gs1Blp33gdtIieYYAQA7) no-repeat 98% center; *background-image: url(-view\\view\\menu\\vert_arrow.gif);}\n\n.uki-dataList {position: relative; outline: none;}\n.uki-dataList-pack {left: 0; width: 100%; display: block; list-style: none; position: absolute; padding: 0; margin: 0;}\n.uki-dataList-row {cursor: default; display: block; padding: 5px; margin: 0; height: 14px; font-size: 11px; line-height: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; background-color: #FFFFFF;}\n.uki-dataList-row_odd {background-color: #EDF3FE;}\n.uki-dataList-row_selected {background-color: #3875D7; color: #FFF; padding-top: 4px; padding-bottom: 4px; border: 1px solid #2760C0; border-left: none; border-right: none;}\n.uki-dataList-row_selected + .uki-dataList-row_selected {border-top: none; padding-top: 5px;}\n.uki-dataList_blured .uki-dataList-row_selected {background-color: #CCC; border-color: #AAA; color: #000;}\n\n.uki-dataTable-container {overflow: auto;}\n.uki-dataTable {position: relative; height: 100%; width: 100%;}\n.uki-dataTable-menu {background: url(data:image/gif;base64,R0lGODlhEAAQAJEAAP39/ebm5ikpKZqamiH5BAAAAAAALAAAAAAQABAAAAIzhI+pqzEBgpwSDTGu2DuzfzgQNSVXxqWDaZAVIkauiWkpxspkUrqQVbt1YA8dBfTxKQMFADs=) no-repeat center center; *background-image: url(-view\\view\\dataTable\\menu.gif);}\n.uki-dataTable-sort-down {background: url(data:image/gif;base64,R0lGODlhCgAJAIABAF9fX////yH5BAEAAAEALAAAAAAKAAkAAAINjI+py50AI0ByPsgsKgA7) no-repeat 98% center; *background-image: url(-view\\view\\dataTable\\down.gif);}\n.uki-dataTable-sort-up {background: url(data:image/gif;base64,R0lGODlhCgAJAIABAF9fX////yH5BAEAAAEALAAAAAAKAAkAAAINjGGZwHrcFoSu2ovzLQA7) no-repeat 98% center; *background-image: url(-view\\view\\dataTable\\up.gif);}\n.uki-dataTable-header,\n.uki-dataTable-pack {border-spacing: 0; table-layout: fixed;}\n.uki-dataTable-pack {width: 100%;}\n.uki-dataTable-row {display: table-row;}\n.uki-dataTable-cell {border: none; padding: 2px 5px; margin: 0; height: 14px; font-size: 11px; line-height: 14px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; cursor: default;}\n.uki-dataTable-row_selected {background-color: #3875D7; color: #FFF;}\n.uki-dataTable-row_selected .uki-dataTable-cell {padding-top: 1px; padding-bottom: 1px; border-top: 1px solid #2760C0; border-bottom: 1px solid #2760C0;}\n.uki-dataTable-row_selected + .uki-dataTable-row_selected .uki-dataTable-cell {border-top: none; padding-top: 2px;}\n.uki-dataList_blured .uki-dataTable-row_selected {background-color: #CCC; color: #000;}\n.uki-dataList_blured .uki-dataTable-row_selected .uki-dataTable-cell {border-color: #AAA;}\n.uki-dataTable-wrap {width: 100%;}\n.uki-dataTable-cell_number {text-align: right;}\n.uki-dataTable-header-container {box-shadow: 0 1px 0 rgba(0, 0, 0, .1); -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, .1); -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .1); z-index: 100; position: relative; background-color: #EFEFEF; border-bottom: 1px solid #999; overflow: hidden; cursor: default;}\n.uki-dataTable-header-cell {margin: 0; border-right: 1px solid #CCC; padding: 0 4px 0 5px; vertical-align: top;}\n.uki-dataTable-header-wrap {position: relative;}\n.uki-dataTable-header-text {text-overflow: ellipsis; white-space: nowrap; overflow: hidden; padding: 2px 0; height: 14px; font-size: 11px; line-height: 14px;}\n.uki-dataTable-resizer {display: none; overflow: hidden; position: absolute; width: 5px; top: 0; right: -7px; height: 100%; text-indent: 1em; cursor: col-resize;}\n.uki-dataTable-header-cell_resizable .uki-dataTable-resizer {display: block;}\n.uki-dataTable-spacer {padding-left: 0; padding-right: 0;}\n.uki-dataTable-filter {margin-left: -2px; padding: 1px; width: 100%;}\n";
     require_modules[0] = function(global, module, require) {
         var exports = this;
         global.uki = require(1);
@@ -63,6 +63,15 @@
         var marked = "__marked";
         function inheritance() {}
         utils.prop = function(obj, prop, value, extra) {
+            var exp = prop.split(".");
+            if (exp.length > 1) {
+                var dobj = obj;
+                for (var i = 0; i < exp.length - 1; i++) {
+                    dobj = obj[exp[i]];
+                }
+                obj = dobj;
+                prop = exp[i];
+            }
             if (arguments.length > 2) {
                 if (obj[prop] && obj[prop].apply) {
                     obj[prop](value, extra);
@@ -649,9 +658,9 @@
                 });
                 return this;
             },
-            attach: function(dom) {
+            attach: function(dom, insertIt) {
                 this.forEach(function(view) {
-                    require(11).Attaching.attach(dom, view);
+                    require(11).Attaching.attach(dom, view, insertIt);
                 });
                 return this;
             },
@@ -941,7 +950,7 @@
             }
         });
         var instances = null;
-        Attaching.attach = function(dom, view) {
+        Attaching.attach = function(dom, view, insertIt) {
             dom = dom || env.doc.body;
             var id = dom[env.expando] = dom[env.expando] || env.guid++;
             if (!instances || !instances[id]) {
@@ -949,7 +958,11 @@
                     dom: dom
                 }));
             }
-            instances[id].appendChild(view);
+            if (insertIt === true) {
+                instances[id].insertChild(view);
+            } else {
+                instances[id].appendChild(view);
+            }
             view.layout();
         };
         Attaching.instances = function() {
@@ -1311,6 +1324,18 @@
             _removeChildFromDom: function(child) {
                 dom.removeElement(child.dom());
             },
+            insertChild: function(child) {
+                child._viewIndex = this._childViews.length;
+                this._childViews.push(child);
+                child.parent(this);
+                if (this.dom().firstChild) {
+                    this._insertBeforeInDom(child, this.dom().firstChild);
+                } else {
+                    this._appendChildToDom(child);
+                }
+                this._childrenChanged();
+                return this;
+            },
             appendChild: function(child) {
                 child._viewIndex = this._childViews.length;
                 this._childViews.push(child);
@@ -1335,7 +1360,7 @@
                 return this;
             },
             _insertBeforeInDom: function(child, beforeChild) {
-                this.dom().insertBefore(child.dom(), beforeChild.dom());
+                this.dom().insertBefore(child.dom(), beforeChild.dom ? beforeChild.dom() : beforeChild);
             },
             _childrenChanged: function() {},
             domForChild: function(child) {
@@ -1347,7 +1372,7 @@
     require_modules[15] = function(global, module, require) {
         var exports = this;
         var view = require(10), utils = require(4), fun = require(7), env = require(3), dom = require(13), evt = require(12), Binding = require(16).Binding;
-        var POS_RULES = [ "top", "right", "left", "bottom", "width", "height", "marginLeft", "marginTop", "marginBottom", "marginRight" ], POS_MAP = {
+        var POS_RULES = [ "top", "right", "left", "bottom", "wiidth", "height", "marginLeft", "marginTop", "marginBottom", "marginRight", "max-width", "max-height" ], POS_MAP = {
             t: "top",
             r: "right",
             l: "left",
@@ -1358,6 +1383,8 @@
             mr: "marginRight",
             mt: "marginTop",
             mb: "marginBottom",
+            mw: "max-width",
+            mh: "max-height",
             p: "position"
         };
         function styleToString(style) {
@@ -2137,7 +2164,8 @@
                 return Focusable._domForEvent.call(this, type) || Base.prototype.domForEvent.call(this, type);
             }
         });
-        fun.delegateProp(NativeControl.prototype, [ "name", "checked", "disabled", "value", "type", "accessKey" ], "_input");
+        fun.delegateProp(NativeControl.prototype, [ "name", "checked", "disabled", "value", "type", "accessKey", "id" ], "_input");
+        fun.delegateProp(NativeControl.prototype, [ "width", "height" ], "_input", [ "style.width", "style.height" ]);
         var Radio = view.newClass("nativeControl.Radio", NativeControl, {
             _createDom: function(initArgs) {
                 this._input = dom.createElement("input", {
@@ -2203,6 +2231,7 @@
                 this._placeholderDom = dom.createElement("span", {
                     className: "uki-nc-text__placholder"
                 });
+                this.textSelectable(false);
                 this.dom().insertBefore(this._placeholderDom, this.dom().firstChild);
                 evt.on(this._placeholderDom, "click", fun.bindOnce(function() {
                     this.focus();
@@ -2238,7 +2267,12 @@
                     className: "uki-nc-textarea"
                 });
                 this.dom().appendChild(this._input);
+                if (initArgs["id"] != null) {
+                    this._input.id = "textarea" + initArgs["id"];
+                }
             },
+            _placeHolderAutoHide: true,
+            placeHolderAutoHide: fun.newProp("placeHolderAutoHide"),
             rows: fun.newProp("rows", function(v) {
                 this._input.rows = v;
             }),
@@ -2270,16 +2304,21 @@
                 if (this._initedPlaceholder) return;
                 this._initedPlaceholder = true;
                 this.addClass("uki-nc-textarea_with-placeholder");
-                this._placeholderDom = dom.createElement("span", {
+                this._placeholderDom = dom.createElement("div", {
                     className: "uki-nc-textarea__placholder"
                 });
+                this.textSelectable(false);
                 this.dom().insertBefore(this._placeholderDom, this.dom().firstChild);
                 evt.on(this._placeholderDom, "click", fun.bindOnce(function() {
                     this.focus();
                 }, this));
+                this.on("focus blur change keyup", this._updatePlaceholderVis);
+                this.on("mouseup", this._updatePlaceholderHeight);
             },
             _updatePlaceholderVis: function() {
-                this._placeholderDom.style.display = this.hasFocus() || this.value() ? "none" : "";
+                if (this._placeHolderAutoHide) {
+                    this._placeholderDom.style.display = this.hasFocus() || this.value() ? "none" : "";
+                }
             },
             _updatePlaceholderHeight: function() {
                 if (!this._placeholderDom) return;
@@ -2313,10 +2352,7 @@
                     className: "uki-nc-button",
                     type: "button"
                 });
-            },
-            width: fun.newProp("width", function(v) {
-                this._input.style.width = v;
-            })
+            }
         });
         var Select = view.newClass("nativeControl.Select", NativeControl, {
             _createDom: function(initArgs) {
@@ -2722,6 +2758,7 @@
                     name: option.name ? option.name : option.text,
                     tabIndex: -1
                 });
+                if (option.visible === false) node_li.style.display = "none";
                 if (option.accessKey) node_a.accessKey = option.accessKey;
                 if (option.className) dom.addClass(node_a, option.className);
                 node_li.appendChild(node_a);
@@ -3320,8 +3357,7 @@
     require_modules[34] = function(global, module, require) {
         var exports = this;
         1;
-        var fun = require(7), utils = require(4), dom = require(13), view = require(10), build = require(6).build, Pack = require(35).Pack, DataList = require(29).DataList, Mustache = require(19).Mustache, Base = require(15).Base, Container = require(14).Container, Focusable = require(22).Focusable;
-        evt = require(12);
+        var fun = require(7), utils = require(4), dom = require(13), view = require(10), build = require(6).build, Pack = require(35).Pack, DataList = require(29).DataList, Mustache = require(19).Mustache, Base = require(15).Base, Container = require(14).Container, Focusable = require(22).Focusable, evt = require(12), Menu = require(28).Menu;
         var DataTable = view.newClass("DataTable", Container, {
             columns: function(cols) {
                 if (!arguments.length) {
@@ -3412,19 +3448,29 @@
         });
         fun.delegateProp(DataTable.prototype, [ "data", "throttle", "debounce", "template", "formatter", "key", "selection", "selectedRows", "selectedRow", "selectedIndexes", "selectedIndex", "lastClickIndex", "multiselect" ], "list");
         fun.delegateCall(DataTable.prototype, [ "scrollToIndex", "triggerSelection", "redrawRow" ], "list");
-        fun.delegateProp(DataTable.prototype, [ "hasFilter", "filterTimeout", "sortable" ], "header");
+        fun.delegateProp(DataTable.prototype, [ "hasFilter", "filterTimeout", "sortable", "hasMenu" ], "header");
         var DataTableHeader = view.newClass("DataTableHeader", Base, {
             template: fun.newProp("template"),
-            _template: '<table class="uki-dataTable-header" style="{{style}}"><tbody><tr class="uki-dataTable-header-row">{{#columns}}<td class="uki-dataTable-header-cell {{className}}" style="{{style}}"><div class="uki-dataTable-header-wrap"><div class="uki-dataTable-header-text{{sortClass}}">{{label}}</div><input type="input" name="{{filter}}" style="{{filterstyle}}" tabindex="1" class="uki-dataTable-filter"><div class="uki-dataTable-resizer uki-dataTable-resizer_pos-{{pos}}">|</div></div></td>{{/columns}}</tr></table>',
+            _template: '<table class="uki-dataTable-header" style="{{style}}"><tbody><tr class="uki-dataTable-header-row">{{#columns}}<td class="uki-dataTable-header-cell {{className}}" style="{{style}}" id="{{menuId}}"><div class="uki-dataTable-header-wrap"><div class="uki-dataTable-header-text{{sortClass}}">{{label}}</div><input type="input" name="{{filter}}" style="{{filterstyle}}" tabindex="1" class="uki-dataTable-filter"><div class="uki-dataTable-resizer uki-dataTable-resizer_pos-{{pos}}">|</div></div></td>{{/columns}}</tr></table>',
             hasFilter: fun.newProp("hasFilter"),
             _hasFilter: false,
+            enterFiltered: fun.newProp("enterFiltered"),
+            _enterFiltered: false,
             filterTimeout: fun.newProp("filterTimeout"),
-            _filterTimeout: 1500,
+            _filterTimeout: 500,
             sortable: fun.newProp("sortable"),
             _sortable: false,
             _intervalId: null,
+            _hasMenu: true,
+            hasMenu: fun.newProp("hasMenu"),
             _createDom: function(initArgs) {
                 Base.prototype._createDom.call(this, initArgs);
+                var c = build([ {
+                    view: Menu,
+                    as: "DataTable-Menu",
+                    addClass: "uki-dataTable-menu"
+                } ]);
+                this._Menu = c;
                 this._draggableColumn = -1;
                 this.on("draggesturestart", this._dragStart);
                 this.on("draggesture", this._drag);
@@ -3505,16 +3551,8 @@
                 }
             },
             _filterpress: function(e) {
+                if (e.charCode == 0) return;
                 var self = e.target.self;
-                if (e.keyCode == 13) {
-                    self._clearfilterInterval();
-                    self._filterpresstimeout(e);
-                    e.preventDefault();
-                    e.cancelBubble = true;
-                } else if (e.keyCode == 9) {
-                    self._clearfilterInterval();
-                }
-                if (e.charCode == 0 && e.keyCode != 8) return;
                 self._clearfilterInterval();
                 self._intervalId = setInterval(function(self, target) {
                     return function() {
@@ -3522,6 +3560,67 @@
                         self._filterpresstimeout(target);
                     };
                 }(self, e), self._filterTimeout);
+            },
+            _filterkeydown: function(e) {
+                if (e.charCode != 0) return;
+                var self = e.target.self;
+                if (e.keyCode == 13 && self._enterFiltered) {
+                    self._clearfilterInterval();
+                    self._filterpresstimeout(e);
+                    e.preventDefault();
+                    e.cancelBubble = true;
+                } else if (e.keyCode == 9) {
+                    self._clearfilterInterval();
+                } else if (e.keyCode == 8 || e.keyCode == 46) {
+                    self._clearfilterInterval();
+                    self._intervalId = setInterval(function(self, target) {
+                        return function() {
+                            self._clearfilterInterval();
+                            self._filterpresstimeout(target);
+                        };
+                    }(self, e), self._filterTimeout);
+                } else if (e.keyCode == 40 || e.keyCode == 38 || e.keyCode == 33 || e.keyCode == 34 || e.keyCode == 35 || e.keyCode == 36) {
+                    var grid = self.parent().childViews()[1].childViews()[0];
+                    var data = grid.data();
+                    var maxrows = 0;
+                    if (data != null) {
+                        maxrows = data.length;
+                    }
+                    var range = grid._visibleRange();
+                    var size = grid.metrics()._rowHeight;
+                    var vrows = 1;
+                    if (size > 0) {
+                        vrows = (range.to - range.from) / size;
+                    }
+                    var idx = grid.selectedIndex();
+                    if (idx == null) {
+                        idx = 0;
+                    }
+                    var oldIdx = idx;
+                    if (e.keyCode == 40) {
+                        idx++;
+                    } else if (e.keyCode == 38) {
+                        idx--;
+                    } else if (e.keyCode == 34) {
+                        idx += vrows;
+                    } else if (e.keyCode == 33) {
+                        idx -= vrows;
+                    } else if (e.keyCode == 36) {
+                        idx = 0;
+                    } else if (e.keyCode == 35) {
+                        idx = maxrows;
+                    }
+                    if (idx >= maxrows) {
+                        idx = maxrows - 1;
+                    }
+                    if (idx < 0) {
+                        idx = 0;
+                    }
+                    if (idx != oldIdx) {
+                        grid.selectedIndex(idx);
+                        grid.scrollToIndex(idx);
+                    }
+                }
             },
             _dragEnd: function(e) {
                 this._drag(e);
@@ -3574,7 +3673,8 @@
                     filter: "filter" + col.label,
                     filterstyle: filterable ? "" : "display:none",
                     className: col.className + (col.width != col.maxWidth || col.width != col.minWidth ? " uki-dataTable-header-cell_resizable" : ""),
-                    sortClass: col.sort === 1 ? " uki-dataTable-sort-down" : col.sort === 2 ? " uki-dataTable-sort-up" : ""
+                    sortClass: col.sort === 1 ? " uki-dataTable-sort-down" : col.sort === 2 ? " uki-dataTable-sort-up" : "",
+                    menuId: col.menuId ? col.menuId : ""
                 };
             },
             columns: fun.newProp("columns", function(cols) {
@@ -3583,12 +3683,29 @@
                 fun.deferOnce(fun.bindOnce(this._render, this));
             }),
             _render: function() {
+                if (this._hasMenu) {
+                    var menuId = "UKIdtMenu" + (new Date).getTime();
+                    var cols = this.columns();
+                    if (cols.length > 0) {
+                        if (cols[0].menuId == null) {
+                            cols[0].menuId = menuId;
+                        } else {
+                            menuId = cols[0].menuId;
+                        }
+                    }
+                }
                 this._dom.innerHTML = Mustache.to_html(this._template, {
                     columns: this.columns().map(this._formatColumn, this),
                     style: "width:" + table.totalWidth(this.columns()) + "px"
                 });
                 if (this._hasFilter) {
                     this._setupFilters();
+                }
+                if (this._hasMenu) {
+                    var menu = document.getElementById(menuId);
+                    if (menu) {
+                        this._Menu.attach(menu, true);
+                    }
                 }
                 this.trigger({
                     type: "render"
@@ -3600,6 +3717,7 @@
                     eles[i].self = this;
                     evt.addListener(eles[i], "change", this._filter);
                     evt.addListener(eles[i], "keypress", this._filterpress);
+                    evt.addListener(eles[i], "keydown", this._filterkeydown);
                 }
             }
         });

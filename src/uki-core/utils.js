@@ -16,6 +16,7 @@ function inheritance() {}
  * If target has function with prop it will be called target[prop](value=)
  * If no function present property will be set/get directly:
  *   target[prop] = value or return target[prop]</p>
+ *   prop can use . (dot) notation for sub-props.  So "style.width" will be resolved to: obj.style.width
  *
  * @example
  *   utils.prop(view, 'name', 'funny') // sets name to funny on view
@@ -27,6 +28,14 @@ function inheritance() {}
  * @returns {object} target if value is being set, retrieved value otherwise
  */
 utils.prop = function(obj, prop, value, extra) {
+    var exp = prop.split('.');
+    if (exp.length > 1) {
+       var dobj = obj;
+       for(var i=0;i<exp.length-1;i++) {
+         dobj = obj[exp[i]];
+       }
+       obj = dobj; prop = exp[i];
+    }
     if (arguments.length > 2) {
         if (obj[prop] && obj[prop].apply) {
             obj[prop](value, extra);

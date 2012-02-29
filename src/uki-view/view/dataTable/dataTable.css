@@ -8,6 +8,10 @@
     width: 100%;
 }
 
+.uki-dataTable-menu {
+  background: url(menu.gif) no-repeat center center;
+}
+
 .uki-dataTable-sort-down {
   background: url(down.gif) no-repeat 98% center;
 }

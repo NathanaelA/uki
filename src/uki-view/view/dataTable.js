@@ -11,8 +11,10 @@ var fun   = require('../../uki-core/function'),
     Mustache  = require('../../uki-core/mustache').Mustache,
     Base      = require('../../uki-core/view/base').Base,
     Container = require('../../uki-core/view/container').Container,
-    Focusable = require('./focusable').Focusable;
-    evt       = require('../../uki-core/event');
+    Focusable = require('./focusable').Focusable,
+    evt       = require('../../uki-core/event'),
+    Menu      = require('./menu').Menu;
+
 
 
 var DataTable = view.newClass('DataTable', Container, {
@@ -114,7 +116,7 @@ fun.delegateCall(DataTable.prototype, [
     'scrollToIndex', 'triggerSelection', 'redrawRow'
 ], 'list');
 
-fun.delegateProp(DataTable.prototype, ['hasFilter', 'filterTimeout', 'sortable'], 'header');
+fun.delegateProp(DataTable.prototype, ['hasFilter', 'filterTimeout', 'sortable', 'hasMenu'], 'header');
 
 
 
@@ -123,14 +125,26 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
     _template: requireText('dataTable/header.html'),
     hasFilter: fun.newProp('hasFilter'),
     _hasFilter: false,
+    enterFiltered: fun.newProp('enterFiltered'),
+    _enterFiltered: false,
     filterTimeout: fun.newProp('filterTimeout'),
-    _filterTimeout: 1500,
+    _filterTimeout: 500,
     sortable: fun.newProp('sortable'),
     _sortable: false,
     _intervalId: null,
+    _hasMenu: true,
+    hasMenu: fun.newProp('hasMenu'),
 
     _createDom: function(initArgs) {
         Base.prototype._createDom.call(this, initArgs);
+        var c = build([
+
+        { view: Menu, as: 'DataTable-Menu',
+          addClass: 'uki-dataTable-menu' }
+
+      ]);
+
+        this._Menu = c;
         this._draggableColumn = -1;
         this.on('draggesturestart', this._dragStart);
         this.on('draggesture', this._drag);
@@ -226,17 +240,11 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
     },
 
     _filterpress: function(e) {
+      if (e.charCode == 0) return;
       var self = e.target.self;
-      if (e.keyCode == 13) {
-         self._clearfilterInterval();
-         self._filterpresstimeout(e);
-         e.preventDefault();
-         e.cancelBubble = true;
-      }
-      else if (e.keyCode == 9) {
-        self._clearfilterInterval();
-      }
-      if (e.charCode == 0 && e.keyCode != 8) return;
+      // We handle normal keys here, Chome doesn't pass "special" keys to onkeypress event
+
+//      console.log("UKI Filterpress: ", e);
 
       self._clearfilterInterval();
       self._intervalId = setInterval(
@@ -244,6 +252,96 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
                 self._clearfilterInterval();
                 self._filterpresstimeout(target); } } )(self, e),
            self._filterTimeout);
+    },
+
+    _filterkeydown: function(e) {
+      // We handle "special" keys here because of Chrome doesn't pass them to onkeypress
+      if (e.charCode != 0) return;
+      var self = e.target.self;
+
+      //console.log("KeyCode: ", e);
+
+      if (e.keyCode == 13 && self._enterFiltered) {
+        self._clearfilterInterval();
+        self._filterpresstimeout(e);
+        e.preventDefault();
+        e.cancelBubble = true;
+      }
+      // Tab Key
+      else if (e.keyCode == 9) {
+        self._clearfilterInterval();
+      }
+      // Delete / Backspace key
+      else if (e.keyCode == 8 || e.keyCode == 46) {
+        self._clearfilterInterval();
+        self._intervalId = setInterval(
+          (function(self, target) { return function() {
+            self._clearfilterInterval();
+            self._filterpresstimeout(target); } } )(self, e),
+          self._filterTimeout);
+      }
+      else if (e.keyCode == 40 || e.keyCode == 38 || e.keyCode == 33 || e.keyCode == 34 || e.keyCode == 35 || e.keyCode == 36) {
+        var grid = self.parent().childViews()[1].childViews()[0];
+        var data = grid.data();
+        var maxrows = 0;
+        if (data != null) {
+          maxrows = data.length;
+        }
+        var range = grid._visibleRange();
+        var size = grid.metrics()._rowHeight;
+        var vrows = 1;
+        if (size > 0) {
+          vrows = (range.to - range.from) / size;
+        }
+        var idx = grid.selectedIndex();//[0];
+        if ( idx == null ) {
+          idx = 0;
+        }
+        var oldIdx = idx;
+
+        // Down Arrow
+        if ( e.keyCode == 40 ) {
+          idx++;
+        }
+
+        // Up Arrow
+        else if ( e.keyCode == 38 ) {
+          idx--;
+        }
+
+        // pgDn
+        else if ( e.keyCode == 34) {
+          idx += vrows;
+        }
+
+        // pgUp
+        else if ( e.keyCode == 33 ) {
+          idx -= vrows;
+        }
+
+        // Home
+        else if ( e.keyCode == 36 ) {
+            idx = 0;
+        }
+
+        // End
+        else if ( e.keyCode == 35 ) {
+            idx = maxrows;
+        }
+
+        if (idx >= maxrows) {
+          idx = maxrows-1;
+        }
+        if (idx < 0) {
+          idx = 0;
+        }
+        if (idx != oldIdx) {
+          grid.selectedIndex( idx );
+          grid.scrollToIndex(idx);
+        }
+
+      }
+
     },
 
     _dragEnd: function(e) {
@@ -309,7 +407,8 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
             className: col.className +
                 (col.width != col.maxWidth || col.width != col.minWidth ?
                     ' uki-dataTable-header-cell_resizable' : ''),
-            sortClass: (col.sort === 1 ? ' uki-dataTable-sort-down' : (col.sort === 2 ? ' uki-dataTable-sort-up' : ''))
+            sortClass: (col.sort === 1 ? ' uki-dataTable-sort-down' : (col.sort === 2 ? ' uki-dataTable-sort-up' : '')),
+            menuId: col.menuId ? col.menuId : ''
         };
     },
 
@@ -320,6 +419,18 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
     }),
 
     _render: function() {
+        if (this._hasMenu) {
+          var menuId = "UKIdtMenu" + (new Date().getTime());
+          var cols = this.columns();
+          if (cols.length > 0) {
+            if (cols[0].menuId == null) {
+              cols[0].menuId = menuId;
+            } else {
+              menuId = cols[0].menuId;
+            }
+          }
+        }
+
         this._dom.innerHTML = Mustache.to_html(
             this._template,
             {
@@ -328,6 +439,12 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
             });
         if (this._hasFilter) {
           this._setupFilters();
+        }
+        if (this._hasMenu) {
+          var menu = document.getElementById(menuId);
+          if (menu) {
+              this._Menu.attach(menu, true);
+          }
         }
         this.trigger({ type: 'render' });
     },
@@ -340,6 +457,7 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
         evt.addListener(eles[i],"change", this._filter);
         //evt.addListener(eles[i],"blur", this._filter);
         evt.addListener(eles[i],"keypress", this._filterpress);
+        evt.addListener(eles[i],"keydown", this._filterkeydown);
       }
     }
 

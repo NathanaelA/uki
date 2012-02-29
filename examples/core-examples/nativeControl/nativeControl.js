@@ -28,7 +28,7 @@ uki(
         ]},
         { view: 'Flow', childViews: [
             { view: 'Label', text: 'Other' },
-            { view: 'nativeControl.Button', value: 'Button' },
+            { view: 'nativeControl.Button', value: 'Button', on: {click: function() {alert('Clicked');}}, width: "140px", height: '40px' },
             { view: 'nativeControl.Text', value: '', placeholder: 'Name?' },
             { view: 'nativeControl.Select', options: [
                 { text: 'Default', options: [
@@ -45,7 +45,7 @@ uki(
         ]},
         { view: 'Flow', childViews: [
           { view: 'Label', text: 'Text Area' },
-          { view: 'nativeControl.TextArea', value: 'TextArea', rows: 3 },
+          { view: 'nativeControl.TextArea', value: 'TextArea', rows: 3, placeholder: 'textarea' },
         ]}
 
 

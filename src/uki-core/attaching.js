@@ -25,13 +25,17 @@ var Attaching = fun.newClass(Container, {
 
 var instances = null;
 
-Attaching.attach = function(dom, view) {
+Attaching.attach = function(dom, view, insertIt) {
     dom = dom || env.doc.body;
     var id = dom[env.expando] = dom[env.expando] || env.guid++;
     if (!instances || !instances[id]) {
         register(new Attaching({ dom: dom }));
     }
-    instances[id].appendChild(view);
+    if (insertIt === true) {
+      instances[id].insertChild(view);
+    }  else {
+      instances[id].appendChild(view);
+    }
     view.layout();
 };
 

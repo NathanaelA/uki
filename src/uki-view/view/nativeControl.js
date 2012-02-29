@@ -29,8 +29,8 @@ var NativeControl = view.newClass('NativeControl', Base, Focusable, {
     }
 
 });
-fun.delegateProp(NativeControl.prototype,
-    ['name', 'checked', 'disabled', 'value', 'type', 'accessKey'], '_input');
+fun.delegateProp(NativeControl.prototype, ['name', 'checked', 'disabled', 'value', 'type', 'accessKey', 'id'], '_input');
+fun.delegateProp(NativeControl.prototype, ['width','height'], '_input', ['style.width','style.height']);
 
 
 
@@ -121,6 +121,7 @@ var Text = view.newClass('nativeControl.Text', NativeControl, {
     this.addClass('uki-nc-text_with-placeholder');
     this._placeholderDom = dom.createElement('span',
         { className: 'uki-nc-text__placholder' });
+    this.textSelectable(false);
     this.dom().insertBefore(this._placeholderDom, this.dom().firstChild);
     evt.on(this._placeholderDom, 'click', fun.bindOnce(function() {
       this.focus();
@@ -159,7 +160,7 @@ var Text = view.newClass('nativeControl.Text', NativeControl, {
 
 
 /**
- * Text input
+ * TextArea input
  * build({ view: 'nativeControl.TextArea', value: 'John Smith', placeholder: 'Name?', rows: 7 })
  */
 
@@ -167,11 +168,19 @@ var TextArea = view.newClass('nativeControl.TextArea', NativeControl, {
 
   _createDom: function(initArgs) {
     this._input = dom.createElement('textarea',
-        { className: 'uki-nc-textarea__input', type: 'text' });
+        { className: 'uki-nc-textarea__input', type: 'text'});
     this._dom = dom.createElement(initArgs.tagName || 'span',
         { className: 'uki-nc-textarea' });
     this.dom().appendChild(this._input);
+//    console.log("InitArgs:", initArgs);
+    if (initArgs['id'] != null) {
+     this._input.id = "textarea"+initArgs['id'];
+    }
+
   },
+
+  _placeHolderAutoHide: true,
+  placeHolderAutoHide: fun.newProp('placeHolderAutoHide'),
 
   rows: fun.newProp('rows', function(v) {
     this._input.rows = v;
@@ -218,21 +227,22 @@ var TextArea = view.newClass('nativeControl.TextArea', NativeControl, {
 
     this._initedPlaceholder = true;
     this.addClass('uki-nc-textarea_with-placeholder');
-    this._placeholderDom = dom.createElement('span',
+    this._placeholderDom = dom.createElement('div',
         { className: 'uki-nc-textarea__placholder' });
+    this.textSelectable(false);
     this.dom().insertBefore(this._placeholderDom, this.dom().firstChild);
     evt.on(this._placeholderDom, 'click', fun.bindOnce(function() {
       this.focus();
     }, this));
-   // this.on('focus blur change keyup', this._updatePlaceholderVis);
-    /*if (this._input.offsetHeight) {
-      this._updatePlaceholderHeight();
-    }*/
+    this.on('focus blur change keyup', this._updatePlaceholderVis);
+    this.on('mouseup', this._updatePlaceholderHeight);
   },
 
   _updatePlaceholderVis: function() {
-    this._placeholderDom.style.display =
+    if (this._placeHolderAutoHide) {
+      this._placeholderDom.style.display =
         (this.hasFocus() || this.value()) ? 'none' : '';
+    }
   },
 
   _updatePlaceholderHeight: function() {
@@ -246,13 +256,16 @@ var TextArea = view.newClass('nativeControl.TextArea', NativeControl, {
         targetStyle[name] = sourceStyle[name];
       }
     });
-    //targetStyle.lineHeight =
+
+//    targetStyle.border = "1px solid red";
     targetStyle.marginTop = ((this._input.offsetHeight + (parseInt(sourceStyle.marginTop, 10) || 0)*2) - 16)
-        + 'px'; //targetStyle.lineHeight;
+        + 'px';
+//    targetStyle.height = sourceStyle.height;
     targetStyle.width = (parseInt(sourceStyle.width)-3) + "px";
     targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft, 10) || 0) + (parseInt(sourceStyle.borderLeftWidth, 10) || 0) + 'px';
     targetStyle.textAlign = "right";
-    //textProto._updatePlaceholderHeight = fun.FS;
+//    targetStyle.display = "table-cell";
+//    targetStyle.verticalAlign = "bottom";
   }
 });
 
@@ -284,12 +297,7 @@ var Button = view.newClass('nativeControl.Button', NativeControl, {
         this._dom = this._input = dom.createElement('input',
             { className: 'uki-nc-button', type: 'button' });
     },
-    width: fun.newProp('width', function(v) {
-        this._input.style.width = v;
-    })
-
 });
-
 
 /**
 * Native browser select

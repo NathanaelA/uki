@@ -75,6 +75,7 @@ function appendMenuOptions ( root, options, level ) {
       name: option.name ? option.name : option.text,
       tabIndex: -1});
 
+    if (option.visible === false) node_li.style.display="none";
     if (option.accessKey) node_a.accessKey = option.accessKey;
     if (option.className) dom.addClass(node_a, option.className);
 
