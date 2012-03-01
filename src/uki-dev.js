@@ -3624,6 +3624,10 @@
             },
             _dragEnd: function(e) {
                 this._drag(e);
+                this.trigger({
+                    type: "resizeColumnEnd",
+                    column: this.columns()[this._draggableColumn]
+                });
                 this._draggableColumn = -1;
             },
             _dragStart: function(e) {

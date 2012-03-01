@@ -346,6 +346,10 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
 
     _dragEnd: function(e) {
       this._drag(e);
+      this.trigger({
+        type: 'resizeColumnEnd',
+        column: this.columns()[this._draggableColumn]
+      });
       this._draggableColumn = -1;
     },
 
