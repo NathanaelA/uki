@@ -32,6 +32,7 @@ var DataTable = view.newClass('DataTable', Container, {
       return this._header;
     },
 
+
     columnWidths: function(v) {
         if (!arguments.length) {
             return utils.pluck(this.columns(), 'width');
@@ -40,6 +41,10 @@ var DataTable = view.newClass('DataTable', Container, {
             if (v[i]) { col.width = v[i]; }
         }, this);
         this._header.columns(this.columns());
+        this.columns().forEach(function(col, i) {
+          if (v[i]) { this._list._updateColumnSize(i); }
+        }, this);
+
         return this;
     },
 
@@ -123,8 +128,9 @@ fun.delegateProp(DataTable.prototype, ['hasFilter', 'filterTimeout', 'sortable',
 var DataTableHeader = view.newClass('DataTableHeader', Base, {
     template: fun.newProp('template'),
     _template: requireText('dataTable/header.html'),
-    hasFilter: fun.newProp('hasFilter'),
-    _hasFilter: false,
+    hasFilter: fun.newProp('filterable'),
+    filterable: fun.newProp('filterable'),
+    _filterable: false,
     enterFiltered: fun.newProp('enterFiltered'),
     _enterFiltered: false,
     filterTimeout: fun.newProp('filterTimeout'),
@@ -400,7 +406,7 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
     },
 
     _formatColumn: function(col) {
-        var filterable = this._hasFilter;
+        var filterable = this._filterable;
         if (filterable && col.filterable === false) filterable = false;
         return {
             pos: col.pos,
@@ -409,8 +415,9 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
             filter: 'filter'+col.label,
             filterstyle: filterable ? '' : 'display:none',
             className: col.className +
+                ((col.resizable === false) ? '' :
                 (col.width != col.maxWidth || col.width != col.minWidth ?
-                    ' uki-dataTable-header-cell_resizable' : ''),
+                    ' uki-dataTable-header-cell_resizable' : '')),
             sortClass: (col.sort === 1 ? ' uki-dataTable-sort-down' : (col.sort === 2 ? ' uki-dataTable-sort-up' : '')),
             menuId: col.menuId ? col.menuId : ''
         };
@@ -441,7 +448,7 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
                 columns: this.columns().map(this._formatColumn, this),
                 style: 'width:' + table.totalWidth(this.columns()) + 'px'
             });
-        if (this._hasFilter) {
+        if (this._filterable) {
           this._setupFilters();
         }
         if (this._hasMenu) {

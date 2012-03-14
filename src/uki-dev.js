@@ -3381,6 +3381,11 @@
                     }
                 }, this);
                 this._header.columns(this.columns());
+                this.columns().forEach(function(col, i) {
+                    if (v[i]) {
+                        this._list._updateColumnSize(i);
+                    }
+                }, this);
                 return this;
             },
             list: function() {
@@ -3452,8 +3457,9 @@
         var DataTableHeader = view.newClass("DataTableHeader", Base, {
             template: fun.newProp("template"),
             _template: '<table class="uki-dataTable-header" style="{{style}}"><tbody><tr class="uki-dataTable-header-row">{{#columns}}<td class="uki-dataTable-header-cell {{className}}" style="{{style}}" id="{{menuId}}"><div class="uki-dataTable-header-wrap"><div class="uki-dataTable-header-text{{sortClass}}">{{label}}</div><input type="input" name="{{filter}}" style="{{filterstyle}}" tabindex="1" class="uki-dataTable-filter"><div class="uki-dataTable-resizer uki-dataTable-resizer_pos-{{pos}}">|</div></div></td>{{/columns}}</tr></table>',
-            hasFilter: fun.newProp("hasFilter"),
-            _hasFilter: false,
+            hasFilter: fun.newProp("filterable"),
+            filterable: fun.newProp("filterable"),
+            _filterable: false,
             enterFiltered: fun.newProp("enterFiltered"),
             _enterFiltered: false,
             filterTimeout: fun.newProp("filterTimeout"),
@@ -3668,7 +3674,7 @@
                 this.dom().firstChild.style.width = table.totalWidth(this.columns()) + "px";
             },
             _formatColumn: function(col) {
-                var filterable = this._hasFilter;
+                var filterable = this._filterable;
                 if (filterable && col.filterable === false) filterable = false;
                 return {
                     pos: col.pos,
@@ -3676,7 +3682,7 @@
                     style: col.visible ? "width:" + col.width + "px" : "display: none",
                     filter: "filter" + col.label,
                     filterstyle: filterable ? "" : "display:none",
-                    className: col.className + (col.width != col.maxWidth || col.width != col.minWidth ? " uki-dataTable-header-cell_resizable" : ""),
+                    className: col.className + (col.resizable === false ? "" : col.width != col.maxWidth || col.width != col.minWidth ? " uki-dataTable-header-cell_resizable" : ""),
                     sortClass: col.sort === 1 ? " uki-dataTable-sort-down" : col.sort === 2 ? " uki-dataTable-sort-up" : "",
                     menuId: col.menuId ? col.menuId : ""
                 };
@@ -3702,7 +3708,7 @@
                     columns: this.columns().map(this._formatColumn, this),
                     style: "width:" + table.totalWidth(this.columns()) + "px"
                 });
-                if (this._hasFilter) {
+                if (this._filterable) {
                     this._setupFilters();
                 }
                 if (this._hasMenu) {

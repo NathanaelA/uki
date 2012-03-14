@@ -16,11 +16,11 @@ function formatTime (t) {
 
 var views = uki([
     { view: 'DataTable', as: 'table', debounce: 1,
-      hasFilter: true, sortable: true,
-      pos: 't:0 l:0 r:0 b:0', columns: [
+      filterable: true, sortable: true,
+      pos: 't:0 l:0 w:50% h:50%', columns: [
         { label: 'ID', width: 40 },
-        { label: 'Name', minWidth: 100, width: 250, sortable: false, sort: 1 },
-        { label: 'Time', width: 50, formatter: formatTime, filterable: false },
+        { label: 'Name', minWidth: 100, width: 250, sortable: false, sort: 1, resizable: true },
+        { label: 'Time', width: 50, formatter: formatTime, filterable: false, resizable: false },
         { label: 'Artist', minWidth: 100, width: 150 },
         { label: 'Album', minWidth: 100, width: 150 },
         { label: 'Genre', width: 100 },
@@ -28,7 +28,8 @@ var views = uki([
         { label: 'Play Count', minWidth: 30, width: 30, maxWidth: 30 }
     ], multiselect: true },
 
-    { view: 'Text', as: 'loading', pos: 't:30px l:45px', text: 'Loading...' }
+    { view: 'Text', as: 'loading', pos: 't:30px l:45px', text: 'Loading...' },
+  { view: 'nativeControl.Button', text: 'Test', pos: 'b:0 r:0', on: {click: test}}
 ]).attach();
 
 // dinamicly load library json
@@ -39,3 +40,13 @@ window.onLibraryLoad = function(data) {
 
 document.getElementsByTagName('head')[0].appendChild(
     uki.createElement('script', { src: 'library.js' }));
+
+function test()
+{
+  console.log(views);
+  var newWidth = [];
+  newWidth[1] = 100;
+  var me =   views[0];
+  me.columnWidths(newWidth);
+//  me._resizeColumn(1,500);
+}
