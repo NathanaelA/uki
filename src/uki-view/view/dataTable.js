@@ -201,7 +201,7 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
           var sortfields = {};
           for ( i = 0; i < col.length; i++ ) {
             if ( col[i].sort > 0 ) {
-              sortfields[col[i].label] = col[i].sort;
+              sortfields[col[i].name] = col[i].sort;
             }
           }
         }
@@ -412,7 +412,7 @@ var DataTableHeader = view.newClass('DataTableHeader', Base, {
             pos: col.pos,
             label: col.label,
             style: (col.visible) ? "width:" + col.width + "px" : 'display: none',
-            filter: 'filter'+col.label,
+            filter: 'filter'+col.name,
             filterstyle: filterable ? '' : 'display:none',
             className: col.className +
                 ((col.resizable === false) ? '' :
