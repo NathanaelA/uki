@@ -1,3 +1,5 @@
+requireCss('base/textSelectable.css');
+
 var view  = require('../view'),
     utils = require('../utils'),
     fun   = require('../function'),
@@ -211,7 +213,6 @@ var Base = view.newClass('Base', {
 
     textSelectable: fun.newProp('textSelectable', function(state) {
         this._textSelectable = state;
-        if (!state) { initTextSelectable(); }
         this.toggleClass('uki-textSelectable_off', !state);
         this[state ? 'removeListener' : 'addListener']
             ('selectstart', evt.preventDefaultHandler);
@@ -378,11 +379,6 @@ var Base = view.newClass('Base', {
     }
 
 });
-
-function initTextSelectable() {
-    initTextSelectable = fun.FT;
-    dom.createStylesheet(requireText('base/textSelectable.css'));
-}
 
 Base.prototype.on = Base.prototype.addListener;
 
