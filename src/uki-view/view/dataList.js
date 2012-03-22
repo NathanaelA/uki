@@ -180,6 +180,9 @@ var DataList = view.newClass('DataList', Container, Focusable, {
                 (data.slice && data.slice(0, 1)[0]) || '',
             pack = this._createPack();
 
+        // Pack Render below will render a blank '' line to be a lesser offsetHeight than proper
+        if (sample.length === 0) sample = "sampleRow";
+
         this.appendChild(pack);
         pack.render([sample], [], 0);
         var rowHeight = pack.dom().offsetHeight;
