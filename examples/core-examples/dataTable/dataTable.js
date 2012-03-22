@@ -18,7 +18,7 @@ function formatTime (t) {
 var views = uki([
     { view: 'DataTable', as: 'table', debounce: 1,
       filterable: true, sortable: true, hasMenu: true,
-      menuoptions: [ 'Row Count', 'Reset Sort', 'Reset Filters', 'Reset All'  ],
+      menuOptions: [ 'Row Count', 'Reset Sort', 'Reset Filters', 'Reset All'  ],
       on: {columnClick: sortit, columnFilter: filterit, menuClick: menuClick },
       pos: 't:0 l:0 w:100% h:100%', columns: [
         { label: 'ID', width: 40, visible: false },

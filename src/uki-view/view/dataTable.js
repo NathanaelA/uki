@@ -144,7 +144,8 @@ fun.delegateCall(DataTable.prototype, [
     'scrollToIndex', 'triggerSelection', 'redrawRow'
 ], 'list');
 
-fun.delegateProp(DataTable.prototype, ['filterable', 'filterTimeout', 'sortable', 'hasMenu', 'menuoptions', 'menu'], 'header');
+fun.delegateProp(DataTable.prototype, ['filterable', 'filterTimeout', 'sortable', 'hasMenu',
+  'menuOptions', 'menu', 'menuImage'], 'header');
 
 var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
 
@@ -349,7 +350,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
         dom.createElement('div', {className: "uki-dataTable-resizer uki-dataTable-resizer_pos-"+this._pos});
     this._resizer.innerHTML = "|";
     this._filter =
-        dom.createElement( 'input', {className: "uki-dataTable-filter", tabIndex: 1, name: this._name, style: filterStyle} )
+        dom.createElement( 'input', {className: "uki-dataTable-filter", tabIndex: 1, autocomplete: "off", name: this._name, style: filterStyle} )
     this._wrapper =
         dom.createElement( 'div', {className: "uki-dataTable-header-wrap"}, [this._labelElement, this._filter, this._resizer] );
     this._dom =
@@ -435,22 +436,22 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
     return (this._menu);
   }),
   _menu: null,
-  menuimage: fun.newProp('menuitem', function(v) {
+  menuImage: fun.newProp('menuImage', function(v) {
     if (arguments.length) {
-      this._menuimage = v;
+      this._menuImage = v;
       this._setupMenuOptions();
     }
-    return (this._menuimage);
+    return (this._menuImage);
   }),
-  _menuimage: "data:image/gif;base64,R0lGODlhEAAQAJEAAP39/ebm5ikpKZqamiH5BAAAAAAALAAAAAAQABAAAAIzhI+pqzEBgpwSDTGu2DuzfzgQNSVXxqWDaZAVIkauiWkpxspkUrqQVbt1YA8dBfTxKQMFADs=",
-  menuoptions: fun.newProp('menuoptions', function(v) {
+  _menuImage: "data:image/gif;base64,R0lGODlhEAAQAJEAAP39/ebm5ikpKZqamiH5BAAAAAAALAAAAAAQABAAAAIzhI+pqzEBgpwSDTGu2DuzfzgQNSVXxqWDaZAVIkauiWkpxspkUrqQVbt1YA8dBfTxKQMFADs=",
+  menuOptions: fun.newProp('menuOptions', function(v) {
     if (arguments.length) {
-        this._menuoptions = v;
+        this._menuOptions = v;
         this._setupMenuOptions();
     }
-    return (this._menuoptions);
+    return (this._menuOptions);
   }),
-  _menuoptions: null,
+  _menuOptions: null,
   _styleSheetElement: null,
   _styleSheet: null,
 
@@ -515,7 +516,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
 
     _setupMenuOptions: function() {
       var lmenu = [];
-      lmenu[0] = {html: '<img src="'+this._menuimage+'" width="12px" height="12px" border=0>', options: this._menuoptions};
+      lmenu[0] = {html: '<img src="'+this._menuImage+'" width="12px" height="12px" border=0>', options: this._menuOptions};
       this._menu.options(lmenu);
     },
 

@@ -11,7 +11,7 @@
     }
     var require_modules = require.modules = [];
     var require_cache = require.cache = [];
-    var __requiredCss = ".uki-attaching {font-size: 12px; font-family: Arial, Helvetica, sans-serif;}\n.uki-attaching-relative {position: relative;}\n\n.uki-button {border: 1px solid #999; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-bottom-color: #777; border-radius: 3px; background: #D7DAE4 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAADwCAIAAAB5d1ZWAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MzFBNzRBRjgzMUMxMTFFMDk4MTVBMTVDMDE2MEQyRTMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MzFBNzRBRjkzMUMxMTFFMDk4MTVBMTVDMDE2MEQyRTMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4OTY5QTk2MTMxQzAxMUUwOTgxNUExNUMwMTYwRDJFMyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4OTY5QTk2MjMxQzAxMUUwOTgxNUExNUMwMTYwRDJFMyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PipBo48AAAKSSURBVHja7N1BTsMwEAXQOun9DwQbJJZcBLFD7KBpuMKfxSiy9eYIT3/Gdpw243ieN5XVHVUB60Yrx9KFBazjgFDAopW3oT4srIbnk0LehrAKbWhmFbAky2rYkixYktWDZcBLlpllU2pTamZJlh08LFiwJsI6T09K82QxiGtDAAvW5TOLl2TBggULFiwEsGDBgrVmDc+zCmdDWLB6sLyAW8GSLMlqwnJlIVmSJVnzYB2SVUjWIVmSZWZZDSVLsmBJVo7lqUOOdUqWZPUkC1ZcrsJgwYIFa9XV8DYgxFhjo5VjiZaZBQsWLFiwFCxYsGCtedx5f3ulEJ8Nh7NhjLVtOhEWrKux9p1CirVvsArJ0oZ5srShNpQsWLYOkiVZBnxlNbTPsintwBoDVmFmwYKlDa/G8jJbAcvLbJU2hBVjCVYFi1ZclsLagFdmlpllZsGCBUvBggULFixYKq3x+e0DtvHZ0B/3aMOuZEGIsXRhAevXP+DmWA+LYaENGVSShSvH8p+uOdYBy2rYgvVnNSwk6yFZhWTBshpaDc2siZLFSrLMrOtXQ8nKsezgDfgWLJ+SqWCxisu9ISxY188sPzeULFiwYMGChQAWLFiw1qzx9eNRaXw29M3tCpbXlXMsV2GlZEGIsdwbVrAshjmWXJlZXW1Iy9ahZzWEYOugDQ14W4c12xCWNtSGsGY6SMOSrI5yFQYLFixYsJRXuytYPo6iDWHBggULFgJYsGDBWvS48/H+QiE/GzocOkh3YO2+I51jbR5o5Vj3faeQY2lDbagNtaE2XDNZd22YJ8sW3szShtpwpoO0NpQsyboaS7BKWLTMLMkys6YpS6E2lCxYsOyzlGTBggULFiwFCxYsWDPVvwADALDE/Hh4isZ/AAAAAElFTkSuQmCC) repeat-x 0 0; white-space: nowrap; vertical-align: top; text-align: center; font-size: 12px; font-family: Arial, Helvetica, sans-serif; color: #111; padding: 0; height: 22px; text-shadow: rgba(255, 255, 255, 0.5) 0 1px 0px; position: relative; z-index: 10; outline: 0; _zoom: 1; _display: inline; -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; *background-image: url(-view/view/button/button.png);}\n.uki-button::-moz-focus-inner {padding: 0; border: 0;}\n.uki-button:hover {background-color: #F5F7FD; background-position: 0 -40px;}\n.uki-button:active {border-color: #666; background-color: #C5C7CD; background-position: 0 -80px; -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset; -moz-box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset; box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset;}\n.uki-button__text {margin: 0 5px;}\n.uki-button:focus {border-color: #7594D2; -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px; -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px; box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px;}\n.uki-button__icon {vertical-align: top; margin-top: -1px; margin-bottom: -1px;}\n.uki-button_disabled,\n.uki-button_disabled:active,\n.uki-button_disabled:hover {color: #999; background-color: #eee; background-image: none; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; border-color: #AAA;}\n.uki-button_disabled .uki-button__icon {opacity: 0.5;}\n.uki-button_image-only .uki-button__text {display: none;}\n.uki-button_confirm {background-position: 0 -120px; border-color: #999; border-bottom-color: #779;}\n.uki-button_confirm:hover {background-position: 0 -160px;}\n.uki-button_confirm:active {background-position: 0 -200px; border-color: #77A;}\n.uki-button_confirm.uki-button_disabled,\n.uki-button_confirm.uki-button_disabled:active,\n.uki-button_confirm.uki-button_disabled:hover {background-color: #EEEEFA; border-color: #AAC;}\n\n.uki-flow {display: block; padding: 0; margin: 0;}\n.uki-flow-item {display: block; padding: 0; margin: 0;}\n.uki-flow_horizontal:after {clear: both; content: '.'; display: block; height: 0px; line-height: 0; visibility: hidden;}\n.uki-flow_horizontal {*zoom: 1;}\n.uki-flow_horizontal > .uki-flow-item {float: left;}\n.uki-flow_spacing-small {margin: 0;}\n.uki-flow_spacing-small > .uki-flow-item {margin: 5px 0 0 0;}\n.uki-flow_spacing-medium > .uki-flow-item {margin: 10px 0 0 0;}\n.uki-flow_spacing-large > .uki-flow-item {margin: 20px 0 0 0;}\n.uki-flow .uki-flow-item:first-child {margin-top: 0;}\n.uki-flow_horizontal.uki-flow_spacing-small > .uki-flow-item {margin: 0 0 0 5px;}\n.uki-flow_horizontal.uki-flow_spacing-medium > .uki-flow-item {margin: 0 0 0 10px;}\n.uki-flow_horizontal.uki-flow_spacing-large > .uki-flow-item {margin: 0 0 0 20px;}\n.uki-flow_horizontal.uki-flow > .uki-flow-item:first-child {margin-left: 0;}\n\n.uki-nc-select {margin: 0;}\n.uki-nc-text, .uki-nc-textarea {display: inline-block; *display: inline; *zoom: 1;}\n.uki-nc-text__input, .uki-nc-textarea__input {margin: 0; width: 100%; *width: auto; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}\n.uki-nc-text_with-placeholder, .uki-nc-textarea_with-placeholder {position: relative;}\n.uki-nc-text__placholder, .uki-nc-textarea__placholder {position: absolute; color: #888; opacity: 0.5;}\n\n.uki-text-p {line-height: 1.3; margin: 0 0 1em 0;}\n.uki-header {margin: 0 0 5px 0; font-weight: normal;}\n.uki-header_size_large {font-size: 18px;}\n.uki-header_size_medium {font-size: 15px;}\n.uki-header_size_small {font-size: 12px; font-weight: bold;}\n\n.uki-splitPane-handle,\n.uki-splitPane-handle-bar {z-index: 200; position: absolute;}\n.uki-splitPane-handle {background: #999;}\n.uki-splitPane-handle-bar {display: none; background: #999; overflow: hidden;}\n.uki-splitPane-handle-ext {background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAyCAYAAACZDmG3AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMTIvMjEvMTCej/OTAAAAJklEQVQokWMoLi7+////f4b///8zMPHw8DDAABMDEhjljHJozAEAwzEI2ZZEXDIAAAAASUVORK5CYII=); position: absolute; *background-image: url(-view/view/splitPane/extv.png);}\n.uki-splitPane-handle_h {cursor: row-resize; width: 100%;}\n.uki-splitPane-handle-bar_h {width: 100%; height: 1px; left: 0px; top: 2px;}\n.uki-splitPane-handle_v {cursor: col-resize; height: 100%;}\n.uki-splitPane-handle-bar_v {height: 100%; width: 1px; top: 0px; left: 2px;}\n.uki-splitPane-handle_thin .uki-splitPane-handle-bar {display: block;}\n.uki-splitPane-handle_thin.uki-splitPane-handle {background: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEHAAEALAAAAAABAAEAAAICTAEAOw==); *background-image: url(-view/view/splitPane/x.gif);}\n.uki-splitPane-handle_thin.uki-splitPane-handle_v {width: 5px !important; margin-left: -2px;}\n.uki-splitPane-handle_thin.uki-splitPane-handle_h {height: 5px !important; margin-top: -2px;}\n\n.uki-menu-horizontal {list-style: none; padding: 0; margin: 0;}\n.uki-menu-horizontal li {color: black; background-color: white; position: relative;}\n.uki-menu-horizontal li ul {z-index: 500; position: absolute; left: 0; width: 10em;}\n.uki-menu-horizontal ul {padding: 0; margin: 0px -1px; list-style: none; border: 1px solid black; background-color: white;}\n.uki-menu-horizontal > li {position: relative; float: left; text-align: left;}\n.uki-menu-horizontal a {display: block; padding: 0px 4px; color: black; text-decoration: none;}\n.uki-menu-horizontal :hover > a {background-color: black; color: white;}\n.uki-menu-horizontal ul {display: none;}\n.uki-menu-horizontal :hover > ul {display: block;}\n.uki-menu-horizontal ul ul {position: absolute; top: 0px; left: 10em;}\n.uki-menu-horizontal .uki-menu-submenu {background: url(data:image/gif;base64,R0lGODlhBwARALMAAAAAAP8AAP///////////////////////////////////////////////////////yH5BAEAAAEALAAAAAAHABEAAAQUMMhJq704AAs27Z4EhuAXilmqZhEAOw==) no-repeat 98% center; *background-image: url(-view/view/menu/horiz_arrow.gif);}\n.uki-menu-vertical .uki-menu-submenu {background: url(data:image/gif;base64,R0lGODlhEQAHAPMAAAAAAP8AAP///////////////////////////////////////////////////////yH5BAEAAAEALAAAAAARAAcAAwQTMMhJq714gs1Blp33gdtIieYYAQA7) no-repeat 98% center; *background-image: url(-view/view/menu/vert_arrow.gif);}\n\n.uki-dataList {position: relative; outline: none;}\n.uki-dataList-pack {left: 0; width: 100%; display: block; list-style: none; position: absolute; padding: 0; margin: 0;}\n.uki-dataList-row {cursor: default; display: block; padding: 5px; margin: 0; height: 14px; font-size: 11px; line-height: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; background-color: #FFFFFF;}\n.uki-dataList-row_odd {background-color: #EDF3FE;}\n.uki-dataList-row_selected {background-color: #3875D7; color: #FFF; padding-top: 4px; padding-bottom: 4px; border: 1px solid #2760C0; border-left: none; border-right: none;}\n.uki-dataList-row_selected + .uki-dataList-row_selected {border-top: none; padding-top: 5px;}\n.uki-dataList_blured .uki-dataList-row_selected {background-color: #CCC; border-color: #AAA; color: #000;}\n\n.uki-dataTable-container {overflow: auto;}\n.uki-dataTable {position: relative; height: 100%; width: 100%;}\n.uki-dataTable-menu {background: url(data:image/gif;base64,R0lGODlhEAAQAJEAAP39/ebm5ikpKZqamiH5BAAAAAAALAAAAAAQABAAAAIzhI+pqzEBgpwSDTGu2DuzfzgQNSVXxqWDaZAVIkauiWkpxspkUrqQVbt1YA8dBfTxKQMFADs=) no-repeat center center; *background-image: url(-view/view/dataTable/menu.gif);}\n.uki-dataTable-sort-down {background: url(data:image/gif;base64,R0lGODlhCgAJAIABAF9fX////yH5BAEAAAEALAAAAAAKAAkAAAINjI+py50AI0ByPsgsKgA7) no-repeat 98% center; *background-image: url(-view/view/dataTable/down.gif);}\n.uki-dataTable-sort-up {background: url(data:image/gif;base64,R0lGODlhCgAJAIABAF9fX////yH5BAEAAAEALAAAAAAKAAkAAAINjGGZwHrcFoSu2ovzLQA7) no-repeat 98% center; *background-image: url(-view/view/dataTable/up.gif);}\n.uki-dataTable-header,\n.uki-dataTable-pack {border-spacing: 0; table-layout: fixed;}\n.uki-dataTable-pack {width: 100%;}\n.uki-dataTable-row {display: table-row;}\n.uki-dataTable-cell {border: none; padding: 2px 5px; margin: 0; height: 14px; font-size: 11px; line-height: 14px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; cursor: default;}\n.uki-dataTable-row_selected {background-color: #3875D7; color: #FFF;}\n.uki-dataTable-row_selected .uki-dataTable-cell {padding-top: 1px; padding-bottom: 1px; border-top: 1px solid #2760C0; border-bottom: 1px solid #2760C0;}\n.uki-dataTable-row_selected + .uki-dataTable-row_selected .uki-dataTable-cell {border-top: none; padding-top: 2px;}\n.uki-dataList_blured .uki-dataTable-row_selected {background-color: #CCC; color: #000;}\n.uki-dataList_blured .uki-dataTable-row_selected .uki-dataTable-cell {border-color: #AAA;}\n.uki-dataTable-wrap {width: 100%;}\n.uki-dataTable-cell_number {text-align: right;}\n.uki-dataTable-header-container {box-shadow: 0 1px 0 rgba(0, 0, 0, .1); -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, .1); -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .1); z-index: 100; position: relative; background-color: #EFEFEF; border-bottom: 1px solid #999; overflow: hidden; cursor: default;}\n.uki-dataTable-header-cell {margin: 0; border-right: 1px solid #CCC; padding: 0 4px 0 5px; vertical-align: top;}\n.uki-dataTable-header-wrap {position: relative;}\n.uki-dataTable-header-text {text-overflow: ellipsis; white-space: nowrap; overflow: hidden; padding: 2px 0; height: 14px; font-size: 11px; line-height: 14px;}\n.uki-dataTable-resizer {display: none; overflow: hidden; position: absolute; width: 5px; top: 0; right: -7px; height: 100%; text-indent: 1em; cursor: col-resize;}\n.uki-dataTable-header-cell_resizable .uki-dataTable-resizer {display: block;}\n.uki-dataTable-spacer {padding-left: 0; padding-right: 0;}\n.uki-dataTable-filter {margin-left: -2px; padding: 1px; width: 100%;}\n";
+    var __requiredCss = ".uki-textSelectable_off {-moz-user-select: -moz-none; -webkit-user-select: none; -o-user-select: none; user-select: none;}\n.uki-textSelectable_off::selection {background: transparent;}\n\n.uki-attaching {font-size: 12px; font-family: Arial, Helvetica, sans-serif;}\n.uki-attaching-relative {position: relative;}\n\n.uki-button {border: 1px solid #999; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-bottom-color: #777; border-radius: 3px; background: #D7DAE4 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAADwCAIAAAB5d1ZWAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MzFBNzRBRjgzMUMxMTFFMDk4MTVBMTVDMDE2MEQyRTMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MzFBNzRBRjkzMUMxMTFFMDk4MTVBMTVDMDE2MEQyRTMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4OTY5QTk2MTMxQzAxMUUwOTgxNUExNUMwMTYwRDJFMyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4OTY5QTk2MjMxQzAxMUUwOTgxNUExNUMwMTYwRDJFMyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PipBo48AAAKSSURBVHja7N1BTsMwEAXQOun9DwQbJJZcBLFD7KBpuMKfxSiy9eYIT3/Gdpw243ieN5XVHVUB60Yrx9KFBazjgFDAopW3oT4srIbnk0LehrAKbWhmFbAky2rYkixYktWDZcBLlpllU2pTamZJlh08LFiwJsI6T09K82QxiGtDAAvW5TOLl2TBggULFiwEsGDBgrVmDc+zCmdDWLB6sLyAW8GSLMlqwnJlIVmSJVnzYB2SVUjWIVmSZWZZDSVLsmBJVo7lqUOOdUqWZPUkC1ZcrsJgwYIFa9XV8DYgxFhjo5VjiZaZBQsWLFiwFCxYsGCtedx5f3ulEJ8Nh7NhjLVtOhEWrKux9p1CirVvsArJ0oZ5srShNpQsWLYOkiVZBnxlNbTPsintwBoDVmFmwYKlDa/G8jJbAcvLbJU2hBVjCVYFi1ZclsLagFdmlpllZsGCBUvBggULFixYKq3x+e0DtvHZ0B/3aMOuZEGIsXRhAevXP+DmWA+LYaENGVSShSvH8p+uOdYBy2rYgvVnNSwk6yFZhWTBshpaDc2siZLFSrLMrOtXQ8nKsezgDfgWLJ+SqWCxisu9ISxY188sPzeULFiwYMGChQAWLFiw1qzx9eNRaXw29M3tCpbXlXMsV2GlZEGIsdwbVrAshjmWXJlZXW1Iy9ahZzWEYOugDQ14W4c12xCWNtSGsGY6SMOSrI5yFQYLFixYsJRXuytYPo6iDWHBggULFgJYsGDBWvS48/H+QiE/GzocOkh3YO2+I51jbR5o5Vj3faeQY2lDbagNtaE2XDNZd22YJ8sW3szShtpwpoO0NpQsyboaS7BKWLTMLMkys6YpS6E2lCxYsOyzlGTBggULFiwFCxYsWDPVvwADALDE/Hh4isZ/AAAAAElFTkSuQmCC) repeat-x 0 0; white-space: nowrap; vertical-align: top; text-align: center; font-size: 12px; font-family: Arial, Helvetica, sans-serif; color: #111; padding: 0; height: 22px; text-shadow: rgba(255, 255, 255, 0.5) 0 1px 0px; position: relative; z-index: 10; outline: 0; _zoom: 1; _display: inline; -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; *background-image: url(-view\\view\\button\\button.png);}\n.uki-button::-moz-focus-inner {padding: 0; border: 0;}\n.uki-button:hover {background-color: #F5F7FD; background-position: 0 -40px;}\n.uki-button:active {border-color: #666; background-color: #C5C7CD; background-position: 0 -80px; -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset; -moz-box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset; box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset;}\n.uki-button__text {margin: 0 5px;}\n.uki-button:focus {border-color: #7594D2; -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px; -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px; box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px;}\n.uki-button__icon {vertical-align: top; margin-top: -1px; margin-bottom: -1px;}\n.uki-button_disabled,\r\n.uki-button_disabled:active,\r\n.uki-button_disabled:hover {color: #999; background-color: #eee; background-image: none; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; border-color: #AAA;}\n.uki-button_disabled .uki-button__icon {opacity: 0.5;}\n.uki-button_image-only .uki-button__text {display: none;}\n.uki-button_confirm {background-position: 0 -120px; border-color: #999; border-bottom-color: #779;}\n.uki-button_confirm:hover {background-position: 0 -160px;}\n.uki-button_confirm:active {background-position: 0 -200px; border-color: #77A;}\n.uki-button_confirm.uki-button_disabled,\r\n.uki-button_confirm.uki-button_disabled:active,\r\n.uki-button_confirm.uki-button_disabled:hover {background-color: #EEEEFA; border-color: #AAC;}\n\n.uki-flow {display: block; padding: 0; margin: 0;}\n.uki-flow-item {display: block; padding: 0; margin: 0;}\n.uki-flow_horizontal:after {clear: both; content: '.'; display: block; height: 0px; line-height: 0; visibility: hidden;}\n.uki-flow_horizontal {*zoom: 1;}\n.uki-flow_horizontal > .uki-flow-item {float: left;}\n.uki-flow_spacing-small {margin: 0;}\n.uki-flow_spacing-small > .uki-flow-item {margin: 5px 0 0 0;}\n.uki-flow_spacing-medium > .uki-flow-item {margin: 10px 0 0 0;}\n.uki-flow_spacing-large > .uki-flow-item {margin: 20px 0 0 0;}\n.uki-flow .uki-flow-item:first-child {margin-top: 0;}\n.uki-flow_horizontal.uki-flow_spacing-small > .uki-flow-item {margin: 0 0 0 5px;}\n.uki-flow_horizontal.uki-flow_spacing-medium > .uki-flow-item {margin: 0 0 0 10px;}\n.uki-flow_horizontal.uki-flow_spacing-large > .uki-flow-item {margin: 0 0 0 20px;}\n.uki-flow_horizontal.uki-flow > .uki-flow-item:first-child {margin-left: 0;}\n\n.uki-nc-select {margin: 0;}\n.uki-nc-text, .uki-nc-textarea {display: inline-block; *display: inline; *zoom: 1;}\n.uki-nc-text__input, .uki-nc-textarea__input {margin: 0; width: 100%; *width: auto; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}\n.uki-nc-text_with-placeholder, .uki-nc-textarea_with-placeholder {position: relative;}\n.uki-nc-text__placholder, .uki-nc-textarea__placholder {position: absolute; color: #888; opacity: 0.5;}\n\n.uki-text-p {line-height: 1.3; margin: 0 0 1em 0;}\n.uki-header {margin: 0 0 5px 0; font-weight: normal;}\n.uki-header_size_large {font-size: 18px;}\n.uki-header_size_medium {font-size: 15px;}\n.uki-header_size_small {font-size: 12px; font-weight: bold;}\n\n.uki-splitPane-handle,\r\n.uki-splitPane-handle-bar {z-index: 200; position: absolute;}\n.uki-splitPane-handle {background: #999;}\n.uki-splitPane-handle-bar {display: none; background: #999; overflow: hidden;}\n.uki-splitPane-handle-ext {background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAyCAYAAACZDmG3AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMTIvMjEvMTCej/OTAAAAJklEQVQokWMoLi7+////f4b///8zMPHw8DDAABMDEhjljHJozAEAwzEI2ZZEXDIAAAAASUVORK5CYII=); position: absolute; *background-image: url(-view\\view\\splitPane\\extv.png);}\n.uki-splitPane-handle_h {cursor: row-resize; width: 100%;}\n.uki-splitPane-handle-bar_h {width: 100%; height: 1px; left: 0px; top: 2px;}\n.uki-splitPane-handle_v {cursor: col-resize; height: 100%;}\n.uki-splitPane-handle-bar_v {height: 100%; width: 1px; top: 0px; left: 2px;}\n.uki-splitPane-handle_thin .uki-splitPane-handle-bar {display: block;}\n.uki-splitPane-handle_thin.uki-splitPane-handle {background: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEHAAEALAAAAAABAAEAAAICTAEAOw==); *background-image: url(-view\\view\\splitPane\\x.gif);}\n.uki-splitPane-handle_thin.uki-splitPane-handle_v {width: 5px !important; margin-left: -2px;}\n.uki-splitPane-handle_thin.uki-splitPane-handle_h {height: 5px !important; margin-top: -2px;}\n\n.uki-menu-horizontal {list-style: none; padding: 0; margin: 0;}\n.uki-menu-horizontal li {color: black; background-color: white; position: relative;}\n.uki-menu-horizontal li ul {z-index: 500; position: absolute; left: 0; width: 10em;}\n.uki-menu-horizontal ul {padding: 0; margin: 0px -1px; list-style: none; border: 1px solid black; background-color: white;}\n.uki-menu-horizontal > li {position: relative; float: left; text-align: left;}\n.uki-menu-horizontal a {display: block; padding: 0px 4px; color: black; text-decoration: none;}\n.uki-menu-horizontal :hover > a {background-color: black; color: white;}\n.uki-menu-horizontal ul {display: none;}\n.uki-menu-horizontal :hover > ul {display: block;}\n.uki-menu-horizontal ul ul {position: absolute; top: 0px; left: 10em;}\n.uki-menu-horizontal .uki-menu-submenu {background: url(data:image/gif;base64,R0lGODlhBwARALMAAAAAAP8AAP///////////////////////////////////////////////////////yH5BAEAAAEALAAAAAAHABEAAAQUMMhJq704AAs27Z4EhuAXilmqZhEAOw==) no-repeat 98% center; *background-image: url(-view\\view\\menu\\horiz_arrow.gif);}\n.uki-menu-vertical .uki-menu-submenu {background: url(data:image/gif;base64,R0lGODlhEQAHAPMAAAAAAP8AAP///////////////////////////////////////////////////////yH5BAEAAAEALAAAAAARAAcAAwQTMMhJq714gs1Blp33gdtIieYYAQA7) no-repeat 98% center; *background-image: url(-view\\view\\menu\\vert_arrow.gif);}\n\n.uki-dataList {position: relative; outline: none;}\n.uki-dataList-pack {left: 0; width: 100%; display: block; list-style: none; position: absolute; padding: 0; margin: 0;}\n.uki-dataList-row {cursor: default; display: block; padding: 5px; margin: 0; height: 14px; font-size: 11px; line-height: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; background-color: #FFFFFF;}\n.uki-dataList-row_odd {background-color: #EDF3FE;}\n.uki-dataList-row_selected {background-color: #3875D7; color: #FFF; padding-top: 4px; padding-bottom: 4px; border: 1px solid #2760C0; border-left: none; border-right: none;}\n.uki-dataList-row_selected + .uki-dataList-row_selected {border-top: none; padding-top: 5px;}\n.uki-dataList_blured .uki-dataList-row_selected {background-color: #CCC; border-color: #AAA; color: #000;}\n\n.uki-dataTable-container {overflow: auto;}\n.uki-dataTable {position: relative; height: 100%; width: 100%;}\n.uki-dataTable-menu {margin-left: 0px; margin-top: 2px; width: 12px; height: 12px; z-index: 101; cursor: pointer; position: absolute;}\n.uki-dataTable-menu .uki-menu-primary, .uki-dataTable-menu .uki-menu-primary > a {background-color: transparent;}\n.uki-dataTable-sort-down {background: url(data:image/gif;base64,R0lGODlhCgAJAIABAF9fX////yH5BAEAAAEALAAAAAAKAAkAAAINjI+py50AI0ByPsgsKgA7) no-repeat 100% center; *background-image: url(-view\\view\\dataTable\\down.gif);}\n.uki-dataTable-sort-up {background: url(data:image/gif;base64,R0lGODlhCgAJAIABAF9fX////yH5BAEAAAEALAAAAAAKAAkAAAINjGGZwHrcFoSu2ovzLQA7) no-repeat 100% center; *background-image: url(-view\\view\\dataTable\\up.gif);}\n.uki-dataTable-header,\r\n.uki-dataTable-pack {border-spacing: 0; table-layout: fixed;}\n.uki-dataTable-pack {width: 100%;}\n.uki-dataTable-row {display: table-row;}\n.uki-dataTable-cell {border: none; padding: 2px 5px; margin: 0; height: 14px; font-size: 11px; line-height: 14px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; cursor: default;}\n.uki-dataTable-row_selected {background-color: #3875D7; color: #FFF;}\n.uki-dataTable-row_selected .uki-dataTable-cell {padding-top: 1px; padding-bottom: 1px; border-top: 1px solid #2760C0; border-bottom: 1px solid #2760C0;}\n.uki-dataTable-row_selected + .uki-dataTable-row_selected .uki-dataTable-cell {border-top: none; padding-top: 2px;}\n.uki-dataList_blured .uki-dataTable-row_selected {background-color: #CCC; color: #000;}\n.uki-dataList_blured .uki-dataTable-row_selected .uki-dataTable-cell {border-color: #AAA;}\n.uki-dataTable-wrap {width: 100%;}\n.uki-dataTable-cell_number {text-align: right;}\n.uki-dataTable-header-container {box-shadow: 0 1px 0 rgba(0, 0, 0, .1); -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, .1); -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .1); z-index: 100; position: relative; background-color: #EFEFEF; border-bottom: 1px solid #999; overflow: hidden; cursor: default;}\n.uki-dataTable-header-cell {margin: 0; border-right: 1px solid #CCC; padding: 0 4px 0 5px; vertical-align: top;}\n.uki-dataTable-header-wrap {position: relative; margin-right: 3px;}\n.uki-dataTable-header-text {text-overflow: ellipsis; white-space: nowrap; overflow: hidden; padding: 2px 0; height: 14px; font-size: 11px; line-height: 14px;}\n.uki-dataTable-resizer {display: none; overflow: hidden; position: absolute; width: 5px; top: 0; right: -7px; height: 100%; text-indent: 1em; cursor: col-resize;}\n.uki-dataTable-header-cell_resizable .uki-dataTable-resizer {display: block;}\n.uki-dataTable-spacer {padding-left: 0; padding-right: 0;}\n.uki-dataTable-filter {margin-left: -2px; padding: 1px; width: 100%;}\n";
     require_modules[0] = function(global, module, require) {
         var exports = this;
         global.uki = require(1);
@@ -1201,6 +1201,7 @@
             },
             createStylesheet: function(code) {
                 var style = env.doc.createElement("style");
+                style.type = "text/css";
                 var ss = env.doc.getElementsByTagName("head")[0];
                 if (style.styleSheet) {
                     style.styleSheet.cssText = code;
@@ -1213,6 +1214,20 @@
                     ss.appendChild(style);
                 }
                 return style;
+            },
+            addCSSRule: function(stylesheet, name, value) {
+                if (stylesheet.insertRule) {
+                    return stylesheet.insertRule(name + " { " + value + " }", stylesheet.cssRules.length);
+                } else {
+                    return stylesheet.addRule(name, value, -1);
+                }
+            },
+            deleteCSSRule: function(stylesheet, ruleId) {
+                if (stylesheet.deleteRule) {
+                    stylesheet.deleteRule(ruleId);
+                } else {
+                    stylesheet.removeRule(ruleId);
+                }
             },
             computedStyle: function(element) {
                 if (env.doc.defaultView && env.doc.defaultView.getComputedStyle) {
@@ -1371,6 +1386,7 @@
     };
     require_modules[15] = function(global, module, require) {
         var exports = this;
+        1;
         var view = require(10), utils = require(4), fun = require(7), env = require(3), dom = require(13), evt = require(12), Binding = require(16).Binding;
         var POS_RULES = [ "top", "right", "left", "bottom", "wiidth", "height", "marginLeft", "marginTop", "marginBottom", "marginRight", "max-width", "max-height" ], POS_MAP = {
             t: "top",
@@ -1496,9 +1512,6 @@
             },
             textSelectable: fun.newProp("textSelectable", function(state) {
                 this._textSelectable = state;
-                if (!state) {
-                    initTextSelectable();
-                }
                 this.toggleClass("uki-textSelectable_off", !state);
                 this[state ? "removeListener" : "addListener"]("selectstart", evt.preventDefaultHandler);
             }),
@@ -1611,10 +1624,6 @@
                 return this.bindings(val && [ val ]);
             }
         });
-        function initTextSelectable() {
-            initTextSelectable = fun.FT;
-            dom.createStylesheet(".uki-textSelectable_off{-moz-user-select:-moz-none;-webkit-user-select:none;-o-user-select:none;user-select:none;}\n.uki-textSelectable_off::selection{background: transparent;}");
-        }
         Base.prototype.on = Base.prototype.addListener;
         exports.Base = Base;
     };
@@ -2864,6 +2873,7 @@
             _prerender: 1,
             deduceRowHeight: function() {
                 var data = this.data(), sample = utils.prop(data, "sampleRow") || data.slice && data.slice(0, 1)[0] || "", pack = this._createPack();
+                if (sample.length === 0) sample = "sampleRow";
                 this.appendChild(pack);
                 pack.render([ sample ], [], 0);
                 var rowHeight = pack.dom().offsetHeight;
@@ -3358,6 +3368,7 @@
         var exports = this;
         1;
         var fun = require(7), utils = require(4), dom = require(13), view = require(10), build = require(6).build, Pack = require(35).Pack, DataList = require(29).DataList, Mustache = require(19).Mustache, Base = require(15).Base, Container = require(14).Container, Focusable = require(22).Focusable, evt = require(12), Menu = require(28).Menu;
+        var _DataTableCounter = 0;
         var DataTable = view.newClass("DataTable", Container, {
             columns: function(cols) {
                 if (!arguments.length) {
@@ -3371,32 +3382,19 @@
             header: function() {
                 return this._header;
             },
-            columnWidths: function(v) {
-                if (!arguments.length) {
-                    return utils.pluck(this.columns(), "width");
-                }
-                this.columns().forEach(function(col, i) {
-                    if (v[i]) {
-                        col.width = v[i];
-                    }
-                }, this);
-                this._header.columns(this.columns());
-                this.columns().forEach(function(col, i) {
-                    if (v[i]) {
-                        this._list._updateColumnSize(i);
-                    }
-                }, this);
-                return this;
-            },
             list: function() {
                 return this._list;
             },
+            CSSTableId: fun.newProp("CSSTableId"),
+            _CSSTableId: 0,
             _createDom: function(initArgs) {
+                _DataTableCounter++;
+                this._CSSTableId = _DataTableCounter;
                 this._dom = dom.createElement("div", {
-                    className: "uki-dataTable"
+                    className: "uki-dataTable uki-dataTable" + this._CSSTableId
                 });
                 var c = build([ {
-                    view: initArgs.headerView || DataTableHeader,
+                    view: initArgs.headerView || DataTableAdvancedHeader,
                     as: "header",
                     addClass: "uki-dataTable-header-container",
                     on: {
@@ -3438,6 +3436,9 @@
                 var newHeader = this._container.scrollLeft();
                 if (lastHeader != newHeader) {
                     this._header.scrollLeft(newHeader);
+                    if (this._header._menu != null) {
+                        this._header._menu.dom().style.marginLeft = -newHeader + "px";
+                    }
                 }
             },
             _scrollChild: function(e) {
@@ -3445,16 +3446,652 @@
                 var newHeader = this._header.scrollLeft();
                 if (lastHeader != newHeader) {
                     this._container.scrollLeft(newHeader);
+                    if (this._header._menu != null) {
+                        this._header._menu.dom().style.marginLeft = -newHeader + "px";
+                    }
                 }
             },
             _resizeColumn: function(e) {
-                this._list._updateColumnSize(e.column.pos);
+                if (typeof e.column.pos === "function") {} else {
+                    this._list._updateColumnSize(e.column.pos);
+                }
+            },
+            focus: function() {
+                if (this._header.filterable) {
+                    var hc = this._header.columns();
+                    var found = false;
+                    for (var i = 0; i < hc.length && !found; i++) {
+                        if (hc[i].visible() && hc[i].filterable()) {
+                            hc[i].focus();
+                            found = true;
+                        }
+                    }
+                    if (!found) {
+                        this._list.focus();
+                    }
+                } else {
+                    this._list.focus();
+                }
             }
         });
         fun.delegateProp(DataTable.prototype, [ "data", "throttle", "debounce", "template", "formatter", "key", "selection", "selectedRows", "selectedRow", "selectedIndexes", "selectedIndex", "lastClickIndex", "multiselect" ], "list");
         fun.delegateCall(DataTable.prototype, [ "scrollToIndex", "triggerSelection", "redrawRow" ], "list");
-        fun.delegateProp(DataTable.prototype, [ "hasFilter", "filterTimeout", "sortable", "hasMenu" ], "header");
-        var DataTableHeader = view.newClass("DataTableHeader", Base, {
+        fun.delegateProp(DataTable.prototype, [ "filterable", "filterTimeout", "sortable", "hasMenu", "menuOptions", "menu", "menuImage" ], "header");
+        var DataTableHeaderColumn = view.newClass("DataTableHeaderColumn", Base, {
+            className: fun.newProp("className", function(v) {
+                if (arguments.length) {
+                    if (this._className === v) return v;
+                    if (this._className.length > 0) {
+                        dom.removeClass(this._dom, this._className);
+                    }
+                    this._className = v;
+                    dom.addClass(this._dom, this._className);
+                }
+                return this._className;
+            }),
+            _className: "",
+            resizable: fun.newProp("resizable", function(v) {
+                if (arguments.length) {
+                    this._resizable = v;
+                    this._setupResizeable();
+                }
+                return this._resizable;
+            }),
+            _resizable: true,
+            sortable: fun.newProp("sortable"),
+            _sortable: true,
+            filterable: fun.newProp("filterable", function(v) {
+                if (arguments.length) {
+                    this._filterable = v;
+                    if (this.parent() == null) return;
+                    if (v && this.parent().filterable()) {
+                        this._filter.style.display = "";
+                    } else {
+                        this._filter.style.display = "none";
+                    }
+                }
+                return this._filterable;
+            }),
+            _filterable: true,
+            maxWidth: fun.newProp("maxWidth", function(v) {
+                if (arguments.length) {
+                    this._maxWidth = Math.max(v, this._width);
+                    if (this._minWidth == this._maxWidth) {
+                        this._sizeable = false;
+                    } else {
+                        this._sizeable = true;
+                    }
+                    this._setupResizeable();
+                }
+                return this._maxWidth;
+            }),
+            _maxWidth: 200,
+            width: fun.newProp("width", function(v) {
+                if (arguments.length) {
+                    var newWidth = Math.min(Math.max(v, this._minWidth), this._maxWidth);
+                    if (newWidth != this._width) {
+                        this._width = newWidth;
+                        if (this.parent() != null) {
+                            this.parent().updateCSSRules(this._cssRule, "width", this._width + "px");
+                        }
+                    }
+                }
+                return this.width;
+            }),
+            _width: 200,
+            minWidth: fun.newProp("minWidth", function(v) {
+                if (arguments.length) {
+                    this._minWidth = Math.min(v, this._width);
+                    if (this._minWidth == this._maxWidth) {
+                        this._sizeable = false;
+                    } else {
+                        this._sizeable = true;
+                    }
+                    this._setupResizeable();
+                }
+                return this._minWidth;
+            }),
+            _minWidth: 20,
+            label: fun.newProp("label", function(v) {
+                if (arguments.length) {
+                    this._label = v;
+                    this._labelElement.innerHTML = dom.escapeHTML(this._label);
+                    this._labelElement.title = this._labelElement.innerHTML;
+                    if (this._hasMenu) {
+                        this._labelElement.style.marginLeft = "16px";
+                    } else {
+                        this._labelElement.style.marginLeft = "";
+                    }
+                    if (this._name.length === 0) this.name(v);
+                }
+                return this._label;
+            }),
+            _label: "",
+            name: fun.newProp("name", function(v) {
+                if (arguments.length) {
+                    this._name = v;
+                    this._filter.name = this._name;
+                }
+                return this._name;
+            }),
+            _name: "",
+            visible: fun.newProp("visible", function(v) {
+                if (arguments.length) {
+                    this._visible = v;
+                    if (this.parent() != null) {
+                        if (v) {
+                            this.parent().updateCSSRules(this._cssRule, "display", "");
+                        } else {
+                            this.parent().updateCSSRules(this._cssRule, "display", "none");
+                        }
+                    }
+                }
+                return this._visible;
+            }),
+            _visible: true,
+            sort: fun.newProp("sort", function(v) {
+                if (arguments.length) {
+                    if (v > 2 || v < 0) v = 0;
+                    this._sort = v;
+                    if (this.parent() == null) return this._sort;
+                    if (this.parent().sortable()) {
+                        dom.removeClass(this._labelElement, "uki-dataTable-sort-down uki-dataTable-sort-up");
+                        if (v === 1) {
+                            dom.addClass(this._labelElement, "uki-dataTable-sort-down");
+                        } else if (v === 2) {
+                            dom.addClass(this._labelElement, "uki-dataTable-sort-up");
+                        }
+                    }
+                }
+                return this._sort;
+            }),
+            _sort: 0,
+            headerstyle: fun.newProp("headerstyle", function(v) {
+                if (arguments.length) {
+                    this._headerstyle = v;
+                    this._dom.style = v;
+                }
+                return this._headerstyle;
+            }),
+            _headerstyle: "",
+            style: fun.newProp("style", function(v) {
+                if (!arguments.length || v == null) {
+                    return this._style;
+                }
+                this._style = v;
+                if (this.Parent() != null) {
+                    this._parseStyle();
+                }
+                return this._style;
+            }),
+            _style: "",
+            formatter: fun.newProp("formatter"),
+            _formatter: dom.escapeHTML,
+            hasMenu: fun.newProp("hasMenu", function(v) {
+                if (arguments.length) {
+                    if (this._hasMenu == v) return this._hasMenu;
+                    this._hasMenu = v;
+                    this.label(this._label);
+                }
+                return this._hasMenu;
+            }),
+            _hasMenu: false,
+            filterValue: fun.newProp("filterValue", function(v) {
+                if (arguments.length) {
+                    if (this._filter.value === v) return;
+                    this._filter.value = v;
+                    if (this.parent() != null) this.parent()._handleFilterNotify();
+                }
+                return this._filter.value;
+            }),
+            _pos: 0,
+            _cssRule: -1,
+            _sizeable: true,
+            _createDom: function(initArgs) {
+                if (initArgs.pos != null) {
+                    this._pos = initArgs.pos;
+                }
+                if (initArgs.cssRule != null) {
+                    this._cssRule = initArgs.cssRule;
+                }
+                var filterStyle = "";
+                if (initArgs.filterable != null) {
+                    if (!initArgs.filterable) filterStyle = "display:none";
+                }
+                var className = "uki-dataTable-header-cell uki-dataTable-col-" + this._pos;
+                this._labelElement = dom.createElement("div", {
+                    className: "uki-dataTable-header-text"
+                });
+                this._resizer = dom.createElement("div", {
+                    className: "uki-dataTable-resizer uki-dataTable-resizer_pos-" + this._pos
+                });
+                this._resizer.innerHTML = "|";
+                this._filter = dom.createElement("input", {
+                    className: "uki-dataTable-filter",
+                    tabIndex: 1,
+                    autocomplete: "off",
+                    name: this._name,
+                    style: filterStyle
+                });
+                this._wrapper = dom.createElement("div", {
+                    className: "uki-dataTable-header-wrap"
+                }, [ this._labelElement, this._filter, this._resizer ]);
+                this._dom = dom.createElement("td", {
+                    className: className
+                }, [ this._wrapper ]);
+                fun.deferOnce(fun.bindOnce(this._finishSetup, this));
+            },
+            _setupResizeable: function() {
+                if (this._resizable && this._sizeable) {
+                    this._resizer.style.display = "";
+                    dom.addClass(this._dom, "uki-dataTable-header-cell_resizable");
+                } else {
+                    this._resizer.style.display = "none";
+                    dom.removeClass(this._dom, "uki-dataTable-header-cell_resizable");
+                }
+            },
+            _parseStyle: function() {
+                if (this._style == null) return;
+                if (typeof this._style === "object") {
+                    for (var key in this._style) {
+                        if (!this._style.hasOwnProperty(key)) {
+                            continue;
+                        }
+                        this.parent().updateCSSRules(this._cssRule, key, this._style[key]);
+                    }
+                } else {
+                    var exp = this._style.split(";");
+                    for (var i = 0; i < exp.length; i++) {
+                        var parts = exp[i].split(":");
+                        if (parts[0].length == 0 || parts.length != 2) continue;
+                        this.parent().updateCSSRules(this._cssRule, parts[0], parts[1]);
+                    }
+                }
+            },
+            _finishSetup: function() {
+                if (!this._visible) {
+                    this.parent().updateCSSRules(this._cssRule, "display", "none");
+                }
+                this.parent().updateCSSRules(this._cssRule, "width", this._width + "px");
+                this._parseStyle();
+                this.resizable(this._resizable);
+                this.filterable(this._filterable);
+                this.sort(this._sort);
+                this.label(this._label);
+            },
+            focus: function() {
+                try {
+                    if (this._visible && this._filterable) this._filter.focus();
+                } catch (err) {}
+            }
+        });
+        var DataTableAdvancedHeader = view.newClass("DataTableAdvancedHeader", Container, {
+            filterable: fun.newProp("filterable"),
+            _filterable: false,
+            enterFiltered: fun.newProp("enterFiltered"),
+            _enterFiltered: false,
+            filterTimeout: fun.newProp("filterTimeout"),
+            _filterTimeout: 500,
+            sortable: fun.newProp("sortable"),
+            _sortable: false,
+            _intervalId: null,
+            hasMenu: fun.newProp("hasMenu", function(v) {
+                if (arguments.length) {
+                    if (this._hasMenu == v) return v;
+                    this._hasMenu = v;
+                    this._setupMenu();
+                }
+                return this._hasMenu;
+            }),
+            _hasMenu: false,
+            menu: fun.newProp("menu", function() {
+                return this._menu;
+            }),
+            _menu: null,
+            menuImage: fun.newProp("menuImage", function(v) {
+                if (arguments.length) {
+                    this._menuImage = v;
+                    this._setupMenuOptions();
+                }
+                return this._menuImage;
+            }),
+            _menuImage: "data:image/gif;base64,R0lGODlhEAAQAJEAAP39/ebm5ikpKZqamiH5BAAAAAAALAAAAAAQABAAAAIzhI+pqzEBgpwSDTGu2DuzfzgQNSVXxqWDaZAVIkauiWkpxspkUrqQVbt1YA8dBfTxKQMFADs=",
+            menuOptions: fun.newProp("menuOptions", function(v) {
+                if (arguments.length) {
+                    this._menuOptions = v;
+                    this._setupMenuOptions();
+                }
+                return this._menuOptions;
+            }),
+            _menuOptions: null,
+            _styleSheetElement: null,
+            _styleSheet: null,
+            _createDom: function(initArgs) {
+                Base.prototype._createDom.call(this, initArgs);
+                this._rowheader = dom.createElement("tr", {
+                    className: "uki-dataTable-header-row"
+                });
+                this._table = dom.createElement("table", {
+                    className: "uki-dataTable-header"
+                }, [ this._rowheader ]);
+                this._dom = dom.createElement("div", null, [ this._table ]);
+                this._styleSheetElement = dom.createStylesheet(" ");
+                if (this._styleSheetElement.sheet && this._styleSheetElement.sheet.cssRules) {
+                    this._styleSheet = this._styleSheetElement.sheet;
+                } else {
+                    this._styleSheet = this._styleSheetElement.styleSheet;
+                }
+                this._menu = build([ {
+                    view: Menu,
+                    as: "DataTable-Menu",
+                    addClass: "uki-dataTable-menu"
+                } ]);
+                this._draggableColumn = -1;
+                this.on("draggesturestart", this._dragStart);
+                this.on("draggesture", this._drag);
+                this.on("draggestureend", this._dragEnd);
+                this.on("click", this._click);
+                this._setupMenu();
+            },
+            _finishSetup: function() {
+                this._setupMenu();
+            },
+            _setupMenu: function() {
+                if (this.parent() == null || this.parent().length == 0 || this._columns == null) {
+                    fun.deferOnce(fun.bindOnce(this._setupMenu, this));
+                    return;
+                }
+                if (this._hasMenu) {
+                    var found = false;
+                    if (this._menu.parent() == null || this._menu.parent().length == 0) {
+                        this._menu.attach(this.parent().dom(), true);
+                        for (var i = 0; i < this._columns.length; i++) {
+                            if (found || this._columns[i].visible() === false) {
+                                this._columns[i].hasMenu(false);
+                            } else if (!found) {
+                                this._columns[i].hasMenu(true);
+                                found = true;
+                            }
+                        }
+                    }
+                } else {
+                    this._menu.remove();
+                    for (var i = 0; i < this._columns.length; i++) {
+                        this._columns[i].hasMenu(false);
+                    }
+                }
+            },
+            _setupMenuOptions: function() {
+                var lmenu = [];
+                lmenu[0] = {
+                    html: '<img src="' + this._menuImage + '" width="12px" height="12px" border=0>',
+                    options: this._menuOptions
+                };
+                this._menu.options(lmenu);
+            },
+            destruct: function() {
+                this._styleSheet = null;
+                dom.removeElement(this._styleSheetElement);
+            },
+            deleteAllCSSRules: function() {
+                var count = 0;
+                if (this._styleSheet.cssRules) {
+                    count = this._styleSheet.cssRules.length;
+                } else {
+                    count = this._styleSheet.rules.length;
+                }
+                for (var i = count - 1; i >= 0; i--) {
+                    dom.deleteCSSRule(this._styleSheet, i);
+                }
+            },
+            addCSSRule: function(id) {
+                return dom.addCSSRule(this._styleSheet, id, "display:;");
+            },
+            updateCSSRules: function(cssRule, name, value) {
+                var theRules;
+                if (this._styleSheet.cssRules) {
+                    theRules = this._styleSheet.cssRules;
+                } else {
+                    theRules = this._styleSheet.rules;
+                }
+                try {
+                    if (theRules[cssRule].style.setProperty) {
+                        theRules[cssRule].style.setProperty(name, value, null);
+                    } else {
+                        theRules[cssRule].style[name] = value;
+                    }
+                } catch (e) {
+                    console.log("Error in Update CSSRules ", e);
+                }
+            },
+            _click: function(e) {
+                if (this._draggableColumn != -1) return;
+                e.isDefaultPrevented = fun.FF;
+                if (e.target.nextSibling && e.target.nextSibling.nextSibling && dom.hasClass(e.target.nextSibling.nextSibling, "uki-dataTable-resizer")) {
+                    var index = e.target.nextSibling.nextSibling.className.match(/uki-dataTable-resizer_pos-(\d+)/)[1];
+                    var col = this.columns();
+                    var eles = this._dom.getElementsByClassName("uki-dataTable-header-text");
+                    if (this._sortable && col[index].sortable() !== false) {
+                        if (!e.shiftKey) {
+                            for (var i = 0; i < col.length; i++) {
+                                if (i == index) {
+                                    continue;
+                                }
+                                if (col[i].sort() != 0 && col[i].sortable() !== false) {
+                                    col[i].sort(0);
+                                }
+                            }
+                        }
+                        col[index].sort(col[index].sort() + 1);
+                        var sortfields = {};
+                        var sortedlist = "";
+                        for (i = 0; i < col.length; i++) {
+                            if (col[i].sort() > 0) {
+                                sortfields[col[i].label()] = col[i].sort();
+                                sortedlist += col[i].sort() + ",";
+                            } else {
+                                sortedlist += "0,";
+                            }
+                        }
+                    }
+                    sortedlist = sortedlist.substring(0, sortedlist.length - 1);
+                    this.trigger({
+                        type: "columnClick",
+                        column: this.columns()[index],
+                        sort: sortfields,
+                        sortedlist: sortedlist,
+                        columnIndex: index
+                    });
+                }
+            },
+            _filter: function(e) {
+                var self = e.target.self;
+                self._handleFilterNotify();
+            },
+            _handleFilterNotify: function() {
+                var eles = this._dom.getElementsByClassName("uki-dataTable-filter");
+                var values = {};
+                var valueid = [];
+                for (var i = 0; i < eles.length; i++) {
+                    values[eles[i].name] = eles[i].value;
+                    valueid[i] = eles[i].value;
+                }
+                try {
+                    this.trigger({
+                        type: "columnFilter",
+                        fields: values,
+                        byfieldid: valueid
+                    });
+                } catch (err) {}
+            },
+            _filterpresstimeout: function(e) {
+                this._clearfilterInterval();
+                var hasFocus = false;
+                if (document.activeElement && document.activeElement == e.target) hasFocus = true;
+                e.target.blur();
+                if (hasFocus) e.target.focus();
+            },
+            _clearfilterInterval: function() {
+                if (this._intervalId) {
+                    clearInterval(this._intervalId);
+                    this._intervalId = null;
+                }
+            },
+            _filterpress: function(e) {
+                if (e.charCode == 0) return;
+                var self = e.target.self;
+                self._clearfilterInterval();
+                self._intervalId = setInterval(function(self, target) {
+                    return function() {
+                        self._clearfilterInterval();
+                        self._filterpresstimeout(target);
+                    };
+                }(self, e), self._filterTimeout);
+            },
+            _filterkeydown: function(e) {
+                if (e.charCode != 0) return;
+                var self = e.target.self;
+                if (e.keyCode == 13 && self._enterFiltered) {
+                    self._clearfilterInterval();
+                    self._filterpresstimeout(e);
+                    e.preventDefault();
+                    e.cancelBubble = true;
+                } else if (e.keyCode == 9) {
+                    self._clearfilterInterval();
+                } else if (e.keyCode == 8 || e.keyCode == 46) {
+                    self._clearfilterInterval();
+                    self._intervalId = setInterval(function(self, target) {
+                        return function() {
+                            self._clearfilterInterval();
+                            self._filterpresstimeout(target);
+                        };
+                    }(self, e), self._filterTimeout);
+                } else if (e.keyCode == 40 || e.keyCode == 38 || e.keyCode == 33 || e.keyCode == 34 || e.keyCode == 35 || e.keyCode == 36) {
+                    var grid = self.parent().childViews()[1].childViews()[0];
+                    var data = grid.data();
+                    var maxrows = 0;
+                    if (data != null) {
+                        maxrows = data.length;
+                    }
+                    var range = grid._visibleRange();
+                    var size = grid.metrics()._rowHeight;
+                    var vrows = 1;
+                    if (size > 0) {
+                        vrows = (range.to - range.from) / size;
+                    }
+                    var idx = grid.selectedIndex();
+                    if (idx == null) {
+                        idx = 0;
+                    }
+                    var oldIdx = idx;
+                    if (e.keyCode == 40) {
+                        idx++;
+                    } else if (e.keyCode == 38) {
+                        idx--;
+                    } else if (e.keyCode == 34) {
+                        idx += vrows;
+                    } else if (e.keyCode == 33) {
+                        idx -= vrows;
+                    } else if (e.keyCode == 36) {
+                        idx = 0;
+                    } else if (e.keyCode == 35) {
+                        idx = maxrows;
+                    }
+                    if (idx >= maxrows) {
+                        idx = maxrows - 1;
+                    }
+                    if (idx < 0) {
+                        idx = 0;
+                    }
+                    if (idx != oldIdx) {
+                        grid.selectedIndex(idx);
+                        grid.scrollToIndex(idx);
+                    }
+                }
+            },
+            _dragEnd: function(e) {
+                this._drag(e);
+                try {
+                    this.trigger({
+                        type: "resizeColumnEnd",
+                        column: this.columns()[this._draggableColumn]
+                    });
+                } catch (err) {
+                    console.log(err);
+                }
+                this._draggableColumn = -1;
+            },
+            _dragStart: function(e) {
+                if (e.target.tagName && e.target.tagName == "INPUT") {
+                    e.isDefaultPrevented = fun.FT;
+                    return;
+                }
+                if (dom.hasClass(e.target, "uki-dataTable-resizer")) {
+                    e.draggbale = e.target;
+                    e.cursor = dom.computedStyle(e.target, null).cursor;
+                    var index = e.target.className.match(/uki-dataTable-resizer_pos-(\d+)/)[1];
+                    this._draggableColumn = index;
+                    this._initialWidth = this.columns()[index].width();
+                } else {
+                    e.preventDefault();
+                }
+            },
+            _drag: function(e) {
+                if (this._draggableColumn == -1) return;
+                var width = this._initialWidth + e.dragOffset.x;
+                this._resizeColumn(this._draggableColumn, width);
+                try {
+                    this.trigger({
+                        type: "resizeColumn",
+                        column: this.columns()[this._draggableColumn]
+                    });
+                } catch (err) {
+                    console.log(err);
+                }
+            },
+            _resizeColumn: function(pos, width) {
+                var column = this.columns()[pos];
+                width = column.width(width);
+                this._table.style.width = this._totalWidth(this.columns()) + "px";
+            },
+            _totalWidth: function(columns) {
+                return utils.reduce(columns, function(s, col) {
+                    return s + (col._visible ? col._width || 200 : 0);
+                }, 0);
+            },
+            _appendChildToDom: function(child) {
+                this._rowheader.appendChild(child.dom());
+            },
+            columns: fun.newProp("columns", function(cols) {
+                this._clearfilterInterval();
+                this.deleteAllCSSRules();
+                this._menu.remove();
+                var parentId = this.parent().CSSTableId();
+                for (var i = 0; i < cols.length; i++) {
+                    cols[i]["view"] = "DataTableHeaderColumn";
+                    var cssRule = this.addCSSRule("div.uki-dataTable" + parentId + " .uki-dataTable-col-" + cols[i].pos);
+                    cols[i]["init"] = {
+                        pos: cols[i].pos,
+                        cssRule: cssRule,
+                        filterable: this._filterable
+                    };
+                }
+                this._columns = build(cols);
+                this._columns.appendTo(this);
+                this._table.style.width = this._totalWidth(this.columns()) + "px";
+                this._setupFilters();
+            }),
+            _setupFilters: function() {
+                var eles = this._dom.getElementsByClassName("uki-dataTable-filter");
+                for (var i = 0; i < eles.length; i++) {
+                    eles[i].self = this;
+                    evt.addListener(eles[i], "change", this._filter);
+                    evt.addListener(eles[i], "keypress", this._filterpress);
+                    evt.addListener(eles[i], "keydown", this._filterkeydown);
+                }
+            }
+        });
+        var DataTableTemplateHeader = view.newClass("DataTableTemplateHeader", Base, {
             template: fun.newProp("template"),
             _template: '<table class="uki-dataTable-header" style="{{style}}"><tbody><tr class="uki-dataTable-header-row">{{#columns}}<td class="uki-dataTable-header-cell {{className}}" style="{{style}}" id="{{menuId}}"><div class="uki-dataTable-header-wrap"><div class="uki-dataTable-header-text{{sortClass}}">{{label}}</div><input type="input" name="{{filter}}" style="{{filterstyle}}" tabindex="1" class="uki-dataTable-filter"><div class="uki-dataTable-resizer uki-dataTable-resizer_pos-{{pos}}">|</div></div></td>{{/columns}}</tr></table>',
             hasFilter: fun.newProp("filterable"),
@@ -3467,24 +4104,15 @@
             sortable: fun.newProp("sortable"),
             _sortable: false,
             _intervalId: null,
-            _hasMenu: true,
+            _hasMenu: false,
             hasMenu: fun.newProp("hasMenu"),
             _createDom: function(initArgs) {
                 Base.prototype._createDom.call(this, initArgs);
-                var c = build([ {
-                    view: Menu,
-                    as: "DataTable-Menu",
-                    addClass: "uki-dataTable-menu"
-                } ]);
-                this._Menu = c;
                 this._draggableColumn = -1;
                 this.on("draggesturestart", this._dragStart);
                 this.on("draggesture", this._drag);
                 this.on("draggestureend", this._dragEnd);
                 this.on("click", this._click);
-            },
-            scrollTo: function(offset) {
-                this._dom.firstChild.style.marginLeft = -offset + "px";
             },
             _click: function(e) {
                 if (this._draggableColumn != -1) return;
@@ -3519,7 +4147,7 @@
                         var sortfields = {};
                         for (i = 0; i < col.length; i++) {
                             if (col[i].sort > 0) {
-                                sortfields[col[i].name] = col[i].sort;
+                                sortfields[col[i].label] = col[i].sort;
                             }
                         }
                     }
@@ -3680,7 +4308,7 @@
                     pos: col.pos,
                     label: col.label,
                     style: col.visible ? "width:" + col.width + "px" : "display: none",
-                    filter: "filter" + col.name,
+                    filter: "filter" + col.label,
                     filterstyle: filterable ? "" : "display:none",
                     className: col.className + (col.resizable === false ? "" : col.width != col.maxWidth || col.width != col.minWidth ? " uki-dataTable-header-cell_resizable" : ""),
                     sortClass: col.sort === 1 ? " uki-dataTable-sort-down" : col.sort === 2 ? " uki-dataTable-sort-up" : "",
@@ -3693,29 +4321,12 @@
                 fun.deferOnce(fun.bindOnce(this._render, this));
             }),
             _render: function() {
-                if (this._hasMenu) {
-                    var menuId = "UKIdtMenu" + (new Date).getTime();
-                    var cols = this.columns();
-                    if (cols.length > 0) {
-                        if (cols[0].menuId == null) {
-                            cols[0].menuId = menuId;
-                        } else {
-                            menuId = cols[0].menuId;
-                        }
-                    }
-                }
                 this._dom.innerHTML = Mustache.to_html(this._template, {
                     columns: this.columns().map(this._formatColumn, this),
-                    style: "width:" + table.totalWidth(this.columns()) + "px"
+                    style: "width:" + table.totalWidth(this.columns()) + "px" + (this._visible ? "" : "; display:none;")
                 });
                 if (this._filterable) {
                     this._setupFilters();
-                }
-                if (this._hasMenu) {
-                    var menu = document.getElementById(menuId);
-                    if (menu) {
-                        this._Menu.attach(menu, true);
-                    }
                 }
                 this.trigger({
                     type: "render"
@@ -3746,7 +4357,7 @@
             _updateColumnSize: function(pos) {
                 var column = this.columns()[pos];
                 utils.forEach(this.childViews(), function(pack) {
-                    pack.resizeColumn(column.visiblePos, column.width);
+                    pack.resizeColumn(pos, column.width);
                 }, this);
             }
         });
@@ -3757,10 +4368,8 @@
                 }, 0);
             },
             addColumnDefaults: function(columns) {
-                var visiblePos = 0;
                 return columns.map(function(col, pos) {
                     col = utils.extend({
-                        visiblePos: visiblePos,
                         pos: pos,
                         width: 200,
                         name: "",
@@ -3773,17 +4382,16 @@
                     if (col.maxWidth > 0) {
                         col.maxWidth = Math.max(col.maxWidth, col.width);
                     }
-                    if (col.visible) {
-                        visiblePos++;
-                    }
                     return col;
                 });
             }
         };
         exports.DataTable = DataTable;
         exports.DataTableList = DataTableList;
-        exports.DataTableHeader = DataTableHeader;
+        exports.DataTableAdvancedHeader = DataTableAdvancedHeader;
+        exports.DataTableTemplateHeader = DataTableTemplateHeader;
         exports.table = table;
+        exports.DataTableHeaderColumn = DataTableHeaderColumn;
     };
     require_modules[35] = function(global, module, require) {
         var exports = this;
@@ -3840,14 +4448,10 @@
                 var cols = [];
                 if (this.parent() == null) return;
                 this.parent().columns().forEach(function(col, i) {
-                    if (!col.visible) {
-                        return;
-                    }
                     var val = col.key ? utils.prop(row, col.key) : row[i];
                     cols[i] = {
                         value: col.formatter(val || "", row, pos),
-                        className: "uki-dataTable-col-" + i + (col.className ? " " + col.className : ""),
-                        style: first && "width: " + col.width + "px"
+                        className: "uki-dataTable-col-" + i + (col.className ? " " + col.className : "")
                     };
                 });
                 return cols;
