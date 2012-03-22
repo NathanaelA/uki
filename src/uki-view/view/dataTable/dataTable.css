@@ -9,15 +9,25 @@
 }
 
 .uki-dataTable-menu {
-  background: url(menu.gif) no-repeat center center;
+  margin-left: 0px;
+  margin-top: 2px;
+  width: 12px;
+  height: 12px;
+  z-index: 101;
+  cursor: pointer;
+  position: absolute;
+}
+
+.uki-dataTable-menu .uki-menu-primary, .uki-dataTable-menu .uki-menu-primary > a{
+  background-color: transparent;
 }
 
 .uki-dataTable-sort-down {
-  background: url(down.gif) no-repeat 98% center;
+  background: url(down.gif) no-repeat 100% center;
 }
 
 .uki-dataTable-sort-up {
-  background: url(up.gif) no-repeat 98% center;
+  background: url(up.gif) no-repeat 100% center;
 }
 
 .uki-dataTable-header,
@@ -103,6 +113,7 @@
 
 .uki-dataTable-header-wrap {
     position: relative;
+    margin-right: 3px;
 }
 
 .uki-dataTable-header-text {
