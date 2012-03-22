@@ -47,19 +47,36 @@ module.exports = {
 
     createStylesheet: function(code) {
         var style = env.doc.createElement('style');
+        style.type = "text/css";
         var ss = env.doc.getElementsByTagName('head')[0];
         if (style.styleSheet) { //IE
-            style.styleSheet.cssText = code;
+              style.styleSheet.cssText = code;
         } else {
-            style.appendChild(env.doc.createTextNode(code));
+              style.appendChild(env.doc.createTextNode(code));
         }
-      if (ss.firstChild) {
-        ss.insertBefore(style, ss.firstChild);
-      }
-      else {
-        ss.appendChild(style);
-      }
+        if (ss.firstChild) {
+          ss.insertBefore(style, ss.firstChild);
+        }
+        else {
+          ss.appendChild(style);
+        }
         return style;
+    },
+
+    addCSSRule: function(stylesheet, name, value) {
+      if (stylesheet.insertRule) {
+        return (stylesheet.insertRule(name+" { "+value+" }",stylesheet.cssRules.length));
+      } else {
+        return (stylesheet.addRule(name,value,-1));
+      }
+    },
+
+    deleteCSSRule: function(stylesheet, ruleId) {
+      if (stylesheet.deleteRule) {
+        stylesheet.deleteRule(ruleId);
+      } else {
+        stylesheet.removeRule(ruleId);
+      }
     },
 
     computedStyle: function(element) {
