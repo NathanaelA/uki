@@ -11,7 +11,7 @@ var fun  = require('../../uki-core/function'),
 
 var Menu = view.newClass('Menu', Base, {
     _createDom: function() {
-        this._dom = dom.createElement('ul', { className: 'uki-menu-horizontal' });
+        this._dom = dom.createElement('ul', { className: 'uki-menu-horizontal uki-textSelectable_off' });
         this.on('click', this._click);
     },
 
@@ -70,6 +70,7 @@ function appendMenuOptions ( root, options, level ) {
 
     node_li = dom.createElement('li', {className: className});
     node_a = dom.createElement('a', {
+      draggable: false, ondragstart: "return false;",
       href: option.url ? option.url : 'javascript:void(0)',
       html: option.html ? option.html : dom.escapeHTML( option.text ),
       name: option.name ? option.name : option.text,

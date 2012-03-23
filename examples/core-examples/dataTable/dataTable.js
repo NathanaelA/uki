@@ -187,6 +187,7 @@ function filterit(e)
   sortit(last_sort);
 }
 
+// Emulate Loading a dynamic data source
 document.getElementsByTagName('head')[0].appendChild(
     uki.createElement('script', { src: 'library.js' }));
 

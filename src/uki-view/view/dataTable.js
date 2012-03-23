@@ -2,6 +2,7 @@ requireCss('./dataTable/dataTable.css');
 
 var fun   = require('../../uki-core/function'),
     utils = require('../../uki-core/utils'),
+    env = require('../../uki-core/env'),
     dom   = require('../../uki-core/dom'),
     view  = require('../../uki-core/view'),
     build = require('../../uki-core/builder').build,
@@ -11,7 +12,6 @@ var fun   = require('../../uki-core/function'),
     Mustache  = require('../../uki-core/mustache').Mustache,
     Base      = require('../../uki-core/view/base').Base,
     Container = require('../../uki-core/view/container').Container,
-    Focusable = require('./focusable').Focusable,
     evt       = require('../../uki-core/event'),
     Menu      = require('./menu').Menu;
 
@@ -26,9 +26,17 @@ var DataTable = view.newClass('DataTable', Container, {
         if (!arguments.length) {
             return this._list.columns();
         }
+        if (this.hasFocus()) {
+          var _hasFocus = true;
+        }
         cols = table.addColumnDefaults(cols);
         this._list.columns(cols);
         this._header.columns(cols);
+
+        if (_hasFocus) {
+          this.focus();
+        }
+
         return this;
     },
 
@@ -76,6 +84,9 @@ var DataTable = view.newClass('DataTable', Container, {
         var pos = this._container.pos();
         pos.t = this._header.clientRect().height + 'px';
         this._container.pos(pos);
+        if (this._deferFocus === true) {
+          this.focus();
+        }
     },
 
     _initLayout: function() {
@@ -114,6 +125,10 @@ var DataTable = view.newClass('DataTable', Container, {
     },
 
     focus: function() {
+      if (this._list.columns().length == 0) {
+        this._deferFocus = true;
+        return;
+      }
       if (this._header.filterable) {
         var hc = this._header.columns();
         var found=false;
@@ -129,6 +144,17 @@ var DataTable = view.newClass('DataTable', Container, {
       } else {
         this._list.focus();
       }
+    },
+
+    hasFocus: function() {
+      if (this._list.hasFocus()) return (true);
+      if (this._header.hasFocus()) return (true);
+      return (false);
+    },
+
+    blur: function() {
+      this._list.blur();
+      this._header.blur();
     }
 
 
@@ -339,7 +365,9 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
     }
     var filterStyle='';
     if (initArgs.filterable != null) {
-      if (!initArgs.filterable) filterStyle='display:none';
+      if (initArgs.filterable === false) {
+        filterStyle='display:none';
+      }
     }
 
     var className = 'uki-dataTable-header-cell uki-dataTable-col-' + this._pos;
@@ -402,18 +430,44 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
     this.label(this._label);
   },
 
-  focus: function()
-  {
+  focus: function() {
     try {
-      if (this._visible && this._filterable) this._filter.focus();
+      if (this._visible && this._filterable && this.parent().filterable()) {
+        this._filter.focus();
+      }
     }
-    catch(err) {};
+    catch(err) {
+ //     console.log("Error on focus",err);
+    }
+  },
+
+  hasFocus: function() {
+    return this._filter == env.doc.activeElement;
+  },
+
+  blur: function() {
+    try {
+      if (this.hasFocus()) this._filter.blur();
+    } catch (err) {}
   }
 
 } );
 
 var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container, {
-  filterable: fun.newProp('filterable'),
+  filterable: fun.newProp('filterable', function (v) {
+    if (arguments.length) {
+      if (this._filterable !== v) {
+        this._filterable = v;
+        if (this._columns == null) return (this._filterable);
+        // Reset Columns Filterable State, since the parent just changed
+        for(var i=0;i<this._columns.length;i++) {
+          this._columns[i].filterable(this._columns[i].filterable());
+        }
+        this.trigger({ type: 'render' });
+      }
+    }
+    return (this._filterable);
+  }),
   _filterable: false,
   enterFiltered: fun.newProp('enterFiltered'),
   _enterFiltered: false,
@@ -432,9 +486,9 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
       return (this._hasMenu);
   }),
   _hasMenu: false,
-  menu: fun.newProp('menu', function () {
+  menu: function () {
     return (this._menu);
-  }),
+  },
   _menu: null,
   menuImage: fun.newProp('menuImage', function(v) {
     if (arguments.length) {
@@ -484,9 +538,9 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
 
     },
 
-    _finishSetup: function() {
+/*    _finishSetup: function() {
       this._setupMenu();
-    },
+    }, */
 
     _setupMenu: function() {
       if (this.parent() == null || this.parent().length == 0 || this._columns == null)  {
@@ -516,7 +570,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
 
     _setupMenuOptions: function() {
       var lmenu = [];
-      lmenu[0] = {html: '<img src="'+this._menuImage+'" width="12px" height="12px" border=0>', options: this._menuOptions};
+      lmenu[0] = {html: '<img src="'+this._menuImage+'" draggable=false width="12px" height="12px" border=0 ondragstart="return false;">', options: this._menuOptions};
       this._menu.options(lmenu);
     },
 
@@ -559,7 +613,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
           theRules[cssRule].style[name] = value;
         }
       } catch (e) {
-        console.log("Error in Update CSSRules ", e);
+        //console.log("Error in Update CSSRules ", e);
       }
     },
 
@@ -635,8 +689,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
       catch (err) {};
     },
 
-    _filterpresstimeout: function(e)
-    {
+    _filterpresstimeout: function(e) {
       this._clearfilterInterval();
       var hasFocus = false;
       if (document.activeElement && document.activeElement == e.target) hasFocus = true;
@@ -644,8 +697,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
       if (hasFocus) e.target.focus();
     },
 
-    _clearfilterInterval: function()
-    {
+    _clearfilterInterval: function() {
       if (this._intervalId) {
         clearInterval(this._intervalId);
         this._intervalId = null;
@@ -764,8 +816,8 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
           column: this.columns()[this._draggableColumn]
         });
       } catch (err) {
-        console.log(err);
-      };
+        //console.log(err);
+      }
       this._draggableColumn = -1;
     },
 
@@ -798,7 +850,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
             column: this.columns()[this._draggableColumn]
           });
         }
-        catch (err) { console.log(err);};
+        catch (err) { }
     },
 
     _resizeColumn: function(pos, width) {
@@ -807,7 +859,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
         this._table.style.width = this._totalWidth(this.columns())+"px";
     },
 
-     _totalWidth: function(columns) {
+    _totalWidth: function(columns) {
        return utils.reduce(columns, function(s, col) {
           return s + (col._visible ? (col._width || 200) : 0);
        }, 0);
@@ -833,10 +885,36 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
         this._columns.appendTo(this);
         this._table.style.width = this._totalWidth(this.columns())+"px";
         this._setupFilters();
+        this.trigger({ type: 'render' });
     }),
 
-    _setupFilters: function()
-    {
+    columnByName: function(name) {
+      var lname = name.toLowerCase();
+       for(var i=0;i<this._columns.length;i++) {
+         if (this._columns[i]._name.toLowerCase() == lname ) {
+           return this._columns[i];
+         }
+       }
+       if (arguments.length == 2) {
+         return this.columnByLabel(name);
+       }
+       return (null);
+    },
+
+    columnByLabel: function(name) {
+      var lname = name.toLowerCase();
+      for(var i=0;i<this._columns.length;i++) {
+        if (this._columns[i]._label.toLowerCase() == lname ) {
+          return this._columns[i];
+        }
+      }
+      if (arguments.length == 2) {
+        return this.columnByName(name);
+      }
+      return (null);
+    },
+
+    _setupFilters: function() {
       var eles = this._dom.getElementsByClassName("uki-dataTable-filter");
       for(var i=0;i<eles.length;i++) {
         eles[i].self = this;
@@ -844,12 +922,39 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
         evt.addListener(eles[i],"keypress", this._filterpress);
         evt.addListener(eles[i],"keydown", this._filterkeydown);
       }
+    },
+
+    hasFocus: function() {
+      if (!this._filterable || this._columns == null) return (false);
+      for(var i=0;i<this._columns.length;i++) {
+        if (this._columns[i].hasFocus()) return (true);
+      }
+      return (false);
+    },
+
+    focus: function() {
+      if (!this._filterable || this._columns == null) return;
+      for(var i=0;i<this._columns.length;i++) {
+        if (this._columns[i].visible() && this._columns[i].filterable()) {
+          this._columns[i].focus();
+          return;
+        }
+      }
+    },
+
+    blur: function() {
+      if (!this._filterable || this._columns == null) return;
+      for(var i=0;i<this._columns.length;i++) {
+        this._columns.blur();
+      }
     }
+
 
 });
 
 // This code no longer works -- it needs to be updated to be a bit smarter now about visibility
 // The pack function no longer "hides" columns.
+// Need to add focus/hasFocus/blur code to it
 var DataTableTemplateHeader = view.newClass('DataTableTemplateHeader', Base, {
   template: fun.newProp('template'),
   _template: requireText('dataTable/header.html'),

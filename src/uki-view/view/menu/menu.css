@@ -4,7 +4,7 @@
   list-style:none;
   padding: 0;
   margin: 0;
-
+  -webkit-user-drag:none;
 }
 
 .uki-menu-horizontal li {
@@ -26,7 +26,6 @@
   list-style: none;
   border: 1px solid black;
   background-color: white;
-
 }
 
 
