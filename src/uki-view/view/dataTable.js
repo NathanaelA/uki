@@ -725,11 +725,17 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
 
       //console.log("KeyCode: ", e);
 
-      if (e.keyCode == 13 && self._enterFiltered) {
-        self._clearfilterInterval();
-        self._filterpresstimeout(e);
-        e.preventDefault();
-        e.cancelBubble = true;
+      if (e.keyCode == 13) {
+        if( self._enterFiltered ) {
+          self._clearfilterInterval();
+          self._filterpresstimeout(e);
+          e.preventDefault();
+          e.cancelBubble = true;
+        } else {
+          // Simulates pressing enter on the browse
+          e.target = self._parent._dom;
+          self._parent.trigger( e );
+        }
       }
       // Tab Key
       else if (e.keyCode == 9) {
@@ -802,6 +808,8 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
         if (idx != oldIdx) {
           grid.selectedIndex( idx );
           grid.scrollToIndex(idx);
+          // This triggers the selection event.
+          self._parent._list.trigger({type: 'selection'});
         }
 
       }

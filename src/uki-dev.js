@@ -3996,11 +3996,16 @@
             _filterkeydown: function(e) {
                 if (e.charCode != 0) return;
                 var self = e.target.self;
-                if (e.keyCode == 13 && self._enterFiltered) {
-                    self._clearfilterInterval();
-                    self._filterpresstimeout(e);
-                    e.preventDefault();
-                    e.cancelBubble = true;
+                if (e.keyCode == 13) {
+                    if (self._enterFiltered) {
+                        self._clearfilterInterval();
+                        self._filterpresstimeout(e);
+                        e.preventDefault();
+                        e.cancelBubble = true;
+                    } else {
+                        e.target = self._parent._dom;
+                        self._parent.trigger(e);
+                    }
                 } else if (e.keyCode == 9) {
                     self._clearfilterInterval();
                 } else if (e.keyCode == 8 || e.keyCode == 46) {
@@ -4051,6 +4056,9 @@
                     if (idx != oldIdx) {
                         grid.selectedIndex(idx);
                         grid.scrollToIndex(idx);
+                        self._parent._list.trigger({
+                            type: "selection"
+                        });
                     }
                 }
             },
