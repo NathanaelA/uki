@@ -223,10 +223,10 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
     }
     return this._maxWidth;
   } ),
-  _maxWidth: 200,
+  _maxWidth: 0,
   width: fun.newProp( 'width', function ( v ) {
     if ( arguments.length ) {
-      var newWidth = Math.min( Math.max( v, this._minWidth ), this._maxWidth );
+      var newWidth = Math.min( Math.max( v, this._minWidth ), this._maxWidth == 0 ? v : this._maxWidth);
       if ( newWidth != this._width ) {
         this._width = newWidth;
         if ( this.parent() != null ) {
