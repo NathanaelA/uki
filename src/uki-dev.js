@@ -3476,9 +3476,17 @@
                     var hc = this._header.columns();
                     var found = false;
                     for (var i = 0; i < hc.length && !found; i++) {
-                        if (hc[i].visible() && hc[i].filterable()) {
+                        if (hc[i].visible() && hc[i].filterable() && hc[i]._filter.hasClass("initfocus")) {
                             hc[i].focus();
                             found = true;
+                        }
+                    }
+                    if (!found) {
+                        for (var i = 0; i < hc.length && !found; i++) {
+                            if (hc[i].visible() && hc[i].filterable()) {
+                                hc[i].focus();
+                                found = true;
+                            }
                         }
                     }
                     if (!found) {
@@ -3693,7 +3701,7 @@
                 });
                 this._resizer.innerHTML = "|";
                 this._filter = dom.createElement("input", {
-                    className: "uki-dataTable-filter",
+                    className: "uki-dataTable-filter" + (initArgs.initfocus ? " initfocus" : ""),
                     tabIndex: 1,
                     autocomplete: "off",
                     name: this._name,
@@ -4122,7 +4130,8 @@
                     cols[i]["init"] = {
                         pos: cols[i].pos,
                         cssRule: cssRule,
-                        filterable: this._filterable
+                        filterable: this._filterable,
+                        initfocus: cols[i].initfocus
                     };
                 }
                 this._columns = build(cols);

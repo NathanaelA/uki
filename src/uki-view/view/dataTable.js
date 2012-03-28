@@ -131,11 +131,20 @@ var DataTable = view.newClass('DataTable', Container, {
       }
       if (this._header.filterable) {
         var hc = this._header.columns();
+        // Search for initfocus
         var found=false;
-        for(var i=0;i<hc.length && !found;i++) {
-          if (hc[i].visible() && hc[i].filterable()) {
+        for (var i = 0; i < hc.length && !found; i++) {
+          if (hc[i].visible() && hc[i].filterable() && hc[i]._filter.hasClass('initfocus')) {
             hc[i].focus();
-            found=true;
+            found = true;
+          }
+        }
+        if(!found) {
+          for(var i=0;i<hc.length && !found;i++) {
+            if (hc[i].visible() && hc[i].filterable()) {
+              hc[i].focus();
+              found=true;
+            }
           }
         }
         if (!found) {
@@ -378,7 +387,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
         dom.createElement('div', {className: "uki-dataTable-resizer uki-dataTable-resizer_pos-"+this._pos});
     this._resizer.innerHTML = "|";
     this._filter =
-        dom.createElement( 'input', {className: "uki-dataTable-filter", tabIndex: 1, autocomplete: "off", name: this._name, style: filterStyle} )
+        dom.createElement( 'input', {className: "uki-dataTable-filter" + (initArgs.initfocus ? ' initfocus' : ''), tabIndex: 1, autocomplete: "off", name: this._name, style: filterStyle} )
     this._wrapper =
         dom.createElement( 'div', {className: "uki-dataTable-header-wrap"}, [this._labelElement, this._filter, this._resizer] );
     this._dom =
@@ -887,7 +896,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
         for(var i=0;i<cols.length;i++) {
           cols[i]["view"] = "DataTableHeaderColumn";
           var cssRule = this.addCSSRule('div.uki-dataTable'+parentId+' .uki-dataTable-col-' + cols[i].pos); //'div.uki-dataTable'+parentId+
-          cols[i]["init"] = {pos: cols[i].pos, cssRule: cssRule, filterable: this._filterable};
+          cols[i]["init"] = {pos: cols[i].pos, cssRule: cssRule, filterable: this._filterable,initfocus: cols[i].initfocus};
         }
         this._columns = build(cols);
         this._columns.appendTo(this);
