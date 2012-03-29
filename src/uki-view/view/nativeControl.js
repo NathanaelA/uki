@@ -89,6 +89,7 @@ var Text = view.newClass('nativeControl.Text', NativeControl, {
   _createDom: function(initArgs) {
     this._input = dom.createElement('input',
         { className: 'uki-nc-text__input', type: 'text' });
+    initArgs.focus && this._input.addClass('initfocus');
     this._dom = dom.createElement(initArgs.tagName || 'span',
         { className: 'uki-nc-text' });
     this.dom().appendChild(this._input);
@@ -169,6 +170,7 @@ var TextArea = view.newClass('nativeControl.TextArea', NativeControl, {
   _createDom: function(initArgs) {
     this._input = dom.createElement('textarea',
         { className: 'uki-nc-textarea__input', type: 'text'});
+    initArgs.focus && this._input.addClass('initfocus');
     this._dom = dom.createElement(initArgs.tagName || 'span',
         { className: 'uki-nc-textarea' });
     this.dom().appendChild(this._input);

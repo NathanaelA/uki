@@ -2217,6 +2217,7 @@
                     className: "uki-nc-text__input",
                     type: "text"
                 });
+                initArgs.focus && this._input.addClass("initfocus");
                 this._dom = dom.createElement(initArgs.tagName || "span", {
                     className: "uki-nc-text"
                 });
@@ -2272,6 +2273,7 @@
                     className: "uki-nc-textarea__input",
                     type: "text"
                 });
+                initArgs.focus && this._input.addClass("initfocus");
                 this._dom = dom.createElement(initArgs.tagName || "span", {
                     className: "uki-nc-textarea"
                 });
