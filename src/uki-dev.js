@@ -3963,8 +3963,11 @@
                 var self = e.target.self;
                 self._handleFilterNotify();
             },
+            _skipFilterNotify: false,
             _handleFilterNotify: function() {
+                if (this._skipFilterNotify === true) return;
                 var eles = this._dom.getElementsByClassName("uki-dataTable-filter");
+                if (eles.length === 0) return;
                 var values = {};
                 var valueid = [];
                 for (var i = 0; i < eles.length; i++) {
@@ -4122,28 +4125,31 @@
                 this._rowheader.appendChild(child.dom());
             },
             columns: fun.newProp("columns", function(cols) {
-                this._clearfilterInterval();
-                this.deleteAllCSSRules();
-                this._menu.remove();
-                var parentId = this.parent().CSSTableId();
-                for (var i = 0; i < cols.length; i++) {
-                    cols[i]["view"] = "DataTableHeaderColumn";
-                    var cssRule = this.addCSSRule("div.uki-dataTable" + parentId + " .uki-dataTable-col-" + cols[i].pos);
-                    cols[i]["init"] = {
-                        pos: cols[i].pos,
-                        cssRule: cssRule,
-                        filterable: this._filterable,
-                        initfocus: cols[i].initfocus
-                    };
+                if (arguments.length) {
+                    this._clearfilterInterval();
+                    this.deleteAllCSSRules();
+                    this._menu.remove();
+                    var parentId = this.parent().CSSTableId();
+                    for (var i = 0; i < cols.length; i++) {
+                        cols[i]["view"] = "DataTableHeaderColumn";
+                        var cssRule = this.addCSSRule("div.uki-dataTable" + parentId + " .uki-dataTable-col-" + cols[i].pos);
+                        cols[i]["init"] = {
+                            pos: cols[i].pos,
+                            cssRule: cssRule,
+                            filterable: this._filterable,
+                            initfocus: cols[i].initfocus
+                        };
+                    }
+                    this._columns = build(cols);
+                    this._columns.appendTo(this);
+                    this._table.style.width = this._totalWidth(this.columns()) + "px";
+                    this._setupFilters();
+                    if (this._hasMenu) this._setupMenu();
+                    this.trigger({
+                        type: "render"
+                    });
                 }
-                this._columns = build(cols);
-                this._columns.appendTo(this);
-                this._table.style.width = this._totalWidth(this.columns()) + "px";
-                this._setupFilters();
-                if (this._hasMenu) this._setupMenu();
-                this.trigger({
-                    type: "render"
-                });
+                return this._columns;
             }),
             columnByName: function(name) {
                 var lname = name.toLowerCase();
@@ -4199,6 +4205,15 @@
                 for (var i = 0; i < this._columns.length; i++) {
                     this._columns.blur();
                 }
+            },
+            clearFilters: function() {
+                if (this._columns == null) return;
+                this._skipFilterNotify = true;
+                for (var i = 0; i < this._columns.length; i++) {
+                    this._columns[i].filterValue("");
+                }
+                this._skipFilterNotify = false;
+                this._handleFilterNotify();
             }
         });
         var DataTableTemplateHeader = view.newClass("DataTableTemplateHeader", Base, {

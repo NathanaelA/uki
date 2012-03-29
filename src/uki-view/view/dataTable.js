@@ -681,8 +681,11 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
       self._handleFilterNotify();
     },
 
+    _skipFilterNotify: false,
     _handleFilterNotify: function() {
+      if (this._skipFilterNotify === true) return;
       var eles = this._dom.getElementsByClassName("uki-dataTable-filter");
+      if (eles.length === 0) return;
       var values = {};
       var valueid = [];
       for(var i=0;i<eles.length;i++) {
@@ -888,6 +891,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
     },
 
     columns: fun.newProp('columns', function(cols) {
+      if (arguments.length) {
         this._clearfilterInterval();
         this.deleteAllCSSRules();
         this._menu.remove();
@@ -905,6 +909,8 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
         this._setupFilters();
         if (this._hasMenu) this._setupMenu();
         this.trigger({ type: 'render' });
+      }
+      return this._columns;
     }),
 
     columnByName: function(name) {
@@ -966,6 +972,18 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
       for(var i=0;i<this._columns.length;i++) {
         this._columns.blur();
       }
+    },
+
+    clearFilters: function() {
+      if (this._columns == null) return;
+      this._skipFilterNotify = true;
+
+      for (var i=0;i<this._columns.length;i++) {
+         this._columns[i].filterValue("");
+      }
+
+      this._skipFilterNotify = false;
+      this._handleFilterNotify();
     }
 
 
