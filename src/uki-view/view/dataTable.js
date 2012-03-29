@@ -654,7 +654,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
           var sortedlist = '';
           for ( i = 0; i < col.length; i++ ) {
             if ( col[i].sort() > 0 ) {
-              sortfields[col[i].label()] = col[i].sort();
+              sortfields[col[i].name()] = col[i].sort();
               sortedlist += col[i].sort()+",";
             } else {
               sortedlist += "0,";
@@ -1037,7 +1037,7 @@ var DataTableTemplateHeader = view.newClass('DataTableTemplateHeader', Base, {
         var sortfields = {};
         for ( i = 0; i < col.length; i++ ) {
           if ( col[i].sort > 0 ) {
-            sortfields[col[i].label] = col[i].sort;
+            sortfields[col[i].name] = col[i].sort;
           }
         }
       }
