@@ -509,6 +509,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
   _menuImage: "data:image/gif;base64,R0lGODlhEAAQAJEAAP39/ebm5ikpKZqamiH5BAAAAAAALAAAAAAQABAAAAIzhI+pqzEBgpwSDTGu2DuzfzgQNSVXxqWDaZAVIkauiWkpxspkUrqQVbt1YA8dBfTxKQMFADs=",
   menuOptions: fun.newProp('menuOptions', function(v) {
     if (arguments.length) {
+        //console.log("Menu: ", this._hasMenu, v);
         this._menuOptions = v;
         this._setupMenuOptions();
     }
@@ -902,6 +903,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
         this._columns.appendTo(this);
         this._table.style.width = this._totalWidth(this.columns())+"px";
         this._setupFilters();
+        if (this._hasMenu) this._setupMenu();
         this.trigger({ type: 'render' });
     }),
 
