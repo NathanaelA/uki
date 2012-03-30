@@ -147,6 +147,7 @@ function sortit(e)
 }
 
 // Simple, stupid Filter routine
+// not using "array.filter" because it isn't supported on all browsers
 function filterit(e)
 {
   var data = [];

@@ -195,7 +195,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
         if (pack) {
             pack.updateRow(
                 index - pack.from,
-                this.data().slice(index, 1),
+                this.data().slice(index, index+1),
                 index);
             pack.setSelected(index - pack.from, this.isSelected(index));
         }

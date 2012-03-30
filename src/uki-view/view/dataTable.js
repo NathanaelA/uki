@@ -134,7 +134,7 @@ var DataTable = view.newClass('DataTable', Container, {
         // Search for initfocus
         var found=false;
         for (var i = 0; i < hc.length && !found; i++) {
-          if (hc[i].visible() && hc[i].filterable() && hc[i]._filter.hasClass('initfocus')) {
+          if (hc[i].visible() && hc[i].filterable() && dom.hasClass(hc[i]._filter,'initfocus')) {
             hc[i].focus();
             found = true;
           }
@@ -277,7 +277,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
   name: fun.newProp( 'name', function ( v ) {
     if ( arguments.length ) {
       this._name = v;
-      this._filter.name = this._name;
+      this._filter.name = "_filter_"+this._name;
     }
     return this._name;
   } ),
@@ -344,14 +344,14 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
     return (this._hasMenu);
   }),
   _hasMenu: false,
-  filterValue: fun.newProp('filterValue', function(v) {
+  filterValue: function(v) {
       if (arguments.length) {
         if (this._filter.value === v) return;
         this._filter.value = v;
         if (this.parent() != null) this.parent()._handleFilterNotify();
       }
       return (this._filter.value);
-  }),
+  },
 
 
   // _pos is not a changeable property, only can be set at creation, this is because too many things depend on this!
@@ -387,7 +387,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
         dom.createElement('div', {className: "uki-dataTable-resizer uki-dataTable-resizer_pos-"+this._pos});
     this._resizer.innerHTML = "|";
     this._filter =
-        dom.createElement( 'input', {className: "uki-dataTable-filter" + (initArgs.initfocus ? ' initfocus' : ''), tabIndex: 1, autocomplete: "off", name: this._name, style: filterStyle} )
+        dom.createElement( 'input', {className: "uki-dataTable-filter" + (initArgs.initfocus ? ' initfocus' : ''), tabIndex: 1, autocomplete: "off", name: "_filter_"+this._name, style: filterStyle} )
     this._wrapper =
         dom.createElement( 'div', {className: "uki-dataTable-header-wrap"}, [this._labelElement, this._filter, this._resizer] );
     this._dom =
@@ -548,10 +548,6 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
 
     },
 
-/*    _finishSetup: function() {
-      this._setupMenu();
-    }, */
-
     _setupMenu: function() {
       if (this.parent() == null || this.parent().length == 0 || this._columns == null)  {
         fun.deferOnce( fun.bindOnce( this._setupMenu, this ) );
@@ -684,14 +680,24 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
     _skipFilterNotify: false,
     _handleFilterNotify: function() {
       if (this._skipFilterNotify === true) return;
-      var eles = this._dom.getElementsByClassName("uki-dataTable-filter");
-      if (eles.length === 0) return;
+      if (this._columns == null || this._columns.length == 0) return;
       var values = {};
       var valueid = [];
+
+      for (var i=0;i<this._columns.length;i++) {
+        var fieldvalue = this._columns[i].filterValue();
+        values[this._columns[i].name()] = fieldvalue;
+        valueid[i] = fieldvalue;
+      }
+
+      console.log("values", values, valueid);
+
+/*      var eles = this._dom.getElementsByClassName("uki-dataTable-filter");
+      if (eles.length === 0) return;
       for(var i=0;i<eles.length;i++) {
         values[eles[i].name] = eles[i].value;
         valueid[i] = eles[i].value;
-      }
+      } */
       try {
       this.trigger({
         type: "columnFilter",
@@ -905,7 +911,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
         }
         this._columns = build(cols);
         this._columns.appendTo(this);
-        this._table.style.width = this._totalWidth(this.columns())+"px";
+        this._table.style.width = this._totalWidth(this._columns)+"px";
         this._setupFilters();
         if (this._hasMenu) this._setupMenu();
         this.trigger({ type: 'render' });
