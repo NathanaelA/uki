@@ -914,12 +914,8 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
     }),
 
     columnByName: function(name) {
-      var lname = name.toLowerCase();
-       for(var i=0;i<this._columns.length;i++) {
-         if (this._columns[i]._name.toLowerCase() == lname ) {
-           return this._columns[i];
-         }
-       }
+       var id = this.columnIdByName(name);
+       if (id != null) return (this._columns[id]);
        if (arguments.length == 2) {
          return this.columnByLabel(name);
        }
@@ -927,14 +923,36 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
     },
 
     columnByLabel: function(name) {
+      var id = this.columnIdByLabel(name);
+      if (id != null) return (this._columns[id]);
+      if (arguments.length == 2) {
+        return this.columnByName(name);
+      }
+      return (null);
+    },
+
+    columnIdByName: function(name) {
+      var lname = name.toLowerCase();
+       for(var i=0;i<this._columns.length;i++) {
+         if (this._columns[i]._name.toLowerCase() == lname ) {
+           return (i);
+         }
+       }
+       if (arguments.length == 2) {
+         return this.columnIdByLabel(name);
+       }
+       return (null);
+    },
+
+    columnIdByLabel: function(name) {
       var lname = name.toLowerCase();
       for(var i=0;i<this._columns.length;i++) {
         if (this._columns[i]._label.toLowerCase() == lname ) {
-          return this._columns[i];
+          return (i);
         }
       }
       if (arguments.length == 2) {
-        return this.columnByName(name);
+        return this.columnIdByName(name);
       }
       return (null);
     },
