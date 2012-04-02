@@ -42,6 +42,8 @@ window.onLibraryLoad = function(data) {
     views.view('table').data(data);
     raw_data = data;
     views.view('table').focus();
+    views.view("table").header().setRowColStyle(2,2,"background-color","red");
+    views.view("table").header().setRowStyle(10,"background-color","green");
 
 };
 

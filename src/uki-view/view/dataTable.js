@@ -24,7 +24,7 @@ var _DataTableCounter = 0;
 var DataTable = view.newClass('DataTable', Container, {
     columns: function(cols) {
         if (!arguments.length) {
-            return this._list.columns();
+            return this._header.columns();
         }
         if (this.hasFocus()) {
           var _hasFocus = true;
@@ -180,7 +180,7 @@ fun.delegateCall(DataTable.prototype, [
 ], 'list');
 
 fun.delegateProp(DataTable.prototype, ['filterable', 'filterTimeout', 'sortable', 'hasMenu',
-  'menuOptions', 'menu', 'menuImage'], 'header');
+  'menuOptions', 'menu', 'menuImage', 'setRowColStyle', 'setRowStyle'], 'header');
 
 var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
 
@@ -486,6 +486,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
   _sortable: false,
   _intervalId: null,
 
+  /* Menu Related Code */
   hasMenu: fun.newProp('hasMenu', function(v) {
       if (arguments.length) {
         if (this._hasMenu == v) return (v);
@@ -583,6 +584,36 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
     destruct: function() {
       this._styleSheet = null;
       dom.removeElement(this._styleSheetElement);
+    },
+
+    _cssRuleTracking: {},
+
+    setRowStyle: function(row, name, value) {
+      var Key = "R"+row, id;
+      if (this._cssRuleTracking[Key] == null) {
+        var parentId = this.parent().CSSTableId();
+        var CSSKey = 'div.uki-dataTable'+parentId+' tr.uki-dataTable-row-'+row;
+        id = this.addCSSRule(CSSKey);
+        this._cssRuleTracking[Key] = id;
+      } else {
+        id = this._cssRuleTracking[Key];
+      }
+      this.updateCSSRules(id, name, value);
+    },
+
+    setRowColStyle: function(row, col, name, value) {
+      var Key = "RC"+row+"-"+col, id;
+
+      if (this._cssRuleTracking[Key] == null) {
+        var parentId = this.parent().CSSTableId();
+        var CSSKey = 'div.uki-dataTable'+parentId+' tr.uki-dataTable-row-'+row+' td.uki-dataTable-col-' + col;
+        id = this.addCSSRule(CSSKey);
+        this._cssRuleTracking[Key] = id;
+      } else {
+        id = this._cssRuleTracking[Key];
+      }
+      this.updateCSSRules(id, name, value);
+
     },
 
     deleteAllCSSRules: function() {
