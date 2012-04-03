@@ -365,6 +365,10 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
   // Used to track if Max/Min Width are equal -- if so, resizabe is disabled also
   _sizeable: true,
 
+  domForEvent: function() {
+    return this._filter;
+  },
+
   _createDom: function ( initArgs ) {
     if ( initArgs.pos != null ) {
       this._pos = initArgs.pos;
@@ -386,8 +390,18 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
     this._resizer =
         dom.createElement('div', {className: "uki-dataTable-resizer uki-dataTable-resizer_pos-"+this._pos});
     this._resizer.innerHTML = "|";
+
     this._filter =
-        dom.createElement( 'input', {className: "uki-dataTable-filter" + (initArgs.initfocus ? ' initfocus' : ''), tabIndex: 1, autocomplete: "off", name: "_filter_"+this._name, style: filterStyle} )
+        dom.createElement( 'input', {className: "uki-dataTable-filter" + (initArgs.initfocus ? ' initfocus' : ''), tabIndex: 1, autocomplete: "off", name: "_filter_"+this._name, style: filterStyle} );
+    // The focus/blur events keep track of the last focused filter.
+    this.on( 'focus', function () {
+      this.parent()._lastFocuedFilter && this.parent()._lastFocuedFilter.removeClass( 'initfocus' );
+      this._filter.addClass( 'initfocus' );
+    } );
+    this.on( 'blur', function () {
+      this.parent()._lastFocuedFilter = this._filter;
+    } );
+
     this._wrapper =
         dom.createElement( 'div', {className: "uki-dataTable-header-wrap"}, [this._labelElement, this._filter, this._resizer] );
     this._dom =
