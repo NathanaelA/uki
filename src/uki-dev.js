@@ -3510,7 +3510,8 @@
         });
         fun.delegateProp(DataTable.prototype, [ "data", "throttle", "debounce", "template", "formatter", "key", "selection", "selectedRows", "selectedRow", "selectedIndexes", "selectedIndex", "lastClickIndex", "multiselect" ], "list");
         fun.delegateCall(DataTable.prototype, [ "scrollToIndex", "triggerSelection", "redrawRow" ], "list");
-        fun.delegateProp(DataTable.prototype, [ "filterable", "filterTimeout", "sortable", "hasMenu", "menuOptions", "menu", "menuImage", "setRowColStyle", "setRowStyle" ], "header");
+        fun.delegateProp(DataTable.prototype, [ "filterable", "filterTimeout", "sortable", "hasMenu", "menuOptions", "menu", "menuImage" ], "header");
+        fun.delegateCall(DataTable.prototype, [ "setRowColStyle", "setRowStyle", "setColStyle" ], "header");
         var DataTableHeaderColumn = view.newClass("DataTableHeaderColumn", Base, {
             className: fun.newProp("className", function(v) {
                 if (arguments.length) {
@@ -3918,6 +3919,18 @@
                 if (this._cssRuleTracking[Key] == null) {
                     var parentId = this.parent().CSSTableId();
                     var CSSKey = "div.uki-dataTable" + parentId + " tr.uki-dataTable-row-" + row + " td.uki-dataTable-col-" + col;
+                    id = this.addCSSRule(CSSKey);
+                    this._cssRuleTracking[Key] = id;
+                } else {
+                    id = this._cssRuleTracking[Key];
+                }
+                this.updateCSSRules(id, name, value);
+            },
+            setColStyle: function(col, name, value) {
+                var Key = "C" + col, id;
+                if (this._cssRuleTracking[Key] == null) {
+                    var parentId = this.parent().CSSTableId();
+                    var CSSKey = "div.uki-dataTable" + parentId + " td.uki-dataTable-col-" + col;
                     id = this.addCSSRule(CSSKey);
                     this._cssRuleTracking[Key] = id;
                 } else {

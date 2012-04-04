@@ -179,8 +179,12 @@ fun.delegateCall(DataTable.prototype, [
     'scrollToIndex', 'triggerSelection', 'redrawRow'
 ], 'list');
 
+
 fun.delegateProp(DataTable.prototype, ['filterable', 'filterTimeout', 'sortable', 'hasMenu',
-  'menuOptions', 'menu', 'menuImage', 'setRowColStyle', 'setRowStyle'], 'header');
+  'menuOptions', 'menu', 'menuImage'], 'header');
+
+fun.delegateCall(DataTable.prototype, ['setRowColStyle', 'setRowStyle', 'setColStyle'], 'header');
+
 
 var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
 
@@ -628,6 +632,20 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
       }
       this.updateCSSRules(id, name, value);
 
+    },
+
+    setColStyle: function(col, name, value) {
+      var Key = "C"+col, id;
+
+      if (this._cssRuleTracking[Key] == null) {
+        var parentId = this.parent().CSSTableId();
+        var CSSKey = 'div.uki-dataTable'+parentId+' td.uki-dataTable-col-' + col;
+        id = this.addCSSRule(CSSKey);
+        this._cssRuleTracking[Key] = id;
+      } else {
+        id = this._cssRuleTracking[Key];
+      }
+      this.updateCSSRules(id, name, value);
     },
 
     deleteAllCSSRules: function() {
