@@ -266,6 +266,7 @@ var DataTable = view.newClass('DataTable', Container, {
         if (this._EIP_ClearEditor() === false) {
           if (this._list.selectedIndex() != this._EIPCurrentRow) {
             this._list.selectedIndex(this._EIPCurrentRow);
+            this._list.triggerSelection();
           }
           return;
         }
@@ -277,6 +278,7 @@ var DataTable = view.newClass('DataTable', Container, {
       this._EIPCurrentRow = row;
       if (this._list.selectedIndex() != row) {
         this._list.selectedIndex(row);
+        this._list.triggerSelection();
       }
 
       // Assign the Editor
@@ -366,22 +368,23 @@ var DataTable = view.newClass('DataTable', Container, {
       if (pos === -1) {
         if (parent.list().selectedIndex() != parent._EIPCurrentRow) {
           parent.list().selectedIndex(parent._EIPCurrentRow);
+          parent.list().triggerSelection();
         }
         return;
       }
-      var col = parseInt(target.className.match(/uki-dataTable-col-(\d+)/)[1]);
+      var col = parseInt(target.className.match(/uki-dataTable-col-(\d+)/)[1],10);
 
-      var row = parent.list().selectedIndex(); //parseInt(target.parentNode.className.match(/uki-dataTable-row-(\d+)/)[1]);
+      var row = parent.list().selectedIndex();
       if (col == null || row == null || col < 0 || row < 0) return;
       parent._EIPMove(row,col,true,true);
     },
 
     _EIPKeyDown: function(event) {
+      var parent = this.parent();
 
       if (event.keyCode === 9 || event.keyCode === 13 || event.keyCode === 27 || event.keyCode === this._editInPlaceHotkey) {
         event.preventDefault();
         event.stopPropagation();
-        var parent = this.parent();
         if (event.keyCode === 9 || event.keyCode === 13) {
           if (event.shiftKey === true) {
             parent._EIPMove(parent._EIPCurrentRow,parent._EIPCurrentColumn-1,false,false);
@@ -395,9 +398,20 @@ var DataTable = view.newClass('DataTable', Container, {
             parent.focus();
           }
         }
-
+      }
+      if ((event.keyCode === 38 || event.keyCode === 40) && parent._inEditInPlace) {
+         if (event.keyCode === 38 && parent._EIPCurrentRow > 0) {
+           parent._EIPMove(parent._EIPCurrentRow-1,parent._EIPCurrentColumn,false,true);
+         } else if (event.keyCode == 40) {
+           parent._EIPMove(parent._EIPCurrentRow+1,parent._EIPCurrentColumn,false,false);
+         }
       }
 
+
+    },
+
+    isEditing: function() {
+      return (this._inEditInPlace);
     },
 
     redrawRow: function(row) {
@@ -1126,6 +1140,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
           self._filterTimeout);
       }
       else if (e.keyCode == 40 || e.keyCode == 38 || e.keyCode == 33 || e.keyCode == 34 || e.keyCode == 35 || e.keyCode == 36) {
+        // this "grid" variable is the _list element not the actual "Grid"
         var grid = self.parent().childViews()[1].childViews()[0];
         var data = grid.data();
         var maxrows = 0;
@@ -1138,7 +1153,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
         if (size > 0) {
           vrows = (range.to - range.from) / size;
         }
-        var idx = grid.selectedIndex();//[0];
+        var idx = grid.selectedIndex();
         if ( idx == null ) {
           idx = 0;
         }
@@ -1184,7 +1199,8 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
           grid.selectedIndex( idx );
           grid.scrollToIndex(idx);
           // This triggers the selection event.
-          self._parent._list.trigger({type: 'selection'});
+          grid.triggerSelection();
+
         }
 
       }
@@ -1575,6 +1591,7 @@ var DataTableTemplateHeader = view.newClass('DataTableTemplateHeader', Base, {
       }
       if (idx != oldIdx) {
         grid.selectedIndex( idx );
+        grid._list.triggerSelection();
         grid.scrollToIndex(idx);
       }
 

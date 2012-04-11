@@ -26,4 +26,5 @@
     position: absolute;
     color: #888;
     opacity:0.5;
+    pointer-events: none;
 }

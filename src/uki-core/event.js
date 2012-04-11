@@ -268,7 +268,7 @@ utils.forEach({
                 });
                 evt.trigger(this, wrapped);
             }
-        } catch(e) { }
+        } catch(err) { }
     }
 
     evt.special[specialName] = {

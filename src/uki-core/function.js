@@ -9,7 +9,7 @@ var env = require('./env'),
 
 // dummy subclass
 /** @ignore */
-function inheritance() {}
+function inheritance() {};
 
 var fun = exports;
 

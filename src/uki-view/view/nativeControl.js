@@ -152,8 +152,9 @@ var Text = view.newClass('nativeControl.Text', NativeControl, {
     targetStyle.lineHeight = (this._input.offsetHeight + (parseInt(sourceStyle.marginTop, 10) || 0)*2) + 'px';
     targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft, 10) || 0) +
         (parseInt(sourceStyle.borderLeftWidth, 10) || 0) + 'px';
-    targetStyle.width = (parseInt(sourceStyle.width)-3) + 'px';
+    targetStyle.width = (parseInt(sourceStyle.width,10)-3) + 'px';
     targetStyle.textAlign = "right";
+
 
    // textProto._updatePlaceholderHeight = fun.FS;
   }
@@ -236,7 +237,7 @@ var TextArea = view.newClass('nativeControl.TextArea', NativeControl, {
     evt.on(this._placeholderDom, 'click', fun.bindOnce(function() {
       this.focus();
     }, this));
-    this.on('focus blur change keyup', this._updatePlaceholderVis);
+    //this.on('focus blur change keyup', this._updatePlaceholderVis);
     this.on('mouseup', this._updatePlaceholderHeight);
   },
 
@@ -263,7 +264,7 @@ var TextArea = view.newClass('nativeControl.TextArea', NativeControl, {
     targetStyle.marginTop = ((this._input.offsetHeight + (parseInt(sourceStyle.marginTop, 10) || 0)*2) - 16)
         + 'px';
 //    targetStyle.height = sourceStyle.height;
-    targetStyle.width = (parseInt(sourceStyle.width)-3) + "px";
+    targetStyle.width = (parseInt(sourceStyle.width,10)-3) + "px";
     targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft, 10) || 0) + (parseInt(sourceStyle.borderLeftWidth, 10) || 0) + 'px';
     targetStyle.textAlign = "right";
 //    targetStyle.display = "table-cell";

@@ -1,3 +1,7 @@
+v0.4b
+- DataTable Reworked to allow; Filtering, Sorting, Editing, Styling
+- Lots of little Bug Fixes
+
 v0.4a
 - Nodejs tool chain
 - Remove IE6 support
