@@ -51,6 +51,22 @@ var DataTable = view.newClass('DataTable', Container, {
     CSSTableId: fun.newProp("CSSTableId"),
     _CSSTableId: 0,
 
+    editInPlaceHotkey: fun.newProp("editInPlaceHotkey"),
+    _editInPlaceHotkey: 113,
+
+    editInPlace: fun.newProp("editInPlace", function(val) {
+      if (arguments.length) {
+        if (val === true) {
+          this._editInPlace = true;
+          this._EIP_CreateEditors();
+        } else {
+          this._editInPlace = false;
+        }
+      }
+      return (this._editInPlace);
+    }),
+    _editInPlace: false,
+
     _createDom: function(initArgs) {
         _DataTableCounter++;
         this._CSSTableId = _DataTableCounter;
@@ -74,10 +90,13 @@ var DataTable = view.newClass('DataTable', Container, {
         ]).appendTo(this);
 
         this._header = c.view('header');
+        this._header.on("keydown", this._keyDown);
         this._header.on('render', fun.bindOnce(this._updateHeaderHeight, this));
         this._container = c.view('container');
+        this._container.on("keydown", this._keyDown);
         this._container.dom().tabIndex = -1; // Remove tab focusablity
         this._list = c.view('list');
+        this._container.on("mousedown", this._EIPClick);
     },
 
     _updateHeaderHeight: function() {
@@ -124,6 +143,271 @@ var DataTable = view.newClass('DataTable', Container, {
         }
     },
 
+    _keyDown: function(event) {
+
+       // This event is called from a Child of DataTable, so we have to link back to the parent
+       var parent = this.parent();
+       if (parent == null) return;
+       if (parent._inEditInPlace) return;
+       // Can we edit in place?
+       if (parent._editInPlace === false) return;
+
+       if (event.keyCode == parent._editInPlaceHotkey) {
+         parent.startEditInPlace(parent._list.selectedIndex(),0);
+       }
+    },
+
+    startEditInPlace: function(row, col) {
+      if (!this._editInPlace) return;
+
+      var columns = this._header.columns();
+      if (columns == null) return;
+
+      if (this._Editors === null || this._Editors.length !== columns.length) {
+        this._EIP_CreateEditors();
+      }
+
+      this._EIPMove(row,col,true,true);
+    },
+
+  /**
+   * Returns TRUE, if the MoveNext/MoveNearest is allowed to continue moving the editor, returns FALSE to stop from moving editor.
+   */
+    _EIP_ClearEditor: function() {
+      if (this._EIPCurrentColumn === -1 || this._EIPCurrentRow === -1) return (true);
+      var columns = this._header.columns();
+      var col = this._EIPCurrentColumn;
+      var row = this._EIPCurrentRow;
+      var value = this._Editors[col].value();
+
+      if (this._Editors[col]._dom.parentNode === null) return (true);
+      if (columns[col].editor != null) {
+        if (columns[col].unformatter != null) {
+          value = columns[col].unformatter(value);
+        }
+        if (columns[col].validation != null) {
+          var validated = columns[col].validation(row,col,value);
+          if (validated === false) return (false);
+        }
+      }
+      var data = this.data();
+      var oldvalue = data.slice(row,row+1)[0][col];
+      if (value === "" && oldvalue === null) oldvalue = "";
+
+      if (oldvalue != value ) {
+        if (data.changeData != null) {
+          data.changeData(row,col,value);
+        } else if (utils.isArray(data)) {
+          data[row][col] = value;
+        }
+
+
+        try {
+          this.trigger({
+            type: "editInPlaceChange",
+            original: oldvalue,
+            value: value,
+            row: row,
+            column: col
+          });
+        }
+        catch (err) {};
+      }
+      var parent = this._Editors[col]._dom.parentNode;
+      dom.removeElement(this._Editors[col]._dom);
+      var newvalue = columns[col].formatter(value);
+      parent.innerHTML = newvalue;
+      this._EIPCurrentColumn = -1;
+      this._EIPCurrentRow = -1;
+      return (true);
+    },
+
+    _EIP_getDomElement: function(row, col) {
+      var htmlrow = this._list.dom().querySelector("tr.uki-dataTable-row-"+row);
+      if (htmlrow == null) return (null);
+
+      var htmlcol = htmlrow.querySelector("td.uki-dataTable-col-"+col);
+      return (htmlcol);
+    },
+
+    _EIPMove: function(row,col,nearest,forward) {
+      var columns = this._header.columns();
+      if (!nearest && col === -1) { col = columns.length; row--; }
+      // find the next valid column (maybe the one sent in)
+
+
+      if (forward) {
+        // Go Forwards
+        while (col < columns.length && (columns[col].visible() === false || this._Editors[col] === null)) col++;
+        if (col >= columns.length) {
+          if (nearest) {
+            col=columns.length-1;
+            while (col >= 0 && (columns[col].visible() === false || this._Editors[col] === null)) col--;
+          } else {
+            col = 0; row++;
+            while (col < columns.length && (columns[col].visible() === false || this._Editors[col] === null)) col++;
+          }
+        }
+      } else {
+        // Go Backwards
+        while (col >= 0 && (columns[col].visible() === false || this._Editors[col] === null)) col--;
+        if (col == -1) {
+          col = columns.length-1;
+          row--;
+          while (col >= 0 && (columns[col].visible() === false || this._Editors[col] === null)) col--;
+        }
+      }
+      var htmlcol = this._EIP_getDomElement(row,col);
+      if (htmlcol === null) {
+        return (false);
+      }
+
+      if (this._inEditInPlace) {
+        if (this._EIP_ClearEditor() === false) {
+          if (this._list.selectedIndex() != this._EIPCurrentRow) {
+            this._list.selectedIndex(this._EIPCurrentRow);
+          }
+          return;
+        }
+      }
+
+      // Set our Tracking Variables
+      this._inEditInPlace = true;
+      this._EIPCurrentColumn = col;
+      this._EIPCurrentRow = row;
+      if (this._list.selectedIndex() != row) {
+        this._list.selectedIndex(row);
+      }
+
+      // Assign the Editor
+      var beditor = this._Editors[col];
+      var value = this.data().slice(row,row+1)[0][col];
+      beditor.value(columns[col].formatter(value ? value : ''));
+      htmlcol.innerHTML = '';
+      htmlcol.appendChild(beditor._dom);
+      fun.deferOnce(fun.bindOnce(this._EIPFocus, this));
+
+    },
+    _inEditInPlace: false,
+    _EIPCurrentColumn: -1,
+    _EIPCurrentRow: -1,
+
+    _EIPFocus: function()
+    {
+       if (this._Editors[this._EIPCurrentColumn].focus) {
+         this._Editors[this._EIPCurrentColumn].focus();
+       } else if (this._Editors[this._EIPCurrentColumn]._input && this._Editors[this._EIPCurrentColumn]._input.focus) {
+         this._Editors[this._EIPCurrentColumn]._input.focus();
+       } else if (this._Editors[this._EIPCurrentColumn]._dom.focus) {
+         this._Editors[this._EIPCurrentColumn]._dom.focus();
+       }
+
+       if (this._Editors[this._EIPCurrentColumn].select) {
+         this._Editors[this._EIPCurrentColumn].select();
+       } else if (this._Editors[this._EIPCurrentColumn]._input && this._Editors[this._EIPCurrentColumn]._input.select) {
+         this._Editors[this._EIPCurrentColumn]._input.select();
+       } else if (this._Editors[this._EIPCurrentColumn]._dom.select) {
+         this._Editors[this._EIPCurrentColumn]._dom.select();
+       }
+    },
+
+    _EIP_CreateEditors: function() {
+
+      if (!this._editInPlace) return;
+
+       // Check for Already created Editors
+       if (this._Editors != null && this._Editors.length > 0) {
+         for (var i=0;i<this._Editors.length;i++) {
+           if (this._Editors[i] != null) {
+             try {
+               this._Editors[i].destruct();
+             } catch (err) {}
+           }
+
+         }
+       }
+
+       var cols = this._header.columns();
+
+       // No columns setup
+       if (cols == null) return;
+
+       this._Editors = [];
+       for (var i=0;i<cols.length;i++) {
+
+         if (cols[i].editor === false || cols[i].editor == null) {
+           this._Editors.push(null);
+           continue;
+         }
+         if (cols[i].editor === true) {
+           var editor = {view: "nativeControl.Text"};
+         } else {
+           var editor = cols[i].editor;
+         }
+         editor["pos"] = "w:100% h:14pt p:relative";
+         try {
+           var beditor = build(editor);
+           beditor[0].on("keydown", this._EIPKeyDown);
+           beditor[0]._editInPlaceHotkey = this._editInPlaceHotkey;
+           beditor[0]._parent = this;
+           this._Editors.push(beditor[0]);
+         } catch (Err) {
+           this._Editors.push(null);
+         }
+       }
+    },
+    _Editors: null,
+
+    _EIPClick: function(event) {
+      var parent = this.parent();
+      if (parent == null || !parent._inEditInPlace) return;
+      var target = event.srcElement ? event.srcElement : event.target;
+      var pos = target.className.indexOf("uki-dataTable-col-");
+      if (pos === -1) {
+        if (parent.list().selectedIndex() != parent._EIPCurrentRow) {
+          parent.list().selectedIndex(parent._EIPCurrentRow);
+        }
+        return;
+      }
+      var col = parseInt(target.className.match(/uki-dataTable-col-(\d+)/)[1]);
+
+      var row = parent.list().selectedIndex(); //parseInt(target.parentNode.className.match(/uki-dataTable-row-(\d+)/)[1]);
+      if (col == null || row == null || col < 0 || row < 0) return;
+      parent._EIPMove(row,col,true,true);
+    },
+
+    _EIPKeyDown: function(event) {
+
+      if (event.keyCode === 9 || event.keyCode === 13 || event.keyCode === 27 || event.keyCode === this._editInPlaceHotkey) {
+        event.preventDefault();
+        event.stopPropagation();
+        var parent = this.parent();
+        if (event.keyCode === 9 || event.keyCode === 13) {
+          if (event.shiftKey === true) {
+            parent._EIPMove(parent._EIPCurrentRow,parent._EIPCurrentColumn-1,false,false);
+          } else {
+            parent._EIPMove(parent._EIPCurrentRow,parent._EIPCurrentColumn+1,false,true);
+          }
+        }
+        if (event.keyCode === 27 || event.keyCode === this._editInPlaceHotkey) {
+          if (parent._EIP_ClearEditor()) {
+            parent._inEditInPlace = false;
+            parent.focus();
+          }
+        }
+
+      }
+
+    },
+
+    redrawRow: function(row) {
+      this._list.redrawRow(row);
+      if (!this._inEditInPlace) return;
+      if (this._EIPCurrentRow == row) {
+        this._EIPMove(this._EIPCurrentRow, this._EIPCurrentColumn, true, true);
+      }
+    },
+
     focus: function() {
       if (this._list.columns().length == 0) {
         this._deferFocus = true;
@@ -164,7 +448,8 @@ var DataTable = view.newClass('DataTable', Container, {
     blur: function() {
       this._list.blur();
       this._header.blur();
-    }
+    },
+
 
 
 });
@@ -176,14 +461,14 @@ fun.delegateProp(DataTable.prototype, [
 ], 'list');
 
 fun.delegateCall(DataTable.prototype, [
-    'scrollToIndex', 'triggerSelection', 'redrawRow'
+    'scrollToIndex', 'triggerSelection'
 ], 'list');
 
 
 fun.delegateProp(DataTable.prototype, ['filterable', 'filterTimeout', 'sortable', 'hasMenu',
   'menuOptions', 'menu', 'menuImage'], 'header');
 
-fun.delegateCall(DataTable.prototype, ['setRowColStyle', 'setRowStyle', 'setColStyle'], 'header');
+fun.delegateCall(DataTable.prototype, ['setRowColStyle', 'setRowStyle', 'setColStyle', 'columnIdByName', 'columnIdByLabel'], 'header');
 
 
 var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
@@ -337,7 +622,16 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
     return this._style;
   } ),
   _style: '',
-  formatter: fun.newProp('formatter'),
+  formatter: function(value) {
+    if (arguments.length) {
+      if (typeof value === 'function') {
+        this._formatter = value;
+      } else {
+        return this._formatter(value);
+      }
+    }
+    return this._formatter;
+  },
   _formatter: dom.escapeHTML,
   hasMenu: fun.newProp('hasMenu', function(v) {
     if (arguments.length) {
@@ -399,11 +693,11 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
         dom.createElement( 'input', {className: "uki-dataTable-filter" + (initArgs.initfocus ? ' initfocus' : ''), tabIndex: 1, autocomplete: "off", name: "_filter_"+this._name, style: filterStyle} );
     // The focus/blur events keep track of the last focused filter.
     this.on( 'focus', function () {
-      this.parent()._lastFocuedFilter && this.parent()._lastFocuedFilter.removeClass( 'initfocus' );
-      this._filter.addClass( 'initfocus' );
+      this.parent()._lastFocusedFilter && dom.removeClass(this.parent()._lastFocusedFilter, 'initfocus' );
+      dom.addClass(this._filter, 'initfocus' );
     } );
     this.on( 'blur', function () {
-      this.parent()._lastFocuedFilter = this._filter;
+      this.parent()._lastFocusedFilter = this._filter;
     } );
 
     this._wrapper =
@@ -753,7 +1047,6 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
         valueid[i] = fieldvalue;
       }
 
-      console.log("values", values, valueid);
 
 /*      var eles = this._dom.getElementsByClassName("uki-dataTable-filter");
       if (eles.length === 0) return;

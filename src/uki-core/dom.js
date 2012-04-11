@@ -93,6 +93,17 @@ module.exports = {
         return fragment.firstChild;
     },
 
+    getOffset: function( element, toParent ) {
+      var _x = 0;
+      var _y = 0;
+      while( element && element != toParent && !isNaN( element.offsetLeft ) && !isNaN( element.offsetTop ) ) {
+        _x += element.offsetLeft - element.scrollLeft;
+        _y += element.offsetTop - element.scrollTop;
+        element = element.offsetParent;
+      }
+      return { top: _y, left: _x };
+    },
+
     // client rect adjusted to window scroll
     clientRect: function(elem, ignoreScroll) {
         var rect = elem.getBoundingClientRect();

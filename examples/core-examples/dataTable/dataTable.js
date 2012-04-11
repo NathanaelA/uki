@@ -11,24 +11,36 @@ function formatTime (t) {
    if (isNaN(t)) return ('');
     var m = Math.floor(t/60/1000),
         s = Math.floor(t/1000 - m * 60);
-
     return m + ':' + (s > 9 ? s : '0' + s);
+}
+
+function unformatTime(t)
+{
+  if (t == '' || t == null) return 0;
+  var times = t.match(/(\d+):(\d+)/);
+  var nt = 0;
+  if (times.length == 3) {
+    var m = parseInt(times[1]) * 60000;
+    var s = parseInt(times[2]) * 1000;
+    var nt = m+s;
+  }
+  return (nt);
 }
 
 var views = uki([
     { view: 'DataTable', as: 'table', debounce: 1,
-      filterable: true, sortable: true, hasMenu: true,
+      filterable: false, sortable: true, hasMenu: true, editInPlace: true, editInPlaceHotkey: 113,
       menuOptions: [ 'Row Count', 'Reset Sort', 'Reset Filters', 'Reset All'  ],
-      on: {columnClick: sortit, columnFilter: filterit, menuClick: menuClick },
+      on: {columnClick: sortit, columnFilter: filterit, menuClick: menuClick, editInPlaceChange: editInPlace },
       pos: 't:0 l:0 w:100% h:100%', columns: [
         { label: 'ID', width: 40, visible: false },
-        { label: 'Name', minWidth: 100, width: 250, maxWidth: 500, resizable: true },
-        { label: 'Time', width: 50, formatter: formatTime, filterable: false, resizable: false, sortable: false },
-        { label: 'Artist', minWidth: 100, width: 150 },
-        { label: 'Album', minWidth: 100, width: 150 },
-        { label: 'Genre', width: 100 },
-        { label: 'Rating', minWidth: 40, width: 50, maxWidth: 80 },
-        { label: 'Play Count', minWidth: 30, width: 50, maxWidth: 80 }
+        { label: 'Name', minWidth: 100, width: 250, maxWidth: 500, resizable: true, editor: {view: "nativeControl.Text"} },
+        { label: 'Time', width: 50, formatter: formatTime, unformatter: unformatTime, validation: validate, filterable: false, resizable: false, sortable: false, editor: true },
+        { label: 'Artist', minWidth: 100, width: 150, editor: {view: "nativeControl.Select", options: ["Hi","Hello"]} },
+        { label: 'Album', minWidth: 100, width: 150, editor: true },
+        { label: 'Genre', width: 100, editor: true },
+        { label: 'Rating', minWidth: 40, width: 50, maxWidth: 80, editor: true },
+        { label: 'Play Count', minWidth: 30, width: 50, maxWidth: 80, editor: true }
     ], multiselect: true },
 
     { view: 'Text', as: 'loading', pos: 't:80px l:85px', text: 'Loading...' },
@@ -42,10 +54,35 @@ window.onLibraryLoad = function(data) {
     views.view('table').data(data);
     raw_data = data;
     views.view('table').focus();
-    views.view("table").header().setRowColStyle(2,2,"background-color","red");
-    views.view("table").header().setRowStyle(10,"background-color","green");
+    views.view("table").setRowColStyle(2,2,"background-color","#FFD396");
+    views.view("table").setRowStyle(10,"background-color","#8AF7DD");
+    views.view("table").setColStyle(5, "background-color","#0DC8E5");
 
 };
+
+function timeEditor (name) {
+  var fieldId = "timeeditor"+math.floor(math.Random()*10000,1);
+  var editor = {
+    fieldId: fieldId,
+    createDom: function () {
+
+    },
+    setValue: function(value) { var ptr = document.getElementsById(rnd); ptr.value = value;},
+    getValue: function() {var ptr = document.getElementsById(rnd); return (ptr.value); }
+  };
+  return (editor);
+}
+
+function editInPlace(data)
+{
+ console.log("Edit in Place",data);
+}
+
+function validate(row, col, data)
+{
+  console.log("Validate",data);
+  return (true);
+}
 
 // Simple Menu code.  :)
 function menuClick(e)
