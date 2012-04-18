@@ -32,6 +32,7 @@ var DataTable = view.newClass('DataTable', Container, {
         cols = table.addColumnDefaults(cols);
         this._list.columns(cols);
         this._header.columns(cols);
+        this._footer.columns(cols);
 
         if (_hasFocus) {
           this.focus();
@@ -46,6 +47,10 @@ var DataTable = view.newClass('DataTable', Container, {
 
     list: function() {
         return this._list;
+    },
+
+    footer: function() {
+        return this._footer;
     },
 
     CSSTableId: fun.newProp("CSSTableId"),
@@ -76,32 +81,52 @@ var DataTable = view.newClass('DataTable', Container, {
 
             { view: initArgs.headerView || DataTableAdvancedHeader, as: 'header',
               addClass: 'uki-dataTable-header-container',
-              on: { resizeColumn: fun.bind(this._resizeColumn, this) ,
-                    scroll: fun.bind(this._scrollChild, this) } },
+              on: {//  resizeColumn: fun.bind(this._resizeColumn, this) ,
+                    scroll: fun.bind(this._scrolledHeader, this) } },
 
             { view: Container, pos: 't:0 l:0 r:0 b:0',
               addClass: 'uki-dataTable-container', as: 'container',
-              on: { scroll: fun.bind(this._scrollHeader, this) },
+              on: { scroll: fun.bind(this._scrolledContainer, this) },
               childViews: [
                 { view: initArgs.listView || DataTableList, as: 'list',
                   on: { selection: fun.bind(this.trigger, this) } }
-              ] }
+              ] },
+
+            { view: initArgs.footerView || DataTableFooter, as: 'footer',
+              addClass: 'uki-dataTable-footer-container',
+              on: {scroll: fun.bind(this._scrolledFooter, this) }
+            }
 
         ]).appendTo(this);
 
+        this._footer = c.view('footer');
+        this._footer.on('render', fun.bindOnce(this._updateContainerHeight, this));
         this._header = c.view('header');
         this._header.on("keydown", this._keyDown);
-        this._header.on('render', fun.bindOnce(this._updateHeaderHeight, this));
+        this._header.on('render', fun.bindOnce(this._updateContainerHeight, this));
+        this._header.on('recalcTableSize', fun.bindOnce(this._recalculateTableSizes, this));
         this._container = c.view('container');
         this._container.on("keydown", this._keyDown);
         this._container.dom().tabIndex = -1; // Remove tab focusablity
-        this._list = c.view('list');
         this._container.on("mousedown", this._EIPClick);
+        this._list = c.view('list');
     },
 
-    _updateHeaderHeight: function() {
+    _recalculateTableSizes: function() {
+      var mwidth = this._header.totalWidth()+"px";
+      this._footer._table.style.width = mwidth;
+      this._header._table.style.width = mwidth;
+    },
+
+
+    _updateContainerHeight: function() {
         var pos = this._container.pos();
         pos.t = this._header.clientRect().height + 'px';
+        if (this._footer.visible()) {
+          pos.bottom = this._footer.clientRect().height + 'px';
+        } else {
+          pos.bottom = "0px";
+        }
         this._container.pos(pos);
         if (this._deferFocus === true) {
           this.focus();
@@ -109,39 +134,49 @@ var DataTable = view.newClass('DataTable', Container, {
     },
 
     _initLayout: function() {
-        this._updateHeaderHeight();
+        this._updateContainerHeight();
     },
 
-    _scrollHeader: function(e) {
+    _handleScroll:function(newLocation) {
       var lastHeader = this._header.scrollLeft();
+      if (lastHeader != newLocation) {
+        this._header.scrollLeft(newLocation);
+        if (this._header._menu != null) {
+          this._header._menu.dom().style.marginLeft=-newLocation+"px";
+        }
+      }
+      lastHeader = this._container.scrollLeft();
+      if (lastHeader != newLocation) {
+        this._container.scrollLeft(newLocation);
+      }
+      lastHeader = this._footer.scrollLeft();
+      if (lastHeader != newLocation) {
+        this._footer.scrollLeft(newLocation);
+      }
+    },
+
+    _scrolledFooter: function() {
+      var lastLocation = this._footer.scrollLeft();
+      this._handleScroll(lastLocation);
+    },
+
+    _scrolledContainer: function() {
       var newHeader = this._container.scrollLeft();
-      if (lastHeader != newHeader) {
-        this._header.scrollLeft(newHeader);
-        if (this._header._menu != null) {
-          this._header._menu.dom().style.marginLeft=-newHeader+"px";
-        }
-      }
+      this._handleScroll(newHeader);
     },
 
-    _scrollChild: function(e) {
-      var lastHeader = this._container.scrollLeft();
+    _scrolledHeader: function() {
       var newHeader = this._header.scrollLeft();
-
-      if (lastHeader != newHeader) {
-        this._container.scrollLeft(newHeader);
-        if (this._header._menu != null) {
-          this._header._menu.dom().style.marginLeft=-newHeader+"px";
-        }
-      }
+      this._handleScroll(newHeader);
     },
 
-    _resizeColumn: function(e) {
+/*    _resizeColumn: function(e) {
         if (typeof e.column.pos === 'function' ) {
             // Don't have to do anything...
         } else {
           this._list._updateColumnSize(e.column.pos);
         }
-    },
+    }, */
 
     _keyDown: function(event) {
 
@@ -464,7 +499,12 @@ var DataTable = view.newClass('DataTable', Container, {
       this._header.blur();
     },
 
-
+    hasFooter: function(v) {
+       if (arguments.length) {
+         return (this._footer.visible(v));
+       }
+       return (this._footer.visible());
+    }
 
 });
 
@@ -478,6 +518,7 @@ fun.delegateCall(DataTable.prototype, [
     'scrollToIndex', 'triggerSelection'
 ], 'list');
 
+fun.delegateCall(DataTable.prototype, ['summary'], 'footer');
 
 fun.delegateProp(DataTable.prototype, ['filterable', 'filterTimeout', 'sortable', 'hasMenu',
   'menuOptions', 'menu', 'menuImage'], 'header');
@@ -543,6 +584,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
         this._width = newWidth;
         if ( this.parent() != null ) {
           this.parent().updateCSSRules( this._cssRule, 'width', this._width + "px" );
+          this.parent().trigger({ type: 'recalcTableSize' });
         }
       }
     }
@@ -620,7 +662,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
   headerstyle: fun.newProp( 'headerstyle', function ( v ) {
     if ( arguments.length ) {
       this._headerstyle = v;
-      this._dom.style = v;
+      this._dom.style.cssText = v;
     }
     return this._headerstyle;
   } ),
@@ -630,7 +672,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
       return this._style;
     }
     this._style = v;
-    if ( this.Parent() != null ) {
+    if ( this.parent() != null ) {
       this._parseStyle();
     }
     return this._style;
@@ -664,6 +706,18 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
       }
       return (this._filter.value);
   },
+  footerValue: function(v) {
+    if (arguments.length) {
+      return (this.parent().parent().footer().footervalue(this._pos, v));
+    }
+    return (this.parent().parent().footer().footervalue(this._pos));
+  },
+  footerVisible: function(v) {
+    if (arguments.length) {
+      return (this.parent().parent().footer().footervisible(this._pos,v));
+    }
+    return (this.parent().parent().footer().footervisible(this._pos));
+  },
 
 
   // _pos is not a changeable property, only can be set at creation, this is because too many things depend on this!
@@ -671,7 +725,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
   _pos: 0,
 
   // This gets assigned the rule # in the CSS stylesheet rule that is related to this column so we can modify
-  // it and affect all columns, this also is set once when the Columns are created
+  // it and affect all cells in a column, this also is set once when the Column is created
   _cssRule: -1,
 
   // Used to track if Max/Min Width are equal -- if so, resizabe is disabled also
@@ -788,6 +842,112 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
 
 } );
 
+var DataTableFooter = view.newClass('DataTableFooter', Container, {
+  template: fun.newProp('template'),
+  _template: requireText('dataTable/footer.html'),
+
+  _createDom: function(initArgs) {
+    Base.prototype._createDom.call(this, initArgs);
+
+    // The rowfooter / _table will be replaced by the _render function do to an IE bug
+    var rowfooter = dom.createElement('tr', {className: 'uki-dataTable-footer-row'});
+    this._table = dom.createElement('table', { className: 'uki-dataTable-footer' }, [rowfooter]);
+
+    // This is the parent static element
+    this._dom = dom.createElement('div', { className: 'uki-hidden' }, [this._table]);
+  },
+
+  columns: fun.newProp('columns', function(cols) {
+    this._columns = cols;
+    this._table.style.width = table.totalWidth(this._columns)+"px";
+    fun.deferOnce(fun.bindOnce(this._render, this));
+  }),
+
+  visible: fun.newProp('visible', function (vis) {
+     if (arguments.length && (vis === true || vis === false) && vis !== this._visible) {
+       this._visible = vis;
+       if (this._visible) {
+         dom.removeClass(this._dom, "uki-hidden");
+       } else {
+         dom.addClass(this._dom, "uki-hidden");
+       }
+       this.trigger({ type: 'render' });
+     }
+     return (this._visible);
+  }),
+  _visible: false,
+
+  _formatColumn: function(col) {
+    return {
+      pos: col.pos,
+      style: (col.footer === false) ? "display:none" : '',
+      value: (col.footervalue ? col.footervalue : '')
+    };
+  },
+
+  _render: function() {
+    this._dom.innerHTML = Mustache.to_html(
+        this._template,  {
+          columns: this._columns.map(this._formatColumn, this)
+        });
+
+    // IE does not allow you to change the innerHTML of a table; so we have to regenerate the entire table and then
+    // relink our variable to the new _table so that we can update the width dynamically when need be
+    this._table = this._dom.getElementsByClassName("uki-dataTable-footer")[0];
+    this._table.style.width = table.totalWidth(this._columns)+"px";
+
+
+    this.trigger({ type: 'render' });
+  },
+
+  footervalue: function(pos, v) {
+    if (arguments.length == 2) {
+      if (this._columns[pos].footervalue !== v) {
+        this._columns[pos].footervalue = v;
+        this._render();
+      }
+    }
+    return (this._columns[pos].footervalue);
+  },
+
+  footervisible: function(pos, v) {
+    if (arguments.length == 2 && (v === true || v === false)) {
+      if (this._columns[pos].footer !== v) {
+        this._columns[pos].footer = v;
+        this._render();
+      }
+    }
+    return (this._columns[pos].footer);
+  },
+
+  values: function (v) {
+    var changed = false;
+    var i;
+    if (arguments.length) {
+      var len = this._columns.length;
+      if (len > v.length) len = v.length;
+      for(i=0;i<len;i++) {
+        if (this._columns[i].footervalue !== v[i]) {
+          this._columns[i].footervalue = v[i];
+          changed = true;
+        }
+      }
+      if (changed) this._render();
+    }
+    var val = [];
+    for(i=0;i<this._columns.length;i++) {
+      val.push(this._columns[i].footervalue);
+    }
+    return (val);
+  },
+
+  summary: function(v) {
+    if (arguments.length) return (this.values(v));
+    else return (this.values());
+  }
+
+});
+
 var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container, {
   filterable: fun.newProp('filterable', function (v) {
     if (arguments.length) {
@@ -836,7 +996,6 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
   _menuImage: "data:image/gif;base64,R0lGODlhEAAQAJEAAP39/ebm5ikpKZqamiH5BAAAAAAALAAAAAAQABAAAAIzhI+pqzEBgpwSDTGu2DuzfzgQNSVXxqWDaZAVIkauiWkpxspkUrqQVbt1YA8dBfTxKQMFADs=",
   menuOptions: fun.newProp('menuOptions', function(v) {
     if (arguments.length) {
-        //console.log("Menu: ", this._hasMenu, v);
         this._menuOptions = v;
         this._setupMenuOptions();
     }
@@ -910,6 +1069,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
     destruct: function() {
       this._styleSheet = null;
       dom.removeElement(this._styleSheetElement);
+      Container.prototype.destruct.call(this);
     },
 
     _cssRuleTracking: {},
@@ -994,14 +1154,32 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
       }
     },
 
+    totalWidth: function() {
+      var tw=0;
+      for(var i=0;i<this._columns.length;i++) {
+        tw += (this._columns[i].visible() ? this._columns[i].width() : 0);
+      }
+      return (tw);
+    },
+
     _click: function(e) {
       if (this._draggableColumn != -1) return;
       e.isDefaultPrevented = fun.FF;
 
-      if (e.target.nextSibling && e.target.nextSibling.nextSibling && dom.hasClass(e.target.nextSibling.nextSibling, "uki-dataTable-resizer")) {
-        var index = e.target.nextSibling.nextSibling.className.match(/uki-dataTable-resizer_pos-(\d+)/)[1];
+      if (e.target.nodeName === "INPUT") return;
+
+      // Get Column #
+      var target = e.target;
+      while (target.nodeName != "TD" && target != null) {
+        target = target.parentNode;
+      }
+      if (target == null) return;
+
+      // Verify this is a Header "CELL" (i.e. a clickable element)
+      if (dom.hasClass(target, "uki-dataTable-header-cell")) {
+        var index = target.className.match(/uki-dataTable-col-(\d+)/)[1];
         var col = this.columns();
-        var eles = this._dom.getElementsByClassName("uki-dataTable-header-text");
+        var sortedlist = '';
 
         if ( this._sortable && col[index].sortable() !== false) {
           // Handle Sorting
@@ -1019,7 +1197,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
           col[index].sort(col[index].sort()+1);
 
           var sortfields = {};
-          var sortedlist = '';
+          sortedlist = '';
           for ( i = 0; i < col.length; i++ ) {
             if ( col[i].sort() > 0 ) {
               sortfields[col[i].name()] = col[i].sort();
@@ -1031,7 +1209,9 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
         }
 
         // remove last ","
-        sortedlist = sortedlist.substring(0, sortedlist.length-1);
+        if (sortedlist.length > 0) {
+          sortedlist = sortedlist.substring(0, sortedlist.length-1);
+        }
 
         this.trigger({
           type: "columnClick",
@@ -1075,7 +1255,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
         byfieldid: valueid
       });
       }
-      catch (err) {};
+      catch (err) {}
     },
 
     _filterpresstimeout: function(e) {
@@ -1254,15 +1434,11 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
 
     _resizeColumn: function(pos, width) {
         var column = this.columns()[pos];
-        width = column.width(width);
-        this._table.style.width = this._totalWidth(this.columns())+"px";
+        column.width(width);
+        try {
+          this.trigger({ type: 'recalcTableSize' });
+        } catch (err) { }
     },
-
-    _totalWidth: function(columns) {
-       return utils.reduce(columns, function(s, col) {
-          return s + (col._visible ? (col._width || 200) : 0);
-       }, 0);
-     },
 
     _appendChildToDom: function(child) {
       this._rowheader.appendChild(child.dom());
@@ -1278,12 +1454,12 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
 
         for(var i=0;i<cols.length;i++) {
           cols[i]["view"] = "DataTableHeaderColumn";
-          var cssRule = this.addCSSRule('div.uki-dataTable'+parentId+' .uki-dataTable-col-' + cols[i].pos); //'div.uki-dataTable'+parentId+
-          cols[i]["init"] = {pos: cols[i].pos, cssRule: cssRule, filterable: this._filterable,initfocus: cols[i].initfocus};
+          var cssRule = this.addCSSRule('div.uki-dataTable'+parentId+' .uki-dataTable-col-' + cols[i].pos);
+          cols[i]["init"] = {pos: cols[i].pos, cssRule: cssRule, filterable: this._filterable, initfocus: cols[i].initfocus};
         }
         this._columns = build(cols);
         this._columns.appendTo(this);
-        this._table.style.width = this._totalWidth(this._columns)+"px";
+        this._table.style.width = this.totalWidth()+"px";
         this._setupFilters();
         if (this._hasMenu) this._setupMenu();
         this.trigger({ type: 'render' });
@@ -1382,12 +1558,15 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
       this._handleFilterNotify();
     }
 
-
 });
+
+
 
 // This code no longer works -- it needs to be updated to be a bit smarter now about visibility
 // The pack function no longer "hides" columns.
 // Need to add focus/hasFocus/blur code to it
+
+/*
 var DataTableTemplateHeader = view.newClass('DataTableTemplateHeader', Base, {
   template: fun.newProp('template'),
   _template: requireText('dataTable/header.html'),
@@ -1704,9 +1883,7 @@ var DataTableTemplateHeader = view.newClass('DataTableTemplateHeader', Base, {
 
 });
 
-
-
-
+*/
 
 var DataTableList = view.newClass('DataTableList', DataList, {
 
@@ -1783,6 +1960,7 @@ var table = {
 exports.DataTable               = DataTable;
 exports.DataTableList           = DataTableList;
 exports.DataTableAdvancedHeader = DataTableAdvancedHeader;
-exports.DataTableTemplateHeader = DataTableTemplateHeader;
+//exports.DataTableTemplateHeader = DataTableTemplateHeader;
+exports.DataTableFooter         = DataTableFooter;
 exports.table                   = table;
 exports.DataTableHeaderColumn   = DataTableHeaderColumn;

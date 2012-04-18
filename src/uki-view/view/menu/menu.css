@@ -44,14 +44,26 @@
   text-decoration: none;
 }
 
-.uki-menu-horizontal :hover > a {
+.uki-menu-horizontal-no-touch :hover > a {
   background-color: black;
   color:white;
 }
 
+/*
+.uki-menu-horizontal :focus > a, .uki-menu-horizontal :active > a, .uki-menu-horizontal :hover > ul {
+  color: #ffffff;
+} */
+
+.uki-menu-horizontal-no-touch :focus > a, a.uki-menu-focus, .uki-menu-focus  {
+  background-color: black;
+  color:#FFFFFF;
+}
+
+
 .uki-menu-horizontal ul {  display:none; }
 
-.uki-menu-horizontal :hover > ul { display: block; }
+.uki-menu-horizontal ul.uki-menu-visible {display: block;}
+.uki-menu-horizontal-no-touch :hover > ul { display: block; }
 
 .uki-menu-horizontal ul ul {
   position:absolute; top:0px; left:10em;

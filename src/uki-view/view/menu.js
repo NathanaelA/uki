@@ -4,6 +4,8 @@ var fun  = require('../../uki-core/function'),
     dom  = require('../../uki-core/dom'),
     view = require('../../uki-core/view'),
     utils = require('../../uki-core/utils'),
+    evt = require('../../uki-core/event'),
+    env = require('../../uki-core/env'),
 
     Base = require('../../uki-core/view/base').Base;
 
@@ -11,17 +13,149 @@ var fun  = require('../../uki-core/function'),
 
 var Menu = view.newClass('Menu', Base, {
     _createDom: function() {
-        this._dom = dom.createElement('ul', { className: 'uki-menu-horizontal uki-textSelectable_off' });
-        this.on('click', this._click);
+        this._dom = dom.createElement('ul', { className: 'uki-menu-horizontal uki-menu-horizontal-no-touch uki-textSelectable_off' });
+        this._hasTouch = false,
+        this.on('click', fun.bind(this._click, this));
+        this.on('touchstart', fun.bind(this._touchstart,this));
+        this._bindedTouchOut = fun.bindOnce(this._touchout, this);
+
+        this.on('touchend', this._touchprevent);
+        this.on('touchmove', this._touchprevent);
+    },
+    destruct: function() {
+      if (this._hasTouch) {
+        evt.removeListener(env.doc, "click", this._bindedTouchOut);
+      }
+      Base.prototype.destruct.call(this);
+    },
+    _touchout: function(event)
+    {
+      // Catch any errors in our handler, in case we are being destroyed and "this" is no longer valid...
+      try {
+        var eles = this._dom.getElementsByClassName("uki-menu-focus");
+        for (var i=0;i<eles.length;i++) {
+          dom.removeClass(eles[i], "uki-menu-focus");
+        }
+        this._closeMenu(this._dom);
+      } catch (err) { };
+    },
+    _touchprevent: function(event)
+    {
+      event.stopPropagation();
+      event.preventDefault();
+
+
+      return (false);
+    },
+
+    _lastElement: null,
+    _touchstart: function(event) {
+       // This is to allow us to short circuit the "Click Event", and remove "hover" events since this is a touch device
+      if (!this._hasTouch) {
+        dom.removeClass(this._dom, 'uki-menu-horizontal-no-touch');
+        evt.addListener(env.doc, "click", this._bindedTouchOut);
+        this._hasTouch = true;
+      }
+       event.stopPropagation();
+       event.preventDefault();
+
+      if (event.baseEvent) {
+        var e = event.baseEvent;
+      } else {
+        var e = event;
+      }
+
+      if (e.touches) {
+        var touch = e.touches[0];
+      } else {
+        touch = e;
+      }
+
+      // Find the "A" tag that we clicked on
+      var target = touch.target;
+      while (target.parentNode && target.tagName != "A") {
+        target = target.parentNode;
+      }
+      var clickedItem = target;
+      if (target == null) return;
+
+      // Find any other elements that have the focus and clear the focus
+      var eles = this._dom.getElementsByClassName("uki-menu-focus");
+      for(var i=0;i<eles.length;i++) {
+        if (eles[i] != target) {
+          dom.removeClass(eles[i], "uki-menu-focus");
+        }
+      }
+      // Set the focus to the new element if it doesn't already have focus
+      if (!dom.hasClass(target, "uki-menu-focus")){
+          dom.addClass(target, "uki-menu-focus");
+      } else {
+        if (dom.hasClass(target.parentNode, "uki-menu-primary")) {
+          dom.removeClass(target,"uki-menu-focus");
+          this._closeMenu(this._dom);
+          return;
+        }
+      }
+
+
+
+      // Find the Next UL tag to see if we need to show it
+      target = target.nextSibling;
+      while (target != null && target.nodeName == "#text") {
+        target = target.nextSibling;
+      }
+
+      // We have a Sub-Menu, show it.
+      if (target != null) {
+        this._closeMenu(target);
+        dom.addClass(target,"uki-menu-visible");
+      } else {
+        // NO Sub-menu, this is a clicked element
+        this._closeMenu(this._dom);
+
+        var name = clickedItem.name;
+        if (clickedItem.href == "javascript:void(0);") {
+
+          this.trigger({
+            type: "menuClick",
+            name: name,
+            option: clickedItem
+          });
+          try {
+            clickedItem.blur();
+          } catch (err){ /* console.log(err); */ };
+        }
+
+      }
+
+    },
+    _closeMenu: function(domElement) {
+        var eles = this._dom.getElementsByClassName("uki-menu-visible");
+        for (var i=0;i<eles.length;i++) {
+          if (!dom.isAChild(domElement, eles[i], this._dom) || this._dom === domElement) {
+            dom.removeClass(eles[i],"uki-menu-visible");
+          }
+        }
+
     },
 
     _click: function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      if (this._hasTouch === true) return;
 
       // Find the "Wrapping 'A'" tag.
       var target = event.target;
       while (target.parentNode && target.tagName != "A") {
         target = target.parentNode;
       }
+
+
+      /*
+      if (this._lastElement != target) {
+        this._lastElement = target;
+        return;
+      } */
 
       // Find the Parent "UL" to make it hide
       var parentUl = target;
@@ -38,7 +172,7 @@ var Menu = view.newClass('Menu', Base, {
 
       // Publish event
       var name = target.name;
-      if (target.href == "javascript:void(0)") {
+      if (target.href == "javascript:void(0);") {
         this.trigger({
           type: "menuClick",
           name: name,
@@ -62,23 +196,27 @@ function appendMenuOptions ( root, options, level ) {
   utils.forEach( options, function ( option ) {
 
     if (typeof option === 'string' || typeof option === 'number') {
-      option = { text: option };
+        option = { text: option };
     }
 
     if (level == 0) className = "uki-menu-primary";
     else className = "uki-menu";
 
     node_li = dom.createElement('li', {className: className});
-    node_a = dom.createElement('a', {
-      draggable: false, ondragstart: "return false;",
-      href: option.url ? option.url : 'javascript:void(0)',
-      html: option.html ? option.html : dom.escapeHTML( option.text ),
-      name: option.name ? option.name : option.text,
-      tabIndex: -1});
 
+    if (option.text === '-' || option.text === '---' || option.text === '--') {
+      node_a = dom.createElement('hr');
+    } else {
+      node_a = dom.createElement('a', {
+        draggable: false, ondragstart: "return false;",
+        href: option.url ? option.url :'javascript:void(0);',
+        html: option.html ? option.html : dom.escapeHTML( option.text ),
+        name: option.name ? option.name : option.text,
+        tabIndex: -1});
+      if (option.accessKey) node_a.accessKey = option.accessKey;
+      if (option.className) dom.addClass(node_a, option.className);
+    }
     if (option.visible === false) node_li.style.display="none";
-    if (option.accessKey) node_a.accessKey = option.accessKey;
-    if (option.className) dom.addClass(node_a, option.className);
 
     node_li.appendChild(node_a);
 

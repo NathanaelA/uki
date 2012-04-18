@@ -341,6 +341,11 @@ var DataList = view.newClass('DataList', Container, Focusable, {
         pack.render(rows, selectedInPack, range.from);
         pack.dom().style.top =
             this.metrics().rowDimensions(range.from).top + 'px';
+
+       // If this is the first rendering (selectedindex = -1) then focus on the index
+       if (rows.length > 0 && this.selectedIndex() === -1) {
+         this.selectedIndex(0);  this.triggerSelection();
+       }
         return pack;
     },
 

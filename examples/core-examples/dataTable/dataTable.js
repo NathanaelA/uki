@@ -28,14 +28,14 @@ function unformatTime(t)
 }
 
 var views = uki([
-    { view: 'DataTable', as: 'table', debounce: 1,
-      filterable: false, sortable: true, hasMenu: true, editInPlace: true, editInPlaceHotkey: 113,
-      menuOptions: [ 'Row Count', 'Reset Sort', 'Reset Filters', 'Reset All'  ],
-      on: {columnClick: sortit, columnFilter: filterit, menuClick: menuClick, editInPlaceChange: editInPlace },
+    { view: 'DataTable', as: 'table', debounce: 1, hasFooter: true,
+      filterable: true, sortable: true, hasMenu: true, editInPlace: true, editInPlaceHotkey: 113,
+      menuOptions: [ 'Row Count', 'Reset Sort', 'Reset Filters', 'Reset All', { text: 'Menu 3', options: ['test', 'test2', 'test3']}, { text: 'Menu 4', options: ['test', 'test2', 'test3'] }],
+      on: {columnClick: sortit, columnFilter: filterit, menuClick: menuClick, editInPlaceChange: editInPlace, touchstart: DoubleTapEvent, dblclick: dblclicker },
       pos: 't:0 l:0 w:100% h:100%', columns: [
         { label: 'ID', width: 40, visible: false },
-        { label: 'Name', minWidth: 100, width: 250, maxWidth: 500, resizable: true, editor: {view: "nativeControl.Text"} },
-        { label: 'Time', width: 50, formatter: formatTime, unformatter: unformatTime, validation: validate, filterable: false, resizable: false, sortable: false, editor: true },
+        { label: 'Name', minWidth: 100, width: 250, maxWidth: 500, resizable: true, editor: {view: "nativeControl.Text"}, footervalue: 'hi' },
+        { label: 'Time', width: 50, style: 'text-align:right;', styler: styler, formatter: formatTime, unformatter: unformatTime, validation: validate, filterable: false, resizable: false, sortable: false, editor: true, footer: false, footervalue: 'I am not visible' },
         { label: 'Artist', minWidth: 100, width: 150, editor: {view: "nativeControl.Select", options: ["Hi","Hello"]} },
         { label: 'Album', minWidth: 100, width: 150, editor: true },
         { label: 'Genre', width: 100, editor: true },
@@ -54,11 +54,53 @@ window.onLibraryLoad = function(data) {
     views.view('table').data(data);
     raw_data = data;
     views.view('table').focus();
-    views.view("table").setRowColStyle(2,2,"background-color","#FFD396");
-    views.view("table").setRowStyle(10,"background-color","#8AF7DD");
-    views.view("table").setColStyle(5, "background-color","#0DC8E5");
+ //   views.view("table").setRowColStyle(2,2,"background-color","#FFD396");
+ //   views.view("table").setRowStyle(10,"background-color","#8AF7DD");
+ //   views.view("table").setColStyle(5, "background-color","#0DC8E5");
 
 };
+
+function dblclicker(e)
+{
+  alert("Double Click");
+}
+
+function styler(row, data)
+{
+
+}
+
+var _lastTouchTime;
+function DoubleTapEvent(event) {
+  if (event.baseEvent) {
+    var e = event.baseEvent;
+  } else {
+    var e = event;
+  }
+
+  var t2 = e.timeStamp
+      , t1 = _lastTouchTime || t2
+      , dt = t2 - t1
+      , fingers = e.touches.length;
+  var touch = e.touches[0];
+
+ console.log("DoubleTap Event Catcher");
+  if (!touch) return (true);
+  _lastTouchTime = t2;
+  if (!dt || dt > 500 || fingers > 1) return (true); // not double-tap
+  console.log("Attempting a Double Click on IPAD");
+  var evtObj = document.createEvent('MouseEvents');
+
+  evtObj.initMouseEvent("dblclick", true, true, window, 1,
+      touch.screenX, touch.screenY,
+      touch.clientX, touch.clientY, false,
+      false, false, false, 0, null);
+
+  touch.target.dispatchEvent(evtObj);
+  e.preventDefault(); // double tap - prevent the zoom
+  e.stopPropagation();
+}
+
 
 function timeEditor (name) {
   var fieldId = "timeeditor"+math.floor(math.Random()*10000,1);
@@ -87,6 +129,7 @@ function validate(row, col, data)
 // Simple Menu code.  :)
 function menuClick(e)
 {
+  console.log("Menu Click",e);
   var hc = views.view('table').header().columns();
   switch(e.name) {
     case 'Row Count':

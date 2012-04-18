@@ -6,3 +6,7 @@
 .uki-attaching-relative {
   position: relative;
 }
+
+.uki-hidden {
+  display: none;
+}

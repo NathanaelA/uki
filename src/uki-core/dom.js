@@ -164,5 +164,14 @@ module.exports = {
      */
     escapeHTML: function(html) {
         return (html + '').replace(/[&<>\"\']/g, function(c) { return trans[c]; });
+    },
+
+    isAChild: function(elem, parent, stopat) {
+       var target = elem.parentNode;
+       while (target != null && target != parent && target != stopat) {
+         target = target.parentNode;
+       }
+      if (target == parent) return (true);
+      return (false);
     }
 };

@@ -30,7 +30,7 @@
   background: url(up.gif) no-repeat 100% center;
 }
 
-.uki-dataTable-header,
+.uki-dataTable-header, .uki-dataTable-footer,
 .uki-dataTable-pack {
     border-spacing: 0;
     table-layout: fixed;
@@ -83,7 +83,6 @@
     border-color: #AAA;
 }
 
-
 .uki-dataTable-wrap {
     width: 100%;
 }
@@ -92,26 +91,45 @@
     text-align: right;
 }
 
-.uki-dataTable-header-container {
+.uki-dataTable-header-container, .uki-dataTable-footer-container {
     box-shadow: 0 1px 0 rgba(0, 0, 0, .1);
     -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, .1);
     -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .1);
     z-index: 100;
     position: relative;
     background-color: #EFEFEF;
-    border-bottom: 1px solid #999;
     overflow: hidden;
     cursor: default;
 }
 
-.uki-dataTable-header-cell {
+.uki-dataTable-header-container {
+  border-bottom: 1px solid #999;
+}
+
+.uki-dataTable-footer-container {
+  border-top: 1px solid #999;
+}
+
+.uki-dataTable-footer-container {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+}
+
+/* Force Column Headers to be Left aligned by default, we need this level of specificity to override the default column style css command */
+table.uki-dataTable-header tr.uki-dataTable-header-row td {
+  text-align: left;
+}
+
+.uki-dataTable-header-cell, .uki-dataTable-footer-cell {
     margin: 0;
     border-right: 1px solid #CCC;
     padding: 0 4px 0 5px;
     vertical-align: top;
 }
 
-.uki-dataTable-header-wrap {
+.uki-dataTable-header-wrap, .uki-dataTable-footer-wrap {
     position: relative;
     margin-right: 3px;
 }
@@ -125,6 +143,18 @@
     font-size: 11px;
     line-height: 14px;
 
+}
+
+.uki-dataTable-footer-text {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 2px 0;
+  height: 14px;
+  font-size: 10px;
+  font-weight: bolder;
+  line-height: 14px;
+  text-align: right;
 }
 
 .uki-dataTable-resizer {
@@ -149,8 +179,12 @@
     padding-right: 0;
 }
 
-.uki-dataTable-filter {
+.uki-dataTable-filter, .uki-dataTable-footer-field {
   margin-left: -2px;
   padding: 1px;
   width: 100%;
+}
+
+.uki-dataTable-footer-field {
+  background-color: #CCC;
 }
