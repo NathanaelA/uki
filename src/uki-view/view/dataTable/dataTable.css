@@ -1,5 +1,6 @@
 .uki-dataTable-container {
     overflow: auto;
+   -webkit-overflow-scrolling: touch;
 }
 
 .uki-dataTable {

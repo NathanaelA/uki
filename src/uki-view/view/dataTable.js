@@ -1167,6 +1167,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
       e.isDefaultPrevented = fun.FF;
 
       if (e.target.nodeName === "INPUT") return;
+      if (dom.hasClass(e.target,"uki-dataTable-resizer")) return;
 
       // Get Column #
       var target = e.target;
@@ -1421,6 +1422,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
     _drag: function(e) {
         if (this._draggableColumn == -1) return;
         var width = this._initialWidth + e.dragOffset.x;
+        if (width < 10) width = 10;
 
         this._resizeColumn(this._draggableColumn, width);
         try {
