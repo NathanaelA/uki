@@ -59,6 +59,7 @@ var DataTable = view.newClass('DataTable', Container, {
     editInPlaceHotkey: fun.newProp("editInPlaceHotkey"),
     _editInPlaceHotkey: 113,
 
+    // Allow Edit in Place, if this is false the editing in place is disabled.
     editInPlace: fun.newProp("editInPlace", function(val) {
       if (arguments.length) {
         if (val === true) {
@@ -118,7 +119,6 @@ var DataTable = view.newClass('DataTable', Container, {
       this._header._table.style.width = mwidth;
     },
 
-
     _updateContainerHeight: function() {
         var pos = this._container.pos();
         pos.t = this._header.clientRect().height + 'px';
@@ -170,14 +170,6 @@ var DataTable = view.newClass('DataTable', Container, {
       this._handleScroll(newHeader);
     },
 
-/*    _resizeColumn: function(e) {
-        if (typeof e.column.pos === 'function' ) {
-            // Don't have to do anything...
-        } else {
-          this._list._updateColumnSize(e.column.pos);
-        }
-    }, */
-
     _keyDown: function(event) {
 
        // This event is called from a Child of DataTable, so we have to link back to the parent
@@ -205,7 +197,7 @@ var DataTable = view.newClass('DataTable', Container, {
       this._EIPMove(row,col,true,true);
     },
 
-  /**
+    /**
    * Returns TRUE, if the MoveNext/MoveNearest is allowed to continue moving the editor, returns FALSE to stop from moving editor.
    */
     _EIP_ClearEditor: function() {
@@ -447,6 +439,22 @@ var DataTable = view.newClass('DataTable', Container, {
 
     isEditing: function() {
       return (this._inEditInPlace);
+    },
+
+    editColumn: function(col) {
+      if (!this._inEditInPlace) return (-1);
+      if (arguments.length && col >= 0 && col < this._header.columns().length) {
+        this._EIPMove(this._EIPCurrentRow, col+0, true, true);
+      }
+      return (this._EIPCurrentColumn);
+    },
+
+    editorValue: function(value) {
+      if (!this._inEditInPlace) return (null);
+      if (arguments.length) {
+        this._Editors[this._EIPCurrentColumn].value(value);
+      }
+      return (this._Editors[this._EIPCurrentColumn].value());
     },
 
     redrawRow: function(row) {

@@ -3863,6 +3863,20 @@
             isEditing: function() {
                 return this._inEditInPlace;
             },
+            editColumn: function(col) {
+                if (!this._inEditInPlace) return -1;
+                if (arguments.length && col >= 0 && col < this._header.columns().length) {
+                    this._EIPMove(this._EIPCurrentRow, col + 0, true, true);
+                }
+                return this._EIPCurrentColumn;
+            },
+            editorValue: function(value) {
+                if (!this._inEditInPlace) return null;
+                if (arguments.length) {
+                    this._Editors[this._EIPCurrentColumn].value(value);
+                }
+                return this._Editors[this._EIPCurrentColumn].value();
+            },
             redrawRow: function(row) {
                 this._list.redrawRow(row);
                 if (!this._inEditInPlace) return;
