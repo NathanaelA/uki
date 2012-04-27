@@ -2818,7 +2818,8 @@
                         this.trigger({
                             type: "menuClick",
                             name: name,
-                            option: clickedItem
+                            option: clickedItem,
+                            menu: this
                         });
                         try {
                             clickedItem.blur();
@@ -2857,16 +2858,20 @@
                     this.trigger({
                         type: "menuClick",
                         name: name,
-                        option: target
+                        option: target,
+                        menu: this
                     });
                 }
             },
             options: fun.newProp("options", function(val) {
+                if (arguments.length === 0) return this._options;
                 this._options = val;
+                this._menuitems = [];
                 this._dom.innerHTML = "";
-                appendMenuOptions(this._dom, val, 0);
+                appendMenuOptions(this._dom, val, this._menuitems, 0);
                 return this;
-            })
+            }),
+            _options: []
         });
         function appendMenuOptions(root, options, level) {
             var node, node_li, node_a;
@@ -2894,7 +2899,30 @@
                     if (option.accessKey) node_a.accessKey = option.accessKey;
                     if (option.className) dom.addClass(node_a, option.className);
                 }
+                option.element = node_a;
                 if (option.visible === false) node_li.style.display = "none";
+                option.setText = function(value) {
+                    this.element.innerHTML = dom.escapeHTML(value);
+                    this.text = value;
+                };
+                option.setHTML = function(value) {
+                    this.element.innerHTML = value;
+                    this.html = value;
+                };
+                option.value = function() {
+                    return this.html ? this.html : this.text;
+                };
+                option.visibility = function(value) {
+                    var e = this.element.parentNode.style;
+                    if (value === true) {
+                        e.display = "";
+                    } else if (value === false) {
+                        e.display = "none";
+                    } else {
+                        if (e.display == "none") return false;
+                        return true;
+                    }
+                };
                 node_li.appendChild(node_a);
                 if (option.options && option.options.length > 0) {
                     node = dom.createElement("ul");
@@ -3649,12 +3677,20 @@
             },
             startEditInPlace: function(row, col) {
                 if (!this._editInPlace) return;
+                if (row == null) row = this._list.selectedIndex();
+                if (col == null) col = 0;
                 var columns = this._header.columns();
                 if (columns == null) return;
                 if (this._Editors === null || this._Editors.length !== columns.length) {
                     this._EIP_CreateEditors();
                 }
                 this._EIPMove(row, col, true, true);
+            },
+            stopEditInPlace: function() {
+                if (this._EIP_ClearEditor()) {
+                    this._inEditInPlace = false;
+                    this.focus();
+                }
             },
             _EIP_ClearEditor: function() {
                 if (this._EIPCurrentColumn === -1 || this._EIPCurrentRow === -1) return true;
@@ -3672,8 +3708,8 @@
                         if (validated === false) return false;
                     }
                 }
+                var oldvalue = this._EIPCurrentRowData[0][col];
                 var data = this.data();
-                var oldvalue = data.slice(row, row + 1)[0][col];
                 if (value === "" && oldvalue === null) oldvalue = "";
                 if (oldvalue != value) {
                     if (data.changeData != null) {
@@ -3697,6 +3733,7 @@
                 parent.innerHTML = newvalue;
                 this._EIPCurrentColumn = -1;
                 this._EIPCurrentRow = -1;
+                this._EIPCurrentRowData = null;
                 return true;
             },
             _EIP_getDomElement: function(row, col) {
@@ -3751,9 +3788,19 @@
                     this._list.selectedIndex(row);
                     this._list.triggerSelection();
                 }
-                var beditor = this._Editors[col];
-                var value = this.data().slice(row, row + 1)[0][col];
-                beditor.value(columns[col].formatter(value ? value : ""));
+                if (this.data().loadRange != null) {
+                    this.data().loadRange(row, row + 1, fun.bindOnce(this._EIPStartEditor, this));
+                } else {
+                    this._EIPStartEditor(this.data().slice(row, row + 1));
+                }
+            },
+            _EIPStartEditor: function(row) {
+                var columns = this._header.columns();
+                var htmlcol = this._EIP_getDomElement(this._EIPCurrentRow, this._EIPCurrentColumn);
+                this._EIPCurrentRowData = row;
+                var beditor = this._Editors[this._EIPCurrentColumn];
+                var value = row[0][this._EIPCurrentColumn];
+                beditor.value(columns[this._EIPCurrentColumn].formatter(value ? value : ""));
                 htmlcol.innerHTML = "";
                 htmlcol.appendChild(beditor._dom);
                 fun.deferOnce(fun.bindOnce(this._EIPFocus, this));
@@ -3761,6 +3808,7 @@
             _inEditInPlace: false,
             _EIPCurrentColumn: -1,
             _EIPCurrentRow: -1,
+            _EIPCurrentRowData: null,
             _EIPFocus: function() {
                 if (this._Editors[this._EIPCurrentColumn].focus) {
                     this._Editors[this._EIPCurrentColumn].focus();
@@ -3856,6 +3904,31 @@
                     if (event.keyCode === 38 && parent._EIPCurrentRow > 0) {
                         parent._EIPMove(parent._EIPCurrentRow - 1, parent._EIPCurrentColumn, false, true);
                     } else if (event.keyCode == 40) {
+                        if (parent.data().length <= parent._EIPCurrentRow + 1) {
+                            if (parent.data().insertRow) {
+                                var row = parent.data().insertRow();
+                                this.trigger({
+                                    type: "insertedRow",
+                                    table: parent,
+                                    row: row
+                                });
+                                parent.redrawRow(parent._EIPCurrentRow + 1);
+                                parent.scrollToIndex(parent._EIPCurrentRow + 1);
+                            } else if (utils.isArray(data)) {
+                                var cols = [];
+                                var collen = parent.columns().length;
+                                for (var i = 0; i < collen; i++) cols.push("");
+                                data.push(cols);
+                                parent.redrawRow(parent._EIPCurrentRow + 1);
+                                parent.scrollToIndex(parent._EIPCurrentRow + 1);
+                                this.trigger({
+                                    type: "insertedRow",
+                                    table: parent,
+                                    row: data[parent._EIPCurrentRow + 1]
+                                });
+                            }
+                            console.log("Insert Row");
+                        }
                         parent._EIPMove(parent._EIPCurrentRow + 1, parent._EIPCurrentColumn, false, false);
                     }
                 }

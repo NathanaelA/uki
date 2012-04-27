@@ -8,8 +8,8 @@
 
 //var uki = require('uki');
 
-uki(
-    { view: 'Menu', on: { menuClick: function(event) { alert("You clicked on the "+event.name+" menu item"); }}, options: [
+var menu = uki(
+    { view: 'Menu', on: { menuClick: menuClicker}, options: [
           { html: '<img border=0 src="../button/settings.png">', options: [ 'Hi', 'Hello'] },
                 { text: 'Menu 2', options: [
                   { html: '<font color=red>Red</font>', name: 'red'},
@@ -33,7 +33,19 @@ uki(
                       ]}
                     ]}
                 ]},
+                { text: 'Click to Change', name: 'ChangeName' },
                 { text: 'Back to Examples', url: '../../' }
             ] }
 ).attach();
+
+
+function menuClicker(event)
+{
+
+  if (event.name == "ChangeName") {
+    event.menu.options()[3].setText("The name changed!");
+  }
+  else alert("You clicked on the "+event.name+" menu item");
+}
+var options = menu[0].options();
 

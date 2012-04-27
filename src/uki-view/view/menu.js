@@ -119,7 +119,8 @@ var Menu = view.newClass('Menu', Base, {
           this.trigger({
             type: "menuClick",
             name: name,
-            option: clickedItem
+            option: clickedItem,
+            menu: this
           });
           try {
             clickedItem.blur();
@@ -176,23 +177,31 @@ var Menu = view.newClass('Menu', Base, {
         this.trigger({
           type: "menuClick",
           name: name,
-          option: target
+          option: target,
+          menu: this
         });
       }
     },
 
     options: fun.newProp('options', function(val) {
+      if (arguments.length === 0) return (this._options);
       this._options = val;
+      this._menuitems = [];
       this._dom.innerHTML = '';
-      appendMenuOptions(this._dom, val, 0);
+      appendMenuOptions(this._dom, val, this._menuitems, 0);
       return this;
-    })
+    }),
+    _options: [],
+
 
 });
 
 
+
+
 function appendMenuOptions ( root, options, level ) {
   var node, node_li, node_a;
+
   utils.forEach( options, function ( option ) {
 
     if (typeof option === 'string' || typeof option === 'number') {
@@ -216,7 +225,32 @@ function appendMenuOptions ( root, options, level ) {
       if (option.accessKey) node_a.accessKey = option.accessKey;
       if (option.className) dom.addClass(node_a, option.className);
     }
+    option.element = node_a;
     if (option.visible === false) node_li.style.display="none";
+    option.setText = function(value) {
+      this.element.innerHTML = dom.escapeHTML(value);
+      this.text = value;
+    };
+    option.setHTML = function(value) {
+      this.element.innerHTML = value;
+      this.html = value;
+    };
+    option.value = function()
+    {
+      return this.html ? this.html : this.text;
+    };
+    option.visibility = function(value) {
+      var e = this.element.parentNode.style;
+
+       if (value === true) {
+          e.display = "";
+       } else if (value === false) {
+         e.display = "none";
+       } else {
+         if (e.display == "none") return (false);
+         return (true);
+       }
+    };
 
     node_li.appendChild(node_a);
 
@@ -224,7 +258,7 @@ function appendMenuOptions ( root, options, level ) {
       node = dom.createElement( 'ul' );
       if (level > 0) dom.addClass(node_li, 'uki-menu-submenu');
       node_li.appendChild(node);
-      appendMenuOptions( node, option.options, level+1 );
+      appendMenuOptions( node, option.options,  level+1 );
     }
     root.appendChild( node_li );
   } );
