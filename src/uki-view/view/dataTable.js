@@ -460,34 +460,36 @@ var DataTable = view.newClass('DataTable', Container, {
            parent._EIPMove(parent._EIPCurrentRow-1,parent._EIPCurrentColumn,false,true);
 
          } else if (event.keyCode == 40)  { // Down Arrow
-           if (parent.data().length <= parent._EIPCurrentRow+1) {
-             if (parent.data().insertRow) {
-                var row = parent.data().insertRow();
+           var data = parent.data();
+           if (data.length <= parent._EIPCurrentRow+1) {
+             if (data.insertRow) {
+                var row = data.insertRow();
                 this.trigger({type: "insertedRow",
                      table: parent,
                      row: row});
-                parent.redrawRow(parent._EIPCurrentRow+1);
-               parent.scrollToIndex(parent._EIPCurrentRow+1);
-             } else if (utils.isArray(data)) {
+
+             } else if (utils.isArray(parent.data())) {
                  var cols = [];
                  var collen = parent.columns().length;
                  for (var i=0;i<collen;i++) cols.push("");
                  data.push(cols);
-                 parent.redrawRow(parent._EIPCurrentRow+1);
-                 parent.scrollToIndex(parent._EIPCurrentRow+1);
                  this.trigger({type: "insertedRow",
                    table: parent,
                    row: data[parent._EIPCurrentRow+1]});
              }
-             console.log("Insert Row");
+             parent.list()._update();
+             parent.scrollToIndex(parent._EIPCurrentRow+1);
+             // Gives Dom enough time to draw new row
+             fun.deferOnce( fun.bindOnce(parent._delayedNextRow, parent) );
 
+           } else {
+             parent._EIPMove(parent._EIPCurrentRow+1,parent._EIPCurrentColumn,false,false);
            }
-
-           parent._EIPMove(parent._EIPCurrentRow+1,parent._EIPCurrentColumn,false,false);
          }
       }
-
-
+    },
+    _delayedNextRow: function() {
+      this._EIPMove(this._EIPCurrentRow+1, this._EIPCurrentColumn,false,false);
     },
 
     isEditing: function() {

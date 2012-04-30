@@ -193,11 +193,25 @@ var DataList = view.newClass('DataList', Container, Focusable, {
     redrawRow: function(index) {
         var pack = this._packFor(index);
         if (pack) {
-            pack.updateRow(
+
+          function rerender(rows) {
+            if (pack.destructed) { return; }
+             pack.updateRow(
                 index - pack.from,
-                this.data().slice(index, index+1),
+                rows,
                 index);
             pack.setSelected(index - pack.from, this.isSelected(index));
+          }
+
+          if (this.data().loadRange) {
+            this.data().loadRange(
+                index, index+1,
+                fun.bind(rerender, this)
+            );
+          } else {
+            rerender.call(this, this.data().slice(index, index+1));
+          }
+
         }
     },
 

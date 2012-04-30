@@ -30,7 +30,7 @@ function unformatTime(t)
 var views = uki([
     { view: 'DataTable', as: 'table', debounce: 1, hasFooter: true,
       filterable: true, sortable: true, hasMenu: true, editInPlace: true, editInPlaceHotkey: 113,
-      menuOptions: [ 'Row Count', 'Reset Sort', 'Reset Filters', 'Reset All', { text: 'Menu 3', options: ['test', 'test2', 'test3']}, { text: 'Menu 4', options: ['test', 'test2', 'test3'] }],
+      menuOptions: [ 'Row Count', 'Reset Sort', 'Reset Filters', 'Reset All', 'Redraw Row', { text: 'Menu 3', options: ['test', 'test2', 'test3']}, { text: 'Menu 4', options: ['test', 'test2', 'test3'] }],
       on: {columnClick: sortit, columnFilter: filterit, menuClick: menuClick, editInPlaceChange: editInPlace, touchstart: DoubleTapEvent, dblclick: dblclicker },
       pos: 't:0 l:0 w:100% h:100%', columns: [
         { label: 'ID', width: 40, visible: false },
@@ -164,6 +164,10 @@ function menuClick(e)
       for(var i=0;i<hc.length;i++) {
         hc[i].filterValue("");
       }
+      break;
+    case 'Redraw Row':
+      var i = views.view('table' ).list().selectedIndex();
+      views.view('table').redrawRow(i);
       break;
 
     default:
