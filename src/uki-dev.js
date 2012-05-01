@@ -3916,35 +3916,46 @@
                     } else if (event.keyCode == 40) {
                         var data = parent.data();
                         if (data.length <= parent._EIPCurrentRow + 1) {
-                            if (data.insertRow) {
-                                var row = data.insertRow();
-                                this.trigger({
-                                    type: "insertedRow",
-                                    table: parent,
-                                    row: row
-                                });
-                            } else if (utils.isArray(parent.data())) {
-                                var cols = [];
-                                var collen = parent.columns().length;
-                                for (var i = 0; i < collen; i++) cols.push("");
-                                data.push(cols);
-                                this.trigger({
-                                    type: "insertedRow",
-                                    table: parent,
-                                    row: data[parent._EIPCurrentRow + 1]
-                                });
-                            }
-                            parent.list()._update();
-                            parent.scrollToIndex(parent._EIPCurrentRow + 1);
-                            fun.deferOnce(fun.bindOnce(parent._delayedNextRow, parent));
+                            parent.EIPInsertRow();
                         } else {
                             parent._EIPMove(parent._EIPCurrentRow + 1, parent._EIPCurrentColumn, false, false);
                         }
                     }
                 }
             },
-            _delayedNextRow: function() {
-                this._EIPMove(this._EIPCurrentRow + 1, this._EIPCurrentColumn, false, false);
+            EIPInsertRow: function() {
+                if (!this._inEditInPlace) return;
+                var data = this.data();
+                var rownum = data.length;
+                if (data.insertRow) {
+                    var row = data.insertRow();
+                    this.trigger({
+                        type: "insertedRow",
+                        table: this,
+                        row: row,
+                        rowid: rownum
+                    });
+                } else if (utils.isArray(data)) {
+                    var cols = [];
+                    var collen = this.columns().length;
+                    for (var i = 0; i < collen; i++) cols.push("");
+                    data.push(cols);
+                    this.trigger({
+                        type: "insertedRow",
+                        table: this,
+                        row: data.slice(rownum, rownum + 1),
+                        rowid: rownum
+                    });
+                } else {
+                    rownum--;
+                }
+                this.list()._update();
+                this.scrollToIndex(this.rownum);
+                fun.deferOnce(fun.bindOnce(this._delayedMoveForInsert, this));
+            },
+            _delayedMoveForInsert: function() {
+                var rownum = this.data().length - 1;
+                this._EIPMove(rownum, this._EIPCurrentColumn, false, false);
             },
             isEditing: function() {
                 return this._inEditInPlace;
@@ -4606,6 +4617,7 @@
                 e.isDefaultPrevented = fun.FF;
                 if (e.target.nodeName === "INPUT") return;
                 if (dom.hasClass(e.target, "uki-dataTable-resizer")) return;
+                if (this._parent.isEditing()) return;
                 var target = e.target;
                 while (target.nodeName != "TD" && target != null) {
                     target = target.parentNode;
@@ -4658,6 +4670,9 @@
             _handleFilterNotify: function() {
                 if (this._skipFilterNotify === true) return;
                 if (this._columns == null || this._columns.length == 0) return;
+                if (this._parent.isEditing()) {
+                    this._parent.stopEditInPlace();
+                }
                 var values = {};
                 var valueid = [];
                 for (var i = 0; i < this._columns.length; i++) {

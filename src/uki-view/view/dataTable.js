@@ -192,6 +192,8 @@ var DataTable = view.newClass('DataTable', Container, {
       var columns = this._header.columns();
       if (columns == null) return;
 
+
+
       if (this._Editors === null || this._Editors.length !== columns.length) {
         this._EIP_CreateEditors();
       }
@@ -462,25 +464,7 @@ var DataTable = view.newClass('DataTable', Container, {
          } else if (event.keyCode == 40)  { // Down Arrow
            var data = parent.data();
            if (data.length <= parent._EIPCurrentRow+1) {
-             if (data.insertRow) {
-                var row = data.insertRow();
-                this.trigger({type: "insertedRow",
-                     table: parent,
-                     row: row});
-
-             } else if (utils.isArray(parent.data())) {
-                 var cols = [];
-                 var collen = parent.columns().length;
-                 for (var i=0;i<collen;i++) cols.push("");
-                 data.push(cols);
-                 this.trigger({type: "insertedRow",
-                   table: parent,
-                   row: data[parent._EIPCurrentRow+1]});
-             }
-             parent.list()._update();
-             parent.scrollToIndex(parent._EIPCurrentRow+1);
-             // Gives Dom enough time to draw new row
-             fun.deferOnce( fun.bindOnce(parent._delayedNextRow, parent) );
+             parent.EIPInsertRow();
 
            } else {
              parent._EIPMove(parent._EIPCurrentRow+1,parent._EIPCurrentColumn,false,false);
@@ -488,8 +472,41 @@ var DataTable = view.newClass('DataTable', Container, {
          }
       }
     },
-    _delayedNextRow: function() {
-      this._EIPMove(this._EIPCurrentRow+1, this._EIPCurrentColumn,false,false);
+
+    EIPInsertRow: function() {
+      if (!this._inEditInPlace) return;
+      var data = this.data();
+      var rownum = data.length;
+      if (data.insertRow) {
+        var row = data.insertRow();
+        this.trigger({type: "insertedRow",
+          table: this,
+          row: row,
+          rowid: rownum
+        });
+      } else if (utils.isArray(data)) {
+        var cols = [];
+        var collen = this.columns().length;
+        for (var i=0;i<collen;i++) cols.push("");
+        data.push(cols);
+        this.trigger({type: "insertedRow",
+          table: this,
+          row: data.slice(rownum,rownum+1),
+          rowid: rownum
+        });
+      } else {
+        // Nothing inserted so, rownum will be invalid
+        rownum--;
+      }
+      this.list()._update();
+      this.scrollToIndex(this.rownum);
+      // Gives Dom enough time to draw new row
+      fun.deferOnce( fun.bindOnce(this._delayedMoveForInsert, this) );
+    },
+
+    _delayedMoveForInsert: function() {
+      var rownum = this.data().length-1;
+      this._EIPMove(rownum, this._EIPCurrentColumn,false,false);
     },
 
     isEditing: function() {
@@ -1232,6 +1249,8 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
       if (e.target.nodeName === "INPUT") return;
       if (dom.hasClass(e.target,"uki-dataTable-resizer")) return;
 
+      if (this._parent.isEditing()) return;
+
       // Get Column #
       var target = e.target;
       while (target.nodeName != "TD" && target != null) {
@@ -1296,6 +1315,11 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
     _handleFilterNotify: function() {
       if (this._skipFilterNotify === true) return;
       if (this._columns == null || this._columns.length == 0) return;
+      if (this._parent.isEditing()) {
+        this._parent.stopEditInPlace();
+      }
+
+
       var values = {};
       var valueid = [];
 
@@ -1305,19 +1329,12 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
         valueid[i] = fieldvalue;
       }
 
-
-/*      var eles = this._dom.getElementsByClassName("uki-dataTable-filter");
-      if (eles.length === 0) return;
-      for(var i=0;i<eles.length;i++) {
-        values[eles[i].name] = eles[i].value;
-        valueid[i] = eles[i].value;
-      } */
       try {
-      this.trigger({
-        type: "columnFilter",
-        fields: values,
-        byfieldid: valueid
-      });
+        this.trigger({
+          type: "columnFilter",
+          fields: values,
+          byfieldid: valueid
+        });
       }
       catch (err) {}
     },
