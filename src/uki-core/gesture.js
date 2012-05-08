@@ -45,7 +45,7 @@ function startGesture (el, e) {
         env.doc.body.style.cursor = e.cursor;
     }
     evt.on(env.doc, 'mousemove scroll touchmove', dragGesture);
-    evt.on(env.doc, 'mouseup dragend touchend', dragGestureEnd);
+    evt.on(env.doc, 'mouseup dragend touchend touchcancel', dragGestureEnd);
     evt.on(env.doc, 'selectstart mousedown touchstart', evt.preventDefaultHandler);
 }
 
@@ -54,7 +54,7 @@ function stopGesture () {
     env.doc.body.style.cursor = gesture.cursor;
     gesture.cursor = null;
     evt.removeListener(env.doc, 'mousemove scroll touchmove', dragGesture);
-    evt.removeListener(env.doc, 'mouseup dragend touchend', dragGestureEnd);
+    evt.removeListener(env.doc, 'mouseup dragend touchend touchcancel', dragGestureEnd);
     evt.removeListener(env.doc, 'selectstart mousedown touchstart', evt.preventDefaultHandler);
 }
 

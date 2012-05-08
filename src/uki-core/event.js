@@ -63,6 +63,21 @@ function normalize(e) {
             e.toElement : e.fromElement;
     }
 
+
+    // Get pageX from Touch event if is a Touch Event
+    if ( e.pageX == 0 && e.baseEvent != null) {
+      // Touch Events
+      if (e.baseEvent.changedTouches != null) {
+        e.pageX = e.baseEvent.changedTouches[0].pageX;
+        e.pageY = e.baseEvent.changedTouches[0].pageY;
+      }
+
+      if ( e.pageX == 0  && e.baseEvent.touches != null) {
+        e.pageX = e.baseEvent.touches[0].pageX;
+        e.pageY = e.baseEvent.touches[0].pageY;
+      }
+    }
+
     // Calculate pageX/Y if missing and clientX/Y available
     if (e.pageX == null && e.clientX != null) {
         var doc = env.doc,

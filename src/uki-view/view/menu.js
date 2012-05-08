@@ -152,12 +152,6 @@ var Menu = view.newClass('Menu', Base, {
       }
 
 
-      /*
-      if (this._lastElement != target) {
-        this._lastElement = target;
-        return;
-      } */
-
       // Find the Parent "UL" to make it hide
       var parentUl = target;
       while (parentUl.parentNode && parentUl.tagName != "UL") {
@@ -168,7 +162,7 @@ var Menu = view.newClass('Menu', Base, {
       if (!dom.hasClass(parentUl, "uki-menu-horizontal")) {
         parentUl.style.display="none";
         // We have to give the ui enough time to make the menu disappear, before we allow the normal css to handle open/closing again
-        setTimeout(function() {parentUl.style.display="";}, 200);
+        setTimeout(function() {parentUl.style.display="";}, 500);
       }
 
       // Publish event
@@ -178,7 +172,8 @@ var Menu = view.newClass('Menu', Base, {
           type: "menuClick",
           name: name,
           option: target,
-          menu: this
+          menu: this,
+          params: target.params
         });
       }
     },
@@ -222,6 +217,8 @@ function appendMenuOptions ( root, options, level ) {
         html: option.html ? option.html : dom.escapeHTML( option.text ),
         name: option.name ? option.name : option.text,
         tabIndex: -1});
+      if (option.params != null) node_a.params = option.params;
+      else node_a.params = null;
       if (option.accessKey) node_a.accessKey = option.accessKey;
       if (option.className) dom.addClass(node_a, option.className);
     }

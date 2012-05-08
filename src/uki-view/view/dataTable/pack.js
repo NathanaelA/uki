@@ -35,10 +35,14 @@ var Pack = fun.newClass(Base, {
     },
 
     _toHTML: function(rows, globalIndex) {
+        var parentGrid = null;
+        if (this.parent() && this.parent().parent()) {
+          parentGrid = this.parent().parent().parent();
+        }
         var formated = utils.map(rows, function(row, i) {
             var pos = i + globalIndex;
             return {
-                columns: this._formatColumns(row, pos, !i),
+                columns: this._formatColumns(row, pos, parentGrid),
                 row: row,
                 index: pos,
                 even: pos & 1
@@ -60,17 +64,19 @@ var Pack = fun.newClass(Base, {
         return this._tbody && this._tbody.childNodes[pos];
     },
 
-    _formatColumns: function(row, pos, first) {
+    _formatColumns: function(row, pos, parentGrid) {
         var cols = [];
         if (this.parent() == null) return;
+        // Call the styler
+        this.parent().columns()[0].styler(row, pos, parentGrid);
+
+        // Build the columns
         this.parent().columns().forEach(function(col, i) {
-            //if (!col.visible) { return; }
             var val = col.key ? utils.prop(row, col.key) : row[i];
             cols[i] = {
-                value: col.formatter(val || '', row, pos),
+                value: col.formatter(val || '', row, i, pos),
                 className: 'uki-dataTable-col-' + i +
                     (col.className ? ' ' + col.className : ''),
-               // style: first && ('width: ' + col.width + 'px')
             };
         });
         return cols;

@@ -2,6 +2,14 @@
     margin: 0;
 }
 
+.uki-nc-svg-wrapper {
+  border: #8a2be2 solid thick;
+  overflow: auto;
+}
+
+.uki-nc-svg {
+  overflow: auto;
+}
 
 .uki-nc-text, .uki-nc-textarea {
     display: inline-block;

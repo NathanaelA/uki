@@ -171,6 +171,7 @@ table.uki-dataTable-header tr.uki-dataTable-header-row td {
     cursor: col-resize;
 }
 
+
 .uki-dataTable-header-cell_resizable .uki-dataTable-resizer {
     display: block;
 }

@@ -30,6 +30,7 @@ var DataTable = view.newClass('DataTable', Container, {
           var _hasFocus = true;
         }
         cols = table.addColumnDefaults(cols);
+        cols[0].styler = this._styler;
         this._list.columns(cols);
         this._header.columns(cols);
         this._footer.columns(cols);
@@ -52,6 +53,9 @@ var DataTable = view.newClass('DataTable', Container, {
     footer: function() {
         return this._footer;
     },
+
+    styler: fun.newProp("styler"),
+    _styler: fun.FF,
 
     CSSTableId: fun.newProp("CSSTableId"),
     _CSSTableId: 0,
@@ -239,6 +243,7 @@ var DataTable = view.newClass('DataTable', Container, {
         } else if (utils.isArray(data)) {
           data[row][col] = value;
         }
+        this._EIPCurrentRowData[0][col] = value;
 
 
         try {
@@ -255,6 +260,7 @@ var DataTable = view.newClass('DataTable', Container, {
       var parent = this._Editors[col]._dom.parentNode;
       dom.removeElement(this._Editors[col]._dom);
       var newvalue = columns[col].formatter(value);
+      this._styler(this._EIPCurrentRowData[0], this._EIPCurrentRow, this );
       parent.innerHTML = newvalue;
       this._EIPCurrentColumn = -1;
       this._EIPCurrentRow = -1;
@@ -835,7 +841,13 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
         dom.createElement( 'div', {className: "uki-dataTable-header-text"} );
     this._resizer =
         dom.createElement('div', {className: "uki-dataTable-resizer uki-dataTable-resizer_pos-"+this._pos});
-    this._resizer.innerHTML = "|";
+    if ('ontouchstart' in window) {
+      this._resizer.innerHTML = "&nbsp;<br>&nbsp;";
+      this._resizer.style.width = "20px";
+      this._resizer.style.right = "-14px";
+    } else {
+      this._resizer.innerHTML = "|";
+    }
 
     this._filter =
         dom.createElement( 'input', {className: "uki-dataTable-filter" + (initArgs.initfocus ? ' initfocus' : ''), tabIndex: 1, autocomplete: "off", name: "_filter_"+this._name, style: filterStyle} );
@@ -1087,7 +1099,6 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
 
 
     _createDom: function(initArgs) {
-
         Base.prototype._createDom.call(this, initArgs);
         this._rowheader = dom.createElement('tr', {className: 'uki-dataTable-header-row'});
         this._table = dom.createElement('table', { className: 'uki-dataTable-header' }, [this._rowheader]);
@@ -1098,9 +1109,10 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
         } else {
           this._styleSheet = this._styleSheetElement.styleSheet; // IE
         }
+        this._cssRuleTracking = {};
 
 
-        this._menu = build([
+      this._menu = build([
         { view: Menu, as: 'DataTable-Menu',
           addClass: 'uki-dataTable-menu' }
         ]);
@@ -1109,9 +1121,12 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
         this.on('draggesturestart', this._dragStart);
         this.on('draggesture', this._drag);
         this.on('draggestureend', this._dragEnd);
-        this.on('click', this._click);
+        if ('ontouchstart' in window) {
+          this.on('touchend', this._click);
+        } else {
+          this.on('click', this._click);
+        }
         this._setupMenu();
-
     },
 
     _setupMenu: function() {
@@ -1148,13 +1163,26 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
 
     destruct: function() {
       this._styleSheet = null;
+      this._cssRuleTracking = null;
       dom.removeElement(this._styleSheetElement);
       Container.prototype.destruct.call(this);
     },
 
-    _cssRuleTracking: {},
+    _cssRuleTracking: null,
+    _name: null,
+
+    hasStyle: function(row, col) {
+      var Key = "";
+      if (row != null && col != null) Key = "RC"+row+"-"+col;
+      else if (row != null) Key = "R"+row;
+      else if (col != null) Key = "C"+col;
+      else return (false);
+      if (this._cssRuleTracking[Key] == null) return (false);
+      return (true);
+    },
 
     setRowStyle: function(row, name, value) {
+      //console.log("DataTableHeader This", this);
       var Key = "R"+row, id;
       if (this._cssRuleTracking[Key] == null) {
         var parentId = this.parent().CSSTableId();
@@ -1495,14 +1523,20 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
             this._draggableColumn = index;
             this._initialWidth = this.columns()[index].width();
         } else {
-           e.preventDefault();
+             e.preventDefault();
         }
     },
 
     _drag: function(e) {
         if (this._draggableColumn == -1) return;
-        var width = this._initialWidth + e.dragOffset.x;
+      var width = this._initialWidth
+      if ( e.dragOffset != null) {
+          width += e.dragOffset.x;
+        } else {
+          width += e.clientX;
+        }
         if (width < 10) width = 10;
+
 
         this._resizeColumn(this._draggableColumn, width);
         try {

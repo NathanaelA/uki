@@ -11,6 +11,7 @@ function formatTime (t) {
    if (isNaN(t)) return ('');
     var m = Math.floor(t/60/1000),
         s = Math.floor(t/1000 - m * 60);
+
     return m + ':' + (s > 9 ? s : '0' + s);
 }
 
@@ -29,13 +30,13 @@ function unformatTime(t)
 
 var views = uki([
     { view: 'DataTable', as: 'table', debounce: 1, hasFooter: true,
-      filterable: true, sortable: true, hasMenu: true, editInPlace: true, editInPlaceHotkey: 113,
+      filterable: true, sortable: true, hasMenu: true, editInPlace: true, editInPlaceHotkey: 113, styler: styler,
       menuOptions: [ 'Row Count', 'Reset Sort', 'Reset Filters', 'Reset All', 'Redraw Row', 'Edit Grid [F2]', "Insert Row", { text: 'Menu 3', options: ['test', 'test2', 'test3']}, { text: 'Menu 4', options: ['test', 'test2', 'test3'] }],
       on: {columnClick: sortit, columnFilter: filterit, menuClick: menuClick, editInPlaceChange: editInPlace, touchstart: DoubleTapEvent, dblclick: dblclicker },
       pos: 't:0 l:0 w:100% h:100%', columns: [
         { label: 'ID', width: 40, visible: false },
         { label: 'Name', minWidth: 100, width: 250, maxWidth: 500, resizable: true, editor: {view: "nativeControl.Text"}, footervalue: 'hi' },
-        { label: 'Time', width: 50, style: 'text-align:right;', styler: styler, formatter: formatTime, unformatter: unformatTime, validation: validate, filterable: false, resizable: false, sortable: false, editor: true, footer: false, footervalue: 'I am not visible' },
+        { label: 'Time', width: 50, style: 'text-align:right;', formatter: formatTime, unformatter: unformatTime, validation: validate, filterable: false, resizable: false, sortable: false, editor: true, footer: false, footervalue: 'I am not visible' },
         { label: 'Artist', minWidth: 100, width: 150, editor: {view: "nativeControl.Select", options: ["Hi","Hello"]} },
         { label: 'Album', minWidth: 100, width: 150, editor: true },
         { label: 'Genre', width: 100, editor: true },
@@ -45,7 +46,16 @@ var views = uki([
 
     { view: 'Text', as: 'loading', pos: 't:80px l:85px', text: 'Loading...' },
 ]).attach();
-
+var Header = views.view("table" ).header();
+function styler(row, pos, tbl)
+{
+  if (row[2] > 1200000) {
+    console.log(tbl);
+    Header.setRowStyle(pos, "background-color", "red");
+  } else {
+    Header.setRowStyle(pos, "background-color", "");
+  }
+}
 
 var raw_data = null, filtered_data = null, last_sort='';
 // dynamicly load library json
@@ -65,10 +75,7 @@ function dblclicker(e)
   alert("Double Click");
 }
 
-function styler(row, data)
-{
 
-}
 
 var _lastTouchTime;
 function DoubleTapEvent(event) {
@@ -84,7 +91,7 @@ function DoubleTapEvent(event) {
       , fingers = e.touches.length;
   var touch = e.touches[0];
 
- console.log("DoubleTap Event Catcher");
+ //console.log("DoubleTap Event Catcher");
   if (!touch) return (true);
   _lastTouchTime = t2;
   if (!dt || dt > 500 || fingers > 1) return (true); // not double-tap
