@@ -299,13 +299,15 @@ var SVG = view.newClass('nativeControl.SVG', NativeControl, {
     this._input = document.createElementNS( "http://www.w3.org/2000/svg", "svg" );
     this._input.setAttribute( "xmlns", "http://www.w3.org/2000/svg/" );
     this._input.setAttribute( "xmlns:xlink", "http://www.w3.org/1999/xlink" );
-    this._input.setAttribute( "className", 'uki-nc-svg');
+    this._input.setAttribute( "class", 'uki-nc-svg');
+    this._input.setAttribute( 'version', '1.1');
+
     this._dom = dom.createElement('div',
-        { className: 'uki-nc-svg-wrapper', xmlns: "http://www.w3.org/2000/svg"}, [this._input] );
+        { className: 'uki-nc-svg-wrapper' }, [this._input] );
 
   }
 });
-fun.delegateProp(SVG.prototype, ['width','height'], '_dom', ['style.width','style.height']);
+//fun.delegateProp(SVG.prototype, ['width','height'], '_dom', ['style.width','style.height']);
 
 /**
  * Native Canvas

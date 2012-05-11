@@ -3,12 +3,13 @@
 }
 
 .uki-nc-svg-wrapper {
-  border: #8a2be2 solid thick;
+  border: #000 solid thin;
   overflow: auto;
+  display: inline-block;
 }
 
 .uki-nc-svg {
-  overflow: auto;
+  overflow: visible !important;
 }
 
 .uki-nc-text, .uki-nc-textarea {
