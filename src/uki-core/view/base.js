@@ -45,10 +45,6 @@ var Base = view.newClass('Base', {
         this._createDom(initArgs);
         this.dom()[env.expando] = this.dom()[env.expando] || env.guid++;
         view.register(this);
-        this.trigger({type: "init",
-          control: this,
-          args: initArgs
-        });
     },
 
     destruct: function() {

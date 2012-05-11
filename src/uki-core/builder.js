@@ -31,7 +31,7 @@ var Builder = fun.newClass({
         }
         return collection;
     },
-    
+
     buildOne: function(mRow) {
         // return prebuilt rows right away
         if (mRow.typeName) { return mRow; }
@@ -53,11 +53,17 @@ var Builder = fun.newClass({
         }
 
         copyAttrs(result, mRow);
+
+				result.trigger({type: "built",
+					control: result,
+					args: initArgs
+				});
+			
         return result;
     },
-    
+
     resolvePath: function(path) {
-        for (var i = 0, ns = this.namespaces, length = ns.length, res; 
+        for (var i = 0, ns = this.namespaces, length = ns.length, res;
             i < length; i++) {
             res = utils.path2obj(path, ns[i]);
             if (res) { return res; }
