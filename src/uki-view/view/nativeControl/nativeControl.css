@@ -6,6 +6,7 @@
   border: #000 solid thin;
   overflow: auto;
   display: inline-block;
+  padding: 1px;
 }
 
 .uki-nc-svg {
