@@ -12,8 +12,7 @@ var fun   = require('../../uki-core/function'),
     Mustache  = require('../../uki-core/mustache').Mustache,
     Base      = require('../../uki-core/view/base').Base,
     Container = require('../../uki-core/view/container').Container,
-    evt       = require('../../uki-core/event'),
-    Menu      = require('./menu').Menu;
+    evt       = require('../../uki-core/event');
 
 
 // This is to allow all defined Tables to have a unique class assigned to them
@@ -1113,7 +1112,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
 
 
       this._menu = build([
-        { view: Menu, as: 'DataTable-Menu',
+        { view: 'Menu', as: 'DataTable-Menu',
           addClass: 'uki-dataTable-menu' }
         ]);
 
