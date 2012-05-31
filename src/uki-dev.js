@@ -2312,23 +2312,23 @@
                 });
                 targetStyle.lineHeight = this._input.offsetHeight + (parseInt(sourceStyle.marginTop, 10) || 0) * 2 + "px";
                 targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft, 10) || 0) + (parseInt(sourceStyle.borderLeftWidth, 10) || 0) + "px";
-                targetStyle.width = parseInt(sourceStyle.width, 10) - 3 + "px";
+                targetStyle.width = "100%";
                 targetStyle.textAlign = "right";
             },
-            width: fun.newProp("width", function(v) {
+            width: function(v) {
                 if (arguments.length) {
                     this._dom.style.width = v;
                     this._input.style.width = "100%";
                 }
                 return this._dom.style.width;
-            }),
-            height: fun.newProp("height", function(v) {
+            },
+            height: function(v) {
                 if (arguments.length) {
                     this._dom.style.height = v;
                     this._input.style.height = "100%";
                 }
                 return this._input.style.height;
-            })
+            }
         });
         var TextArea = view.newClass("nativeControl.TextArea", NativeControl, {
             _createDom: function(initArgs) {
@@ -2355,14 +2355,20 @@
                 this._dom.style.width = "auto";
                 this._input.cols = v;
             }),
-            width: fun.newProp("width", function(v) {
-                this._dom.style.width = v;
-                this._input.style.width = "100%";
-            }),
-            height: fun.newProp("height", function(v) {
-                this._dom.style.height = v;
-                this._input.style.height = "100%";
-            }),
+            width: function(v) {
+                if (arguments.length) {
+                    this._dom.style.width = v;
+                    this._input.style.width = "100%";
+                }
+                return this._dom.style.width;
+            },
+            height: function(v) {
+                if (arguments.length) {
+                    this._dom.style.height = v;
+                    this._input.style.height = "100%";
+                }
+                return this._dom.style.height;
+            },
             placeholder: fun.newProp("placeholder", function(v) {
                 this._placeholder = v;
                 this._initPlaceholder();
@@ -2402,7 +2408,7 @@
                     }
                 });
                 targetStyle.marginTop = this._input.offsetHeight + (parseInt(sourceStyle.marginTop, 10) || 0) * 2 - 16 + "px";
-                targetStyle.width = parseInt(sourceStyle.width, 10) - 3 + "px";
+                targetStyle.width = "100%";
                 targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft, 10) || 0) + (parseInt(sourceStyle.borderLeftWidth, 10) || 0) + "px";
                 targetStyle.textAlign = "right";
             }

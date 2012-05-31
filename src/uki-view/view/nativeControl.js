@@ -164,28 +164,28 @@ var Text = view.newClass('nativeControl.Text', NativeControl, {
     targetStyle.lineHeight = (this._input.offsetHeight + (parseInt(sourceStyle.marginTop, 10) || 0)*2) + 'px';
     targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft, 10) || 0) +
         (parseInt(sourceStyle.borderLeftWidth, 10) || 0) + 'px';
-    targetStyle.width = (parseInt(sourceStyle.width,10)-3) + 'px';
+    targetStyle.width = "100%"; //(parseInt(sourceStyle.width,10)-3) + 'px';
     targetStyle.textAlign = "right";
 
 
    // textProto._updatePlaceholderHeight = fun.FS;
   },
 
-  width: fun.newProp('width', function (v) {
+  width: function (v) {
     if (arguments.length) {
        this._dom.style.width = v;
        this._input.style.width = "100%";
     }
     return (this._dom.style.width);
-  }),
+  },
 
-  height: fun.newProp('height', function(v) {
+  height: function(v) {
     if (arguments.length) {
       this._dom.style.height = v;
       this._input.style.height = "100%";
     }
     return (this._input.style.height);
-  })
+  }
 });
 
 
@@ -223,15 +223,21 @@ var TextArea = view.newClass('nativeControl.TextArea', NativeControl, {
     this._input.cols = v;
   }),
 
-  width: fun.newProp('width', function(v) {
-    this._dom.style.width = v;
-    this._input.style.width = "100%";
-  }),
+  width: function(v) {
+    if (arguments.length) {
+      this._dom.style.width = v;
+      this._input.style.width = "100%";
+    }
+    return (this._dom.style.width);
+  },
 
-  height: fun.newProp('height', function(v) {
-    this._dom.style.height = v;
-    this._input.style.height = "100%";
-  }),
+  height: function(v) {
+    if (arguments.length) {
+      this._dom.style.height = v;
+      this._input.style.height = "100%";
+    }
+    return (this._dom.style.height);
+  },
 
   placeholder: fun.newProp('placeholder', function(v) {
     this._placeholder = v;
@@ -260,6 +266,7 @@ var TextArea = view.newClass('nativeControl.TextArea', NativeControl, {
     this.addClass('uki-nc-textarea_with-placeholder');
     this._placeholderDom = dom.createElement('div',
         { className: 'uki-nc-textarea__placholder' });
+
     this.textSelectable(false);
     this.dom().insertBefore(this._placeholderDom, this.dom().firstChild);
     evt.on(this._placeholderDom, 'click', fun.bindOnce(function() {
@@ -292,7 +299,7 @@ var TextArea = view.newClass('nativeControl.TextArea', NativeControl, {
     targetStyle.marginTop = ((this._input.offsetHeight + (parseInt(sourceStyle.marginTop, 10) || 0)*2) - 16)
         + 'px';
 //    targetStyle.height = sourceStyle.height;
-    targetStyle.width = (parseInt(sourceStyle.width,10)-3) + "px";
+    targetStyle.width = "100%"; //(parseInt(sourceStyle.width,10)-3) + "px";
     targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft, 10) || 0) + (parseInt(sourceStyle.borderLeftWidth, 10) || 0) + 'px';
     targetStyle.textAlign = "right";
 //    targetStyle.display = "table-cell";
