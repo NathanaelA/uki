@@ -29,9 +29,21 @@ var NativeControl = view.newClass('NativeControl', Base, Focusable, {
     }
 
 });
-fun.delegateProp(NativeControl.prototype, ['name', 'checked', 'disabled', 'value', 'type', 'accessKey', 'id'], '_input');
+fun.delegateProp(NativeControl.prototype,
+    ['name', 'checked', 'disabled', 'value', 'type', 'accessKey', 'id', 'autocomplete', 'autofocus', 'required', 'pattern', 'readonly', 'maxlength', 'spellcheck'], '_input');
 fun.delegateProp(NativeControl.prototype, ['width','height'], '_input', ['style.width','style.height']);
 
+
+var Output = view.newClass('nativeControl.Output', NativeControl, {
+    _createDom: function(initArgs) {
+        this._input = dom.createElement('output',
+            { className: 'uki-nc-output__output', type: 'text' });
+        this._dom = dom.createElement(initArgs.tagName || 'span',
+            { className: 'uki-nc-output' });
+        this.dom().appendChild(this._input);
+    }
+});
+fun.delegateProp(Output.prototype, 'for', '_input');
 
 
 /**
@@ -157,7 +169,23 @@ var Text = view.newClass('nativeControl.Text', NativeControl, {
 
 
    // textProto._updatePlaceholderHeight = fun.FS;
-  }
+  },
+
+  width: fun.newProp('width', function (v) {
+    if (arguments.length) {
+       this._dom.style.width = v;
+       this._input.style.width = "100%";
+    }
+    return (this._dom.style.width);
+  }),
+
+  height: fun.newProp('height', function(v) {
+    if (arguments.length) {
+      this._dom.style.height = v;
+      this._input.style.height = "100%";
+    }
+    return (this._input.style.height);
+  })
 });
 
 
@@ -196,13 +224,13 @@ var TextArea = view.newClass('nativeControl.TextArea', NativeControl, {
   }),
 
   width: fun.newProp('width', function(v) {
-     this._input.style.width = v;
-     this._dom.style.width = v;
+    this._dom.style.width = v;
+    this._input.style.width = "100%";
   }),
 
   height: fun.newProp('height', function(v) {
-        this._input.style.height = v;
-        this._dom.style.height = v;
+    this._dom.style.height = v;
+    this._input.style.height = "100%";
   }),
 
   placeholder: fun.newProp('placeholder', function(v) {
@@ -402,5 +430,6 @@ exports.nativeControl = {
     TextArea:      TextArea,
     Image:         Image,
     SVG:           SVG,
-    Canvas:        Canvas
+    Canvas:        Canvas,
+    Output:        Output
 };

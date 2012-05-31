@@ -2209,8 +2209,21 @@
                 return Focusable._domForEvent.call(this, type) || Base.prototype.domForEvent.call(this, type);
             }
         });
-        fun.delegateProp(NativeControl.prototype, [ "name", "checked", "disabled", "value", "type", "accessKey", "id" ], "_input");
+        fun.delegateProp(NativeControl.prototype, [ "name", "checked", "disabled", "value", "type", "accessKey", "id", "autocomplete", "autofocus", "required", "pattern", "readonly", "maxlength", "spellcheck" ], "_input");
         fun.delegateProp(NativeControl.prototype, [ "width", "height" ], "_input", [ "style.width", "style.height" ]);
+        var Output = view.newClass("nativeControl.Output", NativeControl, {
+            _createDom: function(initArgs) {
+                this._input = dom.createElement("output", {
+                    className: "uki-nc-output__output",
+                    type: "text"
+                });
+                this._dom = dom.createElement(initArgs.tagName || "span", {
+                    className: "uki-nc-output"
+                });
+                this.dom().appendChild(this._input);
+            }
+        });
+        fun.delegateProp(Output.prototype, "for", "_input");
         var Radio = view.newClass("nativeControl.Radio", NativeControl, {
             _createDom: function(initArgs) {
                 this._input = dom.createElement("input", {
@@ -2301,7 +2314,21 @@
                 targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft, 10) || 0) + (parseInt(sourceStyle.borderLeftWidth, 10) || 0) + "px";
                 targetStyle.width = parseInt(sourceStyle.width, 10) - 3 + "px";
                 targetStyle.textAlign = "right";
-            }
+            },
+            width: fun.newProp("width", function(v) {
+                if (arguments.length) {
+                    this._dom.style.width = v;
+                    this._input.style.width = "100%";
+                }
+                return this._dom.style.width;
+            }),
+            height: fun.newProp("height", function(v) {
+                if (arguments.length) {
+                    this._dom.style.height = v;
+                    this._input.style.height = "100%";
+                }
+                return this._input.style.height;
+            })
         });
         var TextArea = view.newClass("nativeControl.TextArea", NativeControl, {
             _createDom: function(initArgs) {
@@ -2329,12 +2356,12 @@
                 this._input.cols = v;
             }),
             width: fun.newProp("width", function(v) {
-                this._input.style.width = v;
                 this._dom.style.width = v;
+                this._input.style.width = "100%";
             }),
             height: fun.newProp("height", function(v) {
-                this._input.style.height = v;
                 this._dom.style.height = v;
+                this._input.style.height = "100%";
             }),
             placeholder: fun.newProp("placeholder", function(v) {
                 this._placeholder = v;
@@ -2468,7 +2495,8 @@
             TextArea: TextArea,
             Image: Image,
             SVG: SVG,
-            Canvas: Canvas
+            Canvas: Canvas,
+            Output: Output
         };
     };
     require_modules[25] = function(global, module, require) {
