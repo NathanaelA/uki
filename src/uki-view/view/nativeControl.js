@@ -164,7 +164,7 @@ var Text = view.newClass('nativeControl.Text', NativeControl, {
     targetStyle.lineHeight = (this._input.offsetHeight + (parseInt(sourceStyle.marginTop, 10) || 0)*2) + 'px';
     targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft, 10) || 0) +
         (parseInt(sourceStyle.borderLeftWidth, 10) || 0) + 'px';
-    targetStyle.width = "100%"; //(parseInt(sourceStyle.width,10)-3) + 'px';
+    targetStyle.width = "98%"; //(parseInt(sourceStyle.width,10)-3) + 'px';
     targetStyle.textAlign = "right";
 
 
@@ -300,7 +300,7 @@ var TextArea = view.newClass('nativeControl.TextArea', NativeControl, {
     targetStyle.marginTop = ((this._input.offsetHeight + (parseInt(sourceStyle.marginTop, 10) || 0)*2) - 16)
         + 'px';
 //    targetStyle.height = sourceStyle.height;
-    targetStyle.width = "100%"; //(parseInt(sourceStyle.width,10)-3) + "px";
+    targetStyle.width = "99%"; //(parseInt(sourceStyle.width,10)-3) + "px";
     targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft, 10) || 0) + (parseInt(sourceStyle.borderLeftWidth, 10) || 0) + 'px';
     targetStyle.textAlign = "right";
 //    targetStyle.display = "table-cell";
