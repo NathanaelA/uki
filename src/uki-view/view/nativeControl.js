@@ -235,6 +235,7 @@ var TextArea = view.newClass('nativeControl.TextArea', NativeControl, {
     if (arguments.length) {
       this._dom.style.height = v;
       this._input.style.height = "100%";
+      this._updatePlaceholderHeight();
     }
     return (this._dom.style.height);
   },
