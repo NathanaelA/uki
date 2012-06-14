@@ -1396,7 +1396,7 @@
                 return this;
             },
             _appendChildToDom: function(child) {
-                this.dom().appendChild(child.dom());
+                this.domForChild(child).appendChild(child.dom());
             },
             insertBefore: function(child, beforeChild) {
                 var i = beforeChild._viewIndex, l = this._childViews.length;
@@ -2312,7 +2312,7 @@
                 });
                 targetStyle.lineHeight = this._input.offsetHeight + (parseInt(sourceStyle.marginTop, 10) || 0) * 2 + "px";
                 targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft, 10) || 0) + (parseInt(sourceStyle.borderLeftWidth, 10) || 0) + "px";
-                targetStyle.width = "100%";
+                targetStyle.width = "98%";
                 targetStyle.textAlign = "right";
             },
             width: function(v) {
@@ -2409,7 +2409,7 @@
                     }
                 });
                 targetStyle.marginTop = this._input.offsetHeight + (parseInt(sourceStyle.marginTop, 10) || 0) * 2 - 16 + "px";
-                targetStyle.width = "100%";
+                targetStyle.width = "99%";
                 targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft, 10) || 0) + (parseInt(sourceStyle.borderLeftWidth, 10) || 0) + "px";
                 targetStyle.textAlign = "right";
             }

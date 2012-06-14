@@ -102,7 +102,7 @@ var Container = view.newClass('Container', Base, {
     },
 
     _appendChildToDom: function(child) {
-        this.dom().appendChild(child.dom());
+        this.domForChild(child).appendChild(child.dom());
     },
 
     /**
