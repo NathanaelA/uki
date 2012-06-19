@@ -3484,6 +3484,7 @@
                 } ]).appendTo(this);
                 this._footer = c.view("footer");
                 this._footer.on("render", fun.bindOnce(this._updateContainerHeight, this));
+                this._footer.on("render", fun.bindOnce(this._recalculateTableSizes, this));
                 this._header = c.view("header");
                 this._header.on("keydown", this._keyDown);
                 this._header.on("render", fun.bindOnce(this._updateContainerHeight, this));
@@ -3496,8 +3497,8 @@
             },
             _recalculateTableSizes: function() {
                 var mwidth = this._header.totalWidth() + "px";
-                this._footer._table.style.width = mwidth;
                 this._header._table.style.width = mwidth;
+                this._footer._table.style.width = dom.computedStyle(this._header._table).width;
             },
             _updateContainerHeight: function() {
                 var pos = this._container.pos();
