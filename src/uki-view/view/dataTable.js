@@ -117,7 +117,7 @@ var DataTable = view.newClass('DataTable', Container, {
     },
 
     _recalculateTableSizes: function() {
-      var mwidth = dom.computedStyle(this._header._table).width; // this._header.totalWidth()+"px";
+      var mwidth = this._header.totalWidth()+"px";
 
       this._footer._table.style.width = mwidth;
       this._header._table.style.width = mwidth;

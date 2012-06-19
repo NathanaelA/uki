@@ -3495,7 +3495,7 @@
                 this._list = c.view("list");
             },
             _recalculateTableSizes: function() {
-                var mwidth = dom.computedStyle(this._header._table).width;
+                var mwidth = this._header.totalWidth() + "px";
                 this._footer._table.style.width = mwidth;
                 this._header._table.style.width = mwidth;
             },
