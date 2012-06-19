@@ -16,6 +16,8 @@
   height: 12px;
   cursor: pointer;
   position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .uki-dataTable-menu .uki-menu-primary, .uki-dataTable-menu .uki-menu-primary > a{

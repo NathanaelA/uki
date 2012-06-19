@@ -1137,7 +1137,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
       if (this._hasMenu) {
         var found=false;
         if (this._menu.parent() == null || this._menu.parent().length == 0) {
-          this._menu.attach(this.parent().dom(), true);
+          this._menu.attach(this.parent().dom(), false);
           for(var i=0;i<this._columns.length;i++) {
             if (found || this._columns[i].visible() === false) {
               this._columns[i].hasMenu(false);
