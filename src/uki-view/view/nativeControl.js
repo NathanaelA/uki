@@ -339,7 +339,8 @@ var SVG = view.newClass('nativeControl.SVG', NativeControl, {
     this._input.setAttribute( 'version', '1.1');
 
     this._dom = dom.createElement('div',
-        { className: 'uki-nc-svg-wrapper', tabIndex: -1, on: {click: this.focus()} }, [this._input] );
+        { className: 'uki-nc-svg-wrapper', tabIndex: -1}, [this._input] );
+    this.on("click", this.focus);
   },
 
 
@@ -347,6 +348,7 @@ var SVG = view.newClass('nativeControl.SVG', NativeControl, {
   focus: function() {
     try {
         this._dom.focus();
+        console.log("SVG Focused", this.hasFocus());
     }
     catch(err) {
       //     console.log("Error on focus",err);

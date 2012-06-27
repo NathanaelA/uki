@@ -2435,15 +2435,14 @@
                 this._input.setAttribute("version", "1.1");
                 this._dom = dom.createElement("div", {
                     className: "uki-nc-svg-wrapper",
-                    tabIndex: -1,
-                    on: {
-                        click: this.focus()
-                    }
+                    tabIndex: -1
                 }, [ this._input ]);
+                this.on("click", this.focus);
             },
             focus: function() {
                 try {
                     this._dom.focus();
+                    console.log("SVG Focused", this.hasFocus());
                 } catch (err) {}
             },
             hasFocus: function() {
