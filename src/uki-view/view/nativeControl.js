@@ -339,9 +339,30 @@ var SVG = view.newClass('nativeControl.SVG', NativeControl, {
     this._input.setAttribute( 'version', '1.1');
 
     this._dom = dom.createElement('div',
-        { className: 'uki-nc-svg-wrapper' }, [this._input] );
+        { className: 'uki-nc-svg-wrapper', tabIndex: -1, on: {click: this.focus()} }, [this._input] );
+  },
 
+
+
+  focus: function() {
+    try {
+        this._dom.focus();
+    }
+    catch(err) {
+      //     console.log("Error on focus",err);
+    }
+  },
+
+  hasFocus: function() {
+    return this._dom == env.doc.activeElement;
+  },
+
+  blur: function() {
+    try {
+      if (this.hasFocus()) this._dom.blur();
+    } catch (err) {}
   }
+
 });
 //fun.delegateProp(SVG.prototype, ['width','height'], '_dom', ['style.width','style.height']);
 
