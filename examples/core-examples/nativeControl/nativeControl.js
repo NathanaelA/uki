@@ -24,7 +24,8 @@ uki(
             { view: 'nativeControl.Checkbox', name: 'group_2', text: 'Blue',
                 checked: true },
             { view: 'nativeControl.Checkbox', name: 'group_2', text: 'Green',
-                checked: true }
+                checked: true },
+            { view: 'nativeControl.SVG', name: 'svg_1', width: "100px", height: "100px"}
         ]},
         { view: 'Flow', childViews: [
             { view: 'Label', text: 'Other' },

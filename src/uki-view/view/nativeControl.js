@@ -343,12 +343,9 @@ var SVG = view.newClass('nativeControl.SVG', NativeControl, {
     this.on("click", this.focus);
   },
 
-
-
   focus: function() {
     try {
         this._dom.focus();
-        console.log("SVG Focused", this.hasFocus());
     }
     catch(err) {
       //     console.log("Error on focus",err);

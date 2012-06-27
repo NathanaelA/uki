@@ -2442,7 +2442,6 @@
             focus: function() {
                 try {
                     this._dom.focus();
-                    console.log("SVG Focused", this.hasFocus());
                 } catch (err) {}
             },
             hasFocus: function() {
