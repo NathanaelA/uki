@@ -1113,7 +1113,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
 
 
       this._menu = build([
-        { view: 'Menu', as: 'DataTable-Menu',
+        { view: 'menu', as: 'DataTable-Menu',
           addClass: 'uki-dataTable-menu' }
         ]);
 
