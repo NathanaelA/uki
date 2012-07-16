@@ -120,7 +120,10 @@ var DataTable = view.newClass('DataTable', Container, {
     _recalculateTableSizes: function() {
 			var mwidth = this._header.totalWidth() + "px";
    		this._header._table.style.width = mwidth;
-   		this._footer._table.style.width = dom.computedStyle(this._header._table).width; // Necessary because of chrome layout weirdness
+
+		  // The following 2 lines are necessary because of chrome layout weirdness
+			this._footer._table.style.width = dom.computedStyle(this._header._table).width;
+			this._header.scrollLeft(0);
     },
 
     _updateContainerHeight: function() {
