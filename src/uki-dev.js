@@ -4755,6 +4755,7 @@
                             initfocus: cols[i].initfocus
                         };
                     }
+                    this._childViews = [];
                     this._columns = build(cols);
                     this._columns.appendTo(this);
                     this._table.style.width = this.totalWidth() + "px";

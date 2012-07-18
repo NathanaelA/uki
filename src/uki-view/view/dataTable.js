@@ -1576,6 +1576,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
           var cssRule = this.addCSSRule('div.uki-dataTable'+parentId+' .uki-dataTable-col-' + cols[i].pos);
           cols[i]["init"] = {pos: cols[i].pos, cssRule: cssRule, filterable: this._filterable, initfocus: cols[i].initfocus};
         }
+        this._childViews = [];
         this._columns = build(cols);
         this._columns.appendTo(this);
         this._table.style.width = this.totalWidth()+"px";
