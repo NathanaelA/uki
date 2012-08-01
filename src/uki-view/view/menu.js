@@ -14,7 +14,7 @@ var fun  = require('../../uki-core/function'),
 var Menu = view.newClass('Menu', Base, {
     _createDom: function() {
         this._dom = dom.createElement('ul', { className: 'uki-menu-horizontal uki-menu-horizontal-no-touch uki-textSelectable_off' });
-        this._hasTouch = false,
+        this._hasTouch = false;
         this.on('click', fun.bind(this._click, this));
         this.on('touchstart', fun.bind(this._touchstart,this));
         this._bindedTouchOut = fun.bindOnce(this._touchout, this);
@@ -37,7 +37,7 @@ var Menu = view.newClass('Menu', Base, {
           dom.removeClass(eles[i], "uki-menu-focus");
         }
         this._closeMenu(this._dom);
-      } catch (err) { };
+      } catch (err) { }
     },
     _touchprevent: function(event)
     {
@@ -56,13 +56,12 @@ var Menu = view.newClass('Menu', Base, {
         evt.addListener(env.doc, "click", this._bindedTouchOut);
         this._hasTouch = true;
       }
-       event.stopPropagation();
-       event.preventDefault();
+      event.stopPropagation();
+      event.preventDefault();
+      var e = event;
 
       if (event.baseEvent) {
-        var e = event.baseEvent;
-      } else {
-        var e = event;
+        e = event.baseEvent;
       }
 
       if (e.touches) {
@@ -124,7 +123,7 @@ var Menu = view.newClass('Menu', Base, {
           });
           try {
             clickedItem.blur();
-          } catch (err){ /* console.log(err); */ };
+          } catch (err){ if (console.error) console.error(err); }
         }
 
       }
@@ -186,7 +185,7 @@ var Menu = view.newClass('Menu', Base, {
       appendMenuOptions(this._dom, val, this._menuitems, 0);
       return this;
     }),
-    _options: [],
+    _options: []
 
 
 });

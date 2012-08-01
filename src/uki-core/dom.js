@@ -21,8 +21,8 @@ module.exports = {
      * Creates dom element with given tagName, cssText and innerHTML
      *
      * @param {string} tagName
-     * @param {string=} cssText
-     * @param {string=} innerHTML
+     * @param {Object[]} options
+     * @param  {Object[]} children
      * @returns {Element} created element
      */
     createElement: function(tagName, options, children) {
@@ -104,7 +104,9 @@ module.exports = {
       return { top: _y, left: _x };
     },
 
-    // client rect adjusted to window scroll
+    /**
+     *  client rect adjusted to window scroll
+     */
     clientRect: function(elem, ignoreScroll) {
         var rect = elem.getBoundingClientRect();
         var result = {
@@ -173,5 +175,36 @@ module.exports = {
        }
       if (target == parent) return (true);
       return (false);
+    },
+
+    getParent: function(item, parentType) {
+      var cur = item.parentNode;
+      if (typeof parentType === 'string' && parentType.length > 0) {
+        while (cur !== null) {
+          if (cur.tagName === parentType) return cur;
+          cur = cur.parentNode;
+        }
+      }
+      return (cur);
+    },
+
+    getChildren: function(item, childType) {
+      var i, cur = [],
+          child=item.children || [];
+      if (typeof childType === 'string' && childType.length > 0 && child !== null) {
+        for (i=0;i<child.length;i++) {
+          if (child[i].tagName === childType) {
+            cur.push(child[i]);
+          }
+        }
+        if (cur.length === 0) {
+          cur = item.querySelectorAll(childType);
+        }
+      } else {
+        return (child);
+      }
+      return (cur);
     }
+
+
 };

@@ -116,7 +116,7 @@ utils.invoke = function(array, method) {
  * @param {object|Array} object Object to iterate through
  * @param {function(object, number):boolean} callback Called for every item,
  *                                           may return false to stop iteration
- * @param {object} context Context in which callback should called.
+ * @param {object} [context] Context in which callback should called.
  *                         If not specified context will be set to current item
  * @returns {object}
  */

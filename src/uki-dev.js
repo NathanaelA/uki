@@ -11,7 +11,7 @@
     }
     var require_modules = require.modules = [];
     var require_cache = require.cache = [];
-    var __requiredCss = ".uki-textSelectable_off {-moz-user-select: -moz-none; -webkit-user-select: none; -o-user-select: none; user-select: none;}\n.uki-textSelectable_off::selection {background: transparent;}\n.uki-draggable_off {-webkit-user-drag: none;}\n\n.uki-attaching {font-size: 12px; font-family: Arial, Helvetica, sans-serif;}\n.uki-attaching-relative {position: relative;}\n.uki-hidden {display: none;}\n\n.uki-button {border: 1px solid #999; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-bottom-color: #777; border-radius: 3px; background: #D7DAE4 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAADwCAIAAAB5d1ZWAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MzFBNzRBRjgzMUMxMTFFMDk4MTVBMTVDMDE2MEQyRTMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MzFBNzRBRjkzMUMxMTFFMDk4MTVBMTVDMDE2MEQyRTMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4OTY5QTk2MTMxQzAxMUUwOTgxNUExNUMwMTYwRDJFMyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4OTY5QTk2MjMxQzAxMUUwOTgxNUExNUMwMTYwRDJFMyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PipBo48AAAKSSURBVHja7N1BTsMwEAXQOun9DwQbJJZcBLFD7KBpuMKfxSiy9eYIT3/Gdpw243ieN5XVHVUB60Yrx9KFBazjgFDAopW3oT4srIbnk0LehrAKbWhmFbAky2rYkixYktWDZcBLlpllU2pTamZJlh08LFiwJsI6T09K82QxiGtDAAvW5TOLl2TBggULFiwEsGDBgrVmDc+zCmdDWLB6sLyAW8GSLMlqwnJlIVmSJVnzYB2SVUjWIVmSZWZZDSVLsmBJVo7lqUOOdUqWZPUkC1ZcrsJgwYIFa9XV8DYgxFhjo5VjiZaZBQsWLFiwFCxYsGCtedx5f3ulEJ8Nh7NhjLVtOhEWrKux9p1CirVvsArJ0oZ5srShNpQsWLYOkiVZBnxlNbTPsintwBoDVmFmwYKlDa/G8jJbAcvLbJU2hBVjCVYFi1ZclsLagFdmlpllZsGCBUvBggULFixYKq3x+e0DtvHZ0B/3aMOuZEGIsXRhAevXP+DmWA+LYaENGVSShSvH8p+uOdYBy2rYgvVnNSwk6yFZhWTBshpaDc2siZLFSrLMrOtXQ8nKsezgDfgWLJ+SqWCxisu9ISxY188sPzeULFiwYMGChQAWLFiw1qzx9eNRaXw29M3tCpbXlXMsV2GlZEGIsdwbVrAshjmWXJlZXW1Iy9ahZzWEYOugDQ14W4c12xCWNtSGsGY6SMOSrI5yFQYLFixYsJRXuytYPo6iDWHBggULFgJYsGDBWvS48/H+QiE/GzocOkh3YO2+I51jbR5o5Vj3faeQY2lDbagNtaE2XDNZd22YJ8sW3szShtpwpoO0NpQsyboaS7BKWLTMLMkys6YpS6E2lCxYsOyzlGTBggULFiwFCxYsWDPVvwADALDE/Hh4isZ/AAAAAElFTkSuQmCC) repeat-x 0 0; white-space: nowrap; vertical-align: top; text-align: center; font-size: 12px; font-family: Arial, Helvetica, sans-serif; color: #111; padding: 0; height: 22px; text-shadow: rgba(255, 255, 255, 0.5) 0 1px 0px; position: relative; z-index: 10; outline: 0; _zoom: 1; _display: inline; -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; *background-image: url(-view/view/button/button.png);}\n.uki-button::-moz-focus-inner {padding: 0; border: 0;}\n.uki-button:hover {background-color: #F5F7FD; background-position: 0 -40px;}\n.uki-button:active {border-color: #666; background-color: #C5C7CD; background-position: 0 -80px; -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset; -moz-box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset; box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset;}\n.uki-button__text {margin: 0 5px;}\n.uki-button:focus {border-color: #7594D2; -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px; -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px; box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px;}\n.uki-button__icon {vertical-align: top; margin-top: -1px; margin-bottom: -1px;}\n.uki-button_disabled,\n.uki-button_disabled:active,\n.uki-button_disabled:hover {color: #999; background-color: #eee; background-image: none; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; border-color: #AAA;}\n.uki-button_disabled .uki-button__icon {opacity: 0.5;}\n.uki-button_image-only .uki-button__text {display: none;}\n.uki-button_confirm {background-position: 0 -120px; border-color: #999; border-bottom-color: #779;}\n.uki-button_confirm:hover {background-position: 0 -160px;}\n.uki-button_confirm:active {background-position: 0 -200px; border-color: #77A;}\n.uki-button_confirm.uki-button_disabled,\n.uki-button_confirm.uki-button_disabled:active,\n.uki-button_confirm.uki-button_disabled:hover {background-color: #EEEEFA; border-color: #AAC;}\n\n.uki-flow {display: block; padding: 0; margin: 0;}\n.uki-flow-item {display: block; padding: 0; margin: 0;}\n.uki-flow_horizontal:after {clear: both; content: '.'; display: block; height: 0px; line-height: 0; visibility: hidden;}\n.uki-flow_horizontal {*zoom: 1;}\n.uki-flow_horizontal > .uki-flow-item {float: left;}\n.uki-flow_spacing-small {margin: 0;}\n.uki-flow_spacing-small > .uki-flow-item {margin: 5px 0 0 0;}\n.uki-flow_spacing-medium > .uki-flow-item {margin: 10px 0 0 0;}\n.uki-flow_spacing-large > .uki-flow-item {margin: 20px 0 0 0;}\n.uki-flow .uki-flow-item:first-child {margin-top: 0;}\n.uki-flow_horizontal.uki-flow_spacing-small > .uki-flow-item {margin: 0 0 0 5px;}\n.uki-flow_horizontal.uki-flow_spacing-medium > .uki-flow-item {margin: 0 0 0 10px;}\n.uki-flow_horizontal.uki-flow_spacing-large > .uki-flow-item {margin: 0 0 0 20px;}\n.uki-flow_horizontal.uki-flow > .uki-flow-item:first-child {margin-left: 0;}\n\n.uki-nc-select {margin: 0;}\n.uki-nc-svg-wrapper {border: #000 solid thin; overflow: auto; display: inline-block; padding: 1px;}\n.uki-nc-svg {overflow: visible !important;}\n.uki-nc-text, .uki-nc-textarea {display: inline-block; *display: inline; *zoom: 1;}\n.uki-nc-text__input, .uki-nc-textarea__input {margin: 0; width: 100%; *width: auto; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}\n.uki-nc-text_with-placeholder, .uki-nc-textarea_with-placeholder {position: relative;}\n.uki-nc-text__placholder, .uki-nc-textarea__placholder {position: absolute; color: #888; opacity: 0.5; pointer-events: none;}\n\n.uki-text-p {line-height: 1.3; margin: 0 0 1em 0;}\n.uki-header {margin: 0 0 5px 0; font-weight: normal;}\n.uki-header_size_large {font-size: 18px;}\n.uki-header_size_medium {font-size: 15px;}\n.uki-header_size_small {font-size: 12px; font-weight: bold;}\n\n.uki-splitPane-handle,\n.uki-splitPane-handle-bar {z-index: 200; position: absolute;}\n.uki-splitPane-handle {background: #999;}\n.uki-splitPane-handle-bar {display: none; background: #999; overflow: hidden;}\n.uki-splitPane-handle-ext {background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAyCAYAAACZDmG3AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMTIvMjEvMTCej/OTAAAAJklEQVQokWMoLi7+////f4b///8zMPHw8DDAABMDEhjljHJozAEAwzEI2ZZEXDIAAAAASUVORK5CYII=); position: absolute; *background-image: url(-view/view/splitPane/extv.png);}\n.uki-splitPane-handle_h {cursor: row-resize; width: 100%;}\n.uki-splitPane-handle-bar_h {width: 100%; height: 1px; left: 0px; top: 2px;}\n.uki-splitPane-handle_v {cursor: col-resize; height: 100%;}\n.uki-splitPane-handle-bar_v {height: 100%; width: 1px; top: 0px; left: 2px;}\n.uki-splitPane-handle_thin .uki-splitPane-handle-bar {display: block;}\n.uki-splitPane-handle_thin.uki-splitPane-handle {background: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEHAAEALAAAAAABAAEAAAICTAEAOw==); *background-image: url(-view/view/splitPane/x.gif);}\n.uki-splitPane-handle_thin.uki-splitPane-handle_v {width: 5px !important; margin-left: -2px;}\n.uki-splitPane-handle_thin.uki-splitPane-handle_h {height: 5px !important; margin-top: -2px;}\n\n.uki-dataList {position: relative; outline: none;}\n.uki-dataList-pack {left: 0; width: 100%; display: block; list-style: none; position: absolute; padding: 0; margin: 0;}\n.uki-dataList-row {cursor: default; display: block; padding: 5px; margin: 0; height: 14px; font-size: 11px; line-height: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; background-color: #FFFFFF;}\n.uki-dataList-row_odd {background-color: #EDF3FE;}\n.uki-dataList-row_selected {background-color: #3875D7; color: #FFF; padding-top: 4px; padding-bottom: 4px; border: 1px solid #2760C0; border-left: none; border-right: none;}\n.uki-dataList-row_selected + .uki-dataList-row_selected {border-top: none; padding-top: 5px;}\n.uki-dataList_blured .uki-dataList-row_selected {background-color: #CCC; border-color: #AAA; color: #000;}\n\n.uki-dataTable-container {overflow: auto; -webkit-overflow-scrolling: touch;}\n.uki-dataTable {position: relative; height: 100%; width: 100%;}\n.uki-dataTable-menu {margin-left: 0px; margin-top: 2px; width: 12px; height: 12px; cursor: pointer; position: absolute; top: 0; left: 0;}\n.uki-dataTable-menu .uki-menu-primary, .uki-dataTable-menu .uki-menu-primary > a {background-color: transparent;}\n.uki-dataTable-sort-down {background: url(data:image/gif;base64,R0lGODlhCgAJAIABAF9fX////yH5BAEAAAEALAAAAAAKAAkAAAINjI+py50AI0ByPsgsKgA7) no-repeat 100% center; *background-image: url(-view/view/dataTable/down.gif);}\n.uki-dataTable-sort-up {background: url(data:image/gif;base64,R0lGODlhCgAJAIABAF9fX////yH5BAEAAAEALAAAAAAKAAkAAAINjGGZwHrcFoSu2ovzLQA7) no-repeat 100% center; *background-image: url(-view/view/dataTable/up.gif);}\n.uki-dataTable-header, .uki-dataTable-footer,\n.uki-dataTable-pack {border-spacing: 0; table-layout: fixed;}\n.uki-dataTable-pack {width: 100%;}\n.uki-dataTable-row {display: table-row;}\n.uki-dataTable-cell {border: none; padding: 2px 5px; margin: 0; height: 14px; font-size: 11px; line-height: 14px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; cursor: default;}\n.uki-dataTable-row_selected {background-color: #3875D7; color: #FFF;}\n.uki-dataTable-row_selected .uki-dataTable-cell {padding-top: 1px; padding-bottom: 1px; border-top: 1px solid #2760C0; border-bottom: 1px solid #2760C0;}\n.uki-dataTable-row_selected + .uki-dataTable-row_selected .uki-dataTable-cell {border-top: none; padding-top: 2px;}\n.uki-dataList_blured .uki-dataTable-row_selected {background-color: #CCC; color: #000;}\n.uki-dataList_blured .uki-dataTable-row_selected .uki-dataTable-cell {border-color: #AAA;}\n.uki-dataTable-wrap {width: 100%;}\n.uki-dataTable-cell_number {text-align: right;}\n.uki-dataTable-header-container, .uki-dataTable-footer-container {box-shadow: 0 1px 0 rgba(0, 0, 0, .1); -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, .1); -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .1); position: relative; background-color: #EFEFEF; overflow: hidden; cursor: default;}\n.uki-dataTable-header-container {border-bottom: 1px solid #999;}\n.uki-dataTable-footer-container {border-top: 1px solid #999;}\n.uki-dataTable-footer-container {position: absolute; bottom: 0px; left: 0px; right: 0px;}\ntable.uki-dataTable-header tr.uki-dataTable-header-row td {text-align: left;}\n.uki-dataTable-header-cell, .uki-dataTable-footer-cell {margin: 0; border-right: 1px solid #CCC; padding: 0 4px 0 5px; vertical-align: top;}\n.uki-dataTable-header-wrap, .uki-dataTable-footer-wrap {position: relative; margin-right: 3px;}\n.uki-dataTable-header-text {text-overflow: ellipsis; white-space: nowrap; overflow: hidden; padding: 2px 0; height: 14px; font-size: 11px; line-height: 14px;}\n.uki-dataTable-footer-text {text-overflow: ellipsis; white-space: nowrap; overflow: hidden; padding: 2px 0; height: 14px; font-size: 10px; font-weight: bolder; line-height: 14px; text-align: right;}\n.uki-dataTable-resizer {display: none; overflow: hidden; position: absolute; width: 5px; top: 0; right: -7px; height: 100%; text-indent: 1em; cursor: col-resize;}\n.uki-dataTable-header-cell_resizable .uki-dataTable-resizer {display: block;}\n.uki-dataTable-spacer {padding-left: 0; padding-right: 0;}\n.uki-dataTable-filter, .uki-dataTable-footer-field {margin-left: -2px; padding: 1px; width: 100%;}\n.uki-dataTable-footer-field {background-color: #CCC;}\n";
+    var __requiredCss = ".uki-textSelectable_off {-moz-user-select: -moz-none; -webkit-user-select: none; -o-user-select: none; user-select: none;}\n.uki-textSelectable_off::selection {background: transparent;}\n.uki-draggable_off {-webkit-user-drag: none;}\n\n.uki-attaching {font-size: 12px; font-family: Arial, Helvetica, sans-serif;}\n.uki-attaching-relative {position: relative;}\n.uki-hidden {display: none;}\n\n.uki-button {border: 1px solid #999; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-bottom-color: #777; border-radius: 3px; background: #D7DAE4 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAADwCAIAAAB5d1ZWAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MzFBNzRBRjgzMUMxMTFFMDk4MTVBMTVDMDE2MEQyRTMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MzFBNzRBRjkzMUMxMTFFMDk4MTVBMTVDMDE2MEQyRTMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4OTY5QTk2MTMxQzAxMUUwOTgxNUExNUMwMTYwRDJFMyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4OTY5QTk2MjMxQzAxMUUwOTgxNUExNUMwMTYwRDJFMyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PipBo48AAAKSSURBVHja7N1BTsMwEAXQOun9DwQbJJZcBLFD7KBpuMKfxSiy9eYIT3/Gdpw243ieN5XVHVUB60Yrx9KFBazjgFDAopW3oT4srIbnk0LehrAKbWhmFbAky2rYkixYktWDZcBLlpllU2pTamZJlh08LFiwJsI6T09K82QxiGtDAAvW5TOLl2TBggULFiwEsGDBgrVmDc+zCmdDWLB6sLyAW8GSLMlqwnJlIVmSJVnzYB2SVUjWIVmSZWZZDSVLsmBJVo7lqUOOdUqWZPUkC1ZcrsJgwYIFa9XV8DYgxFhjo5VjiZaZBQsWLFiwFCxYsGCtedx5f3ulEJ8Nh7NhjLVtOhEWrKux9p1CirVvsArJ0oZ5srShNpQsWLYOkiVZBnxlNbTPsintwBoDVmFmwYKlDa/G8jJbAcvLbJU2hBVjCVYFi1ZclsLagFdmlpllZsGCBUvBggULFixYKq3x+e0DtvHZ0B/3aMOuZEGIsXRhAevXP+DmWA+LYaENGVSShSvH8p+uOdYBy2rYgvVnNSwk6yFZhWTBshpaDc2siZLFSrLMrOtXQ8nKsezgDfgWLJ+SqWCxisu9ISxY188sPzeULFiwYMGChQAWLFiw1qzx9eNRaXw29M3tCpbXlXMsV2GlZEGIsdwbVrAshjmWXJlZXW1Iy9ahZzWEYOugDQ14W4c12xCWNtSGsGY6SMOSrI5yFQYLFixYsJRXuytYPo6iDWHBggULFgJYsGDBWvS48/H+QiE/GzocOkh3YO2+I51jbR5o5Vj3faeQY2lDbagNtaE2XDNZd22YJ8sW3szShtpwpoO0NpQsyboaS7BKWLTMLMkys6YpS6E2lCxYsOyzlGTBggULFiwFCxYsWDPVvwADALDE/Hh4isZ/AAAAAElFTkSuQmCC) repeat-x 0 0; white-space: nowrap; vertical-align: top; text-align: center; font-size: 12px; font-family: Arial, Helvetica, sans-serif; color: #111; padding: 0; height: 22px; text-shadow: rgba(255, 255, 255, 0.5) 0 1px 0px; position: relative; z-index: 10; outline: 0; _zoom: 1; _display: inline; -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; *background-image: url(-view\\view\\button\\button.png);}\n.uki-button::-moz-focus-inner {padding: 0; border: 0;}\n.uki-button:hover {background-color: #F5F7FD; background-position: 0 -40px;}\n.uki-button:active {border-color: #666; background-color: #C5C7CD; background-position: 0 -80px; -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset; -moz-box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset; box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset;}\n.uki-button__text {margin: 0 5px;}\n.uki-button:focus {border-color: #7594D2; -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px; -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px; box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px;}\n.uki-button__icon {vertical-align: top; margin-top: -1px; margin-bottom: -1px;}\n.uki-button_disabled,\r\n.uki-button_disabled:active,\r\n.uki-button_disabled:hover {color: #999; background-color: #eee; background-image: none; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; border-color: #AAA;}\n.uki-button_disabled .uki-button__icon {opacity: 0.5;}\n.uki-button_image-only .uki-button__text {display: none;}\n.uki-button_confirm {background-position: 0 -120px; border-color: #999; border-bottom-color: #779;}\n.uki-button_confirm:hover {background-position: 0 -160px;}\n.uki-button_confirm:active {background-position: 0 -200px; border-color: #77A;}\n.uki-button_confirm.uki-button_disabled,\r\n.uki-button_confirm.uki-button_disabled:active,\r\n.uki-button_confirm.uki-button_disabled:hover {background-color: #EEEEFA; border-color: #AAC;}\n\n.uki-flow {display: block; padding: 0; margin: 0;}\n.uki-flow-item {display: block; padding: 0; margin: 0;}\n.uki-flow_horizontal:after {clear: both; content: '.'; display: block; height: 0px; line-height: 0; visibility: hidden;}\n.uki-flow_horizontal {*zoom: 1;}\n.uki-flow_horizontal > .uki-flow-item {float: left;}\n.uki-flow_spacing-small {margin: 0;}\n.uki-flow_spacing-small > .uki-flow-item {margin: 5px 0 0 0;}\n.uki-flow_spacing-medium > .uki-flow-item {margin: 10px 0 0 0;}\n.uki-flow_spacing-large > .uki-flow-item {margin: 20px 0 0 0;}\n.uki-flow .uki-flow-item:first-child {margin-top: 0;}\n.uki-flow_horizontal.uki-flow_spacing-small > .uki-flow-item {margin: 0 0 0 5px;}\n.uki-flow_horizontal.uki-flow_spacing-medium > .uki-flow-item {margin: 0 0 0 10px;}\n.uki-flow_horizontal.uki-flow_spacing-large > .uki-flow-item {margin: 0 0 0 20px;}\n.uki-flow_horizontal.uki-flow > .uki-flow-item:first-child {margin-left: 0;}\n\n.uki-nc-select {margin: 0;}\n.uki-nc-svg-wrapper {border: #000 solid thin; overflow: auto; display: inline-block; padding: 1px;}\n.uki-nc-svg {overflow: visible !important;}\n.uki-nc-text, .uki-nc-textarea {display: inline-block; *display: inline; *zoom: 1;}\n.uki-nc-text__input, .uki-nc-textarea__input {margin: 0; width: 100%; *width: auto; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}\n.uki-nc-text_with-placeholder, .uki-nc-textarea_with-placeholder {position: relative;}\n.uki-nc-text__placholder, .uki-nc-textarea__placholder {position: absolute; color: #888; opacity: 0.5; pointer-events: none;}\n\n.uki-text-p {line-height: 1.3; margin: 0 0 1em 0;}\n.uki-header {margin: 0 0 5px 0; font-weight: normal;}\n.uki-header_size_large {font-size: 18px;}\n.uki-header_size_medium {font-size: 15px;}\n.uki-header_size_small {font-size: 12px; font-weight: bold;}\n\n.uki-menu-horizontal {list-style: none; padding: 0; margin: 0; -webkit-user-drag: none;}\n.uki-menu-horizontal li {color: black; background-color: white; position: relative;}\n.uki-menu-horizontal li ul {z-index: 500; position: absolute; left: 0; width: 10em;}\n.uki-menu-horizontal ul {padding: 0; margin: 0px -1px; list-style: none; border: 1px solid black; background-color: white;}\n.uki-menu-horizontal > li {position: relative; float: left; text-align: left;}\n.uki-menu-horizontal a {display: block; padding: 0px 4px; color: black; text-decoration: none;}\n.uki-menu-horizontal-no-touch :hover > a {background-color: black; color: white;}\n.uki-menu-horizontal-no-touch :focus > a, a.uki-menu-focus, .uki-menu-focus {background-color: black; color: #FFFFFF;}\n.uki-menu-horizontal ul {display: none;}\n.uki-menu-horizontal ul.uki-menu-visible {display: block;}\n.uki-menu-horizontal-no-touch :hover > ul {display: block;}\n.uki-menu-horizontal ul ul {position: absolute; top: 0px; left: 10em;}\n.uki-menu-horizontal .uki-menu-submenu {background: url(data:image/gif;base64,R0lGODlhBwARALMAAAAAAP8AAP///////////////////////////////////////////////////////yH5BAEAAAEALAAAAAAHABEAAAQUMMhJq704AAs27Z4EhuAXilmqZhEAOw==) no-repeat 98% center; *background-image: url(-view\\view\\menu\\horiz_arrow.gif);}\n.uki-menu-vertical .uki-menu-submenu {background: url(data:image/gif;base64,R0lGODlhEQAHAPMAAAAAAP8AAP///////////////////////////////////////////////////////yH5BAEAAAEALAAAAAARAAcAAwQTMMhJq714gs1Blp33gdtIieYYAQA7) no-repeat 98% center; *background-image: url(-view\\view\\menu\\vert_arrow.gif);}\n\n.uki-splitPane-handle,\r\n.uki-splitPane-handle-bar {z-index: 200; position: absolute;}\n.uki-splitPane-handle {background: #999;}\n.uki-splitPane-handle-bar {display: none; background: #999; overflow: hidden;}\n.uki-splitPane-handle-ext {background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAyCAYAAACZDmG3AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMTIvMjEvMTCej/OTAAAAJklEQVQokWMoLi7+////f4b///8zMPHw8DDAABMDEhjljHJozAEAwzEI2ZZEXDIAAAAASUVORK5CYII=); position: absolute; *background-image: url(-view\\view\\splitPane\\extv.png);}\n.uki-splitPane-handle_h {cursor: row-resize; width: 100%;}\n.uki-splitPane-handle-bar_h {width: 100%; height: 1px; left: 0px; top: 2px;}\n.uki-splitPane-handle_v {cursor: col-resize; height: 100%;}\n.uki-splitPane-handle-bar_v {height: 100%; width: 1px; top: 0px; left: 2px;}\n.uki-splitPane-handle_thin .uki-splitPane-handle-bar {display: block;}\n.uki-splitPane-handle_thin.uki-splitPane-handle {background: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEHAAEALAAAAAABAAEAAAICTAEAOw==); *background-image: url(-view\\view\\splitPane\\x.gif);}\n.uki-splitPane-handle_thin.uki-splitPane-handle_v {width: 5px !important; margin-left: -2px;}\n.uki-splitPane-handle_thin.uki-splitPane-handle_h {height: 5px !important; margin-top: -2px;}\n\n.uki-dataList {position: relative; outline: none;}\n.uki-dataList-pack {left: 0; width: 100%; display: block; list-style: none; position: absolute; padding: 0; margin: 0;}\n.uki-dataList-row {cursor: default; display: block; padding: 5px; margin: 0; height: 14px; font-size: 11px; line-height: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; background-color: #FFFFFF;}\n.uki-dataList-row_odd {background-color: #EDF3FE;}\n.uki-dataList-row_selected {background-color: #3875D7; color: #FFF; padding-top: 4px; padding-bottom: 4px; border: 1px solid #2760C0; border-left: none; border-right: none;}\n.uki-dataList-row_selected + .uki-dataList-row_selected {border-top: none; padding-top: 5px;}\n.uki-dataList_blured .uki-dataList-row_selected {background-color: #CCC; border-color: #AAA; color: #000;}\n\n.uki-dataTable-container {overflow: auto; -webkit-overflow-scrolling: touch;}\n.uki-dataTable {position: relative; height: 100%; width: 100%;}\n.uki-dataTable-menu {margin-left: 0px; margin-top: 2px; width: 12px; height: 12px; cursor: pointer; position: absolute; top: 0; left: 0;}\n.uki-dataTable-menu .uki-menu-primary, .uki-dataTable-menu .uki-menu-primary > a {background-color: transparent;}\n.uki-dataTable-sort-down {background: url(data:image/gif;base64,R0lGODlhCgAJAIABAF9fX////yH5BAEAAAEALAAAAAAKAAkAAAINjI+py50AI0ByPsgsKgA7) no-repeat 100% center; *background-image: url(-view\\view\\dataTable\\down.gif);}\n.uki-dataTable-sort-up {background: url(data:image/gif;base64,R0lGODlhCgAJAIABAF9fX////yH5BAEAAAEALAAAAAAKAAkAAAINjGGZwHrcFoSu2ovzLQA7) no-repeat 100% center; *background-image: url(-view\\view\\dataTable\\up.gif);}\n.uki-dataTable-header, .uki-dataTable-footer,\r\n.uki-dataTable-pack {border-spacing: 0; table-layout: fixed;}\n.uki-dataTable-pack {width: 100%;}\n.uki-dataTable-row {display: table-row;}\n.uki-dataTable-cell {border: none; padding: 2px 5px; margin: 0; height: 14px; font-size: 11px; line-height: 14px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; cursor: default;}\n.uki-dataTable-row_selected {background-color: #3875D7; color: #FFF;}\n.uki-dataTable-row_selected .uki-dataTable-cell {padding-top: 1px; padding-bottom: 1px; border-top: 1px solid #2760C0; border-bottom: 1px solid #2760C0;}\n.uki-dataTable-row_selected + .uki-dataTable-row_selected .uki-dataTable-cell {border-top: none; padding-top: 2px;}\n.uki-dataList_blured .uki-dataTable-row_selected {background-color: #CCC; color: #000;}\n.uki-dataList_blured .uki-dataTable-row_selected .uki-dataTable-cell {border-color: #AAA;}\n.uki-dataTable-wrap {width: 100%;}\n.uki-dataTable-cell_number {text-align: right;}\n.uki-dataTable-header-container, .uki-dataTable-footer-container {box-shadow: 0 1px 0 rgba(0, 0, 0, .1); -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, .1); -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .1); position: relative; background-color: #EFEFEF; overflow: hidden; cursor: default;}\n.uki-dataTable-header-container {border-bottom: 1px solid #999;}\n.uki-dataTable-footer-container {border-top: 1px solid #999;}\n.uki-dataTable-footer-container {position: absolute; bottom: 0px; left: 0px; right: 0px;}\ntable.uki-dataTable-header tr.uki-dataTable-header-row td {text-align: left;}\n.uki-dataTable-header-cell, .uki-dataTable-footer-cell {margin: 0; border-right: 1px solid #CCC; padding: 0 4px 0 5px; vertical-align: top;}\n.uki-dataTable-header-wrap, .uki-dataTable-footer-wrap {position: relative; margin-right: 3px;}\n.uki-dataTable-header-text {text-overflow: ellipsis; white-space: nowrap; overflow: hidden; padding: 2px 0; height: 14px; font-size: 11px; line-height: 14px;}\n.uki-dataTable-footer-text {text-overflow: ellipsis; white-space: nowrap; overflow: hidden; padding: 2px 0; height: 14px; font-size: 10px; font-weight: bolder; line-height: 14px; text-align: right;}\n.uki-dataTable-resizer {display: none; overflow: hidden; position: absolute; width: 5px; top: 0; right: -7px; height: 100%; text-indent: 1em; cursor: col-resize;}\n.uki-dataTable-header-cell_resizable .uki-dataTable-resizer {display: block;}\n.uki-dataTable-spacer {padding-left: 0; padding-right: 0;}\n.uki-dataTable-filter, .uki-dataTable-footer-field {margin-left: -2px; padding: 1px; width: 100%;}\n.uki-dataTable-footer-field {background-color: #CCC;}\n";
     require_modules[0] = function(global, module, require) {
         var exports = this;
         global.uki = require(1);
@@ -1324,6 +1324,32 @@
                 }
                 if (target == parent) return true;
                 return false;
+            },
+            getParent: function(item, parentType) {
+                var cur = item.parentNode;
+                if (typeof parentType === "string" && parentType.length > 0) {
+                    while (cur !== null) {
+                        if (cur.tagName === parentType) return cur;
+                        cur = cur.parentNode;
+                    }
+                }
+                return cur;
+            },
+            getChildren: function(item, childType) {
+                var i, cur = [], child = item.children || [];
+                if (typeof childType === "string" && childType.length > 0 && child !== null) {
+                    for (i = 0; i < child.length; i++) {
+                        if (child[i].tagName === childType) {
+                            cur.push(child[i]);
+                        }
+                    }
+                    if (cur.length === 0) {
+                        cur = item.querySelectorAll(childType);
+                    }
+                } else {
+                    return child;
+                }
+                return cur;
             }
         };
     };
@@ -2097,10 +2123,10 @@
         var exports = this;
         1;
         var view = require(10), utils = require(4);
-        utils.extend(view, require(22), require(23), require(24), require(25), require(26), require(27), require(28), {
-            dataList: utils.extend({}, require(29), require(32), require(30), require(31))
-        }, require(33), {
-            dataTable: utils.extend({}, require(34))
+        utils.extend(view, require(22), require(23), require(24), require(25), require(26), require(27), require(28), require(29), {
+            dataList: utils.extend({}, require(30), require(33), require(31), require(32))
+        }, require(34), {
+            dataTable: utils.extend({}, require(35))
         });
         module.exports = view;
     };
@@ -2568,6 +2594,216 @@
     require_modules[26] = function(global, module, require) {
         var exports = this;
         1;
+        var fun = require(7), dom = require(13), view = require(10), utils = require(4), evt = require(12), env = require(3), Base = require(15).Base;
+        var Menu = view.newClass("Menu", Base, {
+            _createDom: function() {
+                this._dom = dom.createElement("ul", {
+                    className: "uki-menu-horizontal uki-menu-horizontal-no-touch uki-textSelectable_off"
+                });
+                this._hasTouch = false;
+                this.on("click", fun.bind(this._click, this));
+                this.on("touchstart", fun.bind(this._touchstart, this));
+                this._bindedTouchOut = fun.bindOnce(this._touchout, this);
+                this.on("touchend", this._touchprevent);
+                this.on("touchmove", this._touchprevent);
+            },
+            destruct: function() {
+                if (this._hasTouch) {
+                    evt.removeListener(env.doc, "click", this._bindedTouchOut);
+                }
+                Base.prototype.destruct.call(this);
+            },
+            _touchout: function(event) {
+                try {
+                    var eles = this._dom.getElementsByClassName("uki-menu-focus");
+                    for (var i = 0; i < eles.length; i++) {
+                        dom.removeClass(eles[i], "uki-menu-focus");
+                    }
+                    this._closeMenu(this._dom);
+                } catch (err) {}
+            },
+            _touchprevent: function(event) {
+                event.stopPropagation();
+                event.preventDefault();
+                return false;
+            },
+            _lastElement: null,
+            _touchstart: function(event) {
+                if (!this._hasTouch) {
+                    dom.removeClass(this._dom, "uki-menu-horizontal-no-touch");
+                    evt.addListener(env.doc, "click", this._bindedTouchOut);
+                    this._hasTouch = true;
+                }
+                event.stopPropagation();
+                event.preventDefault();
+                var e = event;
+                if (event.baseEvent) {
+                    e = event.baseEvent;
+                }
+                if (e.touches) {
+                    var touch = e.touches[0];
+                } else {
+                    touch = e;
+                }
+                var target = touch.target;
+                while (target.parentNode && target.tagName != "A") {
+                    target = target.parentNode;
+                }
+                var clickedItem = target;
+                if (target == null) return;
+                var eles = this._dom.getElementsByClassName("uki-menu-focus");
+                for (var i = 0; i < eles.length; i++) {
+                    if (eles[i] != target) {
+                        dom.removeClass(eles[i], "uki-menu-focus");
+                    }
+                }
+                if (!dom.hasClass(target, "uki-menu-focus")) {
+                    dom.addClass(target, "uki-menu-focus");
+                } else {
+                    if (dom.hasClass(target.parentNode, "uki-menu-primary")) {
+                        dom.removeClass(target, "uki-menu-focus");
+                        this._closeMenu(this._dom);
+                        return;
+                    }
+                }
+                target = target.nextSibling;
+                while (target != null && target.nodeName == "#text") {
+                    target = target.nextSibling;
+                }
+                if (target != null) {
+                    this._closeMenu(target);
+                    dom.addClass(target, "uki-menu-visible");
+                } else {
+                    this._closeMenu(this._dom);
+                    var name = clickedItem.name;
+                    if (clickedItem.href == "javascript:void(0);") {
+                        this.trigger({
+                            type: "menuClick",
+                            name: name,
+                            option: clickedItem,
+                            menu: this
+                        });
+                        try {
+                            clickedItem.blur();
+                        } catch (err) {
+                            if (console.error) console.error(err);
+                        }
+                    }
+                }
+            },
+            _closeMenu: function(domElement) {
+                var eles = this._dom.getElementsByClassName("uki-menu-visible");
+                for (var i = 0; i < eles.length; i++) {
+                    if (!dom.isAChild(domElement, eles[i], this._dom) || this._dom === domElement) {
+                        dom.removeClass(eles[i], "uki-menu-visible");
+                    }
+                }
+            },
+            _click: function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                if (this._hasTouch === true) return;
+                var target = event.target;
+                while (target.parentNode && target.tagName != "A") {
+                    target = target.parentNode;
+                }
+                var parentUl = target;
+                while (parentUl.parentNode && parentUl.tagName != "UL") {
+                    parentUl = parentUl.parentNode;
+                }
+                if (!dom.hasClass(parentUl, "uki-menu-horizontal")) {
+                    parentUl.style.display = "none";
+                    setTimeout(function() {
+                        parentUl.style.display = "";
+                    }, 500);
+                }
+                var name = target.name;
+                if (target.href == "javascript:void(0);") {
+                    this.trigger({
+                        type: "menuClick",
+                        name: name,
+                        option: target,
+                        menu: this,
+                        params: target.params
+                    });
+                }
+            },
+            options: fun.newProp("options", function(val) {
+                if (arguments.length === 0) return this._options;
+                this._options = val;
+                this._menuitems = [];
+                this._dom.innerHTML = "";
+                appendMenuOptions(this._dom, val, this._menuitems, 0);
+                return this;
+            }),
+            _options: []
+        });
+        function appendMenuOptions(root, options, level) {
+            var node, node_li, node_a;
+            utils.forEach(options, function(option) {
+                if (typeof option === "string" || typeof option === "number") {
+                    option = {
+                        text: option
+                    };
+                }
+                if (level == 0) className = "uki-menu-primary"; else className = "uki-menu";
+                node_li = dom.createElement("li", {
+                    className: className
+                });
+                if (option.text === "-" || option.text === "---" || option.text === "--") {
+                    node_a = dom.createElement("hr");
+                } else {
+                    node_a = dom.createElement("a", {
+                        draggable: false,
+                        ondragstart: "return false;",
+                        href: option.url ? option.url : "javascript:void(0);",
+                        html: option.html ? option.html : dom.escapeHTML(option.text),
+                        name: option.name ? option.name : option.text,
+                        tabIndex: -1
+                    });
+                    if (option.params != null) node_a.params = option.params; else node_a.params = null;
+                    if (option.accessKey) node_a.accessKey = option.accessKey;
+                    if (option.className) dom.addClass(node_a, option.className);
+                }
+                option.element = node_a;
+                if (option.visible === false) node_li.style.display = "none";
+                option.setText = function(value) {
+                    this.element.innerHTML = dom.escapeHTML(value);
+                    this.text = value;
+                };
+                option.setHTML = function(value) {
+                    this.element.innerHTML = value;
+                    this.html = value;
+                };
+                option.value = function() {
+                    return this.html ? this.html : this.text;
+                };
+                option.visibility = function(value) {
+                    var e = this.element.parentNode.style;
+                    if (value === true) {
+                        e.display = "";
+                    } else if (value === false) {
+                        e.display = "none";
+                    } else {
+                        if (e.display == "none") return false;
+                        return true;
+                    }
+                };
+                node_li.appendChild(node_a);
+                if (option.options && option.options.length > 0) {
+                    node = dom.createElement("ul");
+                    if (level > 0) dom.addClass(node_li, "uki-menu-submenu");
+                    node_li.appendChild(node);
+                    appendMenuOptions(node, option.options, level + 1);
+                }
+                root.appendChild(node_li);
+            });
+        }
+        exports.Menu = Menu;
+    };
+    require_modules[27] = function(global, module, require) {
+        var exports = this;
+        1;
         var fun = require(7), utils = require(4), view = require(10), evt = require(12), dom = require(13), build = require(6).build, Mustache = require(19).Mustache, Container = require(14).Container, Focusable = require(20).Focusable;
         var SplitPane = view.newClass("SplitPane", Container, Focusable, {}), proto = SplitPane.prototype;
         proto._throttle = 0;
@@ -2754,7 +2990,7 @@
         require(8).Collection.addProps([ "leftMin", "rightMin", "leftSpeed", "rightSpeed", "throttle", "handlePosition", "extPositions", "handleWidth", "vertical" ]);
         exports.SplitPane = SplitPane;
     };
-    require_modules[27] = function(global, module, require) {
+    require_modules[28] = function(global, module, require) {
         var exports = this;
         var fun = require(7), dom = require(13), utils = require(4), view = require(10), build = require(6).build, Container = require(14).Container, Mustache = require(19).Mustache;
         var PLACEHOLDER_CLASSNAME = "__HTMLLayout__";
@@ -2815,10 +3051,10 @@
         require(8).Collection.addProps([ "data", "template" ]);
         exports.HTMLLayout = HTMLLayout;
     };
-    require_modules[28] = function(global, module, require) {
+    require_modules[29] = function(global, module, require) {
         var exports = this;
         1;
-        var fun = require(7), utils = require(4), dom = require(13), view = require(10), build = require(6).build, Metrics = require(29).Metrics, Selection = require(30).Selection, Pack = require(31).Pack, SelectionController = require(32).SelectionController, Container = require(14).Container, Focusable = require(20).Focusable;
+        var fun = require(7), utils = require(4), dom = require(13), view = require(10), build = require(6).build, Metrics = require(30).Metrics, Selection = require(31).Selection, Pack = require(32).Pack, SelectionController = require(33).SelectionController, Container = require(14).Container, Focusable = require(20).Focusable;
         var DataList = view.newClass("DataList", Container, Focusable, {
             _setup: function(initArgs) {
                 this._metrics = initArgs.metrics || new Metrics;
@@ -3103,7 +3339,7 @@
         require(8).Collection.addProps([ "data", "throttle", "debounce", "template", "formatter", "key", "selection", "selectedRows", "selectedRow", "selectedIndexes", "selectedIndex", "lastClickIndex", "multiselect" ]).addMethods([ "scrollToIndex", "triggerSelection", "redrawRow" ]);
         exports.DataList = DataList;
     };
-    require_modules[29] = function(global, module, require) {
+    require_modules[30] = function(global, module, require) {
         var exports = this;
         var fun = require(7), utils = require(4), Observable = require(18).Observable;
         var Metrics = fun.newClass(Observable, {
@@ -3136,7 +3372,7 @@
         });
         exports.Metrics = Metrics;
     };
-    require_modules[30] = function(global, module, require) {
+    require_modules[31] = function(global, module, require) {
         var exports = this;
         var fun = require(7), utils = require(4), Observable = require(18).Observable;
         var Selection = fun.newClass(Observable, {
@@ -3217,7 +3453,7 @@
         }
         exports.Selection = Selection;
     };
-    require_modules[31] = function(global, module, require) {
+    require_modules[32] = function(global, module, require) {
         var exports = this;
         var fun = require(7), utils = require(4), view = require(10), dom = require(13), Mustache = require(19).Mustache, Base = require(15).Base;
         var Pack = view.newClass("dataList.Pack", Base, {
@@ -3276,7 +3512,7 @@
         });
         exports.Pack = Pack;
     };
-    require_modules[32] = function(global, module, require) {
+    require_modules[33] = function(global, module, require) {
         var exports = this;
         var fun = require(7), evt = require(12), env = require(3), Observable = require(18).Observable;
         var SelectionController = fun.newClass(Observable, {
@@ -3411,10 +3647,10 @@
         });
         exports.SelectionController = SelectionController;
     };
-    require_modules[33] = function(global, module, require) {
+    require_modules[34] = function(global, module, require) {
         var exports = this;
         1;
-        var fun = require(7), utils = require(4), env = require(3), dom = require(13), view = require(10), build = require(6).build, Pack = require(34).Pack, DataList = require(28).DataList, Mustache = require(19).Mustache, Base = require(15).Base, Container = require(14).Container, evt = require(12);
+        var fun = require(7), utils = require(4), env = require(3), dom = require(13), view = require(10), build = require(6).build, Pack = require(35).Pack, DataList = require(29).DataList, Mustache = require(19).Mustache, Base = require(15).Base, Container = require(14).Container, evt = require(12), Menu = require(26).Menu;
         var _DataTableCounter = 0;
         var DataTable = view.newClass("DataTable", Container, {
             columns: function(cols) {
@@ -4220,7 +4456,7 @@
         });
         var DataTableFooter = view.newClass("DataTableFooter", Container, {
             template: fun.newProp("template"),
-            _template: '<table class="uki-dataTable-footer"><tbody><tr class="uki-dataTable-footer-row">{{#columns}}<td class="uki-dataTable-footer-cell uki-dataTable-col-{{pos}}"><div class="uki-dataTable-footer-text" name="footer_{{pos}}" style="{{style}}">{{value}}</div></td>{{/columns}}</td></table>\n\n',
+            _template: '<table class="uki-dataTable-footer"><tbody><tr class="uki-dataTable-footer-row">{{#columns}}<td class="uki-dataTable-footer-cell uki-dataTable-col-{{pos}}"><div class="uki-dataTable-footer-text" name="footer_{{pos}}" style="{{style}}">{{value}}</div></td>{{/columns}}</td></table>\r\n\r\n',
             _createDom: function(initArgs) {
                 Base.prototype._createDom.call(this, initArgs);
                 var rowfooter = dom.createElement("tr", {
@@ -4367,6 +4603,7 @@
             _menuOptions: null,
             _styleSheetElement: null,
             _styleSheet: null,
+            _columns: null,
             _createDom: function(initArgs) {
                 Base.prototype._createDom.call(this, initArgs);
                 this._rowheader = dom.createElement("tr", {
@@ -4384,7 +4621,7 @@
                 }
                 this._cssRuleTracking = {};
                 this._menu = build([ {
-                    view: "menu",
+                    view: "Menu",
                     as: "DataTable-Menu",
                     addClass: "uki-dataTable-menu"
                 } ]);
@@ -4513,6 +4750,7 @@
             },
             totalWidth: function() {
                 var tw = 0;
+                if (this._columns === null) return 0;
                 for (var i = 0; i < this._columns.length; i++) {
                     tw += this._columns[i].visible() ? this._columns[i].width() : 0;
                 }
@@ -4899,9 +5137,9 @@
         exports.table = table;
         exports.DataTableHeaderColumn = DataTableHeaderColumn;
     };
-    require_modules[34] = function(global, module, require) {
+    require_modules[35] = function(global, module, require) {
         var exports = this;
-        var fun = require(7), utils = require(4), dom = require(13), Mustache = require(19).Mustache, Base = require(31).Pack;
+        var fun = require(7), utils = require(4), dom = require(13), Mustache = require(19).Mustache, Base = require(32).Pack;
         var Pack = fun.newClass(Base, {
             render: function(rows, selectedInPack, globalIndex) {
                 this._dom.innerHTML = this._toHTML(rows, globalIndex);
