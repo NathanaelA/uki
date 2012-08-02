@@ -80,8 +80,8 @@ var Container = view.newClass('Container', Base, {
       child._viewIndex = this._childViews.length;
       this._childViews.push(child);
       child.parent(this);
-      if (this.dom().firstChild) {
-        this._insertBeforeInDom(child, this.dom().firstChild);
+      if (this.domForChild(child).firstChild) {
+        this._insertBeforeInDom(child, this.domForChild(child).firstChild);
       } else {
         this._appendChildToDom(child);
       }
@@ -127,7 +127,7 @@ var Container = view.newClass('Container', Base, {
 
     // There is a remote possibility that the first element is not a UKI dom tracked element
     _insertBeforeInDom: function(child, beforeChild) {
-          this.dom().insertBefore(child.dom(), beforeChild.dom ? beforeChild.dom() : beforeChild);
+          this.domForChild(child).insertBefore(child.dom(), beforeChild.dom ? beforeChild.dom() : beforeChild);
     },
 
     _childrenChanged: function() {
