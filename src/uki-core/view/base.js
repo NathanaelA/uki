@@ -48,11 +48,16 @@ var Base = view.newClass('Base', {
     },
 
     destruct: function() {
+        console.log("Running BASE Destruct");
         view.unregisterId(this);
         view.unregister(this);
         this.removeListener();
         this.bindings([]);
         this.destructed = true;
+        var parent = this.parent();
+        if (parent && parent.removeChild) {
+          parent.removeChild(this);
+        }
     },
 
     _setup: fun.FS,
@@ -264,7 +269,10 @@ var Base = view.newClass('Base', {
     trigger: function(e) {
         var node = this.domForEvent(e.type);
         var wrapped = evt.createEvent(e, { _targetView: this });
-        return evt.trigger(node, wrapped);
+        var result = evt.trigger(node, wrapped);
+        evt.destroyEvent(wrapped);
+        return result;
+
     },
 
 

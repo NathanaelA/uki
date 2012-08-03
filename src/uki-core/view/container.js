@@ -17,6 +17,7 @@ var Container = view.newClass('Container', Base, {
     },
 
     destruct: function() {
+        console.log("Container Destruct");
         utils.invoke(this.childViews(), 'destruct');
         Base.prototype.destruct.call(this);
     },

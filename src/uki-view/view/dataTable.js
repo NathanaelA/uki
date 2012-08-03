@@ -42,6 +42,12 @@ var DataTable = view.newClass('DataTable', Container, {
         return this;
     },
 
+    destruct: function() {
+      console.log("Destructing DataTable");
+      Container.prototype.destruct.call(this);
+      dom.removeElement(this._dom);
+    },
+
     header: function() {
       return this._header;
     },
@@ -1167,10 +1173,12 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
     },
 
     destruct: function() {
+      console.log("Destructing AdvancedTableHeader");
       this._styleSheet = null;
       this._cssRuleTracking = null;
-      dom.removeElement(this._styleSheetElement);
       Container.prototype.destruct.call(this);
+      dom.removeElement(this._styleSheetElement);
+      dom.removeElement(this._dom);
     },
 
     _cssRuleTracking: null,

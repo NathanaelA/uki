@@ -76,6 +76,7 @@ function dragGestureStart (e) {
         gesture.position = { x: e.pageX, y: e.pageY };
         startGesture(this, e);
     }
+    evt.destroyEvent(e);
 }
 
 function dragGesture (e) {
@@ -84,6 +85,7 @@ function dragGesture (e) {
     evt.trigger(gesture.draggable, e);
 
     if (e.isDefaultPrevented()) stopGesture(gesture.draggable);
+    evt.destroyEvent(e);
 }
 
 function dragGestureEnd (e) {
@@ -92,6 +94,7 @@ function dragGestureEnd (e) {
     evt.trigger(gesture.draggable, e);
 
     stopGesture(gesture.draggable);
+    evt.destroyEvent(e);
 }
 
 module.exports = gesture;

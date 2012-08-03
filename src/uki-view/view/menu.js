@@ -1,3 +1,5 @@
+"use strict";
+
 requireCss('./menu/menu.css');
 
 var fun  = require('../../uki-core/function'),
@@ -15,19 +17,53 @@ var Menu = view.newClass('Menu', Base, {
     _createDom: function() {
         this._dom = dom.createElement('ul', { className: 'uki-menu-horizontal uki-menu-horizontal-no-touch uki-textSelectable_off' });
         this._hasTouch = false;
-        this.on('click', fun.bind(this._click, this));
-        this.on('touchstart', fun.bind(this._touchstart,this));
+        this._options = [];
+        this.on('click', fun.bindOnce(this._click, this));
+        this.on('touchstart', fun.bindOnce(this._touchstart,this));
         this._bindedTouchOut = fun.bindOnce(this._touchout, this);
 
         this.on('touchend', this._touchprevent);
         this.on('touchmove', this._touchprevent);
     },
     destruct: function() {
+      this._clearOptions(this._options);
+      this._clearChildren(this._dom);
       if (this._hasTouch) {
         evt.removeListener(env.doc, "click", this._bindedTouchOut);
       }
+
       Base.prototype.destruct.call(this);
+      this._dom = null;
+      this._parent = null;
+      this._options = null;
     },
+    _clearChildren: function(domNode, level) {
+     try {
+      if (domNode.params) {
+        domNode.params = null;
+        delete domNode.params;
+      }
+      if (domNode.ondragstart) domNode.ondragstart = null;
+      if (domNode.childNodes) {
+        for (var i=domNode.childNodes.length-1;i>=0;i--) {
+          if (domNode.childNodes[i] == null) continue;
+          this._clearChildren(domNode.childNodes[i], level+1);
+        }
+      }
+     } catch (Err) {
+         console.error("Error", Err);
+     }
+    },
+    _clearOptions: function(options) {
+      for (var i=0;i<options.length;i++) {
+        options[i].element = null;
+        if (options[i].options) {
+          this._clearOptions(options[i].options);
+          delete options[i].options;
+        }
+      }
+    },
+
     _touchout: function(event)
     {
       // Catch any errors in our handler, in case we are being destroyed and "this" is no longer valid...
@@ -180,9 +216,8 @@ var Menu = view.newClass('Menu', Base, {
     options: fun.newProp('options', function(val) {
       if (arguments.length === 0) return (this._options);
       this._options = val;
-      this._menuitems = [];
       this._dom.innerHTML = '';
-      appendMenuOptions(this._dom, val, this._menuitems, 0);
+      appendMenuOptions(this._dom, val, 0);
       return this;
     }),
     _options: []
@@ -194,7 +229,7 @@ var Menu = view.newClass('Menu', Base, {
 
 
 function appendMenuOptions ( root, options, level ) {
-  var node, node_li, node_a;
+  var node, node_li, node_a, className;
 
   utils.forEach( options, function ( option ) {
 

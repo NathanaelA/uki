@@ -177,11 +177,33 @@ function createEvent(baseEvent, options) {
     return e;
 }
 
+function destroyEvent(event) {
+  for (var prop in event.prototype) {
+    if (event.prototype.hasOwnProperty(prop)) {
+      event[prop] = null;
+    }
+  }
+  for (var prop in event) {
+    if (event.hasOwnProperty(prop)) {
+      event[prop] = null;
+    }
+  }
+  if (event.__proto__) {
+    for (var prop in event.__proto__) {
+      if (event.__proto__.hasOwnProperty(prop)) {
+        event.__proto__[prop] = null;
+      }
+    }
+  }
+}
+
 var evt = module.exports = {
 
     wrapDomEvent: wrapDomEvent,
 
     createEvent: createEvent,
+
+    destroyEvent: destroyEvent,
 
     special: {},
 
@@ -252,7 +274,18 @@ var evt = module.exports = {
                         el.removeEventListener(type, domHandlers[id], false) :
                         el.detachEvent('on' + type, domHandlers[id]);
                 }
+                delete domHandlers[id];
                 delete listeners[id][type];
+                var cnt = 0;
+                for (var a in listeners[id]) {
+                  if (listeners[id].hasOwnProperty(a)) {
+                    cnt++;
+                    break;
+                  }
+                }
+                if (cnt === 0) {
+                  delete listeners[id];
+                }
             }
         });
     },
@@ -284,6 +317,7 @@ utils.forEach({
                 evt.trigger(this, wrapped);
             }
         } catch(err) { }
+        evt.destroyEvent(wrapped);
     }
 
     evt.special[specialName] = {

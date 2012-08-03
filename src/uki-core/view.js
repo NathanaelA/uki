@@ -12,15 +12,15 @@ module.exports = {
     },
 
     unregister: function(view) {
-        delete registry[view.dom()[env.expando]];
+      delete registry[view.dom()[env.expando]];
     },
 
     registerId: function(view) {
-        ids[utils.prop(view, 'id')] = view;
+      ids[utils.prop(view, 'id')] = view;
     },
     
     unregisterId: function(view) {
-        delete ids[utils.prop(view, 'id')];
+      delete ids[utils.prop(view, 'id')];
     },
     
     byId: function(id) {
