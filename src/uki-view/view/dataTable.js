@@ -45,7 +45,7 @@ var DataTable = view.newClass('DataTable', Container, {
     destruct: function() {
       console.log("Destructing DataTable");
       Container.prototype.destruct.call(this);
-      dom.removeElement(this._dom);
+      this._dom = null;
     },
 
     header: function() {
@@ -878,6 +878,17 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
 
   },
 
+  destruct: function()
+  {
+      Base.prototype.destruct.call(this);
+      this._wrapper = null;
+      this._dom = null;
+      this._filter = null;
+      this._resizer = null;
+      this._labelElement = null;
+  },
+
+
   _setupResizeable: function() {
     if (this._resizable && this._sizeable) {
       this._resizer.style.display = '';
@@ -1110,7 +1121,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
 
 
     _createDom: function(initArgs) {
-        Base.prototype._createDom.call(this, initArgs);
+        Container.prototype._createDom.call(this, initArgs);
         this._rowheader = dom.createElement('tr', {className: 'uki-dataTable-header-row'});
         this._table = dom.createElement('table', { className: 'uki-dataTable-header' }, [this._rowheader]);
         this._dom = dom.createElement('div', null, [this._table]);
@@ -1173,12 +1184,32 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
     },
 
     destruct: function() {
-      console.log("Destructing AdvancedTableHeader");
+      console.log("Destructing AdvancedTableHeader", this);
+
+      if (this._menu) {
+        this._menu.destruct();
+        this._menu = null;
+      }
       this._styleSheet = null;
       this._cssRuleTracking = null;
-      Container.prototype.destruct.call(this);
+
       dom.removeElement(this._styleSheetElement);
-      dom.removeElement(this._dom);
+      this._styleSheetElement = null;
+
+      for (var i=0;i<this._columns.length;i++) {
+        this._columns[i].destruct();
+        this._columns[i] = null;
+      }
+
+
+      Container.prototype.destruct.call(this);
+
+      this._table = null;
+      this._dom = null;
+      this._rowheader = null;
+      this._lastFocusedFilter = null;
+      this._menuOptions = null;
+      this._columns = null;
     },
 
     _cssRuleTracking: null,

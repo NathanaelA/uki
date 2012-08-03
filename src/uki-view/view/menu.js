@@ -154,7 +154,6 @@ var Menu = view.newClass('Menu', Base, {
           this.trigger({
             type: "menuClick",
             name: name,
-            option: clickedItem,
             menu: this
           });
           try {
@@ -206,7 +205,6 @@ var Menu = view.newClass('Menu', Base, {
         this.trigger({
           type: "menuClick",
           name: name,
-          option: target,
           menu: this,
           params: target.params
         });

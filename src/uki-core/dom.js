@@ -188,6 +188,12 @@ module.exports = {
       return (cur);
     },
 
+    isDOMElement: function(o){
+      return ( typeof HTMLElement === "object" ? o instanceof HTMLElement : //DOM 2 Check
+        o && typeof o === "object" && o.nodeType > 0 && typeof o.nodeName==="string" // Check for Properties that would be present
+      );
+     },
+
     getChildren: function(item, childType) {
       var i, cur = [],
           child=item.children || [];

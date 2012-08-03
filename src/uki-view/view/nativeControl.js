@@ -26,6 +26,13 @@ var NativeControl = view.newClass('NativeControl', Base, Focusable, {
     domForEvent: function(type) {
         return Focusable._domForEvent.call(this, type) ||
             Base.prototype.domForEvent.call(this, type);
+    },
+
+    destruct: function() {
+      console.log('NC Destruct');
+      Base.prototype.destruct.call(this);
+      this._dom = null;
+      this._input = null;
     }
 
 });
@@ -352,6 +359,13 @@ var SVG = view.newClass('nativeControl.SVG', NativeControl, {
     }
   },
 
+  destruct: function() {
+    this.trigger({
+      type: "destruction"
+    });
+    NativeControl.prototype.destruct.call(this);
+  },
+
   hasFocus: function() {
     return this._dom == env.doc.activeElement;
   },
@@ -374,7 +388,15 @@ var Canvas = view.newClass('nativeControl.Canvas', NativeControl, {
   _createDom: function(initArgs) {
     this._dom = this._input = dom.createElement('canvase',
         { className: 'uki-nc-canvas' });
+  },
+
+  destruct: function() {
+    this.trigger({
+      type: "destruction"
+    });
+    NativeControl.prototype.destruct.call(this);
   }
+
 });
 
 /**

@@ -178,20 +178,27 @@ function createEvent(baseEvent, options) {
 }
 
 function destroyEvent(event) {
+
   for (var prop in event.prototype) {
     if (event.prototype.hasOwnProperty(prop)) {
-      event[prop] = null;
+      if (dom.isDOMElement(event.prototype[prop])) {
+        event.prototype[prop] = null;
+      }
     }
   }
   for (var prop in event) {
     if (event.hasOwnProperty(prop)) {
-      event[prop] = null;
+      if (dom.isDOMElement(event[prop])) {
+         event[prop] = null;
+      }
     }
   }
-  if (event.__proto__) {
-    for (var prop in event.__proto__) {
-      if (event.__proto__.hasOwnProperty(prop)) {
-        event.__proto__[prop] = null;
+  if (event.baseEvent) {
+    for (var prop in event.baseEvent) {
+      if (event.baseEvent.hasOwnProperty(prop)) {
+        if (dom.isDOMElement(event.baseEvent[prop])) {
+          event.baseEvent[prop] = null;
+        }
       }
     }
   }

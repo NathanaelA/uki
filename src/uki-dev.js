@@ -1096,18 +1096,24 @@
         function destroyEvent(event) {
             for (var prop in event.prototype) {
                 if (event.prototype.hasOwnProperty(prop)) {
-                    event[prop] = null;
+                    if (dom.isDOMElement(event.prototype[prop])) {
+                        event.prototype[prop] = null;
+                    }
                 }
             }
             for (var prop in event) {
                 if (event.hasOwnProperty(prop)) {
-                    event[prop] = null;
+                    if (dom.isDOMElement(event[prop])) {
+                        event[prop] = null;
+                    }
                 }
             }
-            if (event.__proto__) {
-                for (var prop in event.__proto__) {
-                    if (event.__proto__.hasOwnProperty(prop)) {
-                        event.__proto__[prop] = null;
+            if (event.baseEvent) {
+                for (var prop in event.baseEvent) {
+                    if (event.baseEvent.hasOwnProperty(prop)) {
+                        if (dom.isDOMElement(event.baseEvent[prop])) {
+                            event.baseEvent[prop] = null;
+                        }
                     }
                 }
             }
@@ -1366,6 +1372,9 @@
                     }
                 }
                 return cur;
+            },
+            isDOMElement: function(o) {
+                return typeof HTMLElement === "object" ? o instanceof HTMLElement : o && typeof o === "object" && o.nodeType > 0 && typeof o.nodeName === "string";
             },
             getChildren: function(item, childType) {
                 var i, cur = [], child = item.children || [];
@@ -2276,6 +2285,12 @@
             },
             domForEvent: function(type) {
                 return Focusable._domForEvent.call(this, type) || Base.prototype.domForEvent.call(this, type);
+            },
+            destruct: function() {
+                console.log("NC Destruct");
+                Base.prototype.destruct.call(this);
+                this._dom = null;
+                this._input = null;
             }
         });
         fun.delegateProp(NativeControl.prototype, [ "name", "checked", "disabled", "value", "type", "accessKey", "id", "autocomplete", "autofocus", "required", "pattern", "readonly", "maxlength", "spellcheck" ], "_input");
@@ -2513,6 +2528,12 @@
                     this._dom.focus();
                 } catch (err) {}
             },
+            destruct: function() {
+                this.trigger({
+                    type: "destruction"
+                });
+                NativeControl.prototype.destruct.call(this);
+            },
             hasFocus: function() {
                 return this._dom == env.doc.activeElement;
             },
@@ -2527,6 +2548,12 @@
                 this._dom = this._input = dom.createElement("canvase", {
                     className: "uki-nc-canvas"
                 });
+            },
+            destruct: function() {
+                this.trigger({
+                    type: "destruction"
+                });
+                NativeControl.prototype.destruct.call(this);
             }
         });
         var Button = view.newClass("nativeControl.Button", NativeControl, {
@@ -2756,7 +2783,6 @@
                         this.trigger({
                             type: "menuClick",
                             name: name,
-                            option: clickedItem,
                             menu: this
                         });
                         try {
@@ -2798,7 +2824,6 @@
                     this.trigger({
                         type: "menuClick",
                         name: name,
-                        option: target,
                         menu: this,
                         params: target.params
                     });
@@ -3748,7 +3773,7 @@
             destruct: function() {
                 console.log("Destructing DataTable");
                 Container.prototype.destruct.call(this);
-                dom.removeElement(this._dom);
+                this._dom = null;
             },
             header: function() {
                 return this._header;
@@ -4480,6 +4505,14 @@
                 }, [ this._wrapper ]);
                 fun.deferOnce(fun.bindOnce(this._finishSetup, this));
             },
+            destruct: function() {
+                Base.prototype.destruct.call(this);
+                this._wrapper = null;
+                this._dom = null;
+                this._filter = null;
+                this._resizer = null;
+                this._labelElement = null;
+            },
             _setupResizeable: function() {
                 if (this._resizable && this._sizeable) {
                     this._resizer.style.display = "";
@@ -4685,7 +4718,7 @@
             _styleSheet: null,
             _columns: null,
             _createDom: function(initArgs) {
-                Base.prototype._createDom.call(this, initArgs);
+                Container.prototype._createDom.call(this, initArgs);
                 this._rowheader = dom.createElement("tr", {
                     className: "uki-dataTable-header-row"
                 });
@@ -4750,12 +4783,26 @@
                 this._menu.options(lmenu);
             },
             destruct: function() {
-                console.log("Destructing AdvancedTableHeader");
+                console.log("Destructing AdvancedTableHeader", this);
+                if (this._menu) {
+                    this._menu.destruct();
+                    this._menu = null;
+                }
                 this._styleSheet = null;
                 this._cssRuleTracking = null;
-                Container.prototype.destruct.call(this);
                 dom.removeElement(this._styleSheetElement);
-                dom.removeElement(this._dom);
+                this._styleSheetElement = null;
+                for (var i = 0; i < this._columns.length; i++) {
+                    this._columns[i].destruct();
+                    this._columns[i] = null;
+                }
+                Container.prototype.destruct.call(this);
+                this._table = null;
+                this._dom = null;
+                this._rowheader = null;
+                this._lastFocusedFilter = null;
+                this._menuOptions = null;
+                this._columns = null;
             },
             _cssRuleTracking: null,
             _name: null,
