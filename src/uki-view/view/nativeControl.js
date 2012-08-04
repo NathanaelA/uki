@@ -29,10 +29,9 @@ var NativeControl = view.newClass('NativeControl', Base, Focusable, {
     },
 
     destruct: function() {
-      console.log('NC Destruct');
       Base.prototype.destruct.call(this);
-      this._dom = null;
       this._input = null;
+      this._label = null;
     }
 
 });
@@ -112,6 +111,11 @@ var Text = view.newClass('nativeControl.Text', NativeControl, {
     this._dom = dom.createElement(initArgs.tagName || 'span',
         { className: 'uki-nc-text' });
     this.dom().appendChild(this._input);
+  },
+
+  destruct: function() {
+    NativeControl.prototype.destruct.call(this);
+    this._placeholderDom = null;
   },
 
   placeholder: fun.newProp('placeholder', function(v) {
@@ -216,6 +220,12 @@ var TextArea = view.newClass('nativeControl.TextArea', NativeControl, {
     }
 
   },
+
+  destruct: function() {
+    NativeControl.prototype.destruct.call(this);
+    this._placeholderDom = null;
+  },
+
 
   _placeHolderAutoHide: true,
   placeHolderAutoHide: fun.newProp('placeHolderAutoHide'),

@@ -7,7 +7,7 @@ var view  = require('../view'),
     dom   = require('../dom'),
     evt   = require('../event'),
 
-    Binding = require('../binding').Binding;
+    Binding   = require('../binding').Binding;
 
 
 var POS_RULES = [
@@ -48,7 +48,6 @@ var Base = view.newClass('Base', {
     },
 
     destruct: function() {
-        console.log("Running BASE Destruct");
         view.unregisterId(this);
         view.unregister(this);
         this.removeListener();
@@ -58,6 +57,7 @@ var Base = view.newClass('Base', {
         if (parent && parent.removeChild) {
           parent.removeChild(this);
         }
+        this._dom = null;
     },
 
     _setup: fun.FS,

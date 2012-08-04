@@ -153,6 +153,16 @@ proto._createDom = function() {
     this._dom.appendChild(this._handle = this._createHandle());
 };
 
+proto.destruct = function() {
+
+  utils.forEach(this._exts, function(ext) {
+    this._handle.removeChild(ext);
+  }, this);
+
+  Container.prototype.destruct.call(this);
+  this._handle = null;
+};
+
 proto._throttledChildResize = function() {
     this._resizeChildViews();
 };

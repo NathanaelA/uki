@@ -42,12 +42,6 @@ var DataTable = view.newClass('DataTable', Container, {
         return this;
     },
 
-    destruct: function() {
-      console.log("Destructing DataTable");
-      Container.prototype.destruct.call(this);
-      this._dom = null;
-    },
-
     header: function() {
       return this._header;
     },
@@ -878,11 +872,9 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
 
   },
 
-  destruct: function()
-  {
+  destruct: function()  {
       Base.prototype.destruct.call(this);
       this._wrapper = null;
-      this._dom = null;
       this._filter = null;
       this._resizer = null;
       this._labelElement = null;
@@ -968,6 +960,11 @@ var DataTableFooter = view.newClass('DataTableFooter', Container, {
 
     // This is the parent static element
     this._dom = dom.createElement('div', { className: 'uki-hidden' }, [this._table]);
+  },
+
+  destruct: function() {
+    Container.prototype.destruct.call(this);
+    this._table = null;
   },
 
   columns: fun.newProp('columns', function(cols) {
@@ -1184,7 +1181,6 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
     },
 
     destruct: function() {
-      console.log("Destructing AdvancedTableHeader", this);
 
       if (this._menu) {
         this._menu.destruct();
@@ -1226,7 +1222,6 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
     },
 
     setRowStyle: function(row, name, value) {
-      //console.log("DataTableHeader This", this);
       var Key = "R"+row, id;
       if (this._cssRuleTracking[Key] == null) {
         var parentId = this.parent().CSSTableId();

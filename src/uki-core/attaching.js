@@ -28,6 +28,7 @@ var instances = null;
 Attaching.attach = function(dom, view, insertIt) {
     dom = dom || env.doc.body;
     var id = dom[env.expando] = dom[env.expando] || env.guid++;
+
     if (!instances || !instances[id]) {
         register(new Attaching({ dom: dom }));
     }
@@ -38,6 +39,14 @@ Attaching.attach = function(dom, view, insertIt) {
     }
     view.layout();
 };
+
+Attaching.removeInstance = function(id) {
+  if (instances[id]) {
+    instances[id] = null;
+    delete instances[id];
+  }
+};
+
 
 Attaching.instances = function() {
     var atts = [];
@@ -66,6 +75,7 @@ function register(a) {
     }
     var el = a.dom(),
         id = el[env.expando] = el[env.expando] || env.guid++;
+    a._instanceId = id;
 
     return (instances[id] = a);
 }

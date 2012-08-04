@@ -56,6 +56,11 @@ var DataList = view.newClass('DataList', Container, Focusable, {
         this.textSelectable(false);
     },
 
+    destruct: function() {
+      Container.prototype.destruct.call(this);
+      this._data = null;
+    },
+
     layout: function() {
         if (this._layoutBefore) {
             this._wrappedUpdate();

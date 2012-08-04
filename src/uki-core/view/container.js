@@ -17,7 +17,6 @@ var Container = view.newClass('Container', Base, {
     },
 
     destruct: function() {
-        console.log("Container Destruct");
         utils.invoke(this.childViews(), 'destruct');
         Base.prototype.destruct.call(this);
     },
@@ -67,6 +66,10 @@ var Container = view.newClass('Container', Base, {
         this._childViews = utils.without(this._childViews, child);
         this._removeChildFromDom(child);
         this._childrenChanged();
+        if (this._childViews.length === 0 && this.typeName === "Attaching" ) {
+          this._dom = null;
+          require('../attaching' ).Attaching.removeInstance(this._instanceId);
+        }
         return this;
     },
 

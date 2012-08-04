@@ -33,8 +33,6 @@ var Menu = view.newClass('Menu', Base, {
       }
 
       Base.prototype.destruct.call(this);
-      this._dom = null;
-      this._parent = null;
       this._options = null;
     },
     _clearChildren: function(domNode, level) {

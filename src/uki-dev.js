@@ -970,6 +970,12 @@
             }
             view.layout();
         };
+        Attaching.removeInstance = function(id) {
+            if (instances[id]) {
+                instances[id] = null;
+                delete instances[id];
+            }
+        };
         Attaching.instances = function() {
             var atts = [];
             utils.forEach(instances || {}, function(a) {
@@ -994,6 +1000,7 @@
                 });
             }
             var el = a.dom(), id = el[env.expando] = el[env.expando] || env.guid++;
+            a._instanceId = id;
             return instances[id] = a;
         }
         exports.Attaching = Attaching;
@@ -1402,7 +1409,6 @@
                 this._childViews = [];
             },
             destruct: function() {
-                console.log("Container Destruct");
                 utils.invoke(this.childViews(), "destruct");
                 Base.prototype.destruct.call(this);
             },
@@ -1438,6 +1444,10 @@
                 this._childViews = utils.without(this._childViews, child);
                 this._removeChildFromDom(child);
                 this._childrenChanged();
+                if (this._childViews.length === 0 && this.typeName === "Attaching") {
+                    this._dom = null;
+                    require(11).Attaching.removeInstance(this._instanceId);
+                }
                 return this;
             },
             _removeChildFromDom: function(child) {
@@ -1524,7 +1534,6 @@
                 view.register(this);
             },
             destruct: function() {
-                console.log("Running BASE Destruct");
                 view.unregisterId(this);
                 view.unregister(this);
                 this.removeListener();
@@ -1534,6 +1543,7 @@
                 if (parent && parent.removeChild) {
                     parent.removeChild(this);
                 }
+                this._dom = null;
             },
             _setup: fun.FS,
             _createDom: function(initArgs) {
@@ -2229,8 +2239,9 @@
                 }, [ this._text ]);
             },
             destruct: function() {
-                Focusable.destruct.call(this);
-                Base.destruct.call(this);
+                Base.prototype.destruct.call(this);
+                this._text = null;
+                this._iconDom = null;
             }
         });
         function updateImageOnly() {
@@ -2287,10 +2298,9 @@
                 return Focusable._domForEvent.call(this, type) || Base.prototype.domForEvent.call(this, type);
             },
             destruct: function() {
-                console.log("NC Destruct");
                 Base.prototype.destruct.call(this);
-                this._dom = null;
                 this._input = null;
+                this._label = null;
             }
         });
         fun.delegateProp(NativeControl.prototype, [ "name", "checked", "disabled", "value", "type", "accessKey", "id", "autocomplete", "autofocus", "required", "pattern", "readonly", "maxlength", "spellcheck" ], "_input");
@@ -2355,6 +2365,10 @@
                     className: "uki-nc-text"
                 });
                 this.dom().appendChild(this._input);
+            },
+            destruct: function() {
+                NativeControl.prototype.destruct.call(this);
+                this._placeholderDom = null;
             },
             placeholder: fun.newProp("placeholder", function(v) {
                 this._placeholder = v;
@@ -2428,6 +2442,10 @@
                 if (initArgs["id"] != null) {
                     this._input.id = "textarea" + initArgs["id"];
                 }
+            },
+            destruct: function() {
+                NativeControl.prototype.destruct.call(this);
+                this._placeholderDom = null;
             },
             _placeHolderAutoHide: true,
             placeHolderAutoHide: fun.newProp("placeHolderAutoHide"),
@@ -2686,8 +2704,6 @@
                     evt.removeListener(env.doc, "click", this._bindedTouchOut);
                 }
                 Base.prototype.destruct.call(this);
-                this._dom = null;
-                this._parent = null;
                 this._options = null;
             },
             _clearChildren: function(domNode, level) {
@@ -3011,6 +3027,13 @@
             } ]).appendTo(this);
             this._dom.appendChild(this._handle = this._createHandle());
         };
+        proto.destruct = function() {
+            utils.forEach(this._exts, function(ext) {
+                this._handle.removeChild(ext);
+            }, this);
+            Container.prototype.destruct.call(this);
+            this._handle = null;
+        };
         proto._throttledChildResize = function() {
             this._resizeChildViews();
         };
@@ -3184,6 +3207,10 @@
                 this.metrics().initWithView(this);
                 this.selectionController().initWithView(this);
                 this.textSelectable(false);
+            },
+            destruct: function() {
+                Container.prototype.destruct.call(this);
+                this._data = null;
             },
             layout: function() {
                 if (this._layoutBefore) {
@@ -3769,11 +3796,6 @@
                     this.focus();
                 }
                 return this;
-            },
-            destruct: function() {
-                console.log("Destructing DataTable");
-                Container.prototype.destruct.call(this);
-                this._dom = null;
             },
             header: function() {
                 return this._header;
@@ -4508,7 +4530,6 @@
             destruct: function() {
                 Base.prototype.destruct.call(this);
                 this._wrapper = null;
-                this._dom = null;
                 this._filter = null;
                 this._resizer = null;
                 this._labelElement = null;
@@ -4581,6 +4602,10 @@
                 this._dom = dom.createElement("div", {
                     className: "uki-hidden"
                 }, [ this._table ]);
+            },
+            destruct: function() {
+                Container.prototype.destruct.call(this);
+                this._table = null;
             },
             columns: fun.newProp("columns", function(cols) {
                 this._columns = cols;
@@ -4783,7 +4808,6 @@
                 this._menu.options(lmenu);
             },
             destruct: function() {
-                console.log("Destructing AdvancedTableHeader", this);
                 if (this._menu) {
                     this._menu.destruct();
                     this._menu = null;

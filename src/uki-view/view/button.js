@@ -53,8 +53,9 @@ var Button = view.newClass('Button', Base, Focusable, {
     },
 
     destruct: function() {
-        Focusable.destruct.call(this);
-        Base.destruct.call(this);
+        Base.prototype.destruct.call(this);
+        this._text = null;
+        this._iconDom = null;
     }
 });
 
