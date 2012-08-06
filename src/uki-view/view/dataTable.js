@@ -1605,6 +1605,15 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
           cols[i]["init"] = {pos: cols[i].pos, cssRule: cssRule, filterable: this._filterable, initfocus: cols[i].initfocus};
         }
         this._childViews = [];
+
+        // Destroy old Columns
+        if (this._columns && this._columns.length) {
+          for (var i=0;i<this._columns.length;i++) {
+            this._columns[i].destruct();
+            this._columns[i] = null;
+          }
+        }
+
         this._columns = build(cols);
         this._columns.appendTo(this);
         this._table.style.width = this.totalWidth()+"px";
@@ -2066,6 +2075,10 @@ var DataTableList = view.newClass('DataTableList', DataList, {
     _createDom: function(initArgs) {
         DataList.prototype._createDom.call(this, initArgs);
         this.addClass('uki-dataTable-list');
+    },
+
+    destruct: function() {
+      DataList.prototype.destruct.call(this);
     },
 
     _updateColumnSize: function(pos) {

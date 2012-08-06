@@ -60,6 +60,11 @@ var Pack = fun.newClass(Base, {
         });
     },
 
+    destruct: function() {
+      Base.prototype.destruct.call(this);
+      this._tbody = null;
+    },
+
     _rowAt: function(pos) {
         return this._tbody && this._tbody.childNodes[pos];
     },

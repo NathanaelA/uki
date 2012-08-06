@@ -3329,6 +3329,7 @@
                 pack.render([ sample ], [], 0);
                 var rowHeight = pack.dom().offsetHeight;
                 this.removeChild(pack);
+                pack.destruct();
                 return rowHeight;
             },
             redrawRow: function(index) {
@@ -3394,7 +3395,9 @@
                 } else if (packs.length && fromPX <= range.from) {
                     i = 0;
                     while (packs[i] && packs[i].toPX < range.from) {
-                        this.removeChild(packs[i++]);
+                        this.removeChild(packs[i]);
+                        packs[i].destruct();
+                        i++;
                     }
                     packs = packs.slice(i);
                     range.from = packs.length ? packs[packs.length - 1].toPX : range.from;
@@ -3402,7 +3405,9 @@
                 } else if (packs.length && toPX >= range.to) {
                     i = packs.length - 1;
                     while (packs[i] && packs[i].fromPX > range.to) {
-                        this.removeChild(packs[i--]);
+                        this.removeChild(packs[i]);
+                        packs[i].destruct();
+                        i--;
                     }
                     packs = packs.slice(0, i + 1);
                     range.to = packs.length ? packs[0].fromPX : range.to;
@@ -3410,7 +3415,9 @@
                 } else {
                     i = 0;
                     while (packs[i]) {
-                        this.removeChild(packs[i++]);
+                        this.removeChild(packs[i]);
+                        packs[i].destruct();
+                        i++;
                     }
                     packs = [];
                 }
@@ -5193,6 +5200,12 @@
                         };
                     }
                     this._childViews = [];
+                    if (this._columns && this._columns.length) {
+                        for (var i = 0; i < this._columns.length; i++) {
+                            this._columns[i].destruct();
+                            this._columns[i] = null;
+                        }
+                    }
                     this._columns = build(cols);
                     this._columns.appendTo(this);
                     this._table.style.width = this.totalWidth() + "px";
@@ -5297,6 +5310,9 @@
                 DataList.prototype._createDom.call(this, initArgs);
                 this.addClass("uki-dataTable-list");
             },
+            destruct: function() {
+                DataList.prototype.destruct.call(this);
+            },
             _updateColumnSize: function(pos) {
                 var column = this.columns()[pos];
                 utils.forEach(this.childViews(), function(pack) {
@@ -5387,6 +5403,10 @@
                 this._dom = dom.createElement("div", {
                     className: "uki-dataList-pack"
                 });
+            },
+            destruct: function() {
+                Base.prototype.destruct.call(this);
+                this._tbody = null;
             },
             _rowAt: function(pos) {
                 return this._tbody && this._tbody.childNodes[pos];
