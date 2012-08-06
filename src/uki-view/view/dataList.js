@@ -256,7 +256,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
 
     _renderingRange: function() {
         var range = this._visibleRange();
-        if (!range) { return null; };
+        if (!range) { return null; }
         var h = (range.to - range.from) * this.prerender();
 
         range.from = Math.max(0, range.from - h);
@@ -428,7 +428,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
         for (var i=0, l = indexes.length; i < l; i++) {
             var item = this._data.slice(indexes[i], indexes[i]+1)[0];
             if (item) result.push(item);
-        };
+        }
         return result;
     },
 

@@ -108,7 +108,7 @@ function normalize(e) {
     }
 
     return e;
-};
+}
 
 /**
 * Store all the handlers manually so we can override event behaviour
@@ -149,7 +149,7 @@ function domHandler(e) {
 }
 
 function wrapDomEvent(baseEvent) {
-    e = new DomEventWrapper();
+    var e = new DomEventWrapper();
     e.baseEvent = baseEvent;
     // This is expensive. I'd rather use much faster createEvent() here.
     // Unfortunately firefox uses read only properties on native events,
@@ -168,7 +168,7 @@ function createEvent(baseEvent, options) {
     // dynamicaly created event object than to copy all properties
     // from base event.
     EventWrapper.prototype = baseEvent;
-    e = new EventWrapper();
+    var e = new EventWrapper();
     utils.extend(e, EventMethods);
     e.baseEvent = baseEvent;
     e.simulatePropagation = baseEvent.simulatePropagation === undefined ?
@@ -178,15 +178,15 @@ function createEvent(baseEvent, options) {
 }
 
 function destroyEvent(event) {
-
-  for (var prop in event.prototype) {
+  var prop;
+  for (prop in event.prototype) {
     if (event.prototype.hasOwnProperty(prop)) {
       if (dom.isDOMElement(event.prototype[prop])) {
         event.prototype[prop] = null;
       }
     }
   }
-  for (var prop in event) {
+  for (prop in event) {
     if (event.hasOwnProperty(prop)) {
       if (dom.isDOMElement(event[prop])) {
          event[prop] = null;
@@ -194,7 +194,7 @@ function destroyEvent(event) {
     }
   }
   if (event.baseEvent) {
-    for (var prop in event.baseEvent) {
+    for (prop in event.baseEvent) {
       if (event.baseEvent.hasOwnProperty(prop)) {
         if (dom.isDOMElement(event.baseEvent[prop])) {
           event.baseEvent[prop] = null;
@@ -322,9 +322,10 @@ utils.forEach({
                     simulatePropagation: true
                 });
                 evt.trigger(this, wrapped);
+                evt.destroyEvent(wrapped);
             }
         } catch(err) { }
-        evt.destroyEvent(wrapped);
+
     }
 
     evt.special[specialName] = {

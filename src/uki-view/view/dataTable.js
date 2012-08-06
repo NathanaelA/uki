@@ -119,8 +119,7 @@ var DataTable = view.newClass('DataTable', Container, {
     },
 
     _recalculateTableSizes: function() {
-			var mwidth = this._header.totalWidth() + "px";
-   		this._header._table.style.width = mwidth;
+   		this._header._table.style.width = this._header.totalWidth() + "px";
 
 		  // The following 2 lines are necessary because of chrome layout weirdness
 			this._footer._table.style.width = dom.computedStyle(this._header._table).width;
@@ -259,7 +258,7 @@ var DataTable = view.newClass('DataTable', Container, {
             column: col
           });
         }
-        catch (err) {};
+        catch (err) {}
       }
       var parent = this._Editors[col]._dom.parentNode;
       dom.removeElement(this._Editors[col]._dom);
@@ -509,7 +508,7 @@ var DataTable = view.newClass('DataTable', Container, {
         rownum--;
       }
       this.list()._update();
-      this.scrollToIndex(this.rownum);
+      this.scrollToIndex(rownum);
       // Gives Dom enough time to draw new row
       fun.deferOnce( fun.bindOnce(this._delayedMoveForInsert, this) );
     },
@@ -657,11 +656,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
   maxWidth: fun.newProp( 'maxWidth', function ( v ) {
     if ( arguments.length ) {
       this._maxWidth = Math.max( v, this._width );
-      if (this._minWidth == this._maxWidth) {
-        this._sizeable = false;
-      } else {
-        this._sizeable = true;
-      }
+      this._sizeable = this._minWidth != this._maxWidth;
       this._setupResizeable();
     }
     return this._maxWidth;
@@ -684,11 +679,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
   minWidth: fun.newProp( 'minWidth', function ( v ) {
     if ( arguments.length ) {
       this._minWidth = Math.min( v, this._width );
-      if (this._minWidth == this._maxWidth) {
-        this._sizeable = false;
-      } else {
-        this._sizeable = true;
-      }
+      this._sizeable = this._minWidth != this._maxWidth;
       this._setupResizeable();
     }
     return this._minWidth;
@@ -1569,7 +1560,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
 
     _drag: function(e) {
         if (this._draggableColumn == -1) return;
-      var width = this._initialWidth
+      var width = this._initialWidth;
       if ( e.dragOffset != null) {
           width += e.dragOffset.x;
         } else {
@@ -2103,7 +2094,7 @@ var table = {
                 className: '',
                 visible: true,
                 sort: 0,
-                formatter: dom.escapeHTML,
+                formatter: dom.escapeHTML
             }, col);
             col.minWidth = Math.min(col.minWidth || 20, col.width);
             if (col.maxWidth > 0) {

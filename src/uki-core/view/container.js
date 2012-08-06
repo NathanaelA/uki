@@ -28,7 +28,7 @@ var Container = view.newClass('Container', Base, {
 
     /**
      * Sets or retrieves view child view.
-     * @param anything build can parse
+     * @param val anything build can parse
      *
      * Note: if setting on view with child views, all child view will be removed
      */
@@ -62,7 +62,7 @@ var Container = view.newClass('Container', Base, {
             i, l;
         for (i = index+1, l = this._childViews.length; i < l; i++) {
             this._childViews[i]._viewIndex--;
-        };
+        }
         this._childViews = utils.without(this._childViews, child);
         this._removeChildFromDom(child);
         this._childrenChanged();
@@ -121,7 +121,7 @@ var Container = view.newClass('Container', Base, {
         child._viewIndex = beforeChild._viewIndex;
         for (; i < l; i++) {
             this._childViews[i]._viewIndex++;
-        };
+        }
         this._childViews.splice(beforeChild._viewIndex-1, 0, child);
         child.parent(this);
         this._insertBeforeInDom(child, beforeChild);

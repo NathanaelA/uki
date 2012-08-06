@@ -77,10 +77,10 @@ utils.toArray = function(array) {
 };
 
 utils.pluck = function(array, prop) {
-    function reader(v) {
+  function reader(v) {
         return utils.prop(v, prop);
-    };
-    return array.map ?
+  }
+  return array.map ?
         array.map(reader) :
         utils.map(array, reader);
 };
@@ -88,7 +88,7 @@ utils.pluck = function(array, prop) {
 utils.without = function(array, value) {
     function filter(v) {
         return v !== value;
-    };
+    }
 
     return array.filter ?
         array.filter(filter) :

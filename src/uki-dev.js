@@ -1082,7 +1082,7 @@
             evt.trigger(this, normalize(wrapped));
         }
         function wrapDomEvent(baseEvent) {
-            e = new DomEventWrapper;
+            var e = new DomEventWrapper;
             e.baseEvent = baseEvent;
             for (var i = eventProps.length, prop; i >= -1; i--) {
                 prop = eventProps[i];
@@ -1093,7 +1093,7 @@
         }
         function createEvent(baseEvent, options) {
             EventWrapper.prototype = baseEvent;
-            e = new EventWrapper;
+            var e = new EventWrapper;
             utils.extend(e, EventMethods);
             e.baseEvent = baseEvent;
             e.simulatePropagation = baseEvent.simulatePropagation === undefined ? true : baseEvent.simulatePropagation;
@@ -1101,14 +1101,15 @@
             return e;
         }
         function destroyEvent(event) {
-            for (var prop in event.prototype) {
+            var prop;
+            for (prop in event.prototype) {
                 if (event.prototype.hasOwnProperty(prop)) {
                     if (dom.isDOMElement(event.prototype[prop])) {
                         event.prototype[prop] = null;
                     }
                 }
             }
-            for (var prop in event) {
+            for (prop in event) {
                 if (event.hasOwnProperty(prop)) {
                     if (dom.isDOMElement(event[prop])) {
                         event[prop] = null;
@@ -1116,7 +1117,7 @@
                 }
             }
             if (event.baseEvent) {
-                for (var prop in event.baseEvent) {
+                for (prop in event.baseEvent) {
                     if (event.baseEvent.hasOwnProperty(prop)) {
                         if (dom.isDOMElement(event.baseEvent[prop])) {
                             event.baseEvent[prop] = null;
@@ -1211,9 +1212,9 @@
                             simulatePropagation: true
                         });
                         evt.trigger(this, wrapped);
+                        evt.destroyEvent(wrapped);
                     }
                 } catch (err) {}
-                evt.destroyEvent(wrapped);
             }
             evt.special[specialName] = {
                 setup: function(el, listener) {
@@ -3928,8 +3929,7 @@
                 this._list = c.view("list");
             },
             _recalculateTableSizes: function() {
-                var mwidth = this._header.totalWidth() + "px";
-                this._header._table.style.width = mwidth;
+                this._header._table.style.width = this._header.totalWidth() + "px";
                 this._footer._table.style.width = dom.computedStyle(this._header._table).width;
                 this._header.scrollLeft(0);
             },
@@ -4254,7 +4254,7 @@
                     rownum--;
                 }
                 this.list()._update();
-                this.scrollToIndex(this.rownum);
+                this.scrollToIndex(rownum);
                 fun.deferOnce(fun.bindOnce(this._delayedMoveForInsert, this));
             },
             _delayedMoveForInsert: function() {
@@ -4374,11 +4374,7 @@
             maxWidth: fun.newProp("maxWidth", function(v) {
                 if (arguments.length) {
                     this._maxWidth = Math.max(v, this._width);
-                    if (this._minWidth == this._maxWidth) {
-                        this._sizeable = false;
-                    } else {
-                        this._sizeable = true;
-                    }
+                    this._sizeable = this._minWidth != this._maxWidth;
                     this._setupResizeable();
                 }
                 return this._maxWidth;
@@ -4403,11 +4399,7 @@
             minWidth: fun.newProp("minWidth", function(v) {
                 if (arguments.length) {
                     this._minWidth = Math.min(v, this._width);
-                    if (this._minWidth == this._maxWidth) {
-                        this._sizeable = false;
-                    } else {
-                        this._sizeable = true;
-                    }
+                    this._sizeable = this._minWidth != this._maxWidth;
                     this._setupResizeable();
                 }
                 return this._minWidth;

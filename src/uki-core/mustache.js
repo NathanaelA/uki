@@ -206,21 +206,21 @@ Renderer.prototype = {
 };
 
 var Mustache = {
-    version: "0.3.1-uki",
+  version: "0.3.1-uki",
 
-    /*
-    Turns a template and view into HTML
-    */
-    to_html: function(template, view, partials, send_fun) {
-        var renderer = new Renderer();
-        if(send_fun) {
-            renderer.send = send_fun;
-        }
-        renderer.render(template, view, partials);
-        if(!send_fun) {
-            return renderer.buffer.join("\n");
-        }
+  /*
+   Turns a template and view into HTML
+   */
+  to_html: function ( template, view, partials, send_fun ) {
+    var renderer = new Renderer();
+    if ( send_fun ) {
+      renderer.send = send_fun;
     }
-}
+    renderer.render( template, view, partials );
+    if ( !send_fun ) {
+      return renderer.buffer.join( "\n" );
+    }
+  }
+};
 
 exports.Mustache = Mustache;
