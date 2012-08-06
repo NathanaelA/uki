@@ -418,7 +418,7 @@ var Button = view.newClass('nativeControl.Button', NativeControl, {
     _createDom: function(initArgs) {
         this._dom = this._input = dom.createElement('input',
             { className: 'uki-nc-button', type: 'button' });
-    },
+    }
 });
 
 /**
@@ -478,7 +478,7 @@ function appendOptions (root, options) {
 
 require('../../uki-core/collection').Collection.addProps([
     'name', 'checked', 'disabled', 'value', 'type', 'placeholder',
-    'disabled', 'options', 'selectedIndex', 'src',
+    'disabled', 'options', 'selectedIndex', 'src'
 ]);
 exports.nativeControl = {
     NativeControl: NativeControl,
