@@ -13,7 +13,7 @@
   overflow: visible !important;
 }
 
-.uki-nc-text, .uki-nc-textarea {
+.uki-nc-text, uki-nc-checkbox, .uki-nc-textarea {
     display: inline-block;
     *display: inline;
     *zoom: 1;
