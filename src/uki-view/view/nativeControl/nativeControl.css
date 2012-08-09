@@ -3,14 +3,21 @@
 }
 
 .uki-nc-svg-wrapper {
-  border: #000 solid thin;
-  overflow: auto;
+  overflow: hidden;
   display: inline-block;
-  padding: 1px;
+  padding: 0px;
+  margin-bottom: -4px;
 }
 
 .uki-nc-svg {
   overflow: visible !important;
+  display: inline-block;
+  border: #000 solid thin;
+  margin-bottom: -3px;
+}
+
+input:disabled,textarea:disabled {
+  padding: 0px 0px;
 }
 
 .uki-nc-text, uki-nc-checkbox, .uki-nc-textarea {

@@ -167,8 +167,7 @@ var Text = view.newClass('nativeControl.Text', NativeControl, {
         sourceStyle = dom.computedStyle(this._input);
 
     utils.forEach(['font', 'fontFamily', 'fontSize',
-      'paddingLeft', 'paddingTop', 'padding'], function(name) {
-      if (sourceStyle[name] !== undefined) {
+      'paddingLeft', 'paddingTop', 'padding'], function(name) { if ( sourceStyle[name] !== undefined) {
         targetStyle[name] = sourceStyle[name];
       }
     });
@@ -384,7 +383,25 @@ var SVG = view.newClass('nativeControl.SVG', NativeControl, {
     try {
       if (this.hasFocus()) this._dom.blur();
     } catch (err) {}
-  }
+  },
+/*
+  width: function (v) {
+    if (arguments.length) {
+      var w = parseInt(v,10);
+      this._dom.style.width = w+"px";
+      this._input.style.width = w+"px";
+    }
+    return (this._input.style.width);
+  },
+
+  height: function (v) {
+    if (arguments.length) {
+      var w = parseInt(v,10);
+      this._dom.style.height = w+"px";
+      this._input.style.height= w+"px";
+    }
+    return (this._input.style.height);
+  }, */
 
 });
 //fun.delegateProp(SVG.prototype, ['width','height'], '_dom', ['style.width','style.height']);
