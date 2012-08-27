@@ -154,7 +154,10 @@ var Base = view.newClass('Base', {
     * @returns {string|view.Base} current id or self
     */
     id: function(id) {
-        if (!arguments.length) { return this.dom().id; }
+        if (!arguments.length) {
+          if (this.dom() === null || this.dom() === undefined) return null;
+          return this.dom().id;
+        }
         if (this.dom().id) { view.unregisterId(this); }
         this.dom().id = id;
         view.registerId(this);

@@ -77,10 +77,18 @@ var DataTable = view.newClass('DataTable', Container, {
     }),
     _editInPlace: false,
 
+    menudom: function() {
+      return this._menudom;
+    },
+
     _createDom: function(initArgs) {
         _DataTableCounter++;
         this._CSSTableId = _DataTableCounter;
         this._dom = dom.createElement('div', {className: 'uki-dataTable uki-dataTable'+this._CSSTableId});
+        var w1 = dom.createElement('div', {className: 'uki-menu-w1'} );
+        this._menudom = dom.createElement('div', {className: 'uki-menu-w2'});
+        w1.appendChild(this._menudom);
+        this._dom.appendChild(w1);
 
         var c = build([
 
@@ -666,6 +674,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
     if ( arguments.length ) {
       var newWidth = Math.min( Math.max( v, this._minWidth ), this._maxWidth == 0 ? v : this._maxWidth);
       if ( newWidth != this._width ) {
+        console.log(this);
         this._width = newWidth;
         if ( this.parent() != null ) {
           this.parent().updateCSSRules( this._cssRule, 'width', this._width + "px" );
@@ -1147,7 +1156,8 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
       if (this._hasMenu) {
         var found=false;
         if (this._menu.parent() == null || this._menu.parent().length == 0) {
-          this._menu.attach(this.parent().dom(), false);
+
+          this._menu.attach(this.parent().menudom(), false);
           for(var i=0;i<this._columns.length;i++) {
             if (found || this._columns[i].visible() === false) {
               this._columns[i].hasMenu(false);
