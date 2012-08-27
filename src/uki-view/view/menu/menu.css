@@ -1,5 +1,4 @@
 
-
 .uki-menu-horizontal {
   list-style:none;
   padding: 0;
@@ -17,7 +16,7 @@
   z-index: 500;
   position: absolute;
   left: 0;
-  width: 10em;
+  min-width: 10em;
  }
 
 .uki-menu-horizontal ul {
