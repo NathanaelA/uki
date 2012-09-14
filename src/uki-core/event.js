@@ -96,6 +96,15 @@ function normalize(e) {
         e.which = e.charCode != null ? e.charCode : e.keyCode;
     }
 
+    // Hack for QT Webkit (phantomJS) sometimes not filling in charCode/keyCode properly
+    if ( (e.type === 'keydown' || e.type === 'keyup') && e.charCode === 0 && e.keyCode === 0 && e.baseEvent != null && e.baseEvent.keyIdentifier != null) {
+      if (e.baseEvent.keyIdentifier[0] === 'U' && e.baseEvent.keyIdentifier[1] === '+') {
+        e.keyCode = parseInt( e.baseEvent.keyIdentifier.toString().substr(2), 16);
+        if ( e.keyCode === 9 ) { e.keyCode = 0; }
+        else e.which = e.keyCode;
+      }
+    }
+
     // Add metaKey to non-Mac browsers (use ctrl for PC's and Meta for Macs)
     e.metaKey = e.metaKey || e.ctrlKey;
 

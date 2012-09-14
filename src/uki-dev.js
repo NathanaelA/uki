@@ -714,18 +714,18 @@
     };
     require_modules[9] = function(global, module, require) {
         var exports = this;
-        var utils = require(4), Collection = require(8).Collection, idRegexp = /^#((?:[\w\u00c0-\uFFFF_-]|\\.)+)$/, chunker = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^[\]]*\]|['"][^'"]*['"]|[^[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?/g, regexps = [ {
+        var utils = require(4), Collection = require(8).Collection, idRegexp = /^#((?:[\w\u00c0-\uFFFF_\.\-]|\\.)+)$/, chunker = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^[\]]*\]|['"][^'"]*['"]|[^[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?/g, regexps = [ {
             name: "ID",
-            regexp: /#((?:[\w\u00c0-\uFFFF_-]|\\.)+)/
+            regexp: /#((?:[\w\u00c0-\uFFFF_\.\-]|\\.)+)/
         }, {
             name: "INST",
-            regexp: /\[\s*instanceof\s+((?:[\w\u00c0-\uFFFF_.-]|\\.)+)\s*\]/
+            regexp: /\[\s*instanceof\s+((?:[\w\u00c0-\uFFFF_\.\-]|\\.)+)\s*\]/
         }, {
             name: "PROP",
-            regexp: /\[\s*((?:[\w\u00c0-\uFFFF_-]|\\.)+)\s*(?:(\S?=)\s*(['"]*)(.*?)\3|)\s*\]/
+            regexp: /\[\s*((?:[\w\u00c0-\uFFFF_\.\-]|\\.)+)\s*(?:(\S?=)\s*(['"]*)(.*?)\3|)\s*\]/
         }, {
             name: "TYPE",
-            regexp: /^((?:[\w\u00c0-\uFFFF\*_\.-]|\\.)+)/
+            regexp: /^((?:[\w\u00c0-\uFFFF\*_\.\-]|\\.)+)/
         }, {
             name: "POS",
             regexp: /:(nth|eq|gt|lt|first|last|even|odd)(?:\((\d*)\))?(?=[^-]|$)/
@@ -1066,6 +1066,14 @@
             }
             if (e.which == null && (e.charCode != null || e.keyCode != null)) {
                 e.which = e.charCode != null ? e.charCode : e.keyCode;
+            }
+            if ((e.type === "keydown" || e.type === "keyup") && e.charCode === 0 && e.keyCode === 0 && e.baseEvent != null && e.baseEvent.keyIdentifier != null) {
+                if (e.baseEvent.keyIdentifier[0] === "U" && e.baseEvent.keyIdentifier[1] === "+") {
+                    e.keyCode = parseInt(e.baseEvent.keyIdentifier.toString().substr(2), 16);
+                    if (e.keyCode === 9) {
+                        e.keyCode = 0;
+                    } else e.which = e.keyCode;
+                }
             }
             e.metaKey = e.metaKey || e.ctrlKey;
             if (!e.which && e.button !== undefined) {

@@ -1,13 +1,13 @@
 /**#@+ @ignore */
 var utils = require('./utils'),
     Collection = require('./collection').Collection,
-    idRegexp = /^#((?:[\w\u00c0-\uFFFF_-]|\\.)+)$/,
+    idRegexp = /^#((?:[\w\u00c0-\uFFFF_\.\-]|\\.)+)$/,
     chunker = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^[\]]*\]|['"][^'"]*['"]|[^[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?/g,
     regexps = [ // enforce order
-        { name: 'ID', regexp: /#((?:[\w\u00c0-\uFFFF_-]|\\.)+)/ },
-        { name: 'INST', regexp: /\[\s*instanceof\s+((?:[\w\u00c0-\uFFFF_.-]|\\.)+)\s*\]/ },
-        { name: 'PROP', regexp: /\[\s*((?:[\w\u00c0-\uFFFF_-]|\\.)+)\s*(?:(\S?=)\s*(['"]*)(.*?)\3|)\s*\]/ },
-        { name: 'TYPE', regexp: /^((?:[\w\u00c0-\uFFFF\*_\.-]|\\.)+)/ },
+        { name: 'ID', regexp: /#((?:[\w\u00c0-\uFFFF_\.\-]|\\.)+)/ },
+        { name: 'INST', regexp: /\[\s*instanceof\s+((?:[\w\u00c0-\uFFFF_\.\-]|\\.)+)\s*\]/ },
+        { name: 'PROP', regexp: /\[\s*((?:[\w\u00c0-\uFFFF_\.\-]|\\.)+)\s*(?:(\S?=)\s*(['"]*)(.*?)\3|)\s*\]/ },
+        { name: 'TYPE', regexp: /^((?:[\w\u00c0-\uFFFF\*_\.\-]|\\.)+)/ },
         { name: 'POS',  regexp: /:(nth|eq|gt|lt|first|last|even|odd)(?:\((\d*)\))?(?=[^-]|$)/ }
     ],
     posRegexp = regexps.POS,
