@@ -175,7 +175,7 @@ var Text = view.newClass('nativeControl.Text', NativeControl, {
     targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft, 10) || 0) +
         (parseInt(sourceStyle.borderLeftWidth, 10) || 0) + 'px';
     targetStyle.width = "98%"; //(parseInt(sourceStyle.width,10)-3) + 'px';
-    targetStyle.textAlign = "right";
+    //targetStyle.textAlign = "left";
 
 
    // textProto._updatePlaceholderHeight = fun.FS;
@@ -318,7 +318,7 @@ var TextArea = view.newClass('nativeControl.TextArea', NativeControl, {
 //    targetStyle.height = sourceStyle.height;
     targetStyle.width = "99%"; //(parseInt(sourceStyle.width,10)-3) + "px";
     targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft, 10) || 0) + (parseInt(sourceStyle.borderLeftWidth, 10) || 0) + 'px';
-    targetStyle.textAlign = "right";
+    //targetStyle.textAlign = "right";
 //    targetStyle.display = "table-cell";
 //    targetStyle.verticalAlign = "bottom";
   }

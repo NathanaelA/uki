@@ -33,7 +33,9 @@ input:disabled,textarea:disabled {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+
 }
+
 
 .uki-nc-text_with-placeholder, .uki-nc-textarea_with-placeholder {
     position: relative;
@@ -44,4 +46,13 @@ input:disabled,textarea:disabled {
     color: #888;
     opacity:0.5;
     pointer-events: none;
+    text-align: right;
+}
+
+.uki-nc-text__input {
+  text-align: right;
+}
+
+.uki-nc-text__placholder {
+    text-align: left;
 }
