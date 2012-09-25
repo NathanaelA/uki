@@ -744,11 +744,17 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
         } else if (v === 2) {
           dom.addClass( this._labelElement, "uki-dataTable-sort-up" );
         }
+        this._lastClicked = new Date().getTime();
       }
     }
     return (this._sort);
   } ),
   _sort: 0,
+  getLastClicked: function () {
+    return this._lastClicked;
+  },
+  _lastClicked: 0,
+
   headerstyle: fun.newProp( 'headerstyle', function ( v ) {
     if ( arguments.length ) {
       this._headerstyle = v;
@@ -1348,11 +1354,11 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
 
           col[index].sort(col[index].sort()+1);
 
-          var sortfields = {};
+          var sortfields = [];
           sortedlist = '';
           for ( i = 0; i < col.length; i++ ) {
             if ( col[i].sort() > 0 ) {
-              sortfields[col[i].name()] = col[i].sort();
+              sortfields.push({name:col[i].name(), direction:col[i].sort(),clickTime:col[i].getLastClicked()});
               sortedlist += col[i].sort()+",";
             } else {
               sortedlist += "0,";
