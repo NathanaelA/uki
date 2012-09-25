@@ -1,6 +1,7 @@
 .uki-dataList {
     position: relative;
     outline: none;
+    outline-offset: 0;
 }
 
 .uki-dataList-pack {
