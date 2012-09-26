@@ -171,7 +171,19 @@ var Text = view.newClass('nativeControl.Text', NativeControl, {
         targetStyle[name] = sourceStyle[name];
       }
     });
-    targetStyle.lineHeight = (this._input.offsetHeight + (parseInt(sourceStyle.marginTop, 10) || 0)*2) + 'px';
+
+    var offsetHeight = this._input.offsetHeight;
+    if (offsetHeight === 0) {
+        var rect = this._input.getBoundingClientRect();
+        offsetHeight = rect.bottom - rect.top;
+        if (offsetHeight === 0) {
+          // This needs to be "this._dom" as ._input will be "100%"
+          offsetHeight = parseInt(this._dom.height,10) + (((parseInt(sourceStyle.borderTopWidth,10) || 0) + (parseInt(sourceStyle.paddingTop, 10) || 0)) * 2);
+        }
+    }
+    if (offsetHeight > 0) {
+      targetStyle.lineHeight = (offsetHeight + (parseInt(sourceStyle.marginTop, 10) || 0)*2) + 'px';
+    }
     targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft, 10) || 0) +
         (parseInt(sourceStyle.borderLeftWidth, 10) || 0) + 'px';
     targetStyle.width = "98%"; //(parseInt(sourceStyle.width,10)-3) + 'px';
@@ -193,8 +205,9 @@ var Text = view.newClass('nativeControl.Text', NativeControl, {
     if (arguments.length) {
       this._dom.style.height = v;
       this._input.style.height = "100%";
+      this._updatePlaceholderHeight();
     }
-    return (this._input.style.height);
+    return (this._dom.style.height);
   }
 });
 
@@ -239,22 +252,22 @@ var TextArea = view.newClass('nativeControl.TextArea', NativeControl, {
     this._input.cols = v;
   }),
 
-  width: function(v) {
+  width:  fun.newProp('width', function(v) {
     if (arguments.length) {
       this._dom.style.width = v;
       this._input.style.width = "100%";
     }
     return (this._dom.style.width);
-  },
+  }),
 
-  height: function(v) {
+  height:  fun.newProp('height', function(v) {
     if (arguments.length) {
       this._dom.style.height = v;
       this._input.style.height = "100%";
       this._updatePlaceholderHeight();
     }
     return (this._dom.style.height);
-  },
+  }),
 
   placeholder: fun.newProp('placeholder', function(v) {
     this._placeholder = v;
@@ -264,7 +277,7 @@ var TextArea = view.newClass('nativeControl.TextArea', NativeControl, {
       this._input.placeholder = v;
     } else { */
       this._initPlaceholder();
-      this._placeholderDom.innerHTML = dom.escapeHTML(v);
+      this._placeholderDom.innerHTML = dom.escapeHTML(v) + '&nbsp;';
     //}
   }),
 
@@ -313,11 +326,17 @@ var TextArea = view.newClass('nativeControl.TextArea', NativeControl, {
     });
 
 //    targetStyle.border = "1px solid red";
-    targetStyle.marginTop = ((this._input.offsetHeight + (parseInt(sourceStyle.marginTop, 10) || 0)*2) - 16)
-        + 'px';
+
+
+    //targetStyle.marginTop = ((this._input.offsetHeight + (parseInt(sourceStyle.marginTop, 10) || 0)*2) - 16) + 'px';
+    targetStyle.position = "absolute";
+    targetStyle.bottom = 0;
+
 //    targetStyle.height = sourceStyle.height;
-    targetStyle.width = "99%"; //(parseInt(sourceStyle.width,10)-3) + "px";
-    targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft, 10) || 0) + (parseInt(sourceStyle.borderLeftWidth, 10) || 0) + 'px';
+    targetStyle.width = "100%"; //(parseInt(sourceStyle.width,10)-3) + "px";
+    //targetStyle.marginLeft = ((parseInt(sourceStyle.marginLeft, 10) || 0) + (parseInt(sourceStyle.borderLeftWidth, 10) || 0)) + 'px';
+    //targetStyle.marginRight = (-8 + (parseInt(sourceStyle.marginLeft, 10) || 0) + (parseInt(sourceStyle.borderLeftWidth, 10) || 0)) + 'px';
+
     //targetStyle.textAlign = "right";
 //    targetStyle.display = "table-cell";
 //    targetStyle.verticalAlign = "bottom";
