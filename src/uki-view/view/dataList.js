@@ -190,7 +190,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
 
         this.appendChild(pack);
         pack.render([sample], [], 0);
-        var rowHeight = pack.dom().offsetHeight;
+        var rowHeight = parseFloat(window.getComputedStyle(pack.dom()).height);
         this.removeChild(pack);
         pack.destruct();
 
@@ -355,6 +355,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
 
     _createPack: function() {
         var pack = new this._packView();
+
         return pack
             .template(this.template())
             .formatter(this.formatter())

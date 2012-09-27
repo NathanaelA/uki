@@ -12,25 +12,28 @@
     position: absolute;
     padding: 0;
     margin: 0;
+		background-color: #FFFFFF;
+}
+
+.uki-dataList-column {
+	cursor: default;
+	padding: 5px;
+	margin: 0;
+	font-size: 11px;
+	line-height: 14px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .uki-dataList-row {
-    cursor: default;
     display: block;
-    padding: 5px;
-    margin: 0;
     height: 14px;
-    font-size: 11px;
-    line-height: 14px;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    background-color: #FFFFFF;
+    /*background-color: #FFFFFF;*/
 }
 
-.uki-dataList-row_odd {
-    background-color: #F1F1F1;
-    background-color: #EDF3FE;
+.uki-dataTable-row_odd {
+ 	background-color: #EDF3FE;
 }
 
 .uki-dataList-row_selected {

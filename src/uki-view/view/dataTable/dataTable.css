@@ -125,9 +125,9 @@ table.uki-dataTable-header tr.uki-dataTable-header-row td {
 
 .uki-dataTable-header-cell, .uki-dataTable-footer-cell {
     margin: 0;
-    border-right: 1px solid #CCC;
-    padding: 0 4px 0 5px;
     vertical-align: top;
+		border-right: 1px solid #CCC;
+		padding: 0 5px 0 4px;
 }
 
 .uki-dataTable-header-wrap, .uki-dataTable-footer-wrap {
