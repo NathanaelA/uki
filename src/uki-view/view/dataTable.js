@@ -732,7 +732,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
           //this.parent().updateCSSRules( this._cssRule, 'display', '' );
         } else {
 					this.parent().setColStyle(this._pos, 'visibility', 'collapse');
-					this.parent().setColStyle(this._pos, 'width', '0px');
+					this.parent().setColStyle(this._pos, 'width', '0');
           //this.parent().updateCSSRules( this._cssRule, 'display', 'none' );
         }
       }
@@ -931,7 +931,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
   _finishSetup: function () {
     if ( !this._visible ) {
       this.parent().setColStyle( this._pos, 'visibility', 'collapse' );
-			this.parent().setColStyle( this._pos, 'width', "0px" );
+			this.parent().setColStyle( this._pos, 'width', "0" );
     } else {
     	this.parent().setColStyle( this._pos, 'width', this._width + "px" );
 		}
@@ -2154,7 +2154,9 @@ var DataTableList = view.newClass('DataTableList', DataList, {
     _createDom: function(initArgs) {
         DataList.prototype._createDom.call(this, initArgs);
         this.addClass('uki-dataTable-list');
-
+				this._placeholder = dom.createElement('div', {class:'uki-dataList-placeholder'});
+				this._placeholder.innerHTML = '&nbsp'; // The width property won't take w/o contents... haha
+				this._dom.appendChild(this._placeholder);
     },
 
     destruct: function() {
@@ -2174,6 +2176,8 @@ var DataTableList = view.newClass('DataTableList', DataList, {
 				var table = pack.dom().getElementsByTagName('table')[0];
 				this._colgroup = this._colgroup.cloneNode(true);
 				table.insertBefore(this._colgroup, table.childNodes[0]);
+				this._placeholder.style.width = table.offsetWidth + 'px';
+
 				return pack;
 		},
 

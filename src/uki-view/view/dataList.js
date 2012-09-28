@@ -113,13 +113,14 @@ var DataList = view.newClass('DataList', Container, Focusable, {
             maxY  = dm.top + dm.height,
             minY  = dm.top;
 
+				var xScrollPos = this.scrollableParent.scrollLeft();
         if (maxY >= range.to) {
-            this.scrollableParent().scroll(0, maxY - range.to +
+            this.scrollableParent().scroll(xScrollPos, maxY - range.to +
                 // hackish overflow to compensate for bottom scroll bar
                 (index === this.data().length - 1 ? 100 : 0)
             );
         } else if (minY < range.from) {
-            this.scrollableParent().scroll(0, minY - range.from);
+            this.scrollableParent().scroll(xScrollPos, minY - range.from);
         }
         this._wrappedUpdate();
         return this;

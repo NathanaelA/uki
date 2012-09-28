@@ -1,6 +1,7 @@
 .uki-dataTable-container {
     overflow: auto;
    -webkit-overflow-scrolling: touch;
+	 background-color: #ffffff;
 }
 
 .uki-dataTable {
@@ -32,14 +33,10 @@
   background: url(up.gif) no-repeat 100% center;
 }
 
-.uki-dataTable-header, .uki-dataTable-footer,
-.uki-dataTable-pack {
-    border-spacing: 0;
-    table-layout: fixed;
-}
-
-.uki-dataTable-pack {
-    width: 100%;
+.uki-dataTable-pack, .uki-dataTable-header, .uki-dataTable-footer {
+		border-spacing: 0;
+    width: 100%; /* should only be necessary for the pack, but webkit has a bug that makes this necessary for any fixed table-layout element. */
+		table-layout: fixed;
 }
 
 .uki-dataTable-row {
