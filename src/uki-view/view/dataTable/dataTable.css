@@ -36,6 +36,7 @@
 .uki-dataTable-pack, .uki-dataTable-header, .uki-dataTable-footer {
 		border-spacing: 0;
     width: 100%; /* should only be necessary for the pack, but webkit has a bug that makes this necessary for any fixed table-layout element. */
+		overflow: hidden; /* fixes webkit not honoring 0 width columns */
 		table-layout: fixed;
 }
 
