@@ -113,7 +113,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
             maxY  = dm.top + dm.height,
             minY  = dm.top;
 
-				var xScrollPos = this.scrollableParent.scrollLeft();
+				var xScrollPos = this.scrollableParent().scrollLeft();
         if (maxY >= range.to) {
             this.scrollableParent().scroll(xScrollPos, maxY - range.to +
                 // hackish overflow to compensate for bottom scroll bar
