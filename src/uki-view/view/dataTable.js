@@ -678,7 +678,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
     if ( arguments.length ) {
       var newWidth = Math.min( Math.max( v, this._minWidth ), this._maxWidth == 0 ? v : this._maxWidth);
       if ( newWidth != this._width ) {
-        console.log(this);
+        //console.log(this);
         this._width = newWidth;
         if ( this.parent() != null ) {
           //this.parent().updateCSSRules( this._cssRule, 'width', this._width + "px" );
@@ -2162,6 +2162,7 @@ var DataTableList = view.newClass('DataTableList', DataList, {
     destruct: function() {
       DataList.prototype.destruct.call(this);
 			this._colgroup = null;
+      this._placeholder = null;
     },
 
     _updateColumnSize: function(pos) {
@@ -2176,7 +2177,10 @@ var DataTableList = view.newClass('DataTableList', DataList, {
 				var table = pack.dom().getElementsByTagName('table')[0];
 				this._colgroup = this._colgroup.cloneNode(true);
 				table.insertBefore(this._colgroup, table.childNodes[0]);
-				this._placeholder.style.width = table.offsetWidth + 'px';
+
+        // Needs to get the header for the "proper" size of the placeholder.
+        var headerTable = this._parent._parent._childViews[0]._table;
+				this._placeholder.style.width = headerTable.offsetWidth + 'px';
 
 				return pack;
 		},

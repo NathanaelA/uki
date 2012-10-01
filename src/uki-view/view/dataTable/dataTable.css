@@ -10,6 +10,12 @@
     width: 100%;
 }
 
+.uki-menu-w1 {
+}
+
+.uki-menu-w2 {
+}
+
 .uki-dataTable-menu {
   margin-left: 0px;
   margin-top: 2px;
@@ -19,6 +25,7 @@
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 1;  /* This is REQUIRED for usage outside of Key */
 }
 
 .uki-dataTable-menu .uki-menu-primary, .uki-dataTable-menu .uki-menu-primary > a{

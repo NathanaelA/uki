@@ -111,10 +111,14 @@ var Text = view.newClass('nativeControl.Text', NativeControl, {
     this._dom = dom.createElement(initArgs.tagName || 'span',
         { className: 'uki-nc-text' });
     this.dom().appendChild(this._input);
+    this._placeholderDom = null;
   },
 
   destruct: function() {
     NativeControl.prototype.destruct.call(this);
+    if (this._initedPlaceholder) {
+      evt.removeListener(this._placeholderDom);
+    }
     this._placeholderDom = null;
   },
 
@@ -235,6 +239,9 @@ var TextArea = view.newClass('nativeControl.TextArea', NativeControl, {
 
   destruct: function() {
     NativeControl.prototype.destruct.call(this);
+    if (this._initedPlaceholder) {
+      evt.removeListener(this._placeholderDom);
+    }
     this._placeholderDom = null;
   },
 
