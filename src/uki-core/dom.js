@@ -45,10 +45,11 @@ module.exports = {
         }
     },
 
-    createStylesheet: function(code) {
+    createStylesheet: function(code, parentElement) {
         var style = env.doc.createElement('style');
         style.type = "text/css";
-        var ss = env.doc.getElementsByTagName('head')[0];
+        var ss = parentElement || env.doc.getElementsByTagName('head')[0];
+				if (parentElement) style.scoped='scoped'; // In HTML5 spec
         if (style.styleSheet) { //IE
               style.styleSheet.cssText = code;
         } else {
