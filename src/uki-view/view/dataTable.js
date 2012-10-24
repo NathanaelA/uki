@@ -162,6 +162,15 @@ var DataTable = view.newClass('DataTable', Container, {
         this._list = c.view('list');
     },
 
+    destruct: function()  {
+      Container.prototype.destruct.call(this);
+      this._menudom = null;
+      this._list = null;
+      this._container = null;
+      this._header = null;
+      this._footer = null;
+    },
+
     _recalculateTableSizes: function() {
 			this._footer._table.style.width = this._header._table.style.width = this._header.totalWidth() + "px";
     },
