@@ -30,10 +30,19 @@ var fun = exports;
 * obj.bar === 'bar';
 */
 fun.bind = function(fn, context) {
-    // Optimize:
-    // Do not transform and concat arguments array
-    // if optional arguments are not provided
-    var args = arrayPrototype.slice.call(arguments, 2),
+
+   // Optimize:
+   // Do not transform and concat arguments array
+   // if optional arguments are not provided
+    var args = arrayPrototype.slice.call(arguments, 2 ), result;
+    if (Function.prototype.bind) {
+      if (args.length) {
+         args.unshift(context || this);
+         result = Function.prototype.bind.apply(fn, args);
+      } else {
+        result =  fn.bind(context || this);
+      }
+    } else {
         result = args.length ?
             function() {
                 return fn.apply(context || this,
@@ -42,6 +51,7 @@ fun.bind = function(fn, context) {
             function() {
                 return fn.apply(context || this, arguments);
             };
+    }
     // mark bound function so we can optimize later
     result.bound = true;
     return result;

@@ -54,6 +54,10 @@ var Builder = fun.newClass({
 
         copyAttrs(result, mRow);
 
+        if (result._built) {
+          result._built();
+        }
+
 				result.trigger({type: "built",
 					control: result,
 					args: initArgs

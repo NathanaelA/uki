@@ -391,6 +391,9 @@
                     this._references[mRow.as] = result;
                 }
                 copyAttrs(result, mRow);
+                if (result._built) {
+                    result._built();
+                }
                 result.trigger({
                     type: "built",
                     control: result,
@@ -440,11 +443,21 @@
         function inheritance() {}
         var fun = exports;
         fun.bind = function(fn, context) {
-            var args = arrayPrototype.slice.call(arguments, 2), result = args.length ? function() {
-                return fn.apply(context || this, args.concat(utils.toArray(arguments)));
-            } : function() {
-                return fn.apply(context || this, arguments);
-            };
+            var args = arrayPrototype.slice.call(arguments, 2), result;
+            if (Function.prototype.bind) {
+                if (args.length) {
+                    args.unshift(context || this);
+                    result = Function.prototype.bind.apply(fn, args);
+                } else {
+                    result = fn.bind(context || this);
+                }
+            } else {
+                result = args.length ? function() {
+                    return fn.apply(context || this, args.concat(utils.toArray(arguments)));
+                } : function() {
+                    return fn.apply(context || this, arguments);
+                };
+            }
             result.bound = true;
             return result;
         };
@@ -1087,7 +1100,10 @@
         function domHandler(e) {
             e = e || env.root.event;
             var wrapped = wrapDomEvent(e);
-            evt.trigger(this, normalize(wrapped));
+            var normalized = normalize(wrapped);
+            evt.trigger(this, normalized);
+            destroyEvent(wrapped);
+            destroyEvent(normalized);
         }
         function wrapDomEvent(baseEvent) {
             var e = new DomEventWrapper;
@@ -1117,13 +1133,6 @@
                     }
                 }
             }
-            for (prop in event) {
-                if (event.hasOwnProperty(prop)) {
-                    if (dom.isDOMElement(event[prop])) {
-                        event[prop] = null;
-                    }
-                }
-            }
             if (event.baseEvent) {
                 for (prop in event.baseEvent) {
                     if (event.baseEvent.hasOwnProperty(prop)) {
@@ -1133,6 +1142,12 @@
                     }
                 }
             }
+            for (prop in event) {
+                if (event.hasOwnProperty(prop)) {
+                    event[prop] = null;
+                }
+            }
+            event.isDestroyed = true;
         }
         var evt = module.exports = {
             wrapDomEvent: wrapDomEvent,
@@ -1455,6 +1470,8 @@
                 this._removeChildFromDom(child);
                 this._childrenChanged();
                 if (this._childViews.length === 0 && this.typeName === "Attaching") {
+                    view.unregisterId(this);
+                    view.unregister(this);
                     this._dom = null;
                     require(11).Attaching.removeInstance(this._instanceId);
                 }
@@ -1544,21 +1561,31 @@
                 view.register(this);
             },
             destruct: function() {
+                this.trigger({
+                    type: "destruct",
+                    simulatePropagation: false
+                });
                 view.unregisterId(this);
                 view.unregister(this);
                 this.removeListener();
                 this.bindings([]);
-                this.destructed = true;
                 var parent = this.parent();
                 if (parent && parent.removeChild) {
                     parent.removeChild(this);
                 }
                 this._dom = null;
+                for (var key in this) {
+                    if (this.hasOwnProperty(key)) {
+                        this[key] = null;
+                    }
+                }
+                this.destructed = true;
             },
             _setup: fun.FS,
             _createDom: function(initArgs) {
                 this._dom = dom.createElement(initArgs.tagName || "div");
             },
+            _built: fun.FS,
             _initLayout: fun.FS,
             _layout: fun.FS,
             layout: function() {
@@ -3909,7 +3936,6 @@
                     var _hasFocus = true;
                 }
                 cols = table.addColumnDefaults(cols);
-                cols[0].styler = this._styler;
                 this._list.columns(cols);
                 this._header.columns(cols);
                 this._footer.columns(cols);
@@ -3926,6 +3952,9 @@
             },
             footer: function() {
                 return this._footer;
+            },
+            styleColumn: function(row, col, grid) {
+                return this._styler(row, col, grid);
             },
             styler: fun.newProp("styler"),
             _styler: fun.FF,
@@ -4016,6 +4045,8 @@
                 this._container = null;
                 this._header = null;
                 this._footer = null;
+                this._styler = null;
+                this._stylerfunction = null;
             },
             _recalculateTableSizes: function() {
                 this._footer._table.style.width = this._header._table.style.width = this._header.totalWidth() + "px";
@@ -4671,6 +4702,7 @@
                 this._filter = null;
                 this._resizer = null;
                 this._labelElement = null;
+                this._formatter = null;
             },
             _setupResizeable: function() {
                 if (this._resizable && this._sizeable) {
@@ -5140,12 +5172,12 @@
                     });
                 } catch (err) {}
             },
-            _filterpresstimeout: function(e) {
+            _filterpresstimeout: function(target) {
                 this._clearfilterInterval();
                 var hasFocus = false;
-                if (document.activeElement && document.activeElement == e.target) hasFocus = true;
-                e.target.blur();
-                if (hasFocus) e.target.focus();
+                if (document.activeElement && document.activeElement == target) hasFocus = true;
+                target.blur();
+                if (hasFocus) target.focus();
             },
             _clearfilterInterval: function() {
                 if (this._intervalId) {
@@ -5156,21 +5188,23 @@
             _filterpress: function(e) {
                 if (e.charCode == 0) return;
                 var self = e.target.self;
+                var myTarget = e.target;
                 self._clearfilterInterval();
                 self._intervalId = setInterval(function(self, target) {
                     return function() {
                         self._clearfilterInterval();
                         self._filterpresstimeout(target);
                     };
-                }(self, e), self._filterTimeout);
+                }(self, myTarget), self._filterTimeout);
             },
             _filterkeydown: function(e) {
                 if (e.charCode != 0) return;
                 var self = e.target.self;
+                var myTarget = e.target;
                 if (e.keyCode == 13) {
                     if (self._enterFiltered) {
                         self._clearfilterInterval();
-                        self._filterpresstimeout(e);
+                        self._filterpresstimeout(myTarget);
                         e.preventDefault();
                         e.cancelBubble = true;
                     } else {
@@ -5186,7 +5220,7 @@
                             self._clearfilterInterval();
                             self._filterpresstimeout(target);
                         };
-                    }(self, e), self._filterTimeout);
+                    }(self, myTarget), self._filterTimeout);
                 } else if (e.keyCode == 40 || e.keyCode == 38 || e.keyCode == 33 || e.keyCode == 34 || e.keyCode == 35 || e.keyCode == 36) {
                     var grid = self.parent().childViews()[1].childViews()[0];
                     var data = grid.data();
@@ -5528,7 +5562,7 @@
             _formatColumns: function(row, pos, parentGrid) {
                 var cols = [];
                 if (this.parent() == null) return;
-                this.parent().columns()[0].styler(row, pos, parentGrid);
+                if (parentGrid) parentGrid.styleColumn(row, pos, parentGrid);
                 this.parent().columns().forEach(function(col, i) {
                     var val = col.key ? utils.prop(row, col.key) : row[i];
                     cols[i] = {

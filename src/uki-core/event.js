@@ -154,7 +154,10 @@ var eventProps = "altKey attrChange attrName bubbles button cancelable charCode 
 function domHandler(e) {
     e = e || env.root.event;
     var wrapped = wrapDomEvent(e);
-    evt.trigger(this, normalize(wrapped));
+    var normalized = normalize(wrapped);
+    evt.trigger(this, normalized);
+    destroyEvent(wrapped);
+    destroyEvent(normalized);
 }
 
 function wrapDomEvent(baseEvent) {
@@ -195,13 +198,6 @@ function destroyEvent(event) {
       }
     }
   }
-  for (prop in event) {
-    if (event.hasOwnProperty(prop)) {
-      if (dom.isDOMElement(event[prop])) {
-         event[prop] = null;
-      }
-    }
-  }
   if (event.baseEvent) {
     for (prop in event.baseEvent) {
       if (event.baseEvent.hasOwnProperty(prop)) {
@@ -211,6 +207,12 @@ function destroyEvent(event) {
       }
     }
   }
+  for (prop in event) {
+    if (event.hasOwnProperty(prop)) {
+        event[prop] = null;
+    }
+  }
+  event.isDestroyed = true;
 }
 
 var evt = module.exports = {

@@ -73,7 +73,7 @@ var Pack = fun.newClass(Base, {
         var cols = [];
         if (this.parent() == null) return;
         // Call the styler
-        this.parent().columns()[0].styler(row, pos, parentGrid);
+        if (parentGrid) parentGrid.styleColumn(row, pos, parentGrid);
 
         // Build the columns
         this.parent().columns().forEach(function(col, i) {

@@ -48,16 +48,27 @@ var Base = view.newClass('Base', {
     },
 
     destruct: function() {
+        this.trigger({ type: "destruct", simulatePropagation: false });
         view.unregisterId(this);
         view.unregister(this);
         this.removeListener();
         this.bindings([]);
-        this.destructed = true;
         var parent = this.parent();
         if (parent && parent.removeChild) {
           parent.removeChild(this);
         }
         this._dom = null;
+
+        for (var key in this) {
+          if (this.hasOwnProperty(key)) {
+            // Initially Tried to limit this to bind and functions; but...
+            // ...  Too many circular refs seems to cause Chrome to leave these structs in Memory
+            // So we are just going to null ALL refs to anything to help eliminate left over refs...
+              this[key] = null;
+          }
+        }
+        this.destructed = true;
+
     },
 
     _setup: fun.FS,
@@ -69,6 +80,9 @@ var Base = view.newClass('Base', {
     _createDom: function(initArgs) {
         this._dom = dom.createElement(initArgs.tagName || 'div');
     },
+
+    /** Ran after all properties are copied onto this klass and it has been fully built **/
+    _built: fun.FS,
 
     /**
      * Called when view becomes visible for the first time.

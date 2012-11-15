@@ -67,6 +67,8 @@ var Container = view.newClass('Container', Base, {
         this._removeChildFromDom(child);
         this._childrenChanged();
         if (this._childViews.length === 0 && this.typeName === "Attaching" ) {
+          view.unregisterId(this);
+          view.unregister(this);
           this._dom = null;
           require('../attaching' ).Attaching.removeInstance(this._instanceId);
         }

@@ -62,8 +62,10 @@ var DataTable = view.newClass('DataTable', Container, {
         if (this.hasFocus()) {
           var _hasFocus = true;
         }
+//        this._stylerfunction = fun.bindOnce(this._styler, this);
+
         cols = table.addColumnDefaults(cols);
-        cols[0].styler = this._styler;
+//        cols[0].styler = this._stylerfunction;
         this._list.columns(cols);
         this._header.columns(cols);
         this._footer.columns(cols);
@@ -85,6 +87,10 @@ var DataTable = view.newClass('DataTable', Container, {
 
     footer: function() {
         return this._footer;
+    },
+
+    styleColumn: function(row, col, grid) {
+      return this._styler(row, col, grid);
     },
 
     styler: fun.newProp("styler"),
@@ -169,6 +175,8 @@ var DataTable = view.newClass('DataTable', Container, {
       this._container = null;
       this._header = null;
       this._footer = null;
+      this._styler = null;
+      this._stylerfunction = null;
     },
 
     _recalculateTableSizes: function() {
@@ -925,6 +933,8 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
       this._filter = null;
       this._resizer = null;
       this._labelElement = null;
+      this._formatter = null;
+
   },
 
 
@@ -1468,12 +1478,12 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
       catch (err) {}
     },
 
-    _filterpresstimeout: function(e) {
+    _filterpresstimeout: function(target) {
       this._clearfilterInterval();
       var hasFocus = false;
-      if (document.activeElement && document.activeElement == e.target) hasFocus = true;
-      e.target.blur();
-      if (hasFocus) e.target.focus();
+      if (document.activeElement && document.activeElement == target) hasFocus = true;
+      target.blur();
+      if (hasFocus) target.focus();
     },
 
     _clearfilterInterval: function() {
@@ -1487,13 +1497,15 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
       if (e.charCode == 0) return;
       var self = e.target.self;
       // We handle normal keys here, Chome doesn't pass "special" keys to onkeypress event
+      var myTarget = e.target;
 
 
       self._clearfilterInterval();
       self._intervalId = setInterval(
            (function(self, target) { return function() {
                 self._clearfilterInterval();
-                self._filterpresstimeout(target); } } )(self, e),
+                self._filterpresstimeout( target );
+           } } )(self, myTarget),
            self._filterTimeout);
     },
 
@@ -1501,13 +1513,14 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
       // We handle "special" keys here because of Chrome doesn't pass them to onkeypress
       if (e.charCode != 0) return;
       var self = e.target.self;
+      var myTarget = e.target;
 
       //console.log("KeyCode: ", e);
 
       if (e.keyCode == 13) {
         if( self._enterFiltered ) {
           self._clearfilterInterval();
-          self._filterpresstimeout(e);
+          self._filterpresstimeout( myTarget );
           e.preventDefault();
           e.cancelBubble = true;
         } else {
@@ -1526,7 +1539,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
         self._intervalId = setInterval(
           (function(self, target) { return function() {
             self._clearfilterInterval();
-            self._filterpresstimeout(target); } } )(self, e),
+            self._filterpresstimeout(target); } } )(self, myTarget),
           self._filterTimeout);
       }
       else if (e.keyCode == 40 || e.keyCode == 38 || e.keyCode == 33 || e.keyCode == 34 || e.keyCode == 35 || e.keyCode == 36) {
