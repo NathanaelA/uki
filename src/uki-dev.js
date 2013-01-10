@@ -2450,7 +2450,8 @@
             _createDom: function(initArgs) {
                 this._input = dom.createElement("input", {
                     className: "uki-nc-text__input",
-                    type: "text"
+                    type: "text",
+                    zlist: "datalist18"
                 });
                 initArgs.focus && this._input.addClass("initfocus");
                 this._dom = dom.createElement(initArgs.tagName || "span", {
@@ -2458,6 +2459,7 @@
                 });
                 this.dom().appendChild(this._input);
                 this._placeholderDom = null;
+                this._dataList = null;
             },
             destruct: function() {
                 NativeControl.prototype.destruct.call(this);
@@ -2465,12 +2467,28 @@
                     evt.removeListener(this._placeholderDom);
                 }
                 this._placeholderDom = null;
+                this._dataList = null;
             },
             placeholder: fun.newProp("placeholder", function(v) {
                 this._placeholder = v;
                 this._initPlaceholder();
                 this._placeholderDom.innerHTML = dom.escapeHTML(v);
             }),
+            datalist: function(list) {
+                if (arguments.length) {
+                    if (!this._dataList) {
+                        this._dataList = dom.createElement("datalist");
+                        this._dataList.id = "datalist" + this.dom()[env.expando];
+                        this.dom().appendChild(this._dataList);
+                        this._input.setAttribute("list", this._dataList.id);
+                    }
+                    this._dataList.options.length = 0;
+                    if (list !== null) {
+                        appendOptions(this._dataList, list);
+                    }
+                }
+                return this;
+            },
             _layout: function() {
                 this._updatePlaceholderHeight();
                 if (ieResize) {
