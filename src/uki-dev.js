@@ -38,6 +38,7 @@
             return builder.build(val);
         }
         uki.version = "0.4.0a4";
+        uki.config = {};
         utils.extend(uki, env, utils, selector, collection, {
             builder: builder
         }, require(7), require(13), require(12), require(17), require(18), require(16), require(11), require(19));
@@ -1125,6 +1126,9 @@
             return e;
         }
         function destroyEvent(event) {
+            if (uki && uki.config && uki.config.destroyEvents === false) {
+                return;
+            }
             var prop;
             for (prop in event.prototype) {
                 if (event.prototype.hasOwnProperty(prop)) {

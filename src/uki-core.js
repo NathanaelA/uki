@@ -27,6 +27,8 @@ function uki(val, context) {
 
 uki.version = '0.4.0a4';
 
+uki.config = {};
+
 // push everything into core namespace
 utils.extend(uki,
     env, utils, selector, collection,

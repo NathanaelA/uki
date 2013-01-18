@@ -190,6 +190,9 @@ function createEvent(baseEvent, options) {
 }
 
 function destroyEvent(event) {
+  if(uki && uki.config && uki.config.destroyEvents === false) {
+    return;
+  }
   var prop;
   for (prop in event.prototype) {
     if (event.prototype.hasOwnProperty(prop)) {
