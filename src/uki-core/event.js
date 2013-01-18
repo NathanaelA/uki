@@ -156,8 +156,8 @@ function domHandler(e) {
     var wrapped = wrapDomEvent(e);
     var normalized = normalize(wrapped);
     evt.trigger(this, normalized);
-    destroyEvent(wrapped);
-    destroyEvent(normalized);
+    evt.destroyEvent(wrapped);
+    evt.destroyEvent(normalized);
 }
 
 function wrapDomEvent(baseEvent) {
