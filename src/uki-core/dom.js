@@ -211,6 +211,15 @@ module.exports = {
         return (child);
       }
       return (cur);
+    },
+
+    isInDom: function(element) {
+      while (element = element.parentNode) {
+        if (element == document) {
+          return true;
+        }
+      }
+      return false;
     }
 
 

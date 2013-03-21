@@ -120,7 +120,8 @@ var Base = view.newClass('Base', {
     },
 
     layoutIfVisible: function() {
-        if (this.dom() && this.dom().offsetWidth) { this.layout(); }
+        var dom = this.dom();
+        if (dom && dom.offsetWidth) { this.layout(); }
         return this;
     },
 

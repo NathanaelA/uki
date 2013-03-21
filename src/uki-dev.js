@@ -1427,6 +1427,14 @@
                     return child;
                 }
                 return cur;
+            },
+            isInDom: function(element) {
+                while (element = element.parentNode) {
+                    if (element == document) {
+                        return true;
+                    }
+                }
+                return false;
             }
         };
     };
@@ -1603,7 +1611,8 @@
                 return this;
             },
             layoutIfVisible: function() {
-                if (this.dom() && this.dom().offsetWidth) {
+                var dom = this.dom();
+                if (dom && dom.offsetWidth) {
                     this.layout();
                 }
                 return this;
@@ -2454,8 +2463,7 @@
             _createDom: function(initArgs) {
                 this._input = dom.createElement("input", {
                     className: "uki-nc-text__input",
-                    type: "text",
-                    zlist: "datalist18"
+                    type: "text"
                 });
                 initArgs.focus && this._input.addClass("initfocus");
                 this._dom = dom.createElement(initArgs.tagName || "span", {
@@ -2519,38 +2527,28 @@
                 this._placeholderDom.style.display = this.hasFocus() || this.value() ? "none" : "";
             },
             _updatePlaceholderHeight: function() {
+                return;
                 if (!this._placeholderDom) return;
-                var targetStyle = this._placeholderDom.style, sourceStyle = dom.computedStyle(this._input);
-                utils.forEach([ "font", "fontFamily", "fontSize", "paddingLeft", "paddingTop", "padding" ], function(name) {
-                    if (sourceStyle[name] !== undefined) {
-                        targetStyle[name] = sourceStyle[name];
-                    }
-                });
-                var offsetHeight = this._input.offsetHeight;
-                if (offsetHeight === 0) {
-                    var rect = this._input.getBoundingClientRect();
-                    offsetHeight = rect.bottom - rect.top;
-                    if (offsetHeight === 0) {
-                        offsetHeight = parseInt(this._dom.height, 10) + ((parseInt(sourceStyle.borderTopWidth, 10) || 0) + (parseInt(sourceStyle.paddingTop, 10) || 0)) * 2;
-                    }
+                if (!this._setCSSAttributes) {
+                    var targetStyle = this._placeholderDom.style, sourceStyle = dom.computedStyle(this._input);
+                    utils.forEach([ "font", "fontFamily", "fontSize", "paddingLeft", "paddingTop", "padding" ], function(name) {
+                        if (sourceStyle[name] !== undefined && targetStyle[name] !== sourceStyle[name]) {
+                            targetStyle[name] = sourceStyle[name];
+                        }
+                    });
+                    this._setCSSAttributes = true;
                 }
-                if (offsetHeight > 0) {
-                    targetStyle.lineHeight = offsetHeight + (parseInt(sourceStyle.marginTop, 10) || 0) * 2 + "px";
-                }
-                targetStyle.marginLeft = (parseInt(sourceStyle.marginLeft, 10) || 0) + (parseInt(sourceStyle.borderLeftWidth, 10) || 0) + "px";
-                targetStyle.width = "98%";
             },
             width: function(v) {
-                if (arguments.length) {
+                if (arguments.length && this._dom.style.width !== v) {
                     this._dom.style.width = v;
-                    this._input.style.width = "100%";
                 }
                 return this._dom.style.width;
             },
             height: function(v) {
-                if (arguments.length) {
+                if (arguments.length && v !== this._input.style.height) {
+                    var oldHeight = this._dom.style.height;
                     this._dom.style.height = v;
-                    this._input.style.height = "100%";
                     this._updatePlaceholderHeight();
                 }
                 return this._dom.style.height;
@@ -2589,16 +2587,14 @@
                 this._input.cols = v;
             }),
             width: fun.newProp("width", function(v) {
-                if (arguments.length) {
+                if (arguments.length && this._dom.style.width !== v) {
                     this._dom.style.width = v;
-                    this._input.style.width = "100%";
                 }
                 return this._dom.style.width;
             }),
             height: fun.newProp("height", function(v) {
-                if (arguments.length) {
+                if (arguments.length && v !== this._dom.style.height) {
                     this._dom.style.height = v;
-                    this._input.style.height = "100%";
                     this._updatePlaceholderHeight();
                 }
                 return this._dom.style.height;
@@ -2634,16 +2630,17 @@
                 }
             },
             _updatePlaceholderHeight: function() {
+                return;
                 if (!this._placeholderDom) return;
-                var targetStyle = this._placeholderDom.style, sourceStyle = dom.computedStyle(this._input);
-                utils.forEach([ "font", "fontFamily", "fontSize", "paddingLeft", "paddingTop", "padding" ], function(name) {
-                    if (sourceStyle[name] !== undefined) {
-                        targetStyle[name] = sourceStyle[name];
-                    }
-                });
-                targetStyle.position = "absolute";
-                targetStyle.bottom = 0;
-                targetStyle.width = "100%";
+                if (!this._setCSSAttributes) {
+                    var targetStyle = this._placeholderDom.style, sourceStyle = dom.computedStyle(this._input);
+                    utils.forEach([ "font", "fontFamily", "fontSize", "paddingLeft", "paddingTop", "padding" ], function(name) {
+                        if (sourceStyle[name] !== undefined && sourceStyle[name] !== targetStyle[name]) {
+                            targetStyle[name] = sourceStyle[name];
+                        }
+                    });
+                    this._setCSSAttributes = true;
+                }
             }
         });
         var Image = view.newClass("nativeControl.Image", NativeControl, {
@@ -4075,9 +4072,23 @@
             },
             _updateContainerHeight: function() {
                 var pos = this._container.pos();
-                pos.t = this._header.clientRect().height + "px";
+                if (this._header._rectHeight) {
+                    pos.t = this._header._rectHeight;
+                } else {
+                    pos.t = this._header.clientRect().height + "px";
+                    if (pos.t !== "0px") {
+                        this._header._rectHeight = pos.t;
+                    }
+                }
                 if (this._footer.visible()) {
-                    pos.bottom = this._footer.clientRect().height + "px";
+                    if (this._footer._rectHeight) {
+                        pos.bottom = this._footer._rectHeight;
+                    } else {
+                        pos.bottom = this._footer.clientRect().height + "px";
+                        if (pos.bottom !== "0px") {
+                            this._footer._rectHeight = pos.bottom;
+                        }
+                    }
                 } else {
                     pos.bottom = "0px";
                 }
@@ -5084,6 +5095,7 @@
                 var index = dom.addCSSRule(this._styleSheet, id, "display:;");
                 if (this._styleSheet.getInnerHTML) {
                     this._styleSheetElement.innerHTML = this._styleSheet.getInnerHTML();
+                    this._styleSheet = this._styleSheetElement.sheet || this._styleSheet;
                 }
                 return index;
             },

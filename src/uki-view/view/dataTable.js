@@ -185,9 +185,27 @@ var DataTable = view.newClass('DataTable', Container, {
 
     _updateContainerHeight: function() {
         var pos = this._container.pos();
-        pos.t = this._header.clientRect().height + 'px';
+
+        // .clientRect() is very expensive; so we are going to cache the results once we have valid results
+        if (this._header._rectHeight) {
+          pos.t = this._header._rectHeight;
+        }
+        else {
+           pos.t = this._header.clientRect().height + 'px';
+           if (pos.t !== "0px") {
+             this._header._rectHeight = pos.t;
+           }
+        }
         if (this._footer.visible()) {
-          pos.bottom = this._footer.clientRect().height + 'px';
+          if (this._footer._rectHeight) {
+            pos.bottom = this._footer._rectHeight;
+          }
+          else {
+            pos.bottom = this._footer.clientRect().height + 'px';
+            if (pos.bottom !== "0px") {
+              this._footer._rectHeight = pos.bottom;
+            }
+          }
         } else {
           pos.bottom = "0px";
         }
@@ -1326,8 +1344,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
 
       if (this._styleSheet.cssRules) {
         count=this._styleSheet.cssRules.length;
-      }
-      else {
+      } else {
         count = this._styleSheet.rules.length;
       }
       for(var i=count-1;i>=0;i--) {
@@ -1343,7 +1360,8 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
         var index = (dom.addCSSRule(this._styleSheet, id, "display:;"));
 				if (this._styleSheet.getInnerHTML) {
 					this._styleSheetElement.innerHTML = this._styleSheet.getInnerHTML();
-				}
+          this._styleSheet = this._styleSheetElement.sheet || this._styleSheet;
+        }
 				return index;
     },
 
@@ -1367,8 +1385,8 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
       }
 
 			if (this._styleSheet.getInnerHTML) {
-				this._styleSheetElement.innerHTML = this._styleSheet.getInnerHTML();
-				this._styleSheet = this._styleSheetElement.sheet || this._styleSheet;
+				    this._styleSheetElement.innerHTML = this._styleSheet.getInnerHTML();
+				    this._styleSheet = this._styleSheetElement.sheet || this._styleSheet;
 			}
     },
 

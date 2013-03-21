@@ -28,14 +28,13 @@ input:disabled,textarea:disabled {
 
 .uki-nc-text__input, .uki-nc-textarea__input {
     margin: 0;
-    width: 100%;
-    *width: auto;
+    height: 100%;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-
+    width: 100%;
+   *width: auto;
 }
-
 
 .uki-nc-text_with-placeholder, .uki-nc-textarea_with-placeholder {
     position: relative;
@@ -45,8 +44,11 @@ input:disabled,textarea:disabled {
     position: absolute;
     color: #888;
     opacity:0.5;
+    padding: 0px 2px;
     pointer-events: none;
     text-align: right;
+    bottom: 0;
+    width: 100%;
 }
 
 .uki-nc-text__input {

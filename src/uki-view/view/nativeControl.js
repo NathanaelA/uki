@@ -106,7 +106,7 @@ var Text = view.newClass('nativeControl.Text', NativeControl, {
 
   _createDom: function(initArgs) {
     this._input = dom.createElement('input',
-        { className: 'uki-nc-text__input', type: 'text', zlist: 'datalist18' });
+        { className: 'uki-nc-text__input', type: 'text' });
     initArgs.focus && this._input.addClass('initfocus');
     this._dom = dom.createElement(initArgs.tagName || 'span',
         { className: 'uki-nc-text' });
@@ -168,6 +168,12 @@ var Text = view.newClass('nativeControl.Text', NativeControl, {
     this.addClass('uki-nc-text_with-placeholder');
     this._placeholderDom = dom.createElement('span',
         { className: 'uki-nc-text__placholder' });
+
+   // var targetStyle = this._placeholderDom.style;
+   // targetStyle.position = "absolute";
+   // targetStyle.bottom = 0;
+   // targetStyle.width = "100%";
+
     this.textSelectable(false);
     this.dom().insertBefore(this._placeholderDom, this.dom().firstChild);
     evt.on(this._placeholderDom, 'click', fun.bindOnce(function() {
@@ -185,17 +191,24 @@ var Text = view.newClass('nativeControl.Text', NativeControl, {
   },
 
   _updatePlaceholderHeight: function() {
+    return;
+    // Handled by CSS
     if (!this._placeholderDom) return;
-    var targetStyle = this._placeholderDom.style,
-        sourceStyle = dom.computedStyle(this._input);
+    if (!this._setCSSAttributes) {
+      var targetStyle = this._placeholderDom.style,
+          sourceStyle = dom.computedStyle(this._input);
 
-    utils.forEach(['font', 'fontFamily', 'fontSize',
-      'paddingLeft', 'paddingTop', 'padding'], function(name) { if ( sourceStyle[name] !== undefined) {
-        targetStyle[name] = sourceStyle[name];
-      }
-    });
+      utils.forEach(['font', 'fontFamily', 'fontSize', 'paddingLeft', 'paddingTop', 'padding'], function(name) {
+        if ( sourceStyle[name] !== undefined && targetStyle[name] !== sourceStyle[name]) {
+          targetStyle[name] = sourceStyle[name];
+        }
+      });
 
-    var offsetHeight = this._input.offsetHeight;
+      this._setCSSAttributes = true;
+
+    }
+
+/*    var offsetHeight = this._input.offsetHeight;
     if (offsetHeight === 0) {
         var rect = this._input.getBoundingClientRect();
         offsetHeight = rect.bottom - rect.top;
@@ -211,23 +224,24 @@ var Text = view.newClass('nativeControl.Text', NativeControl, {
         (parseInt(sourceStyle.borderLeftWidth, 10) || 0) + 'px';
     targetStyle.width = "98%"; //(parseInt(sourceStyle.width,10)-3) + 'px';
     //targetStyle.textAlign = "left";
-
+    */
 
    // textProto._updatePlaceholderHeight = fun.FS;
   },
 
   width: function (v) {
-    if (arguments.length) {
+    if (arguments.length && this._dom.style.width !== v) {
        this._dom.style.width = v;
-       this._input.style.width = "100%";
+       //this._input.style.width = "100%";
     }
     return (this._dom.style.width);
   },
 
   height: function(v) {
-    if (arguments.length) {
+    if (arguments.length && v !== this._input.style.height) {
+      var oldHeight = this._dom.style.height;
+
       this._dom.style.height = v;
-      this._input.style.height = "100%";
       this._updatePlaceholderHeight();
     }
     return (this._dom.style.height);
@@ -279,17 +293,15 @@ var TextArea = view.newClass('nativeControl.TextArea', NativeControl, {
   }),
 
   width:  fun.newProp('width', function(v) {
-    if (arguments.length) {
+    if (arguments.length && this._dom.style.width !== v) {
       this._dom.style.width = v;
-      this._input.style.width = "100%";
     }
     return (this._dom.style.width);
   }),
 
   height:  fun.newProp('height', function(v) {
-    if (arguments.length) {
+    if (arguments.length && v !== this._dom.style.height) {
       this._dom.style.height = v;
-      this._input.style.height = "100%";
       this._updatePlaceholderHeight();
     }
     return (this._dom.style.height);
@@ -323,6 +335,11 @@ var TextArea = view.newClass('nativeControl.TextArea', NativeControl, {
     this._placeholderDom = dom.createElement('div',
         { className: 'uki-nc-textarea__placholder' });
 
+    //var targetStyle = this._placeholderDom.style;
+    //targetStyle.position = "absolute";
+    //targetStyle.bottom = 0;
+    //targetStyle.width = "100%"; //(parseInt(sourceStyle.width,10)-3) + "px";
+
     this.textSelectable(false);
     this.dom().insertBefore(this._placeholderDom, this.dom().firstChild);
     evt.on(this._placeholderDom, 'click', fun.bindOnce(function() {
@@ -340,32 +357,20 @@ var TextArea = view.newClass('nativeControl.TextArea', NativeControl, {
   },
 
   _updatePlaceholderHeight: function() {
+    return;
+    // This code is now moot as this is controlled by .CSS
     if (!this._placeholderDom) return;
-    var targetStyle = this._placeholderDom.style,
-        sourceStyle = dom.computedStyle(this._input);
+    if (!this._setCSSAttributes) {
+      var targetStyle = this._placeholderDom.style,
+          sourceStyle = dom.computedStyle(this._input);
 
-    utils.forEach(['font', 'fontFamily', 'fontSize',
-      'paddingLeft', 'paddingTop', 'padding'], function(name) {
-      if (sourceStyle[name] !== undefined) {
-        targetStyle[name] = sourceStyle[name];
-      }
-    });
-
-//    targetStyle.border = "1px solid red";
-
-
-    //targetStyle.marginTop = ((this._input.offsetHeight + (parseInt(sourceStyle.marginTop, 10) || 0)*2) - 16) + 'px';
-    targetStyle.position = "absolute";
-    targetStyle.bottom = 0;
-
-//    targetStyle.height = sourceStyle.height;
-    targetStyle.width = "100%"; //(parseInt(sourceStyle.width,10)-3) + "px";
-    //targetStyle.marginLeft = ((parseInt(sourceStyle.marginLeft, 10) || 0) + (parseInt(sourceStyle.borderLeftWidth, 10) || 0)) + 'px';
-    //targetStyle.marginRight = (-8 + (parseInt(sourceStyle.marginLeft, 10) || 0) + (parseInt(sourceStyle.borderLeftWidth, 10) || 0)) + 'px';
-
-    //targetStyle.textAlign = "right";
-//    targetStyle.display = "table-cell";
-//    targetStyle.verticalAlign = "bottom";
+      utils.forEach(['font', 'fontFamily', 'fontSize', 'paddingLeft', 'paddingTop', 'padding'], function(name) {
+        if (sourceStyle[name] !== undefined && sourceStyle[name] !== targetStyle[name]) {
+          targetStyle[name] = sourceStyle[name];
+        }
+      });
+      this._setCSSAttributes = true;
+    }
   }
 });
 
@@ -458,7 +463,7 @@ var SVG = view.newClass('nativeControl.SVG', NativeControl, {
 var Canvas = view.newClass('nativeControl.Canvas', NativeControl, {
 
   _createDom: function(initArgs) {
-    this._dom = this._input = dom.createElement('canvase',
+    this._dom = this._input = dom.createElement('canvas',
         { className: 'uki-nc-canvas' });
   },
 
