@@ -3362,7 +3362,7 @@
                 this.scrollableParent(null);
                 fun.deferOnce(fun.bindOnce(this.layoutIfVisible, this));
             },
-            data: fun.newProp("data", function(data, isReload) {
+            data: fun.newProp("data", function(data) {
                 this._data = data;
                 this._reset();
             }),
@@ -4502,7 +4502,7 @@
             }
         });
         fun.delegateProp(DataTable.prototype, [ "data", "dataReload", "throttle", "debounce", "template", "formatter", "key", "selection", "selectedRows", "selectedRow", "selectedIndexes", "selectedIndex", "lastClickIndex", "multiselect" ], "list");
-        fun.delegateCall(DataTable.prototype, [ "scrollToIndex", "triggerSelection" ], "list");
+        fun.delegateCall(DataTable.prototype, [ "scrollToIndex", "triggerSelection", "renderingRows" ], "list");
         fun.delegateCall(DataTable.prototype, [ "summary" ], "footer");
         fun.delegateProp(DataTable.prototype, [ "filterable", "filterTimeout", "sortable", "hasMenu", "menuOptions", "menu", "menuImage" ], "header");
         fun.delegateCall(DataTable.prototype, [ "setRowColStyle", "setRowStyle", "setColStyle", "columnIdByName", "columnIdByLabel" ], "header");
@@ -5107,6 +5107,7 @@
                 for (var i = count - 1; i >= 0; i--) {
                     dom.deleteCSSRule(this._styleSheet, i);
                 }
+                this._cssRuleTracking = {};
                 if (this._styleSheet.getInnerHTML) {
                     this._styleSheetElement.innerHTML = this._styleSheet.getInnerHTML();
                 }
@@ -5514,6 +5515,18 @@
                 utils.forEach(this.childViews(), function(pack) {
                     pack.resizeColumn(pos, column.width);
                 }, this);
+            },
+            renderingRows: function() {
+                "use strict";
+                var range = DataList.prototype._renderingRange.call(this);
+                if (!range) {
+                    return {
+                        from: 0,
+                        to: 1
+                    };
+                }
+                var rowsRange = this.metrics().rowsForRange(range);
+                return rowsRange;
             },
             _renderPack: function(pack, range, rows) {
                 var pack = DataList.prototype._renderPack.call(this, pack, range, rows);

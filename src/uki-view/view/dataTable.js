@@ -685,7 +685,7 @@ fun.delegateProp(DataTable.prototype, [
 ], 'list');
 
 fun.delegateCall(DataTable.prototype, [
-    'scrollToIndex', 'triggerSelection'
+    'scrollToIndex', 'triggerSelection', 'renderingRows'
 ], 'list');
 
 fun.delegateCall(DataTable.prototype, ['summary'], 'footer');
@@ -1357,6 +1357,8 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
         dom.deleteCSSRule(this._styleSheet, i);
       }
 
+      this._cssRuleTracking = {};
+
 			if (this._styleSheet.getInnerHTML) {
 				this._styleSheetElement.innerHTML = this._styleSheet.getInnerHTML();
 			}
@@ -1711,7 +1713,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
           for (var i=0;i<this._columns.length;i++) {
             this._columns[i].destruct();
             this._columns[i] = null;
-          } 
+          }
         }
 
         for(var i=0;i<cols.length;i++) {
@@ -2199,6 +2201,15 @@ var DataTableList = view.newClass('DataTableList', DataList, {
 						 pack.resizeColumn(pos, column.width);
 			}, this);
 		},
+
+    renderingRows: function() {
+      "use strict";
+      var range = DataList.prototype._renderingRange.call(this);
+      if (!range) { return {from: 0, to: 1}; }
+      var rowsRange = this.metrics().rowsForRange(range);
+      return rowsRange;
+
+    },
 
 		_renderPack: function(pack, range, rows) {
 				var pack = DataList.prototype._renderPack.call(this, pack, range, rows);
