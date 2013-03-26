@@ -103,8 +103,26 @@ var DataList = view.newClass('DataList', Container, Focusable, {
         this._reset();
     }),
 
+  /**
+   * Same as "Data", except this wraps the code to keep selections and position on a reload of data
+   */
+    dataReload: fun.newProp('reloadData', function(data) {
+      var sIndexes = [], lastIndex;
+      if (this._data !== null) {
+        sIndexes = this.selectedIndexes();
+        lastIndex = this.lastClickIndex();
+        console.log("Indexes are: ", sIndexes, lastIndex);
+      }
+      this._data = data;
+      this._reset();
+      if (sIndexes.length) {
+        console.log("Reseting Indexes", sIndexes, lastIndex);
+        this.selectedIndexes(sIndexes);
+      }
+    }),
 
-    /**
+
+  /**
     * Scroll the parent so row at position gets into view
     */
     scrollToIndex: function(index) {

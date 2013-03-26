@@ -22,10 +22,12 @@ var fun   = require('../../uki-core/function'),
 var _DataTableCounter = 0;
 
 var FauxCSSStyleSheet = function () {
+  "use strict";
 	this.cssRules = [];
-}
+};
 
 FauxCSSStyleSheet.prototype.addRule = function (name, value, index) {
+  "use strict";
 	var newRule = {name: name, value: value, style:[]};
 	if (index < 0) {
 		index = this.cssRules.push(newRule) - 1;
@@ -33,29 +35,33 @@ FauxCSSStyleSheet.prototype.addRule = function (name, value, index) {
 		this.cssRules.splice(index, 0, newRule);
 	}
 	return index;
-}
+};
 
 FauxCSSStyleSheet.prototype.removeRule = function (index) {
+  "use strict";
 	this.cssRules.splice(index, 1);
-}
+};
 
 FauxCSSStyleSheet.prototype.getInnerHTML = function () {
+  "use strict";
 	var finalText = '';
 	for (var i = 0; i < this.cssRules.length; i++) {
 		var rule = this.cssRules[i];
 		var ruleValue = rule.value;
 		for (var styleName in rule.style) {
-			if (!rule.style.hasOwnProperty(styleName)) continue;
-			ruleValue += styleName + ": " + rule.style[styleName] + ';';
+			if (rule.style.hasOwnProperty(styleName)) {
+			  ruleValue += styleName + ": " + rule.style[styleName] + ';';
+      }
 		}
 
 		finalText += rule.name + ' { ' + ruleValue + ' }\n';
 	}
 	return finalText;
-}
+};
 
 var DataTable = view.newClass('DataTable', Container, {
     columns: function(cols) {
+        "use strict";
         if (!arguments.length) {
             return this._header.columns();
         }
@@ -673,7 +679,7 @@ var DataTable = view.newClass('DataTable', Container, {
 });
 
 fun.delegateProp(DataTable.prototype, [
-    'data', 'throttle', 'debounce', 'template', 'formatter', 'key',
+    'data', 'dataReload', 'throttle', 'debounce', 'template', 'formatter', 'key',
     'selection', 'selectedRows', 'selectedRow',
     'selectedIndexes', 'selectedIndex', 'lastClickIndex', 'multiselect'
 ], 'list');
@@ -1410,10 +1416,10 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
 
       // Get Column #
       var target = e.target;
-      while (target.nodeName != "TD" && target != null) {
+      while (target !== null && target.nodeName !== "TD") {
         target = target.parentNode;
       }
-      if (target == null) return;
+      if (target === null) return;
 
       // Verify this is a Header "CELL" (i.e. a clickable element)
       if (dom.hasClass(target, "uki-dataTable-header-cell")) {
@@ -1700,6 +1706,14 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
 
         var parentId = this.parent().CSSTableId();
 
+        // Destroy old Columns
+        if (this._columns && this._columns.length) {
+          for (var i=0;i<this._columns.length;i++) {
+            this._columns[i].destruct();
+            this._columns[i] = null;
+          } 
+        }
+
         for(var i=0;i<cols.length;i++) {
           cols[i]["view"] = "DataTableHeaderColumn";
           var cssRule = this.addCSSRule('div.uki-dataTable'+parentId+' .uki-dataTable-col-' + cols[i].pos);
@@ -1707,13 +1721,6 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
         }
         this._childViews = [];
 
-        // Destroy old Columns
-        if (this._columns && this._columns.length) {
-          for (var i=0;i<this._columns.length;i++) {
-            this._columns[i].destruct();
-            this._columns[i] = null;
-          }
-        }
 
         this._columns = build(cols);
         this._columns.appendTo(this);

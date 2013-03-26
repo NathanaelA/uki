@@ -3362,9 +3362,23 @@
                 this.scrollableParent(null);
                 fun.deferOnce(fun.bindOnce(this.layoutIfVisible, this));
             },
-            data: fun.newProp("data", function(data) {
+            data: fun.newProp("data", function(data, isReload) {
                 this._data = data;
                 this._reset();
+            }),
+            dataReload: fun.newProp("reloadData", function(data) {
+                var sIndexes = [], lastIndex;
+                if (this._data !== null) {
+                    sIndexes = this.selectedIndexes();
+                    lastIndex = this.lastClickIndex();
+                    console.log("Indexes are: ", sIndexes, lastIndex);
+                }
+                this._data = data;
+                this._reset();
+                if (sIndexes.length) {
+                    console.log("Reseting Indexes", sIndexes, lastIndex);
+                    this.selectedIndexes(sIndexes);
+                }
             }),
             scrollToIndex: function(index) {
                 var range = this._visibleRange(), dm = this.metrics().rowDimensions(index), maxY = dm.top + dm.height, minY = dm.top;
@@ -3915,9 +3929,11 @@
         var fun = require(7), utils = require(4), env = require(3), dom = require(13), view = require(10), build = require(6).build, Pack = require(35).Pack, DataList = require(29).DataList, Mustache = require(19).Mustache, Base = require(15).Base, Container = require(14).Container, evt = require(12), Menu = require(26).Menu;
         var _DataTableCounter = 0;
         var FauxCSSStyleSheet = function() {
+            "use strict";
             this.cssRules = [];
         };
         FauxCSSStyleSheet.prototype.addRule = function(name, value, index) {
+            "use strict";
             var newRule = {
                 name: name,
                 value: value,
@@ -3931,16 +3947,19 @@
             return index;
         };
         FauxCSSStyleSheet.prototype.removeRule = function(index) {
+            "use strict";
             this.cssRules.splice(index, 1);
         };
         FauxCSSStyleSheet.prototype.getInnerHTML = function() {
+            "use strict";
             var finalText = "";
             for (var i = 0; i < this.cssRules.length; i++) {
                 var rule = this.cssRules[i];
                 var ruleValue = rule.value;
                 for (var styleName in rule.style) {
-                    if (!rule.style.hasOwnProperty(styleName)) continue;
-                    ruleValue += styleName + ": " + rule.style[styleName] + ";";
+                    if (rule.style.hasOwnProperty(styleName)) {
+                        ruleValue += styleName + ": " + rule.style[styleName] + ";";
+                    }
                 }
                 finalText += rule.name + " { " + ruleValue + " }\n";
             }
@@ -3948,6 +3967,7 @@
         };
         var DataTable = view.newClass("DataTable", Container, {
             columns: function(cols) {
+                "use strict";
                 if (!arguments.length) {
                     return this._header.columns();
                 }
@@ -4481,7 +4501,7 @@
                 return this._footer.visible();
             }
         });
-        fun.delegateProp(DataTable.prototype, [ "data", "throttle", "debounce", "template", "formatter", "key", "selection", "selectedRows", "selectedRow", "selectedIndexes", "selectedIndex", "lastClickIndex", "multiselect" ], "list");
+        fun.delegateProp(DataTable.prototype, [ "data", "dataReload", "throttle", "debounce", "template", "formatter", "key", "selection", "selectedRows", "selectedRow", "selectedIndexes", "selectedIndex", "lastClickIndex", "multiselect" ], "list");
         fun.delegateCall(DataTable.prototype, [ "scrollToIndex", "triggerSelection" ], "list");
         fun.delegateCall(DataTable.prototype, [ "summary" ], "footer");
         fun.delegateProp(DataTable.prototype, [ "filterable", "filterTimeout", "sortable", "hasMenu", "menuOptions", "menu", "menuImage" ], "header");
@@ -5133,10 +5153,10 @@
                 if (dom.hasClass(e.target, "uki-dataTable-resizer")) return;
                 if (this._parent.isEditing()) return;
                 var target = e.target;
-                while (target.nodeName != "TD" && target != null) {
+                while (target !== null && target.nodeName !== "TD") {
                     target = target.parentNode;
                 }
-                if (target == null) return;
+                if (target === null) return;
                 if (dom.hasClass(target, "uki-dataTable-header-cell")) {
                     var index = target.className.match(/uki-dataTable-col-(\d+)/)[1];
                     var col = this.columns();
@@ -5359,6 +5379,12 @@
                     this.deleteAllCSSRules();
                     this._menu.remove();
                     var parentId = this.parent().CSSTableId();
+                    if (this._columns && this._columns.length) {
+                        for (var i = 0; i < this._columns.length; i++) {
+                            this._columns[i].destruct();
+                            this._columns[i] = null;
+                        }
+                    }
                     for (var i = 0; i < cols.length; i++) {
                         cols[i]["view"] = "DataTableHeaderColumn";
                         var cssRule = this.addCSSRule("div.uki-dataTable" + parentId + " .uki-dataTable-col-" + cols[i].pos);
@@ -5370,12 +5396,6 @@
                         };
                     }
                     this._childViews = [];
-                    if (this._columns && this._columns.length) {
-                        for (var i = 0; i < this._columns.length; i++) {
-                            this._columns[i].destruct();
-                            this._columns[i] = null;
-                        }
-                    }
                     this._columns = build(cols);
                     this._columns.appendTo(this);
                     this._table.style.width = this.totalWidth() + "px";
