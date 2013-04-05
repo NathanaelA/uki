@@ -1577,6 +1577,7 @@ var DataTableAdvancedHeader = view.newClass('DataTableAdvancedHeader', Container
           maxrows = data.length;
         }
         var range = grid._visibleRange();
+        if (range === null) return; // No valid range yet
         var size = grid.metrics()._rowHeight;
         var vrows = 1;
         if (size > 0) {
