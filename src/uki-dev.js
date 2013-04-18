@@ -2408,7 +2408,7 @@
                 this._label = null;
             }
         });
-        fun.delegateProp(NativeControl.prototype, [ "name", "checked", "disabled", "value", "type", "accessKey", "id", "autocomplete", "autofocus", "required", "pattern", "readonly", "maxlength", "spellcheck" ], "_input");
+        fun.delegateProp(NativeControl.prototype, [ "name", "checked", "disabled", "value", "type", "accessKey", "id", "autocomplete", "autofocus", "required", "pattern", "readonly", "maxLength", "spellcheck" ], "_input");
         fun.delegateProp(NativeControl.prototype, [ "width", "height" ], "_input", [ "style.width", "style.height" ]);
         var Output = view.newClass("nativeControl.Output", NativeControl, {
             _createDom: function(initArgs) {
@@ -5284,6 +5284,7 @@
                         maxrows = data.length;
                     }
                     var range = grid._visibleRange();
+                    if (range === null) return;
                     var size = grid.metrics()._rowHeight;
                     var vrows = 1;
                     if (size > 0) {
