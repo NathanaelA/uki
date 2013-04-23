@@ -4151,19 +4151,33 @@
             },
             _keyDown: function(event) {
                 var parent = this.parent();
-                if (parent == null) return;
-                if (parent._inEditInPlace) return;
-                if (parent._editInPlace === false) return;
+                if (parent == null) {
+                    return;
+                }
+                if (parent._inEditInPlace) {
+                    return;
+                }
+                if (parent._editInPlace === false) {
+                    return;
+                }
                 if (event.keyCode == parent._editInPlaceHotkey) {
                     parent.startEditInPlace(parent._list.selectedIndex(), 0);
                 }
             },
             startEditInPlace: function(row, col) {
-                if (!this._editInPlace) return;
-                if (row == null) row = this._list.selectedIndex();
-                if (col == null) col = 0;
+                if (!this._editInPlace) {
+                    return;
+                }
+                if (row == null) {
+                    row = this._list.selectedIndex();
+                }
+                if (col == null) {
+                    col = 0;
+                }
                 var columns = this._header.columns();
-                if (columns == null) return;
+                if (columns == null) {
+                    return;
+                }
                 if (this._Editors === null || this._Editors.length !== columns.length) {
                     this._EIP_CreateEditors();
                 }
@@ -4176,24 +4190,32 @@
                 }
             },
             _EIP_ClearEditor: function() {
-                if (this._EIPCurrentColumn === -1 || this._EIPCurrentRow === -1) return true;
+                if (this._EIPCurrentColumn === -1 || this._EIPCurrentRow === -1) {
+                    return true;
+                }
                 var columns = this._header.columns();
                 var col = this._EIPCurrentColumn;
                 var row = this._EIPCurrentRow;
                 var value = this._Editors[col].value();
-                if (this._Editors[col]._dom.parentNode === null) return true;
+                if (this._Editors[col]._dom.parentNode === null) {
+                    return true;
+                }
                 if (columns[col].editor != null) {
                     if (columns[col].unformatter != null) {
                         value = columns[col].unformatter(value);
                     }
                     if (columns[col].validation != null) {
                         var validated = columns[col].validation(row, col, value);
-                        if (validated === false) return false;
+                        if (validated === false) {
+                            return false;
+                        }
                     }
                 }
                 var oldvalue = this._EIPCurrentRowData[0][col];
                 var data = this.data();
-                if (value === "" && oldvalue === null) oldvalue = "";
+                if (value === "" && oldvalue === null) {
+                    oldvalue = "";
+                }
                 if (oldvalue != value) {
                     if (data.changeData != null) {
                         data.changeData(row, col, value);
@@ -4223,7 +4245,9 @@
             },
             _EIP_getDomElement: function(row, col) {
                 var htmlrow = this._list.dom().querySelector("tr.uki-dataTable-row-" + row);
-                if (htmlrow == null) return null;
+                if (htmlrow == null) {
+                    return null;
+                }
                 var htmlcol = htmlrow.querySelector("td.uki-dataTable-col-" + col);
                 return htmlcol;
             },
@@ -4234,23 +4258,33 @@
                     row--;
                 }
                 if (forward) {
-                    while (col < columns.length && (columns[col].visible() === false || this._Editors[col] === null)) col++;
+                    while (col < columns.length && (columns[col].visible() === false || this._Editors[col] === null)) {
+                        col++;
+                    }
                     if (col >= columns.length) {
                         if (nearest) {
                             col = columns.length - 1;
-                            while (col >= 0 && (columns[col].visible() === false || this._Editors[col] === null)) col--;
+                            while (col >= 0 && (columns[col].visible() === false || this._Editors[col] === null)) {
+                                col--;
+                            }
                         } else {
                             col = 0;
                             row++;
-                            while (col < columns.length && (columns[col].visible() === false || this._Editors[col] === null)) col++;
+                            while (col < columns.length && (columns[col].visible() === false || this._Editors[col] === null)) {
+                                col++;
+                            }
                         }
                     }
                 } else {
-                    while (col >= 0 && (columns[col].visible() === false || this._Editors[col] === null)) col--;
+                    while (col >= 0 && (columns[col].visible() === false || this._Editors[col] === null)) {
+                        col--;
+                    }
                     if (col == -1) {
                         col = columns.length - 1;
                         row--;
-                        while (col >= 0 && (columns[col].visible() === false || this._Editors[col] === null)) col--;
+                        while (col >= 0 && (columns[col].visible() === false || this._Editors[col] === null)) {
+                            col--;
+                        }
                     }
                 }
                 var htmlcol = this._EIP_getDomElement(row, col);
@@ -4311,7 +4345,9 @@
                 }
             },
             _EIP_CreateEditors: function() {
-                if (!this._editInPlace) return;
+                if (!this._editInPlace) {
+                    return;
+                }
                 if (this._Editors != null && this._Editors.length > 0) {
                     for (var i = 0; i < this._Editors.length; i++) {
                         if (this._Editors[i] != null) {
@@ -4322,7 +4358,9 @@
                     }
                 }
                 var cols = this._header.columns();
-                if (cols == null) return;
+                if (cols == null) {
+                    return;
+                }
                 this._Editors = [];
                 for (var i = 0; i < cols.length; i++) {
                     if (cols[i].editor === false || cols[i].editor == null) {
@@ -4351,7 +4389,9 @@
             _Editors: null,
             _EIPClick: function(event) {
                 var parent = this.parent();
-                if (parent == null || !parent._inEditInPlace) return;
+                if (parent == null || !parent._inEditInPlace) {
+                    return;
+                }
                 var target = event.srcElement ? event.srcElement : event.target;
                 var pos = target.className.indexOf("uki-dataTable-col-");
                 if (pos === -1) {
@@ -4363,7 +4403,9 @@
                 }
                 var col = parseInt(target.className.match(/uki-dataTable-col-(\d+)/)[1], 10);
                 var row = parent.list().selectedIndex();
-                if (col == null || row == null || col < 0 || row < 0) return;
+                if (col == null || row == null || col < 0 || row < 0) {
+                    return;
+                }
                 parent._EIPMove(row, col, true, true);
             },
             _EIPKeyDown: function(event) {
@@ -4399,7 +4441,9 @@
                 }
             },
             EIPInsertRow: function() {
-                if (!this._inEditInPlace) return;
+                if (!this._inEditInPlace) {
+                    return;
+                }
                 var data = this.data();
                 var rownum = data.length;
                 if (data.insertRow) {
@@ -4413,7 +4457,9 @@
                 } else if (utils.isArray(data)) {
                     var cols = [];
                     var collen = this.columns().length;
-                    for (var i = 0; i < collen; i++) cols.push("");
+                    for (var i = 0; i < collen; i++) {
+                        cols.push("");
+                    }
                     data.push(cols);
                     this.trigger({
                         type: "insertedRow",
@@ -4436,14 +4482,18 @@
                 return this._inEditInPlace;
             },
             editColumn: function(col) {
-                if (!this._inEditInPlace) return -1;
+                if (!this._inEditInPlace) {
+                    return -1;
+                }
                 if (arguments.length && col >= 0 && col < this._header.columns().length) {
                     this._EIPMove(this._EIPCurrentRow, col + 0, true, true);
                 }
                 return this._EIPCurrentColumn;
             },
             editorValue: function(value) {
-                if (!this._inEditInPlace) return null;
+                if (!this._inEditInPlace) {
+                    return null;
+                }
                 if (arguments.length) {
                     this._Editors[this._EIPCurrentColumn].value(value);
                 }
@@ -4451,7 +4501,9 @@
             },
             redrawRow: function(row) {
                 this._list.redrawRow(row);
-                if (!this._inEditInPlace) return;
+                if (!this._inEditInPlace) {
+                    return;
+                }
                 if (this._EIPCurrentRow == row) {
                     this._EIPMove(this._EIPCurrentRow, this._EIPCurrentColumn, true, true);
                 }
@@ -4486,8 +4538,12 @@
                 }
             },
             hasFocus: function() {
-                if (this._list.hasFocus()) return true;
-                if (this._header.hasFocus()) return true;
+                if (this._list.hasFocus()) {
+                    return true;
+                }
+                if (this._header.hasFocus()) {
+                    return true;
+                }
                 return false;
             },
             blur: function() {
@@ -4505,11 +4561,13 @@
         fun.delegateCall(DataTable.prototype, [ "scrollToIndex", "triggerSelection", "renderingRows" ], "list");
         fun.delegateCall(DataTable.prototype, [ "summary" ], "footer");
         fun.delegateProp(DataTable.prototype, [ "filterable", "filterTimeout", "sortable", "hasMenu", "menuOptions", "menu", "menuImage" ], "header");
-        fun.delegateCall(DataTable.prototype, [ "setRowColStyle", "setRowStyle", "setColStyle", "columnIdByName", "columnIdByLabel" ], "header");
+        fun.delegateCall(DataTable.prototype, [ "setRowColStyle", "setRowStyle", "setColStyle", "columnIdByName", "columnIdByLabel", "pinColumn" ], "header");
         var DataTableHeaderColumn = view.newClass("DataTableHeaderColumn", Base, {
             className: fun.newProp("className", function(v) {
                 if (arguments.length) {
-                    if (this._className === v) return v;
+                    if (this._className === v) {
+                        return v;
+                    }
                     if (this._className.length > 0) {
                         dom.removeClass(this._dom, this._className);
                     }
@@ -4532,7 +4590,9 @@
             filterable: fun.newProp("filterable", function(v) {
                 if (arguments.length) {
                     this._filterable = v;
-                    if (this.parent() == null) return;
+                    if (this.parent() == null) {
+                        return;
+                    }
                     if (v && this.parent().filterable()) {
                         this._filter.style.display = "";
                     } else {
@@ -4586,7 +4646,9 @@
                     } else {
                         this._labelElement.style.marginLeft = "";
                     }
-                    if (this._name.length === 0) this.name(v);
+                    if (this._name.length === 0) {
+                        this.name(v);
+                    }
                 }
                 return this._label;
             }),
@@ -4615,9 +4677,13 @@
             _visible: true,
             sort: fun.newProp("sort", function(v) {
                 if (arguments.length) {
-                    if (v > 2 || v < 0) v = 0;
+                    if (v > 2 || v < 0) {
+                        v = 0;
+                    }
                     this._sort = v;
-                    if (this.parent() == null) return this._sort;
+                    if (this.parent() == null) {
+                        return this._sort;
+                    }
                     if (this.parent().sortable()) {
                         dom.removeClass(this._labelElement, "uki-dataTable-sort-down uki-dataTable-sort-up");
                         if (v === 1) {
@@ -4667,7 +4733,9 @@
             _formatter: dom.escapeHTML,
             hasMenu: fun.newProp("hasMenu", function(v) {
                 if (arguments.length) {
-                    if (this._hasMenu == v) return this._hasMenu;
+                    if (this._hasMenu == v) {
+                        return this._hasMenu;
+                    }
                     this._hasMenu = v;
                     this.label(this._label);
                 }
@@ -4676,9 +4744,13 @@
             _hasMenu: false,
             filterValue: function(v) {
                 if (arguments.length) {
-                    if (this._filter.value === v) return;
+                    if (this._filter.value === v) {
+                        return;
+                    }
                     this._filter.value = v;
-                    if (this.parent() != null) this.parent()._handleFilterNotify();
+                    if (this.parent() != null) {
+                        this.parent()._handleFilterNotify();
+                    }
                 }
                 return this._filter.value;
             },
@@ -4767,7 +4839,9 @@
                 }
             },
             _parseStyle: function() {
-                if (this._style == null) return;
+                if (this._style == null) {
+                    return;
+                }
                 if (typeof this._style === "object") {
                     for (var key in this._style) {
                         if (!this._style.hasOwnProperty(key)) {
@@ -4779,7 +4853,9 @@
                     var exp = this._style.split(";");
                     for (var i = 0; i < exp.length; i++) {
                         var parts = exp[i].split(":");
-                        if (parts[0].length == 0 || parts.length != 2) continue;
+                        if (parts[0].length == 0 || parts.length != 2) {
+                            continue;
+                        }
                         this.parent().setColStyle(this._pos, parts[0], parts[1]);
                     }
                 }
@@ -4807,7 +4883,9 @@
             },
             blur: function() {
                 try {
-                    if (this.hasFocus()) this._filter.blur();
+                    if (this.hasFocus()) {
+                        this._filter.blur();
+                    }
                 } catch (err) {}
             }
         });
@@ -4890,14 +4968,19 @@
                 var i;
                 if (arguments.length) {
                     var len = this._columns.length;
-                    if (len > v.length) len = v.length;
+                    if (len > v.length) {
+                        len = v.length;
+                    }
                     for (i = 0; i < len; i++) {
                         if (this._columns[i].footervalue !== v[i]) {
                             this._columns[i].footervalue = v[i];
                             changed = true;
                         }
                     }
-                    if (changed) this._render();
+                    if (changed) {
+                        this._rectHeight = null;
+                        this._render();
+                    }
                 }
                 var val = [];
                 for (i = 0; i < this._columns.length; i++) {
@@ -4906,7 +4989,11 @@
                 return val;
             },
             summary: function(v) {
-                if (arguments.length) return this.values(v); else return this.values();
+                if (arguments.length) {
+                    return this.values(v);
+                } else {
+                    return this.values();
+                }
             }
         });
         var DataTableAdvancedHeader = view.newClass("DataTableAdvancedHeader", Container, {
@@ -4914,7 +5001,9 @@
                 if (arguments.length) {
                     if (this._filterable !== v) {
                         this._filterable = v;
-                        if (this._columns == null) return this._filterable;
+                        if (this._columns == null) {
+                            return this._filterable;
+                        }
                         for (var i = 0; i < this._columns.length; i++) {
                             this._columns[i].filterable(this._columns[i].filterable());
                         }
@@ -4935,7 +5024,9 @@
             _intervalId: null,
             hasMenu: fun.newProp("hasMenu", function(v) {
                 if (arguments.length) {
-                    if (this._hasMenu == v) return v;
+                    if (this._hasMenu == v) {
+                        return v;
+                    }
                     this._hasMenu = v;
                     this._setupMenu();
                 }
@@ -4965,6 +5056,7 @@
             _styleSheetElement: null,
             _styleSheet: null,
             _columns: null,
+            _pinnedColumns: [],
             _createDom: function(initArgs) {
                 Container.prototype._createDom.call(this, initArgs);
                 this._rowheader = dom.createElement("tr", {
@@ -5057,8 +5149,18 @@
             _name: null,
             hasStyle: function(row, col) {
                 var Key = "";
-                if (row != null && col != null) Key = "RC" + row + "-" + col; else if (row != null) Key = "R" + row; else if (col != null) Key = "C" + col; else return false;
-                if (this._cssRuleTracking[Key] == null) return false;
+                if (row != null && col != null) {
+                    Key = "RC" + row + "-" + col;
+                } else if (row != null) {
+                    Key = "R" + row;
+                } else if (col != null) {
+                    Key = "C" + col;
+                } else {
+                    return false;
+                }
+                if (this._cssRuleTracking[Key] == null) {
+                    return false;
+                }
                 return true;
             },
             setRowStyle: function(row, name, value) {
@@ -5141,64 +5243,78 @@
             },
             totalWidth: function() {
                 var tw = 0;
-                if (this._columns === null) return 0;
+                if (this._columns === null) {
+                    return 0;
+                }
                 for (var i = 0; i < this._columns.length; i++) {
                     tw += this._columns[i].visible() ? this._columns[i].width() : 0;
                 }
                 return tw;
             },
             _click: function(e) {
-                if (this._draggableColumn != -1) return;
+                if (this._draggableColumn != -1) {
+                    return;
+                }
                 e.isDefaultPrevented = fun.FF;
-                if (e.target.nodeName === "INPUT") return;
-                if (dom.hasClass(e.target, "uki-dataTable-resizer")) return;
-                if (this._parent.isEditing()) return;
+                if (e.target.nodeName === "INPUT") {
+                    return;
+                }
+                if (dom.hasClass(e.target, "uki-dataTable-resizer")) {
+                    return;
+                }
+                if (this._parent.isEditing()) {
+                    return;
+                }
                 var target = e.target;
                 while (target !== null && target.nodeName !== "TD") {
                     target = target.parentNode;
                 }
-                if (target === null) return;
+                if (target === null) {
+                    return;
+                }
                 if (dom.hasClass(target, "uki-dataTable-header-cell")) {
                     var index = target.className.match(/uki-dataTable-col-(\d+)/)[1];
                     var col = this.columns();
                     var sortedlist = "";
-                    if (this._sortable && col[index].sortable() !== false) {
-                        if (!e.shiftKey) {
-                            for (var i = 0; i < col.length; i++) {
-                                if (i == index) {
-                                    continue;
+                    if (e.ctrlKey) {} else {
+                        if (this._sortable && col[index].sortable() !== false) {
+                            if (!e.shiftKey) {
+                                for (var i = 0; i < col.length; i++) {
+                                    if (i == index) {
+                                        continue;
+                                    }
+                                    if (col[i].sort() != 0 && col[i].sortable() !== false) {
+                                        col[i].sort(0);
+                                    }
                                 }
-                                if (col[i].sort() != 0 && col[i].sortable() !== false) {
-                                    col[i].sort(0);
+                            }
+                            col[index].sort(col[index].sort() + 1);
+                            var sortfields = [];
+                            sortedlist = "";
+                            for (i = 0; i < col.length; i++) {
+                                if (col[i].sort() > 0) {
+                                    sortfields.push({
+                                        name: col[i].name(),
+                                        direction: col[i].sort(),
+                                        clickTime: col[i].getLastClicked()
+                                    });
+                                    sortedlist += col[i].sort() + ",";
+                                } else {
+                                    sortedlist += "0,";
                                 }
                             }
                         }
-                        col[index].sort(col[index].sort() + 1);
-                        var sortfields = [];
-                        sortedlist = "";
-                        for (i = 0; i < col.length; i++) {
-                            if (col[i].sort() > 0) {
-                                sortfields.push({
-                                    name: col[i].name(),
-                                    direction: col[i].sort(),
-                                    clickTime: col[i].getLastClicked()
-                                });
-                                sortedlist += col[i].sort() + ",";
-                            } else {
-                                sortedlist += "0,";
-                            }
+                        if (sortedlist.length > 0) {
+                            sortedlist = sortedlist.substring(0, sortedlist.length - 1);
                         }
+                        this.trigger({
+                            type: "columnClick",
+                            column: this.columns()[index],
+                            sort: sortfields,
+                            sortedlist: sortedlist,
+                            columnIndex: index
+                        });
                     }
-                    if (sortedlist.length > 0) {
-                        sortedlist = sortedlist.substring(0, sortedlist.length - 1);
-                    }
-                    this.trigger({
-                        type: "columnClick",
-                        column: this.columns()[index],
-                        sort: sortfields,
-                        sortedlist: sortedlist,
-                        columnIndex: index
-                    });
                 }
             },
             _filter: function(e) {
@@ -5207,8 +5323,12 @@
             },
             _skipFilterNotify: false,
             _handleFilterNotify: function() {
-                if (this._skipFilterNotify === true) return;
-                if (this._columns == null || this._columns.length == 0) return;
+                if (this._skipFilterNotify === true) {
+                    return;
+                }
+                if (this._columns == null || this._columns.length == 0) {
+                    return;
+                }
                 if (this._parent.isEditing()) {
                     this._parent.stopEditInPlace();
                 }
@@ -5230,9 +5350,13 @@
             _filterpresstimeout: function(target) {
                 this._clearfilterInterval();
                 var hasFocus = false;
-                if (document.activeElement && document.activeElement == target) hasFocus = true;
+                if (document.activeElement && document.activeElement == target) {
+                    hasFocus = true;
+                }
                 target.blur();
-                if (hasFocus) target.focus();
+                if (hasFocus) {
+                    target.focus();
+                }
             },
             _clearfilterInterval: function() {
                 if (this._intervalId) {
@@ -5241,7 +5365,9 @@
                 }
             },
             _filterpress: function(e) {
-                if (e.charCode == 0) return;
+                if (e.charCode == 0) {
+                    return;
+                }
                 var self = e.target.self;
                 var myTarget = e.target;
                 self._clearfilterInterval();
@@ -5253,7 +5379,9 @@
                 }(self, myTarget), self._filterTimeout);
             },
             _filterkeydown: function(e) {
-                if (e.charCode != 0) return;
+                if (e.charCode != 0) {
+                    return;
+                }
                 var self = e.target.self;
                 var myTarget = e.target;
                 if (e.keyCode == 13) {
@@ -5284,7 +5412,9 @@
                         maxrows = data.length;
                     }
                     var range = grid._visibleRange();
-                    if (range === null) return;
+                    if (range === null) {
+                        return;
+                    }
                     var size = grid.metrics()._rowHeight;
                     var vrows = 1;
                     if (size > 0) {
@@ -5347,14 +5477,18 @@
                 }
             },
             _drag: function(e) {
-                if (this._draggableColumn == -1) return;
+                if (this._draggableColumn == -1) {
+                    return;
+                }
                 var width = this._initialWidth;
                 if (e.dragOffset != null) {
                     width += e.dragOffset.x;
                 } else {
                     width += e.clientX;
                 }
-                if (width < 10) width = 10;
+                if (width < 10) {
+                    width = 10;
+                }
                 this._resizeColumn(this._draggableColumn, width);
                 try {
                     this.trigger({
@@ -5402,7 +5536,9 @@
                     this._columns.appendTo(this);
                     this._table.style.width = this.totalWidth() + "px";
                     this._setupFilters();
-                    if (this._hasMenu) this._setupMenu();
+                    if (this._hasMenu) {
+                        this._setupMenu();
+                    }
                     this.trigger({
                         type: "render"
                     });
@@ -5411,7 +5547,9 @@
             }),
             columnByName: function(name) {
                 var id = this.columnIdByName(name);
-                if (id != null) return this._columns[id];
+                if (id != null) {
+                    return this._columns[id];
+                }
                 if (arguments.length == 2) {
                     return this.columnByLabel(name);
                 }
@@ -5419,7 +5557,9 @@
             },
             columnByLabel: function(name) {
                 var id = this.columnIdByLabel(name);
-                if (id != null) return this._columns[id];
+                if (id != null) {
+                    return this._columns[id];
+                }
                 if (arguments.length == 2) {
                     return this.columnByName(name);
                 }
@@ -5459,14 +5599,20 @@
                 }
             },
             hasFocus: function() {
-                if (!this._filterable || this._columns == null) return false;
+                if (!this._filterable || this._columns == null) {
+                    return false;
+                }
                 for (var i = 0; i < this._columns.length; i++) {
-                    if (this._columns[i].hasFocus()) return true;
+                    if (this._columns[i].hasFocus()) {
+                        return true;
+                    }
                 }
                 return false;
             },
             focus: function() {
-                if (!this._filterable || this._columns == null) return;
+                if (!this._filterable || this._columns == null) {
+                    return;
+                }
                 for (var i = 0; i < this._columns.length; i++) {
                     if (this._columns[i].visible() && this._columns[i].filterable()) {
                         this._columns[i].focus();
@@ -5475,13 +5621,17 @@
                 }
             },
             blur: function() {
-                if (!this._filterable || this._columns == null) return;
+                if (!this._filterable || this._columns == null) {
+                    return;
+                }
                 for (var i = 0; i < this._columns.length; i++) {
                     this._columns.blur();
                 }
             },
             clearFilters: function() {
-                if (this._columns == null) return;
+                if (this._columns == null) {
+                    return;
+                }
                 this._skipFilterNotify = true;
                 for (var i = 0; i < this._columns.length; i++) {
                     this._columns[i].filterValue("");
