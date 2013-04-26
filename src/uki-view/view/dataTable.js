@@ -174,6 +174,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
     this._footer = c.view( 'footer' );
     this._footer.on( "render", fun.bindOnce( this._updateContainerHeight, this ) );
     this._footer.on( "render", fun.bindOnce( this._recalculateTableSizes, this ) );
+    this._footer.on('keydown', this._keyDown);
     this._header = c.view( 'header' );
     this._header.on( "keydown", this._keyDown );
     this._header.on( 'render', fun.bindOnce( this._updateContainerHeight, this ) );
@@ -1223,6 +1224,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
   // due to the fact that .parent() is not assigned right away; we need to finish setting up
   // all the rules after the object is fully built
   _finishSetup: function () {
+    if(this.destructed) return;
     if ( !this._visible ) {
       this.parent().updateCSSRules( this._cssRule, 'display', 'none' );
     }
