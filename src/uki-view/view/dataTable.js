@@ -192,28 +192,30 @@ var DataTable = view.newClass( 'DataTable', Container, {
     var pos = this._container.pos();
 
     // .clientRect() is very expensive; so we are going to cache the results once we have valid results
+    var headerHeight = 0;
     if ( this._header._rectHeight ) {
-      pos.t = this._header._rectHeight;
+      headerHeight = this._header._rectHeight;
     }
     else {
-      pos.t = this._header.clientRect().height + 'px';
-      if ( pos.t !== "0px" ) {
-        this._header._rectHeight = pos.t;
+      headerHeight = this._header.clientRect().height;
+      if ( headerHeight !== 0 ) {
+        this._header._rectHeight = headerHeight;
       }
     }
+    pos.t = headerHeight + 'px';
+    var footerHeight;
     if ( this._footer.visible() ) {
       if ( this._footer._rectHeight ) {
-        pos.bottom = this._footer._rectHeight;
+        footerHeight = this._footer._rectHeight;
       }
       else {
-        pos.bottom = this._footer.clientRect().height + 'px';
-        if ( pos.bottom !== "0px" ) {
-          this._footer._rectHeight = pos.bottom;
+        footerHeight = this._footer.clientRect().height;
+        if ( footerHeight > 1 ) {
+          this._footer._rectHeight = footerHeight;
         }
       }
-    } else {
-      pos.bottom = "0px";
     }
+    pos.b = footerHeight + 'px';
     this._container.pos( pos );
     if ( this._deferFocus === true ) {
       this.focus();

@@ -11,9 +11,9 @@ var view  = require('../view'),
 
 
 var POS_RULES = [
-        'top', 'right', 'left', 'bottom', 'wiidth', 'height',
+        'top', 'right', 'left', 'bottom', 'width', 'height',
         'marginLeft', 'marginTop', 'marginBottom', 'marginRight',
-        'max-width', 'max-height'
+        'max-width', 'max-height', 'position'
     ],
     POS_MAP = {
         t: 'top', r: 'right',
