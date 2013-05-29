@@ -93,7 +93,12 @@ var DataTable = view.newClass( 'DataTable', Container, {
   footer: function () {
     return this._footer;
   },
-
+  scrollContainer: function () {
+    return this._scrollContainer;
+  },
+  scrollBar: function () {
+    return this._scrollBar;
+  },
   styleColumn: function ( row, col, grid ) {
     return this._styler( row, col, grid );
   },
@@ -138,19 +143,26 @@ var DataTable = view.newClass( 'DataTable', Container, {
     var c = build( [
 
       { view: initArgs.headerView || DataTableAdvancedHeader, as: 'header',
-        addClass: 'uki-dataTable-header-container',
-        on: {//  resizeColumn: fun.bind(this._resizeColumn, this) ,
-          scroll: fun.bind( this._scrolledHeader, this ) },
+        addClass: 'uki-dataTable-header-container', pos:{p:'relative'},
+        on: {scroll: fun.bind( this._scrolledHeader, this ) },
         init: {stylesheet: this._stylesheet}
       },
 
       { view: Container, pos: 't:0 l:0 r:0 b:0',
         addClass: 'uki-dataTable-container', as: 'container',
-        on: { scroll: fun.bind( this._scrolledContainer, this ) },
         childViews: [
           { view: initArgs.listView || DataTableList, as: 'list',
             on: { selection: fun.bind( this.trigger, this ) } }
         ] },
+
+      { view: Container, pos: 'l:0 r:0 b:0 h:15',
+        addClass: 'uki-dataTable-scrollbar-container', as: 'scrollContainer',
+        on: { scroll: fun.bind( this._scrolledScrollbar, this ) },
+        childViews:  [
+          {view: Container, pos: 'h:15',
+           addClass: 'uki-dataTable-scrollbar', as: 'scrollBar' }
+        ]
+      },
 
       { view: initArgs.footerView || DataTableFooter, as: 'footer',
         addClass: 'uki-dataTable-footer-container',
@@ -170,7 +182,17 @@ var DataTable = view.newClass( 'DataTable', Container, {
     this._container.on( "keydown", this._keyDown );
     this._container.dom().tabIndex = -1; // Remove tab focusablity
     this._container.on( "mousedown", this._EIPClick );
+    this._scrollContainer = c.view('scrollContainer');
+    this._scrollBar = c.view('scrollBar');
     this._list = c.view( 'list' );
+    if ('ontouchstart' in window) {
+      this._container._dom.addEventListener('touchstart', fun.bind(this._detectSwipe, this), false);
+      this._container._dom.addEventListener('touchmove', fun.bind(this._detectSwipe, this), false);
+      this._container._dom.addEventListener('touchend', fun.bind(this._detectSwipe, this), false);
+    } else {
+      this._container.on('mousewheel', fun.bindOnce(this._redirectHorizontalScroll, this));
+      this._container._dom.addEventListener('wheel', fun.bind(this._redirectHorizontalScroll, this), false); //FF
+    }
   },
 
   destruct: function () {
@@ -178,19 +200,57 @@ var DataTable = view.newClass( 'DataTable', Container, {
     this._menudom = null;
     this._list = null;
     this._container = null;
+    this._scrollContainer = null;
     this._header = null;
     this._footer = null;
     this._styler = null;
     this._stylerfunction = null;
   },
-
   _recalculateTableSizes: function () {
-    this._footer._table.style.width = this._header._table.style.width = this._header.totalWidth() + "px";
+    var headerWidth = this._header.totalWidth();
+    this._footer._table.style.width = this._header._table.style.width = headerWidth + "px";
+    headerWidth = (this._header._table && this._header._table && this._header._table.offsetWidth);
+    var scrollbarPos = this._scrollBar.pos();
+    scrollbarPos.width = headerWidth + 'px';
+    this._scrollBar.pos(scrollbarPos);
+
   },
-
+  _lastClientX: false,
+  _detectSwipe: function (event) {
+    if (event.type == 'touchstart') {
+      this._lastClientX = event.pageX;
+    } else if (event.type === 'touchend') {
+      this._lastClientX = false;
+    } else {
+      if (this._lastClientX !== false) {
+        var x = this._lastClientX - event.touches[0].clientX;
+        if (x) {
+          var left = this._scrollContainer.scrollLeft();
+          this._scrollContainer.scrollLeft(left+x);
+          this._lastClientX = event.touches[0].clientX;
+        }
+      }
+    }
+  },
+  _redirectHorizontalScroll: function (event) {
+    var x = event && (event.deltaX || (event.baseEvent && event.baseEvent.wheelDeltaX));
+    if (x) {
+      var left = this._scrollContainer.scrollLeft();
+      if ('ontouchstart' in window) {
+        this._scrollContainer.scrollLeft(left+x);
+      } else {
+        this._scrollContainer.scrollLeft(left-x);
+      }
+    }
+  },
+  pinColumn: function (index) {
+    this._header.pinColumn(index);
+  },
+  setStyle: function (styleName, name, value ) {if (this._header && this._header.setStyle) return this._header.setStyle(styleName, name, value);},
+  getStyle: function (styleName, name ) {if (this._header && this._header.getStyle) return this._header.getStyle(styleName, name); },
   _updateContainerHeight: function () {
+    if (!this._dom.clientHeight && !this._dom.clientWidth) return;
     var pos = this._container.pos();
-
     // .clientRect() is very expensive; so we are going to cache the results once we have valid results
     var headerHeight = 0;
     if ( this._header._rectHeight ) {
@@ -202,7 +262,21 @@ var DataTable = view.newClass( 'DataTable', Container, {
         this._header._rectHeight = headerHeight;
       }
     }
-    pos.t = headerHeight + 'px';
+    //force the height of the header since when a column is moved and all the columns are set to position:absolute
+    // the header disappears because it is empty
+    var headerPos = this._header.pos();
+    var headerHeightPx = headerHeight + 'px';
+    if (headerPos.height !== headerHeightPx) {
+      headerPos.height = headerHeightPx;
+      this._header.pos(headerPos);
+    }
+    var posChange = false;
+    if (pos.top !== headerHeightPx) {
+      pos.top = headerHeightPx;
+      posChange = true;
+    }
+    this.setStyle('uki-dataTable-header-wrap', 'height', headerHeightPx);
+
     var footerHeight;
     if ( this._footer.visible() ) {
       if ( this._footer._rectHeight ) {
@@ -215,8 +289,48 @@ var DataTable = view.newClass( 'DataTable', Container, {
         }
       }
     }
-    pos.b = footerHeight + 'px';
-    this._container.pos( pos );
+    var footerHeightPx = footerHeight + 'px';
+
+    var scrollbarHeight = 0;
+    var tableDataWidth = this._footer._dom.scrollWidth;
+    var tableContainerWidth = this._dom.clientWidth;
+    if (tableContainerWidth < tableDataWidth) {
+      var scrolledPos = this._scrollContainer.pos();
+      var scrollChange = false;
+      if (scrolledPos.height !== '15px') {
+        scrolledPos.height = '15px';
+        scrollChange = true;
+      }
+      if ('ontouchstart' in window) {
+        if (scrolledPos.bottom !== '0px') {
+          scrolledPos.bottom = '0px';
+          if (!scrollChange) scrollChange = true;
+        };
+      } else {
+        if (scrolledPos.bottom !== footerHeightPx) {
+          scrolledPos.bottom = footerHeightPx;
+          if (!scrollChange) scrollChange = true;
+        }
+        scrollbarHeight = 15;
+      }
+      if (scrollChange) this._scrollContainer.pos(scrolledPos);
+    }
+
+    //force the height of the footer since when a column is moved and all the columns are set to position:absolute
+    // the footer disappears because it is empty
+    var footerPos = this._footer.pos();
+    if (footerHeight > 4 && footerPos.height !== footerHeightPx ) { //anything under 5 pixels is probably bogus while things are building out
+      footerPos.height = footerHeightPx;
+      this._footer.pos(footerPos);
+    }
+
+    if (pos.bottom !== (footerHeight + scrollbarHeight ) + 'px') {
+      pos.bottom = (footerHeight + scrollbarHeight ) + 'px';
+      if (!posChange) posChange = true;
+    }
+    if (posChange) this._container.pos( pos );
+
+
     if ( this._deferFocus === true ) {
       this.focus();
     }
@@ -227,21 +341,18 @@ var DataTable = view.newClass( 'DataTable', Container, {
   },
 
   _handleScroll: function ( newLocation ) {
-    var lastHeader = this._header.scrollLeft();
-    if ( lastHeader != newLocation ) {
-      this._header.scrollLeft( newLocation );
-      if ( this._header._menu != null ) {
-        this._header._menu.dom().style.marginLeft = -newLocation + "px";
+    if ( this._header._menu != null ) {
+      this._header._menu.dom().style.marginLeft = -newLocation + "px";
+    }
+    this._header.setStyle('table.uki-dataTable-pack', 'margin-left', '-' + newLocation + 'px');
+    var baseMarginLeft = 0;
+    var pinnedColumns = Object.keys(this._header._leftPinnedColumns);
+    if (pinnedColumns && pinnedColumns.length) {
+      for (var i = 0, count = pinnedColumns.length; i < count; ++i) {
+        baseMarginLeft += this._header._leftPinnedColumns[pinnedColumns[i]].width;
       }
     }
-    lastHeader = this._container.scrollLeft();
-    if ( lastHeader != newLocation ) {
-      this._container.scrollLeft( newLocation );
-    }
-    lastHeader = this._footer.scrollLeft();
-    if ( lastHeader != newLocation ) {
-      this._footer.scrollLeft( newLocation );
-    }
+    this._footer._table.style.marginLeft = this._header._table.style.marginLeft = (baseMarginLeft - newLocation) + "px";
   },
 
   _scrolledFooter: function () {
@@ -249,8 +360,8 @@ var DataTable = view.newClass( 'DataTable', Container, {
     this._handleScroll( lastLocation );
   },
 
-  _scrolledContainer: function () {
-    var newHeader = this._container.scrollLeft();
+  _scrolledScrollbar: function () {
+    var newHeader = this._scrollContainer.scrollLeft();
     this._handleScroll( newHeader );
   },
 
@@ -816,7 +927,14 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
       if ( newWidth != this._width ) {
         //console.log(this);
         this._width = newWidth;
+        var pinWidth = 15;
+        if ('ontouchstart' in window) {
+          pinWidth = 35;
+        }
+        this._filter.style.width = (newWidth - pinWidth) + 'px';
+        //console.log('filter', this._filter);
         if ( this.parent() != null ) {
+          //console.log('cssRule', this._cssRule, newWidth);
           this.parent().updateCSSRules( this._cssRule, 'width', this._width + "px" );
           this.parent().trigger( { type: 'recalcTableSize' } );
         }
@@ -966,6 +1084,13 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
     }
     return (this.parent().parent().footer().footervisible( this._pos ));
   },
+  pinned: fun.newProp( 'pinned', function ( v ) {
+    if ( arguments.length ) {
+      this._pinned = v;
+    }
+    return this._pinned;
+  } ),
+  _pinned: false,
 
   // _pos is not a changeable property, only can be set at creation, this is because too many things depend on this!
   // it would be a pain to try and make sure things that link via the _pos are updated
@@ -999,16 +1124,21 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
     var className = 'uki-dataTable-header-cell uki-dataTable-col-' + this._pos;
 
     this._labelElement =
-        dom.createElement( 'div', {className: "uki-dataTable-header-text"} );
+        dom.createElement( 'div', {className: "uki-dataTable-header-text uki-dataTable-header-text-col-" + this._pos} );
     this._resizer =
         dom.createElement( 'div', {className: "uki-dataTable-resizer uki-dataTable-resizer_pos-" + this._pos} );
+
+    var pinClasses = "uki-dataTable-pin uki-dataTable-pin-col-" + this._pos;
     if ( 'ontouchstart' in window ) {
       this._resizer.innerHTML = "&nbsp;<br>&nbsp;";
       this._resizer.style.width = "20px";
       this._resizer.style.right = "-14px";
+      pinClasses += ' uki-dataTable-unpinned';
     } else {
       this._resizer.innerHTML = "|";
     }
+
+    this._pin = dom.createElement( 'div', {className: pinClasses  } );
 
     this._filter =
         dom.createElement( 'input', {className: "uki-dataTable-filter" +
@@ -1024,13 +1154,20 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
     } );
 
     this._wrapper =
-        dom.createElement( 'div', {className: "uki-dataTable-header-wrap"}, [
-          this._labelElement, this._filter, this._resizer
+        dom.createElement( 'div', {className: "uki-dataTable-header-wrap uki-dataTable-header-wrap-col-" + this._pos}, [
+          this._labelElement, this._filter, this._pin, this._resizer
         ] );
     this._dom =
         dom.createElement( 'td', {className: className}, [this._wrapper] );
     fun.deferOnce( fun.bindOnce( this._finishSetup, this ) );
-
+    if ('ontouchstart' in window) {
+      this._pin.style.width = '25px';
+      this._pin.style.height = '25px';
+      this._pin.style.right = '0px';
+    } else {
+      this._wrapper.onmouseover = fun.bind(this._showPin, this);
+      this._wrapper.onmouseout =  fun.bind(this._removePin, this);
+    }
   },
 
   destruct: function () {
@@ -1042,7 +1179,14 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
     this._formatter = null;
 
   },
-
+  _showPin: function () {
+    if (dom.hasClass(this._pin, 'uki-dataTable-pinned')) return;
+    dom.addClass(this._pin, 'uki-dataTable-unpinned');
+  },
+  _removePin: function () {
+    if (dom.hasClass(this._pin, 'uki-dataTable-pinned')) return;
+    dom.removeClass(this._pin, 'uki-dataTable-unpinned');
+  },
   _setupResizeable: function () {
     if ( this._resizable && this._sizeable ) {
       this._resizer.style.display = '';
@@ -1088,6 +1232,13 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
     this.filterable( this._filterable );
     this.sort( this._sort );
     this.label( this._label );
+    this.pinned(this._pinned);
+    var pinned = this.pinned && this.pinned();
+    if (pinned) {
+      this._parent.pinColumn(this._pos, pinned);
+      dom.addClass(this._pin, 'uki-dataTable-pinned');
+      dom.removeClass(this._pin, 'uki-dataTable-unpinned');
+    }
   },
 
   focus: function () {
@@ -1095,10 +1246,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
       if ( this._visible && this._filterable && this.parent().filterable() ) {
         this._filter.focus();
       }
-    }
-    catch( err ) {
-      //     console.log("Error on focus",err);
-    }
+    } catch( err ) {  }
   },
 
   hasFocus: function () {
@@ -1110,9 +1258,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
       if ( this.hasFocus() ) {
         this._filter.blur();
       }
-    }
-    catch( err ) {
-    }
+    } catch( err ) {  }
   }
 
 } );
@@ -1297,7 +1443,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
   _styleSheetElement: null,
   _styleSheet: null,
   _columns: null,
-  _pinnedColumns: [],
+  _leftPinnedColumns: {},
 
   _createDom: function ( initArgs ) {
     Container.prototype._createDom.call( this, initArgs );
@@ -1320,7 +1466,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     ] );
 
     this._draggableColumn = -1;
-    this.on( 'draggesturestart', this._dragStart );
+    //this.on( 'draggesturestart', this._dragStart );
     this.on( 'draggesture', this._drag );
     this.on( 'draggestureend', this._dragEnd );
     if ( 'ontouchstart' in window ) {
@@ -1328,6 +1474,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     } else {
       this.on( 'click', this._click );
     }
+    this.on('resizedColumn', this._resizePinnedColumn);
     this._setupMenu();
   },
 
@@ -1456,6 +1603,38 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     }
     this.updateCSSRules( id, name, value );
   },
+  getStyleId: function (styleName) {
+    var id;
+    if ( this._cssRuleTracking[styleName] == null ) {
+      var parentId = this.parent().CSSTableId();
+      var prefix = styleName.indexOf('.') > -1 ? '' : 'div.';
+      var CSSKey = 'div.uki-dataTable' + parentId + ' ' + prefix + styleName;
+      id = this.addCSSRule( CSSKey );
+      this._cssRuleTracking[styleName] = id;
+    } else {
+      id = this._cssRuleTracking[styleName];
+    }
+    return id;
+  },
+  getStyle: function (styleName, name) {
+    var id = this.getStyleId(styleName);
+    var theRules;
+    if ( this._styleSheet.cssRules ) {
+      theRules = this._styleSheet.cssRules;
+    } else {
+      theRules = this._styleSheet.rules;
+    }
+    if (theRules[id].style.getPropertyValue) {
+      var ret = theRules[id].style.getPropertyValue(name);
+    } else {
+      var ret = theRules[id].style[name];
+    }
+    return ret;
+  },
+  setStyle: function ( styleName, name, value ) {
+    var id = this.getStyleId(styleName);
+    this.updateCSSRules( id, name, value );
+  },
 
   deleteAllCSSRules: function () {
     var count = 0;
@@ -1485,7 +1664,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     return index;
   },
 
-  updateCSSRules: function ( cssRule, name, value ) {
+  updateCSSRules: function ( id, name, value ) {
     var theRules;
 
     if ( this._styleSheet.cssRules ) {
@@ -1493,21 +1672,24 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     } else {
       theRules = this._styleSheet.rules;
     }
+    //Check the previous value and see if it needs to be set
+    if (theRules[id].style.getPropertyValue) {
+      var prevVal = theRules[id].style.getPropertyValue(name);
+    } else {
+      var prevVal = theRules[id].style[name];
+    }
 
-    try {
-      if ( theRules[cssRule].style.setProperty ) {
-        theRules[cssRule].style.setProperty( name, value, null );
+    if (prevVal !== value) {
+      if ( theRules[id].style.setProperty ) {
+        theRules[id].style.setProperty( name, value, null );
       } else {
-        theRules[cssRule].style[name] = value;
+        theRules[id].style[name] = value;
       }
-    }
-    catch( e ) {
-      //console.log("Error in Update CSSRules ", e);
-    }
 
-    if ( this._styleSheet.getInnerHTML ) {
-      this._styleSheetElement.innerHTML = this._styleSheet.getInnerHTML();
-      this._styleSheet = this._styleSheetElement.sheet || this._styleSheet;
+      if ( this._styleSheet.getInnerHTML ) {
+        this._styleSheetElement.innerHTML = this._styleSheet.getInnerHTML();
+        this._styleSheet = this._styleSheetElement.sheet || this._styleSheet;
+      }
     }
   },
 
@@ -1518,11 +1700,128 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     }
     for ( var i = 0; i < this._columns.length; i++ ) {
       tw += (this._columns[i].visible() ? this._columns[i].width() : 0);
+      //console.log('column', this._columns[i]);
     }
-    return (tw);
+    return tw;
+  },
+
+  _resizePinnedColumn: function (event) {
+    //console.log('resizePinnedColumn', event.curWidth, event.prevWidth, event.index);
+    var change = event.curWidth - event.prevWidth;
+    this._leftPinnedColumns[event.index].width = this.columns()[event.index]._dom.offsetWidth;
+    this._setupPinnedColumn(event.index, change);
+  },
+
+  //pinnedValue can be false, true (sequence will be assumed as 1) or a sequence number (1 based) if there are multiple columns pinned
+  pinColumn: function (index, pinnedValue) {
+    if (index == undefined) return;
+    //console.log('pinColumn', index, pinnedValue);
+    if (pinnedValue === false || this._leftPinnedColumns[index] !== undefined) {
+      if (this._leftPinnedColumns[index] == undefined) return; // it was never actually pinned so return
+      this._setupPinnedColumn(index);
+      delete this._leftPinnedColumns[index];
+      var pinned = false;
+    } else if (pinnedValue || this._leftPinnedColumns[index] === undefined){
+      var colWidth = this.columns()[index]._dom.offsetWidth;
+      //console.log('column', colWidth, this.columns()[index], this.columns()[index]._width, this.columns()[index]._dom.offsetWidth);
+      this._leftPinnedColumns[index] = {width:colWidth, index:index};
+      this._leftPinnedColumns[index].sequence = (pinnedValue !== true && pinnedValue != undefined) ? pinnedValue : Object.keys(this._leftPinnedColumns).length;
+      this._setupPinnedColumn(index, null, true);
+      var pinned = true;
+    }
+    this.trigger( {
+      type: "columnPin",
+      column: this.columns()[index],
+      pinned: pinned,
+      columnIndex: index
+    } );
+
+  },
+
+  _setupPinnedColumn: function (index, widthChange, pinned) {
+    //console.log('setupPinnedColumnSize', index, widthChange, pinned);
+    if (!this._leftPinnedColumns[index]) return;
+    this.setColStyle(index, 'z-index', pinned ? 1 : 0);
+    this.setColStyle(index, 'position', pinned ? 'absolute' : 'initial');
+    this.setStyle('div.uki-dataTable-header-container td.uki-dataTable-col-' + index, 'background-color', pinned ? 'lightgray' : 'initial');
+    this.setStyle('div.uki-dataTable-footer-container td.uki-dataTable-col-' + index, 'background-color', pinned ? '#EFEFEF' : 'initial');
+    var colWidth = this._leftPinnedColumns[index].width;
+    var pinnedCount = Object.keys(this._leftPinnedColumns).length;
+    if (!pinned) --pinnedCount;
+    var allSeq = {};
+    var highestSeq = 0;
+    var totalWidth = 0;
+    var orderedList = {};
+    var deletedSeq = this._leftPinnedColumns[index].sequence;
+    for (var i in this._leftPinnedColumns) {
+      if (!this._leftPinnedColumns.hasOwnProperty(i)) continue;
+      var seq = this._leftPinnedColumns[i].sequence;
+      if (allSeq[seq]) { //This is a duplicate
+        seq++;
+        this._leftPinnedColumns[i].sequence = seq;
+      }
+      allSeq[seq] = this._leftPinnedColumns[i].index;
+      if (highestSeq < seq) highestSeq = seq;
+      if (!pinned) {
+        if (this._leftPinnedColumns[i].sequence == deletedSeq) continue;
+        if (this._leftPinnedColumns[i].sequence > deletedSeq) this._leftPinnedColumns[i].sequence--;
+      }
+      totalWidth += this._leftPinnedColumns[i].width;
+      orderedList[this._leftPinnedColumns[i].sequence] = {width:this._leftPinnedColumns[i].width, index:this._leftPinnedColumns[i].index};
+    }
+
+    //console.log('width:', colWidth, 'pinnedCount:', pinnedCount, 'totalWidth:', totalWidth);
+    var offset = 0;
+    //Do a fixup if there are some holes in the sequence
+    var gaps = 0;
+    for (var i = 1; i <= highestSeq; ++i) {
+      if (!orderedList[i]) {
+        //We have a gap;
+        for (var next = i; next <= highestSeq; ++next) {
+          if (orderedList[next]) {
+            this._leftPinnedColumns[orderedList[next].index].sequence = i;
+            orderedList[i] = orderedList[next];
+            delete orderedList[next];
+            ++gaps;
+            break;
+          }
+        }
+      }
+    }
+    highestSeq -= gaps;
+    for (var i = highestSeq; i > 0; --i) {
+      if (!orderedList[i]) continue;
+      offset += orderedList[i].width;
+      this._leftPinnedColumns[orderedList[i].index].offset = offset;
+      //console.log('offset:', offset);
+      this.setStyle('div.uki-dataList td.uki-dataTable-col-' + orderedList[i].index, 'left', '-' + offset + 'px');
+    }
+    var leftOffset = 0;
+    for (var i = 1; i <= highestSeq; ++i) {
+      if (!orderedList[i]) continue;
+      this.setStyle('div.uki-dataTable-header-container td.uki-dataTable-col-' + orderedList[i].index, 'left', (leftOffset) + 'px');
+      this.setStyle('div.uki-dataTable-footer-container td.uki-dataTable-col-' + orderedList[i].index, 'left', (leftOffset) + 'px');
+      leftOffset += orderedList[i].width;
+    }
+    //console.log('offsetWidth', this._parent._header._table.offsetWidth)
+    if (this._parent._header._table.offset != '10px') {
+    //if (pinned) {
+      //var headerTableWidth = this._parent._header._table.offsetWidth - totalWidth;
+      this.setStyle('uki-dataList-pack', 'width', '10px');
+      this._parent._footer._table.style.width = this._parent._header._table.style.width = "10px";
+    }
+    var headerMargin = this._parent._header._table.style.marginLeft;
+    headerMargin = !headerMargin ? 0 : parseInt(headerMargin);
+    var headerMarginLeft = pinned ? headerMargin + (widthChange || colWidth) : headerMargin - colWidth;
+    //console.log('headerMargin', headerMargin, 'pinned', pinned, 'colWidth', colWidth, 'headerMarginLeft', headerMarginLeft);
+    this._parent._footer._table.style.marginLeft = this._parent._header._table.style.marginLeft = headerMarginLeft + "px";
+    //console.log('setting rows:', totalWidth);
+    this.setStyle('uki-dataList-pack', 'margin-left', totalWidth + 'px');
+    //console.log('setupPinnedColumn', orderedList, this._leftPinnedColumns);
   },
 
   _click: function ( e ) {
+    //console.log('_click', this._draggableColumn);
     if ( this._draggableColumn != -1 ) {
       return;
     }
@@ -1541,21 +1840,18 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
 
     // Get Column #
     var target = e.target;
-    while ( target !== null && target.nodeName !== "TD" ) {
-      target = target.parentNode;
-    }
     if ( target === null ) {
       return;
     }
-
+    //console.log('clicked', target, e.target);
     // Verify this is a Header "CELL" (i.e. a clickable element)
-    if ( dom.hasClass( target, "uki-dataTable-header-cell" ) ) {
-      var index = target.className.match( /uki-dataTable-col-(\d+)/ )[1];
+    if ( dom.hasClass(target, "uki-dataTable-header-text" ) ) {
+      var index = target.className.match( /uki-dataTable-header-text-col-(\d+)/ )[1];
       var col = this.columns();
       var sortedlist = '';
 
-      if ( e.ctrlKey ) {
-        
+      if ( e.altKey ) {
+        this.pinColumn(index);
 
       } else {
 
@@ -1599,6 +1895,19 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
         columnIndex: index
       } );
       }
+    } else if (dom.hasClass(target, 'uki-dataTable-pin')) {
+      var index = target.className.match( /uki-dataTable-pin-col-(\d+)/ )[1];
+      var col = this.columns()[index];
+      if (!dom.hasClass(target, 'uki-dataTable-pinned')) {
+        dom.removeClass(target, 'uki-dataTable-unpinned');
+        dom.addClass(target, 'uki-dataTable-pinned');
+      } else {
+        dom.removeClass(target, 'uki-dataTable-pinned');
+        if ('ontouchstart' in window) {
+          dom.addClass(target, 'uki-dataTable-unpinned');
+        }
+      }
+      this.pinColumn(index);
     }
   },
 
@@ -1788,69 +2097,207 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
   },
 
   _dragEnd: function ( e ) {
-    this._drag( e );
-    try {
-      this.trigger( {
-        type: 'resizeColumnEnd',
-        column: this.columns()[this._draggableColumn]
-      } );
-    }
-    catch( err ) {
-      //console.log(err);
+    //console.log('dragEnd', e.target, 'pos:', this._initialPosition);
+    if (this._draggableColumn != -1 ) {
+      this._drag( e );
+      try {
+        this.trigger( {
+          type: 'resizeColumnEnd',
+          column: this.columns()[this._draggableColumn]
+        } );
+      } catch( err ) {}
+    } else if (this._initialPosition != undefined) {
+
+      var index = this._initialPosition;
+      var cols = this.columns();
+      var orderedIndex = [];
+      for (var i = 0, count = cols.length; i < count; ++i) {
+        if (i == index) continue;
+        var col = cols[i];
+        if (col._dom.style.borderLeftColor == 'blue' ) {
+          orderedIndex.push(parseInt(index));
+          orderedIndex.push(i);
+          this._turnOffLeftMovingColumnMarker(col);
+        } else if (col._dom.style.borderRightColor == 'blue') {
+          orderedIndex.push(i);
+          orderedIndex.push(parseInt(index));
+          this._turnOffRightMovingColumnMarker(col);
+        } else {
+          orderedIndex.push(i);
+        }
+      }
+      //console.log('orderedIndex', orderedIndex);
+      try {
+        this.trigger( {
+          type: 'columnsReordered',
+          columnOrder: orderedIndex
+        } );
+      } catch( err ) {}
+
+      var offset = 0;
+      for (var i = 0, count = orderedIndex.length; i < count; ++i) {
+        this.setColStyle(orderedIndex[i], 'position', 'absolute');
+        this.setColStyle(orderedIndex[i], 'left', offset + 'px');
+        //console.log('offsetWidth', cols[orderedIndex[i]]._dom.offsetWidth, 'offset:', offset, 'i:', i);
+        offset += cols[orderedIndex[i]]._dom.offsetWidth;
+      }
+      this.setColStyle(index, 'z-index', '0');
+      this.setColStyle(index, 'position', 'absolute');
+      this.setColStyle(index, 'background-color', 'initial');
     }
     this._draggableColumn = -1;
+    this._initialWidth = undefined;
+    this._initialLeft = undefined;
+    this._initialPosition = undefined;
   },
-
+  _isTargetMovable: function (target) {
+    var index;
+    if (dom.hasClass( target, 'uki-dataTable-header-wrap' )) {
+      index = target.className.match( /uki-dataTable-header-wrap-col-(\d+)/ )[1];
+    }
+    if (dom.hasClass( target, 'uki-dataTable-header-text' )) {
+      index = target.className.match( /uki-dataTable-header-text-col-(\d+)/ )[1];
+    }
+    if (dom.hasClass( target, 'uki-dataTable-header-cell' )) {
+      var index = target.className.match( /uki-dataTable-col-(\d+)/ )[1];
+    }
+    if (index == undefined) return false;
+    return index;
+  },
+/*
   _dragStart: function ( e ) {
+    console.log('dragStart', e.target);
     if ( (e.target.tagName && e.target.tagName == "INPUT") ) {
       e.isDefaultPrevented = fun.FT;
       return;
     }
 
     if ( dom.hasClass( e.target, 'uki-dataTable-resizer' ) ) {
-      e.draggbale = e.target;
+      e.draggable = e.target;
       e.cursor = dom.computedStyle( e.target, null ).cursor;
       var index =
           e.target.className.match( /uki-dataTable-resizer_pos-(\d+)/ )[1];
       this._draggableColumn = index;
       this._initialWidth = this.columns()[index].width();
+
+    } else if (dom.hasClass(e.target, "uki-dataTable-header-wrap")) {
+      console.log('dragStart position drag');
+      var index = e.target.className.match( /uki-dataTable-header-wrap-col-(\d+)/ )[1];
+      this._setupAdjustingPositionColumn(index);
+    } else if (dom.hasClass(e.target, "uki-dataTable-header-text")) {
+      console.log('dragStart position drag2');
+      var index = e.target.className.match( /uki-dataTable-header-text-col-(\d+)/ )[1];
+      this._setupAdjustingPositionColumn(index);
+
     } else {
+      console.log('dragStart preventing default');
       e.preventDefault();
     }
   },
+  */
+  _setupAdjustingPositionColumn: function (index) {
+    //console.log('adjusting position', index);
+    this._initialPosition = index;
+    this._initialLeft = this.columns()[index]._dom.offsetLeft;
+    this.setColStyle(index, 'z-index', '1');
+    this.setColStyle(index, 'position', 'absolute');
+    this.setColStyle(index, 'background-color', 'red');
+  },
 
   _drag: function ( e ) {
-    if ( this._draggableColumn == -1 ) {
-      return;
-    }
-    var width = this._initialWidth;
-    if ( e.dragOffset != null ) {
-      width += e.dragOffset.x;
-    } else {
-      width += e.clientX;
-    }
-    if ( width < 10 ) {
-      width = 10;
-    }
+    var index;
+    if (this._draggableColumn != -1 || (dom.hasClass( e.target, 'uki-dataTable-resizer' ) && !this._initialPosition)) {
+      if (!this._draggableColumn || !this._initialWidth) {
+        index = e.target.className.match( /uki-dataTable-resizer_pos-(\d+)/ )[1];
+        this._initialWidth = this.columns()[index].width();
+        this._draggableColumn = index;
+      }
+      var width = this._initialWidth;
+      if ( e.dragOffset != null ) {
+        width += e.dragOffset.x;
+      } else {
+        width += e.clientX;
+      }
+      if ( width < 10 ) {
+        width = 10;
+      }
 
-    this._resizeColumn( this._draggableColumn, width );
-    try {
-      this.trigger( {
-        type: 'resizeColumn',
-        column: this.columns()[this._draggableColumn]
-      } );
+      this._resizeColumn( this._draggableColumn, width );
+      try {
+        this.trigger( {
+          type: 'resizeColumn',
+          column: this.columns()[this._draggableColumn]
+        } );
+      } catch( err ) { }
+    } else if (this._initialPosition != undefined || ((index = this._isTargetMovable(e.target)) != undefined && index != false && this._draggableColumn == -1)) {
+      if (index == undefined) index = this._initialPosition;
+      var movement = (e.dragOffset && e.dragOffset.x) || e.clientX;
+      var cols = this.columns();
+      //console.log('_initialLeft', this._initialLeft);
+      if (!this._initialLeft) {
+        this._setupAdjustingPositionColumn(index);
+      };
+      var offset = this._initialLeft + movement;
+      this.setColStyle(index, 'left', offset + 'px');
+      var closestResizer;
+      var blueBorder;
+      var lastVisibleIndex;
+      for (var i = 0, count = cols.length; i< count; ++i) {
+        if (index == i || !cols[i]._visible) continue;
+        var colDom = cols[i]._dom;
+        if (colDom.style.borderLeftColor == 'blue') blueBorder = i;
+        var difference = Math.abs(offset - (isNaN(parseInt(colDom.offsetLeft)) ? 0 : parseInt(colDom.offsetLeft)));
+        if (closestResizer == undefined || difference < closestResizer.distance) {
+          closestResizer = {index:i, distance:difference};
+        }
+        lastVisibleIndex = i;
+      };
+      if (cols[lastVisibleIndex]._dom.style.borderRightColor == 'blue') var rightBlueBorder = lastVisibleIndex;
+
+      var totalWidth = this.totalWidth();
+      if (Math.abs(offset - totalWidth) < closestResizer.distance || cols[index]._dom.offsetLeft > totalWidth) {
+        var lastCol = cols[lastVisibleIndex];
+        if (lastCol._dom.style.borderRightColor != 'blue') {
+          if (blueBorder) this._turnOffLeftMovingColumnMarker(cols[blueBorder])
+          if (rightBlueBorder) this._turnOffRightMovingColumnMarker(cols[rightBlueBorder]);
+          this._turnOnRightMovingColumnMarker(lastCol);
+        } else {
+          this._turnOnRightMovingColumnMarker(cols[lastVisibleIndex]);
+        }
+      } else if (blueBorder !== closestResizer.index) {
+        this._turnOnLeftMovingColumnMarker(cols[closestResizer.index]);
+        if (blueBorder) this._turnOffLeftMovingColumnMarker(cols[blueBorder]);
+        if (rightBlueBorder) this._turnOffRightMovingColumnMarker(cols[rightBlueBorder]);
+      }
     }
-    catch( err ) {
-    }
+  },
+  _turnOffLeftMovingColumnMarker: function (col) {
+    col._dom.style.borderLeft = '';
+  },
+  _turnOnLeftMovingColumnMarker: function (col) {
+    col._dom.style.borderLeft = '4px solid blue';
+  },
+  _turnOffRightMovingColumnMarker: function (col) {
+    col._dom.style.borderRightColor = 'rgb(204, 204,204)';
+    col._dom.style.borderRightWidth = '1px';
+  },
+  _turnOnRightMovingColumnMarker: function (col) {
+    col._dom.style.borderRightColor = 'blue';
+    col._dom.style.borderRightWidth = '4px';
   },
 
   _resizeColumn: function ( pos, width ) {
     var column = this.columns()[pos];
+    var prevWidth = column.width();
     column.width( width );
-    try {
-      this.trigger( { type: 'recalcTableSize' } );
-    }
-    catch( err ) {
+    var newWidth = column.width();
+    if (prevWidth !== newWidth) {
+      try {
+        this.trigger( { type: 'recalcTableSize' } );
+        if (this._leftPinnedColumns[column._pos]) {
+          this.trigger( {type: 'resizedColumn', prevWidth: prevWidth, curWidth: newWidth, index:column._pos});
+        }
+      } catch( err ) { }
     }
   },
 

@@ -1,6 +1,10 @@
 .uki-dataTable-container {
-    overflow: auto;
-   -webkit-overflow-scrolling: touch;
+    /*overflow: auto;*/
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+   /*-webkit-overflow-scrolling: touch;*/
 	 background-color: #ffffff;
 }
 
@@ -62,6 +66,7 @@
     white-space: nowrap;
     overflow: hidden;
     cursor: default;
+    background-color: inherit;
 }
 
 .uki-dataTable-row_selected {
@@ -169,7 +174,7 @@ table.uki-dataTable-header tr.uki-dataTable-header-row td {
     position: absolute;
     width: 5px;
     top: 0;
-    right: -7px;
+    right: -12px;
     height: 100%;
     text-indent: 1em;
     cursor: ew-resize;
@@ -185,13 +190,30 @@ table.uki-dataTable-header tr.uki-dataTable-header-row td {
     padding-left: 0;
     padding-right: 0;
 }
+.uki-dataTable-pin {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    right:-7px;
+    bottom: 0px;
+}
+.uki-dataTable-unpinned {
+    background: url(unpinned.gif) no-repeat center;
+}
+.uki-dataTable-pinned {
+    background: url(pinned.gif) no-repeat center;
+}
 
 .uki-dataTable-filter, .uki-dataTable-footer-field {
   margin-left: -2px;
   padding: 1px;
-  width: 100%;
 }
 
 .uki-dataTable-footer-field {
   background-color: #CCC;
+}
+
+.uki-dataTable-scrollbar-container {
+  overflow-x: scroll;
+  -webkit-overflow-scrolling:touch;
 }

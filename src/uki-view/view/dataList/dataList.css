@@ -1,5 +1,5 @@
 .uki-dataList {
-    position: relative;
+    /*position: relative;*/
     outline: none;
     outline-offset: 0;
 		background-color: #FFFFFF;
@@ -10,7 +10,7 @@
     width: 100%;
     display: block;
     list-style: none;
-    position: absolute;
+    position: relative;
     padding: 0;
     margin: 0;
 }
@@ -29,7 +29,7 @@
     display: block;
     height: 14px;
     overflow: hidden;
-    /*background-color: #FFFFFF;*/
+    background-color: #FFFFFF;
 }
 
 .uki-dataList-row_odd {
@@ -56,4 +56,8 @@
     background-color: #CCC;
     border-color: #AAA;
     color: #000;
+}
+
+.uki-dataList-placeholder {
+    display: none;
 }

@@ -33,7 +33,7 @@ var views = uki([
       filterable: true, sortable: true, hasMenu: true, editInPlace: true, editInPlaceHotkey: 113, styler: styler,
       menuOptions: [ 'Row Count', 'Reset Sort', 'Reset Filters', 'Reset All', 'Redraw Row', 'Edit Grid [F2]', "Insert Row", { text: 'Menu 3', options: ['test', 'test2', 'test3']}, { text: 'Menu 4', options: ['test', 'test2', 'test3'] }],
       on: {columnClick: sortit, columnFilter: filterit, menuClick: menuClick, editInPlaceChange: editInPlace, touchstart: DoubleTapEvent, dblclick: dblclicker },
-      pos: 't:0 l:0 w:100% h:100%', columns: [
+      pos: 't:0 l:0 w:500 h:500', columns: [
         { label: 'ID', width: 40, visible: false },
         { label: 'Name', minWidth: 100, width: 250, maxWidth: 500, resizable: true, editor: {view: "nativeControl.Text"}, footervalue: 'hi' },
         { label: 'Time', width: 50, style: 'text-align:right;', formatter: formatTime, unformatter: unformatTime, validation: validate, filterable: false, resizable: false, sortable: false, editor: true, footer: false, footervalue: 'I am not visible' },
@@ -50,7 +50,7 @@ var Header = views.view("table" ).header();
 function styler(row, pos, tbl)
 {
   if (row[2] > 1200000) {
-    console.log(tbl);
+    //console.log(tbl);
     Header.setRowStyle(pos, "background-color", "red");
   } else {
     Header.setRowStyle(pos, "background-color", "");

@@ -340,8 +340,8 @@ var DataList = view.newClass('DataList', Container, Focusable, {
                 pack = this._scheduleRenderPack(rowsRange),
                 d = this.metrics().rowDimensions(rowsRange.to - 1);
 
-            pack.fromPX = this.metrics().rowDimensions(rowsRange.from).top;
-            pack.toPX = d.top + d.height;
+            //pack.fromPX = this.metrics().rowDimensions(rowsRange.from).top;
+            //pack.toPX = d.top + d.height;
             packs.push(pack);
 
             this._childViews = packs.sort(function(a, b) {
