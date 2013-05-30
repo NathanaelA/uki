@@ -11,7 +11,7 @@
     }
     var require_modules = require.modules = [];
     var require_cache = require.cache = [];
-    var __requiredCss = ".uki-textSelectable_off {-moz-user-select: -moz-none; -webkit-user-select: none; -o-user-select: none; user-select: none;}\n.uki-textSelectable_off::selection {background: transparent;}\n.uki-draggable_off {-webkit-user-drag: none;}\n\n.uki-attaching {font-size: 12px; font-family: Arial, Helvetica, sans-serif;}\n.uki-attaching-relative {position: relative;}\n.uki-hidden {display: none;}\n\n.uki-button {border: 1px solid #999; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-bottom-color: #777; border-radius: 3px; background: #D7DAE4 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAADwCAIAAAB5d1ZWAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MzFBNzRBRjgzMUMxMTFFMDk4MTVBMTVDMDE2MEQyRTMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MzFBNzRBRjkzMUMxMTFFMDk4MTVBMTVDMDE2MEQyRTMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4OTY5QTk2MTMxQzAxMUUwOTgxNUExNUMwMTYwRDJFMyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4OTY5QTk2MjMxQzAxMUUwOTgxNUExNUMwMTYwRDJFMyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PipBo48AAAKSSURBVHja7N1BTsMwEAXQOun9DwQbJJZcBLFD7KBpuMKfxSiy9eYIT3/Gdpw243ieN5XVHVUB60Yrx9KFBazjgFDAopW3oT4srIbnk0LehrAKbWhmFbAky2rYkixYktWDZcBLlpllU2pTamZJlh08LFiwJsI6T09K82QxiGtDAAvW5TOLl2TBggULFiwEsGDBgrVmDc+zCmdDWLB6sLyAW8GSLMlqwnJlIVmSJVnzYB2SVUjWIVmSZWZZDSVLsmBJVo7lqUOOdUqWZPUkC1ZcrsJgwYIFa9XV8DYgxFhjo5VjiZaZBQsWLFiwFCxYsGCtedx5f3ulEJ8Nh7NhjLVtOhEWrKux9p1CirVvsArJ0oZ5srShNpQsWLYOkiVZBnxlNbTPsintwBoDVmFmwYKlDa/G8jJbAcvLbJU2hBVjCVYFi1ZclsLagFdmlpllZsGCBUvBggULFixYKq3x+e0DtvHZ0B/3aMOuZEGIsXRhAevXP+DmWA+LYaENGVSShSvH8p+uOdYBy2rYgvVnNSwk6yFZhWTBshpaDc2siZLFSrLMrOtXQ8nKsezgDfgWLJ+SqWCxisu9ISxY188sPzeULFiwYMGChQAWLFiw1qzx9eNRaXw29M3tCpbXlXMsV2GlZEGIsdwbVrAshjmWXJlZXW1Iy9ahZzWEYOugDQ14W4c12xCWNtSGsGY6SMOSrI5yFQYLFixYsJRXuytYPo6iDWHBggULFgJYsGDBWvS48/H+QiE/GzocOkh3YO2+I51jbR5o5Vj3faeQY2lDbagNtaE2XDNZd22YJ8sW3szShtpwpoO0NpQsyboaS7BKWLTMLMkys6YpS6E2lCxYsOyzlGTBggULFiwFCxYsWDPVvwADALDE/Hh4isZ/AAAAAElFTkSuQmCC) repeat-x 0 0; white-space: nowrap; vertical-align: top; text-align: center; font-size: 12px; font-family: Arial, Helvetica, sans-serif; color: #111; padding: 0; height: 22px; text-shadow: rgba(255, 255, 255, 0.5) 0 1px 0px; position: relative; z-index: 10; outline: 0; _zoom: 1; _display: inline; -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; *background-image: url(-view/view/button/button.png);}\n.uki-button::-moz-focus-inner {padding: 0; border: 0;}\n.uki-button:hover {background-color: #F5F7FD; background-position: 0 -40px;}\n.uki-button:active {border-color: #666; background-color: #C5C7CD; background-position: 0 -80px; -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset; -moz-box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset; box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset;}\n.uki-button__text {margin: 0 5px;}\n.uki-button:focus {border-color: #7594D2; -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px; -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px; box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px;}\n.uki-button__icon {vertical-align: top; margin-top: -1px; margin-bottom: -1px;}\n.uki-button_disabled,\n.uki-button_disabled:active,\n.uki-button_disabled:hover {color: #999; background-color: #eee; background-image: none; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; border-color: #AAA;}\n.uki-button_disabled .uki-button__icon {opacity: 0.5;}\n.uki-button_image-only .uki-button__text {display: none;}\n.uki-button_confirm {background-position: 0 -120px; border-color: #999; border-bottom-color: #779;}\n.uki-button_confirm:hover {background-position: 0 -160px;}\n.uki-button_confirm:active {background-position: 0 -200px; border-color: #77A;}\n.uki-button_confirm.uki-button_disabled,\n.uki-button_confirm.uki-button_disabled:active,\n.uki-button_confirm.uki-button_disabled:hover {background-color: #EEEEFA; border-color: #AAC;}\n\n.uki-flow {display: block; padding: 0; margin: 0;}\n.uki-flow-item {display: block; padding: 0; margin: 0;}\n.uki-flow_horizontal:after {clear: both; content: '.'; display: block; height: 0px; line-height: 0; visibility: hidden;}\n.uki-flow_horizontal {*zoom: 1;}\n.uki-flow_horizontal > .uki-flow-item {float: left;}\n.uki-flow_spacing-small {margin: 0;}\n.uki-flow_spacing-small > .uki-flow-item {margin: 5px 0 0 0;}\n.uki-flow_spacing-medium > .uki-flow-item {margin: 10px 0 0 0;}\n.uki-flow_spacing-large > .uki-flow-item {margin: 20px 0 0 0;}\n.uki-flow .uki-flow-item:first-child {margin-top: 0;}\n.uki-flow_horizontal.uki-flow_spacing-small > .uki-flow-item {margin: 0 0 0 5px;}\n.uki-flow_horizontal.uki-flow_spacing-medium > .uki-flow-item {margin: 0 0 0 10px;}\n.uki-flow_horizontal.uki-flow_spacing-large > .uki-flow-item {margin: 0 0 0 20px;}\n.uki-flow_horizontal.uki-flow > .uki-flow-item:first-child {margin-left: 0;}\n\n.uki-nc-select {margin: 0;}\n.uki-nc-svg-wrapper {overflow: hidden; display: inline-block; padding: 0px; margin-bottom: -4px;}\n.uki-nc-svg {overflow: visible !important; display: inline-block; border: #000 solid thin; margin-bottom: -3px;}\ninput:disabled,textarea:disabled {padding: 0px 0px;}\n.uki-nc-text, uki-nc-checkbox, .uki-nc-textarea {display: inline-block; *display: inline; *zoom: 1;}\n.uki-nc-text__input, .uki-nc-textarea__input {margin: 0; height: 100%; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; width: 100%; *width: auto;}\n.uki-nc-text_with-placeholder, .uki-nc-textarea_with-placeholder {position: relative;}\n.uki-nc-text__placholder, .uki-nc-textarea__placholder {position: absolute; color: #888; opacity: 0.5; padding: 0px 2px; pointer-events: none; text-align: right; bottom: 0; width: 100%;}\n.uki-nc-text__input {text-align: right;}\n.uki-nc-text__placholder {text-align: left;}\n\n.uki-text-p {line-height: 1.3; margin: 0 0 1em 0;}\n.uki-header {margin: 0 0 5px 0; font-weight: normal;}\n.uki-header_size_large {font-size: 18px;}\n.uki-header_size_medium {font-size: 15px;}\n.uki-header_size_small {font-size: 12px; font-weight: bold;}\n\n.uki-menu-horizontal {list-style: none; padding: 0; margin: 0; -webkit-user-drag: none;}\n.uki-menu-horizontal li {color: black; background-color: white; position: relative;}\n.uki-menu-horizontal li ul {z-index: 500; position: absolute; left: 0; min-width: 10em;}\n.uki-menu-horizontal ul {padding: 0; margin: 0px -1px; list-style: none; border: 1px solid black; background-color: white;}\n.uki-menu-horizontal > li {position: relative; float: left; text-align: left;}\n.uki-menu-horizontal a {display: block; padding: 0px 4px; color: black; text-decoration: none;}\n.uki-menu-horizontal-no-touch :hover > a {background-color: black; color: white;}\n.uki-menu-horizontal-no-touch :focus > a, a.uki-menu-focus, .uki-menu-focus {background-color: black; color: #FFFFFF;}\n.uki-menu-horizontal ul {display: none;}\n.uki-menu-horizontal ul.uki-menu-visible {display: block;}\n.uki-menu-horizontal-no-touch :hover > ul {display: block;}\n.uki-menu-horizontal ul ul {position: absolute; top: 0px; left: 10em;}\n.uki-menu-horizontal .uki-menu-submenu {background: url(data:image/gif;base64,R0lGODlhBwARALMAAAAAAP8AAP///////////////////////////////////////////////////////yH5BAEAAAEALAAAAAAHABEAAAQUMMhJq704AAs27Z4EhuAXilmqZhEAOw==) no-repeat 98% center; *background-image: url(-view/view/menu/horiz_arrow.gif);}\n.uki-menu-vertical .uki-menu-submenu {background: url(data:image/gif;base64,R0lGODlhEQAHAPMAAAAAAP8AAP///////////////////////////////////////////////////////yH5BAEAAAEALAAAAAARAAcAAwQTMMhJq714gs1Blp33gdtIieYYAQA7) no-repeat 98% center; *background-image: url(-view/view/menu/vert_arrow.gif);}\n\n.uki-splitPane-handle,\n.uki-splitPane-handle-bar {z-index: 200; position: absolute;}\n.uki-splitPane-handle {background: #999;}\n.uki-splitPane-handle-bar {display: none; background: #999; overflow: hidden;}\n.uki-splitPane-handle-ext {background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAyCAYAAACZDmG3AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMTIvMjEvMTCej/OTAAAAJklEQVQokWMoLi7+////f4b///8zMPHw8DDAABMDEhjljHJozAEAwzEI2ZZEXDIAAAAASUVORK5CYII=); position: absolute; *background-image: url(-view/view/splitPane/extv.png);}\n.uki-splitPane-handle_h {cursor: row-resize; width: 100%;}\n.uki-splitPane-handle-bar_h {width: 100%; height: 1px; left: 0px; top: 2px;}\n.uki-splitPane-handle_v {cursor: col-resize; height: 100%;}\n.uki-splitPane-handle-bar_v {height: 100%; width: 1px; top: 0px; left: 2px;}\n.uki-splitPane-handle_thin .uki-splitPane-handle-bar {display: block;}\n.uki-splitPane-handle_thin.uki-splitPane-handle {background: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEHAAEALAAAAAABAAEAAAICTAEAOw==); *background-image: url(-view/view/splitPane/x.gif);}\n.uki-splitPane-handle_thin.uki-splitPane-handle_v {width: 5px !important; margin-left: -2px;}\n.uki-splitPane-handle_thin.uki-splitPane-handle_h {height: 5px !important; margin-top: -2px;}\n\n.uki-dataList {position: relative; outline: none; outline-offset: 0; background-color: #FFFFFF;}\n.uki-dataList-pack {left: 0; width: 100%; display: block; list-style: none; position: absolute; padding: 0; margin: 0;}\n.uki-dataList-column {cursor: default; padding: 5px; margin: 0; font-size: 11px; line-height: 14px; text-overflow: ellipsis; white-space: nowrap;}\n.uki-dataList-row {display: block; height: 14px; overflow: hidden;}\n.uki-dataList-row_odd {background-color: #EDF3FE;}\n.uki-dataList-row_selected {background-color: #3875D7; color: #FFF; padding-top: 4px; padding-bottom: 4px; border: 1px solid #2760C0; border-left: none; border-right: none;}\n.uki-dataList-row_selected + .uki-dataList-row_selected {border-top: none; padding-top: 5px;}\n.uki-dataList_blured .uki-dataList-row_selected {background-color: #CCC; border-color: #AAA; color: #000;}\n\n.uki-dataTable-container {overflow: auto; -webkit-overflow-scrolling: touch; background-color: #ffffff;}\n.uki-dataTable {position: relative; height: 100%; width: 100%;}\n.uki-menu-w1 {}\n.uki-menu-w2 {}\n.uki-dataTable-menu {margin-left: 0px; margin-top: 2px; width: 12px; height: 12px; cursor: pointer; position: absolute; top: 0; left: 0; z-index: 1;}\n.uki-dataTable-menu .uki-menu-primary, .uki-dataTable-menu .uki-menu-primary > a {background-color: transparent;}\n.uki-dataTable-sort-down {background: url(data:image/gif;base64,R0lGODlhCgAJAIABAF9fX////yH5BAEAAAEALAAAAAAKAAkAAAINjI+py50AI0ByPsgsKgA7) no-repeat 100% center; *background-image: url(-view/view/dataTable/down.gif);}\n.uki-dataTable-sort-up {background: url(data:image/gif;base64,R0lGODlhCgAJAIABAF9fX////yH5BAEAAAEALAAAAAAKAAkAAAINjGGZwHrcFoSu2ovzLQA7) no-repeat 100% center; *background-image: url(-view/view/dataTable/up.gif);}\n.uki-dataTable-pack, .uki-dataTable-header, .uki-dataTable-footer {border-spacing: 0; width: 100%; overflow: hidden; table-layout: fixed;}\n.uki-dataTable-row {display: table-row;}\n.uki-dataTable-cell {border: none; padding: 2px 5px; margin: 0; height: 14px; font-size: 11px; line-height: 14px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; cursor: default;}\n.uki-dataTable-row_selected {background-color: #3875D7; color: #FFF;}\n.uki-dataTable-row_selected .uki-dataTable-cell {padding-top: 1px; padding-bottom: 1px; border-top: 1px solid #2760C0; border-bottom: 1px solid #2760C0;}\n.uki-dataTable-row_selected + .uki-dataTable-row_selected .uki-dataTable-cell {border-top: none; padding-top: 2px;}\n.uki-dataList_blured .uki-dataTable-row_selected {background-color: #CCC; color: #000;}\n.uki-dataList_blured .uki-dataTable-row_selected .uki-dataTable-cell {border-color: #AAA;}\n.uki-dataTable-wrap {width: 100%;}\n.uki-dataTable-cell_number {text-align: right;}\n.uki-dataTable-header-container, .uki-dataTable-footer-container {box-shadow: 0 1px 0 rgba(0, 0, 0, .1); -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, .1); -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .1); position: relative; background-color: #EFEFEF; overflow: hidden; cursor: default;}\n.uki-dataTable-header-container {border-bottom: 1px solid #999;}\n.uki-dataTable-footer-container {border-top: 1px solid #999;}\n.uki-dataTable-footer-container {position: absolute; bottom: 0px; left: 0px; right: 0px;}\ntable.uki-dataTable-header tr.uki-dataTable-header-row td {text-align: left;}\n.uki-dataTable-header-cell, .uki-dataTable-footer-cell {margin: 0; vertical-align: top; border-right: 1px solid #CCC; padding: 0 5px 0 4px;}\n.uki-dataTable-header-wrap, .uki-dataTable-footer-wrap {position: relative; margin-right: 3px;}\n.uki-dataTable-header-text {text-overflow: ellipsis; white-space: nowrap; overflow: hidden; padding: 2px 0; height: 14px; font-size: 11px; line-height: 14px;}\n.uki-dataTable-footer-text {text-overflow: ellipsis; white-space: nowrap; overflow: hidden; padding: 2px 0; height: 14px; font-size: 10px; font-weight: bolder; line-height: 14px; text-align: right;}\n.uki-dataTable-resizer {display: none; overflow: hidden; position: absolute; width: 5px; top: 0; right: -7px; height: 100%; text-indent: 1em; cursor: col-resize;}\n.uki-dataTable-header-cell_resizable .uki-dataTable-resizer {display: block;}\n.uki-dataTable-spacer {padding-left: 0; padding-right: 0;}\n.uki-dataTable-filter, .uki-dataTable-footer-field {margin-left: -2px; padding: 1px; width: 100%;}\n.uki-dataTable-footer-field {background-color: #CCC;}\n";
+    var __requiredCss = ".uki-textSelectable_off {-moz-user-select: -moz-none; -webkit-user-select: none; -o-user-select: none; user-select: none;}\n.uki-textSelectable_off::selection {background: transparent;}\n.uki-draggable_off {-webkit-user-drag: none;}\n\n.uki-attaching {font-size: 12px; font-family: Arial, Helvetica, sans-serif;}\n.uki-attaching-relative {position: relative;}\n.uki-hidden {display: none;}\n\n.uki-button {border: 1px solid #999; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-bottom-color: #777; border-radius: 3px; background: #D7DAE4 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAADwCAIAAAB5d1ZWAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MzFBNzRBRjgzMUMxMTFFMDk4MTVBMTVDMDE2MEQyRTMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MzFBNzRBRjkzMUMxMTFFMDk4MTVBMTVDMDE2MEQyRTMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4OTY5QTk2MTMxQzAxMUUwOTgxNUExNUMwMTYwRDJFMyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4OTY5QTk2MjMxQzAxMUUwOTgxNUExNUMwMTYwRDJFMyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PipBo48AAAKSSURBVHja7N1BTsMwEAXQOun9DwQbJJZcBLFD7KBpuMKfxSiy9eYIT3/Gdpw243ieN5XVHVUB60Yrx9KFBazjgFDAopW3oT4srIbnk0LehrAKbWhmFbAky2rYkixYktWDZcBLlpllU2pTamZJlh08LFiwJsI6T09K82QxiGtDAAvW5TOLl2TBggULFiwEsGDBgrVmDc+zCmdDWLB6sLyAW8GSLMlqwnJlIVmSJVnzYB2SVUjWIVmSZWZZDSVLsmBJVo7lqUOOdUqWZPUkC1ZcrsJgwYIFa9XV8DYgxFhjo5VjiZaZBQsWLFiwFCxYsGCtedx5f3ulEJ8Nh7NhjLVtOhEWrKux9p1CirVvsArJ0oZ5srShNpQsWLYOkiVZBnxlNbTPsintwBoDVmFmwYKlDa/G8jJbAcvLbJU2hBVjCVYFi1ZclsLagFdmlpllZsGCBUvBggULFixYKq3x+e0DtvHZ0B/3aMOuZEGIsXRhAevXP+DmWA+LYaENGVSShSvH8p+uOdYBy2rYgvVnNSwk6yFZhWTBshpaDc2siZLFSrLMrOtXQ8nKsezgDfgWLJ+SqWCxisu9ISxY188sPzeULFiwYMGChQAWLFiw1qzx9eNRaXw29M3tCpbXlXMsV2GlZEGIsdwbVrAshjmWXJlZXW1Iy9ahZzWEYOugDQ14W4c12xCWNtSGsGY6SMOSrI5yFQYLFixYsJRXuytYPo6iDWHBggULFgJYsGDBWvS48/H+QiE/GzocOkh3YO2+I51jbR5o5Vj3faeQY2lDbagNtaE2XDNZd22YJ8sW3szShtpwpoO0NpQsyboaS7BKWLTMLMkys6YpS6E2lCxYsOyzlGTBggULFiwFCxYsWDPVvwADALDE/Hh4isZ/AAAAAElFTkSuQmCC) repeat-x 0 0; white-space: nowrap; vertical-align: top; text-align: center; font-size: 12px; font-family: Arial, Helvetica, sans-serif; color: #111; padding: 0; height: 22px; text-shadow: rgba(255, 255, 255, 0.5) 0 1px 0px; position: relative; z-index: 10; outline: 0; _zoom: 1; _display: inline; -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; *background-image: url(-view/view/button/button.png);}\n.uki-button::-moz-focus-inner {padding: 0; border: 0;}\n.uki-button:hover {background-color: #F5F7FD; background-position: 0 -40px;}\n.uki-button:active {border-color: #666; background-color: #C5C7CD; background-position: 0 -80px; -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset; -moz-box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset; box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset;}\n.uki-button__text {margin: 0 5px;}\n.uki-button:focus {border-color: #7594D2; -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px; -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px; box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px;}\n.uki-button__icon {vertical-align: top; margin-top: -1px; margin-bottom: -1px;}\n.uki-button_disabled,\n.uki-button_disabled:active,\n.uki-button_disabled:hover {color: #999; background-color: #eee; background-image: none; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; border-color: #AAA;}\n.uki-button_disabled .uki-button__icon {opacity: 0.5;}\n.uki-button_image-only .uki-button__text {display: none;}\n.uki-button_confirm {background-position: 0 -120px; border-color: #999; border-bottom-color: #779;}\n.uki-button_confirm:hover {background-position: 0 -160px;}\n.uki-button_confirm:active {background-position: 0 -200px; border-color: #77A;}\n.uki-button_confirm.uki-button_disabled,\n.uki-button_confirm.uki-button_disabled:active,\n.uki-button_confirm.uki-button_disabled:hover {background-color: #EEEEFA; border-color: #AAC;}\n\n.uki-flow {display: block; padding: 0; margin: 0;}\n.uki-flow-item {display: block; padding: 0; margin: 0;}\n.uki-flow_horizontal:after {clear: both; content: '.'; display: block; height: 0px; line-height: 0; visibility: hidden;}\n.uki-flow_horizontal {*zoom: 1;}\n.uki-flow_horizontal > .uki-flow-item {float: left;}\n.uki-flow_spacing-small {margin: 0;}\n.uki-flow_spacing-small > .uki-flow-item {margin: 5px 0 0 0;}\n.uki-flow_spacing-medium > .uki-flow-item {margin: 10px 0 0 0;}\n.uki-flow_spacing-large > .uki-flow-item {margin: 20px 0 0 0;}\n.uki-flow .uki-flow-item:first-child {margin-top: 0;}\n.uki-flow_horizontal.uki-flow_spacing-small > .uki-flow-item {margin: 0 0 0 5px;}\n.uki-flow_horizontal.uki-flow_spacing-medium > .uki-flow-item {margin: 0 0 0 10px;}\n.uki-flow_horizontal.uki-flow_spacing-large > .uki-flow-item {margin: 0 0 0 20px;}\n.uki-flow_horizontal.uki-flow > .uki-flow-item:first-child {margin-left: 0;}\n\n.uki-nc-select {margin: 0;}\n.uki-nc-svg-wrapper {overflow: hidden; display: inline-block; padding: 0px; margin-bottom: -4px;}\n.uki-nc-svg {overflow: visible !important; display: inline-block; border: #000 solid thin; margin-bottom: -3px;}\ninput:disabled,textarea:disabled {padding: 0px 0px;}\n.uki-nc-text, uki-nc-checkbox, .uki-nc-textarea {display: inline-block; *display: inline; *zoom: 1;}\n.uki-nc-text__input, .uki-nc-textarea__input {margin: 0; height: 100%; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; width: 100%; *width: auto;}\n.uki-nc-text_with-placeholder, .uki-nc-textarea_with-placeholder {position: relative;}\n.uki-nc-text__placholder, .uki-nc-textarea__placholder {position: absolute; color: #888; opacity: 0.5; padding: 0px 2px; pointer-events: none; text-align: right; bottom: 0; width: 100%;}\n.uki-nc-text__input {text-align: right;}\n.uki-nc-text__placholder {text-align: left;}\n\n.uki-text-p {line-height: 1.3; margin: 0 0 1em 0;}\n.uki-header {margin: 0 0 5px 0; font-weight: normal;}\n.uki-header_size_large {font-size: 18px;}\n.uki-header_size_medium {font-size: 15px;}\n.uki-header_size_small {font-size: 12px; font-weight: bold;}\n\n.uki-menu-horizontal {list-style: none; padding: 0; margin: 0; -webkit-user-drag: none;}\n.uki-menu-horizontal li {color: black; background-color: white; position: relative;}\n.uki-menu-horizontal li ul {z-index: 500; position: absolute; left: 0; min-width: 10em;}\n.uki-menu-horizontal ul {padding: 0; margin: 0px -1px; list-style: none; border: 1px solid black; background-color: white;}\n.uki-menu-horizontal > li {position: relative; float: left; text-align: left;}\n.uki-menu-horizontal a {display: block; padding: 0px 4px; color: black; text-decoration: none;}\n.uki-menu-horizontal-no-touch :hover > a {background-color: black; color: white;}\n.uki-menu-horizontal-no-touch :focus > a, a.uki-menu-focus, .uki-menu-focus {background-color: black; color: #FFFFFF;}\n.uki-menu-horizontal ul {display: none;}\n.uki-menu-horizontal ul.uki-menu-visible {display: block;}\n.uki-menu-horizontal-no-touch :hover > ul {display: block;}\n.uki-menu-horizontal ul ul {position: absolute; top: 0px; left: 10em;}\n.uki-menu-horizontal .uki-menu-submenu {background: url(data:image/gif;base64,R0lGODlhBwARALMAAAAAAP8AAP///////////////////////////////////////////////////////yH5BAEAAAEALAAAAAAHABEAAAQUMMhJq704AAs27Z4EhuAXilmqZhEAOw==) no-repeat 98% center; *background-image: url(-view/view/menu/horiz_arrow.gif);}\n.uki-menu-vertical .uki-menu-submenu {background: url(data:image/gif;base64,R0lGODlhEQAHAPMAAAAAAP8AAP///////////////////////////////////////////////////////yH5BAEAAAEALAAAAAARAAcAAwQTMMhJq714gs1Blp33gdtIieYYAQA7) no-repeat 98% center; *background-image: url(-view/view/menu/vert_arrow.gif);}\n\n.uki-splitPane-handle,\n.uki-splitPane-handle-bar {z-index: 200; position: absolute;}\n.uki-splitPane-handle {background: #999;}\n.uki-splitPane-handle-bar {display: none; background: #999; overflow: hidden;}\n.uki-splitPane-handle-ext {background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAyCAYAAACZDmG3AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMTIvMjEvMTCej/OTAAAAJklEQVQokWMoLi7+////f4b///8zMPHw8DDAABMDEhjljHJozAEAwzEI2ZZEXDIAAAAASUVORK5CYII=); position: absolute; *background-image: url(-view/view/splitPane/extv.png);}\n.uki-splitPane-handle_h {cursor: row-resize; width: 100%;}\n.uki-splitPane-handle-bar_h {width: 100%; height: 1px; left: 0px; top: 2px;}\n.uki-splitPane-handle_v {cursor: col-resize; height: 100%;}\n.uki-splitPane-handle-bar_v {height: 100%; width: 1px; top: 0px; left: 2px;}\n.uki-splitPane-handle_thin .uki-splitPane-handle-bar {display: block;}\n.uki-splitPane-handle_thin.uki-splitPane-handle {background: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEHAAEALAAAAAABAAEAAAICTAEAOw==); *background-image: url(-view/view/splitPane/x.gif);}\n.uki-splitPane-handle_thin.uki-splitPane-handle_v {width: 5px !important; margin-left: -2px;}\n.uki-splitPane-handle_thin.uki-splitPane-handle_h {height: 5px !important; margin-top: -2px;}\n\n.uki-dataList {outline: none; outline-offset: 0; background-color: #FFFFFF;}\n.uki-dataList-pack {left: 0; width: 100%; display: block; list-style: none; position: relative; padding: 0; margin: 0;}\n.uki-dataList-column {cursor: default; padding: 5px; margin: 0; font-size: 11px; line-height: 14px; text-overflow: ellipsis; white-space: nowrap;}\n.uki-dataList-row {display: block; height: 14px; overflow: hidden; background-color: #FFFFFF;}\n.uki-dataList-row_odd {background-color: #EDF3FE;}\n.uki-dataList-row_selected {background-color: #3875D7; color: #FFF; padding-top: 4px; padding-bottom: 4px; border: 1px solid #2760C0; border-left: none; border-right: none;}\n.uki-dataList-row_selected + .uki-dataList-row_selected {border-top: none; padding-top: 5px;}\n.uki-dataList_blured .uki-dataList-row_selected {background-color: #CCC; border-color: #AAA; color: #000;}\n.uki-dataList-placeholder {display: none;}\n\n.uki-dataTable-container {overflow-y: auto; overflow-x: hidden; background-color: #ffffff;}\n.uki-dataTable {position: relative; height: 100%; width: 100%;}\n.uki-menu-w1 {}\n.uki-menu-w2 {}\n.uki-dataTable-menu {margin-left: 0px; margin-top: 2px; width: 12px; height: 12px; cursor: pointer; position: absolute; top: 0; left: 0; z-index: 1;}\n.uki-dataTable-menu .uki-menu-primary, .uki-dataTable-menu .uki-menu-primary > a {background-color: transparent;}\n.uki-dataTable-sort-down {background: url(data:image/gif;base64,R0lGODlhCgAJAIABAF9fX////yH5BAEAAAEALAAAAAAKAAkAAAINjI+py50AI0ByPsgsKgA7) no-repeat 100% center; *background-image: url(-view/view/dataTable/down.gif);}\n.uki-dataTable-sort-up {background: url(data:image/gif;base64,R0lGODlhCgAJAIABAF9fX////yH5BAEAAAEALAAAAAAKAAkAAAINjGGZwHrcFoSu2ovzLQA7) no-repeat 100% center; *background-image: url(-view/view/dataTable/up.gif);}\n.uki-dataTable-pack, .uki-dataTable-header, .uki-dataTable-footer {border-spacing: 0; width: 100%; overflow: hidden; table-layout: fixed;}\n.uki-dataTable-row {display: table-row;}\n.uki-dataTable-cell {border: none; padding: 2px 5px; margin: 0; height: 14px; font-size: 11px; line-height: 14px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; cursor: default; background-color: inherit;}\n.uki-dataTable-row_selected {background-color: #3875D7; color: #FFF;}\n.uki-dataTable-row_selected .uki-dataTable-cell {padding-top: 1px; padding-bottom: 1px; border-top: 1px solid #2760C0; border-bottom: 1px solid #2760C0;}\n.uki-dataTable-row_selected + .uki-dataTable-row_selected .uki-dataTable-cell {border-top: none; padding-top: 2px;}\n.uki-dataList_blured .uki-dataTable-row_selected {background-color: #CCC; color: #000;}\n.uki-dataList_blured .uki-dataTable-row_selected .uki-dataTable-cell {border-color: #AAA;}\n.uki-dataTable-wrap {width: 100%;}\n.uki-dataTable-cell_number {text-align: right;}\n.uki-dataTable-header-container, .uki-dataTable-footer-container {box-shadow: 0 1px 0 rgba(0, 0, 0, .1); -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, .1); -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .1); position: relative; background-color: #EFEFEF; overflow: hidden; cursor: default;}\n.uki-dataTable-header-container {border-bottom: 1px solid #999;}\n.uki-dataTable-footer-container {border-top: 1px solid #999;}\n.uki-dataTable-footer-container {position: absolute; bottom: 0px; left: 0px; right: 0px;}\ntable.uki-dataTable-header tr.uki-dataTable-header-row td {text-align: left;}\n.uki-dataTable-header-cell, .uki-dataTable-footer-cell {margin: 0; vertical-align: top; border-right: 1px solid #CCC; padding: 0 5px 0 4px;}\n.uki-dataTable-header-wrap, .uki-dataTable-footer-wrap {position: relative; margin-right: 3px;}\n.uki-dataTable-header-text {text-overflow: ellipsis; white-space: nowrap; overflow: hidden; padding: 2px 0; height: 14px; font-size: 11px; line-height: 14px;}\n.uki-dataTable-footer-text {text-overflow: ellipsis; white-space: nowrap; overflow: hidden; padding: 2px 0; height: 14px; font-size: 10px; font-weight: bolder; line-height: 14px; text-align: right;}\n.uki-dataTable-resizer {display: none; overflow: hidden; position: absolute; width: 5px; top: 0; right: -12px; height: 100%; text-indent: 1em; cursor: col-resize;}\n.uki-dataTable-header-cell_resizable .uki-dataTable-resizer {display: block;}\n.uki-dataTable-spacer {padding-left: 0; padding-right: 0;}\n.uki-dataTable-pin {width: 16px; height: 16px; position: absolute; right: -7px; bottom: 0px;}\n.uki-dataTable-unpinned {background: url(data:image/gif;base64,R0lGODlhCwANAIABALGxsdPT0yH5BAEKAAEALAAAAAALAA0AAAIUDI5oye0Po5xpuYAvznVv5XlAWAAAOw==) no-repeat center; *background-image: url(-view/view/dataTable/unpinned.gif);}\n.uki-dataTable-pinned {background: url(data:image/gif;base64,R0lGODlhCwANAIAAAIWFhYWFhSH5BAEKAAEALAAAAAALAA0AAAIUDI5oye0Po5xpuYAvznVv5XlAWAAAOw==) no-repeat center; *background-image: url(-view/view/dataTable/pinned.gif);}\n.uki-dataTable-filter, .uki-dataTable-footer-field {margin-left: -2px; padding: 1px;}\n.uki-dataTable-footer-field {background-color: #CCC;}\n.uki-dataTable-scrollbar-container {overflow-x: scroll; -webkit-overflow-scrolling: touch;}\n";
     require_modules[0] = function(global, module, require) {
         var exports = this;
         global.uki = require(1);
@@ -1541,7 +1541,7 @@
         var exports = this;
         1;
         var view = require(10), utils = require(4), fun = require(7), env = require(3), dom = require(13), evt = require(12), Binding = require(16).Binding;
-        var POS_RULES = [ "top", "right", "left", "bottom", "wiidth", "height", "marginLeft", "marginTop", "marginBottom", "marginRight", "max-width", "max-height" ], POS_MAP = {
+        var POS_RULES = [ "top", "right", "left", "bottom", "width", "height", "marginLeft", "marginTop", "marginBottom", "marginRight", "max-width", "max-height", "position" ], POS_MAP = {
             t: "top",
             r: "right",
             l: "left",
@@ -3510,8 +3510,6 @@
                 }
                 if (range.to > range.from) {
                     var rowsRange = this.metrics().rowsForRange(range), pack = this._scheduleRenderPack(rowsRange), d = this.metrics().rowDimensions(rowsRange.to - 1);
-                    pack.fromPX = this.metrics().rowDimensions(rowsRange.from).top;
-                    pack.toPX = d.top + d.height;
                     packs.push(pack);
                     this._childViews = packs.sort(function(a, b) {
                         return a.from - b.from;
@@ -3992,6 +3990,12 @@
             footer: function() {
                 return this._footer;
             },
+            scrollContainer: function() {
+                return this._scrollContainer;
+            },
+            scrollBar: function() {
+                return this._scrollBar;
+            },
             styleColumn: function(row, col, grid) {
                 return this._styler(row, col, grid);
             },
@@ -4035,6 +4039,9 @@
                     view: initArgs.headerView || DataTableAdvancedHeader,
                     as: "header",
                     addClass: "uki-dataTable-header-container",
+                    pos: {
+                        p: "relative"
+                    },
                     on: {
                         scroll: fun.bind(this._scrolledHeader, this)
                     },
@@ -4046,15 +4053,26 @@
                     pos: "t:0 l:0 r:0 b:0",
                     addClass: "uki-dataTable-container",
                     as: "container",
-                    on: {
-                        scroll: fun.bind(this._scrolledContainer, this)
-                    },
                     childViews: [ {
                         view: initArgs.listView || DataTableList,
                         as: "list",
                         on: {
                             selection: fun.bind(this.trigger, this)
                         }
+                    } ]
+                }, {
+                    view: Container,
+                    pos: "l:0 r:0 b:0 h:15",
+                    addClass: "uki-dataTable-scrollbar-container",
+                    as: "scrollContainer",
+                    on: {
+                        scroll: fun.bind(this._scrolledScrollbar, this)
+                    },
+                    childViews: [ {
+                        view: Container,
+                        pos: "h:15",
+                        addClass: "uki-dataTable-scrollbar",
+                        as: "scrollBar"
                     } ]
                 }, {
                     view: initArgs.footerView || DataTableFooter,
@@ -4076,44 +4094,144 @@
                 this._container.on("keydown", this._keyDown);
                 this._container.dom().tabIndex = -1;
                 this._container.on("mousedown", this._EIPClick);
+                this._scrollContainer = c.view("scrollContainer");
+                this._scrollBar = c.view("scrollBar");
                 this._list = c.view("list");
+                if ("ontouchstart" in window) {
+                    this._container._dom.addEventListener("touchstart", fun.bind(this._detectSwipe, this), false);
+                    this._container._dom.addEventListener("touchmove", fun.bind(this._detectSwipe, this), false);
+                    this._container._dom.addEventListener("touchend", fun.bind(this._detectSwipe, this), false);
+                } else {
+                    this._container.on("mousewheel", fun.bindOnce(this._redirectHorizontalScroll, this));
+                    this._container._dom.addEventListener("wheel", fun.bind(this._redirectHorizontalScroll, this), false);
+                }
             },
             destruct: function() {
                 Container.prototype.destruct.call(this);
                 this._menudom = null;
                 this._list = null;
                 this._container = null;
+                this._scrollContainer = null;
                 this._header = null;
                 this._footer = null;
                 this._styler = null;
                 this._stylerfunction = null;
             },
             _recalculateTableSizes: function() {
-                this._footer._table.style.width = this._header._table.style.width = this._header.totalWidth() + "px";
+                var headerWidth = this._header.totalWidth();
+                this._footer._table.style.width = this._header._table.style.width = headerWidth + "px";
+                headerWidth = this._header._table && this._header._table && this._header._table.offsetWidth;
+                var scrollbarPos = this._scrollBar.pos();
+                scrollbarPos.width = headerWidth + "px";
+                this._scrollBar.pos(scrollbarPos);
             },
-            _updateContainerHeight: function() {
-                var pos = this._container.pos();
-                if (this._header._rectHeight) {
-                    pos.t = this._header._rectHeight;
+            _lastClientX: false,
+            _detectSwipe: function(event) {
+                if (event.type == "touchstart") {
+                    this._lastClientX = event.pageX;
+                } else if (event.type === "touchend") {
+                    this._lastClientX = false;
                 } else {
-                    pos.t = this._header.clientRect().height + "px";
-                    if (pos.t !== "0px") {
-                        this._header._rectHeight = pos.t;
-                    }
-                }
-                if (this._footer.visible()) {
-                    if (this._footer._rectHeight) {
-                        pos.bottom = this._footer._rectHeight;
-                    } else {
-                        pos.bottom = this._footer.clientRect().height + "px";
-                        if (pos.bottom !== "0px") {
-                            this._footer._rectHeight = pos.bottom;
+                    if (this._lastClientX !== false) {
+                        var x = this._lastClientX - event.touches[0].clientX;
+                        if (x) {
+                            var left = this._scrollContainer.scrollLeft();
+                            this._scrollContainer.scrollLeft(left + x);
+                            this._lastClientX = event.touches[0].clientX;
                         }
                     }
-                } else {
-                    pos.bottom = "0px";
                 }
-                this._container.pos(pos);
+            },
+            _redirectHorizontalScroll: function(event) {
+                var x = event && (event.deltaX || event.baseEvent && event.baseEvent.wheelDeltaX);
+                if (x) {
+                    var left = this._scrollContainer.scrollLeft();
+                    if ("ontouchstart" in window) {
+                        this._scrollContainer.scrollLeft(left + x);
+                    } else {
+                        this._scrollContainer.scrollLeft(left - x);
+                    }
+                }
+            },
+            pinColumn: function(index) {
+                this._header.pinColumn(index);
+            },
+            setStyle: function(styleName, name, value) {
+                if (this._header && this._header.setStyle) return this._header.setStyle(styleName, name, value);
+            },
+            getStyle: function(styleName, name) {
+                if (this._header && this._header.getStyle) return this._header.getStyle(styleName, name);
+            },
+            _updateContainerHeight: function() {
+                if (!this._dom.clientHeight && !this._dom.clientWidth) return;
+                var pos = this._container.pos();
+                var headerHeight = 0;
+                if (this._header._rectHeight) {
+                    headerHeight = this._header._rectHeight;
+                } else {
+                    headerHeight = this._header.clientRect().height;
+                    if (headerHeight !== 0) {
+                        this._header._rectHeight = headerHeight;
+                    }
+                }
+                var headerPos = this._header.pos();
+                var headerHeightPx = headerHeight + "px";
+                if (headerPos.height !== headerHeightPx) {
+                    headerPos.height = headerHeightPx;
+                    this._header.pos(headerPos);
+                }
+                var posChange = false;
+                if (pos.top !== headerHeightPx) {
+                    pos.top = headerHeightPx;
+                    posChange = true;
+                }
+                this.setStyle("uki-dataTable-header-wrap", "height", headerHeightPx);
+                var footerHeight;
+                if (this._footer.visible()) {
+                    if (this._footer._rectHeight) {
+                        footerHeight = this._footer._rectHeight;
+                    } else {
+                        footerHeight = this._footer.clientRect().height;
+                        if (footerHeight > 1) {
+                            this._footer._rectHeight = footerHeight;
+                        }
+                    }
+                }
+                var footerHeightPx = footerHeight + "px";
+                var scrollbarHeight = 0;
+                var tableDataWidth = this._footer._dom.scrollWidth;
+                var tableContainerWidth = this._dom.clientWidth;
+                if (tableContainerWidth < tableDataWidth) {
+                    var scrolledPos = this._scrollContainer.pos();
+                    var scrollChange = false;
+                    if (scrolledPos.height !== "15px") {
+                        scrolledPos.height = "15px";
+                        scrollChange = true;
+                    }
+                    if ("ontouchstart" in window) {
+                        if (scrolledPos.bottom !== "0px") {
+                            scrolledPos.bottom = "0px";
+                            if (!scrollChange) scrollChange = true;
+                        }
+                    } else {
+                        if (scrolledPos.bottom !== footerHeightPx) {
+                            scrolledPos.bottom = footerHeightPx;
+                            if (!scrollChange) scrollChange = true;
+                        }
+                        scrollbarHeight = 15;
+                    }
+                    if (scrollChange) this._scrollContainer.pos(scrolledPos);
+                }
+                var footerPos = this._footer.pos();
+                if (footerHeight > 4 && footerPos.height !== footerHeightPx) {
+                    footerPos.height = footerHeightPx;
+                    this._footer.pos(footerPos);
+                }
+                if (pos.bottom !== footerHeight + scrollbarHeight + "px") {
+                    pos.bottom = footerHeight + scrollbarHeight + "px";
+                    if (!posChange) posChange = true;
+                }
+                if (posChange) this._container.pos(pos);
                 if (this._deferFocus === true) {
                     this.focus();
                 }
@@ -4122,28 +4240,25 @@
                 this._updateContainerHeight();
             },
             _handleScroll: function(newLocation) {
-                var lastHeader = this._header.scrollLeft();
-                if (lastHeader != newLocation) {
-                    this._header.scrollLeft(newLocation);
-                    if (this._header._menu != null) {
-                        this._header._menu.dom().style.marginLeft = -newLocation + "px";
+                if (this._header._menu != null) {
+                    this._header._menu.dom().style.marginLeft = -newLocation + "px";
+                }
+                this._header.setStyle("table.uki-dataTable-pack", "margin-left", "-" + newLocation + "px");
+                var baseMarginLeft = 0;
+                var pinnedColumns = Object.keys(this._header._leftPinnedColumns);
+                if (pinnedColumns && pinnedColumns.length) {
+                    for (var i = 0, count = pinnedColumns.length; i < count; ++i) {
+                        baseMarginLeft += this._header._leftPinnedColumns[pinnedColumns[i]].width;
                     }
                 }
-                lastHeader = this._container.scrollLeft();
-                if (lastHeader != newLocation) {
-                    this._container.scrollLeft(newLocation);
-                }
-                lastHeader = this._footer.scrollLeft();
-                if (lastHeader != newLocation) {
-                    this._footer.scrollLeft(newLocation);
-                }
+                this._footer._table.style.marginLeft = this._header._table.style.marginLeft = baseMarginLeft - newLocation + "px";
             },
             _scrolledFooter: function() {
                 var lastLocation = this._footer.scrollLeft();
                 this._handleScroll(lastLocation);
             },
-            _scrolledContainer: function() {
-                var newHeader = this._container.scrollLeft();
+            _scrolledScrollbar: function() {
+                var newHeader = this._scrollContainer.scrollLeft();
                 this._handleScroll(newHeader);
             },
             _scrolledHeader: function() {
@@ -4617,6 +4732,11 @@
                     var newWidth = Math.min(Math.max(v, this._minWidth), this._maxWidth == 0 ? v : this._maxWidth);
                     if (newWidth != this._width) {
                         this._width = newWidth;
+                        var pinWidth = 15;
+                        if ("ontouchstart" in window) {
+                            pinWidth = 35;
+                        }
+                        this._filter.style.width = newWidth - pinWidth + "px";
                         if (this.parent() != null) {
                             this.parent().updateCSSRules(this._cssRule, "width", this._width + "px");
                             this.parent().trigger({
@@ -4767,6 +4887,13 @@
                 }
                 return this.parent().parent().footer().footervisible(this._pos);
             },
+            pinned: fun.newProp("pinned", function(v) {
+                if (arguments.length) {
+                    this._pinned = v;
+                }
+                return this._pinned;
+            }),
+            _pinned: false,
             _pos: 0,
             _cssRule: -1,
             _sizeable: true,
@@ -4788,18 +4915,23 @@
                 }
                 var className = "uki-dataTable-header-cell uki-dataTable-col-" + this._pos;
                 this._labelElement = dom.createElement("div", {
-                    className: "uki-dataTable-header-text"
+                    className: "uki-dataTable-header-text uki-dataTable-header-text-col-" + this._pos
                 });
                 this._resizer = dom.createElement("div", {
                     className: "uki-dataTable-resizer uki-dataTable-resizer_pos-" + this._pos
                 });
+                var pinClasses = "uki-dataTable-pin uki-dataTable-pin-col-" + this._pos;
                 if ("ontouchstart" in window) {
                     this._resizer.innerHTML = "&nbsp;<br>&nbsp;";
                     this._resizer.style.width = "20px";
                     this._resizer.style.right = "-14px";
+                    pinClasses += " uki-dataTable-unpinned";
                 } else {
                     this._resizer.innerHTML = "|";
                 }
+                this._pin = dom.createElement("div", {
+                    className: pinClasses
+                });
                 this._filter = dom.createElement("input", {
                     className: "uki-dataTable-filter" + (initArgs.initfocus ? " initfocus" : ""),
                     tabIndex: 1,
@@ -4815,12 +4947,20 @@
                     this.parent()._lastFocusedFilter = this._filter;
                 });
                 this._wrapper = dom.createElement("div", {
-                    className: "uki-dataTable-header-wrap"
-                }, [ this._labelElement, this._filter, this._resizer ]);
+                    className: "uki-dataTable-header-wrap uki-dataTable-header-wrap-col-" + this._pos
+                }, [ this._labelElement, this._filter, this._pin, this._resizer ]);
                 this._dom = dom.createElement("td", {
                     className: className
                 }, [ this._wrapper ]);
                 fun.deferOnce(fun.bindOnce(this._finishSetup, this));
+                if ("ontouchstart" in window) {
+                    this._pin.style.width = "25px";
+                    this._pin.style.height = "25px";
+                    this._pin.style.right = "0px";
+                } else {
+                    this._wrapper.onmouseover = fun.bind(this._showPin, this);
+                    this._wrapper.onmouseout = fun.bind(this._removePin, this);
+                }
             },
             destruct: function() {
                 Base.prototype.destruct.call(this);
@@ -4829,6 +4969,14 @@
                 this._resizer = null;
                 this._labelElement = null;
                 this._formatter = null;
+            },
+            _showPin: function() {
+                if (dom.hasClass(this._pin, "uki-dataTable-pinned")) return;
+                dom.addClass(this._pin, "uki-dataTable-unpinned");
+            },
+            _removePin: function() {
+                if (dom.hasClass(this._pin, "uki-dataTable-pinned")) return;
+                dom.removeClass(this._pin, "uki-dataTable-unpinned");
             },
             _setupResizeable: function() {
                 if (this._resizable && this._sizeable) {
@@ -4872,6 +5020,13 @@
                 this.filterable(this._filterable);
                 this.sort(this._sort);
                 this.label(this._label);
+                this.pinned(this._pinned);
+                var pinned = this.pinned && this.pinned();
+                if (pinned) {
+                    this._parent.pinColumn(this._pos, pinned);
+                    dom.addClass(this._pin, "uki-dataTable-pinned");
+                    dom.removeClass(this._pin, "uki-dataTable-unpinned");
+                }
             },
             focus: function() {
                 try {
@@ -5058,7 +5213,7 @@
             _styleSheetElement: null,
             _styleSheet: null,
             _columns: null,
-            _pinnedColumns: [],
+            _leftPinnedColumns: {},
             _createDom: function(initArgs) {
                 Container.prototype._createDom.call(this, initArgs);
                 this._rowheader = dom.createElement("tr", {
@@ -5083,7 +5238,6 @@
                     addClass: "uki-dataTable-menu"
                 } ]);
                 this._draggableColumn = -1;
-                this.on("draggesturestart", this._dragStart);
                 this.on("draggesture", this._drag);
                 this.on("draggestureend", this._dragEnd);
                 if ("ontouchstart" in window) {
@@ -5091,6 +5245,7 @@
                 } else {
                     this.on("click", this._click);
                 }
+                this.on("resizedColumn", this._resizePinnedColumn);
                 this._setupMenu();
             },
             _setupMenu: function() {
@@ -5201,6 +5356,38 @@
                 }
                 this.updateCSSRules(id, name, value);
             },
+            getStyleId: function(styleName) {
+                var id;
+                if (this._cssRuleTracking[styleName] == null) {
+                    var parentId = this.parent().CSSTableId();
+                    var prefix = styleName.indexOf(".") > -1 ? "" : "div.";
+                    var CSSKey = "div.uki-dataTable" + parentId + " " + prefix + styleName;
+                    id = this.addCSSRule(CSSKey);
+                    this._cssRuleTracking[styleName] = id;
+                } else {
+                    id = this._cssRuleTracking[styleName];
+                }
+                return id;
+            },
+            getStyle: function(styleName, name) {
+                var id = this.getStyleId(styleName);
+                var theRules;
+                if (this._styleSheet.cssRules) {
+                    theRules = this._styleSheet.cssRules;
+                } else {
+                    theRules = this._styleSheet.rules;
+                }
+                if (theRules[id].style.getPropertyValue) {
+                    var ret = theRules[id].style.getPropertyValue(name);
+                } else {
+                    var ret = theRules[id].style[name];
+                }
+                return ret;
+            },
+            setStyle: function(styleName, name, value) {
+                var id = this.getStyleId(styleName);
+                this.updateCSSRules(id, name, value);
+            },
             deleteAllCSSRules: function() {
                 var count = 0;
                 if (this._styleSheet.cssRules) {
@@ -5224,23 +5411,28 @@
                 }
                 return index;
             },
-            updateCSSRules: function(cssRule, name, value) {
+            updateCSSRules: function(id, name, value) {
                 var theRules;
                 if (this._styleSheet.cssRules) {
                     theRules = this._styleSheet.cssRules;
                 } else {
                     theRules = this._styleSheet.rules;
                 }
-                try {
-                    if (theRules[cssRule].style.setProperty) {
-                        theRules[cssRule].style.setProperty(name, value, null);
+                if (theRules[id].style.getPropertyValue) {
+                    var prevVal = theRules[id].style.getPropertyValue(name);
+                } else {
+                    var prevVal = theRules[id].style[name];
+                }
+                if (prevVal !== value) {
+                    if (theRules[id].style.setProperty) {
+                        theRules[id].style.setProperty(name, value, null);
                     } else {
-                        theRules[cssRule].style[name] = value;
+                        theRules[id].style[name] = value;
                     }
-                } catch (e) {}
-                if (this._styleSheet.getInnerHTML) {
-                    this._styleSheetElement.innerHTML = this._styleSheet.getInnerHTML();
-                    this._styleSheet = this._styleSheetElement.sheet || this._styleSheet;
+                    if (this._styleSheet.getInnerHTML) {
+                        this._styleSheetElement.innerHTML = this._styleSheet.getInnerHTML();
+                        this._styleSheet = this._styleSheetElement.sheet || this._styleSheet;
+                    }
                 }
             },
             totalWidth: function() {
@@ -5252,6 +5444,107 @@
                     tw += this._columns[i].visible() ? this._columns[i].width() : 0;
                 }
                 return tw;
+            },
+            _resizePinnedColumn: function(event) {
+                var change = event.curWidth - event.prevWidth;
+                this._leftPinnedColumns[event.index].width = this.columns()[event.index]._dom.offsetWidth;
+                this._setupPinnedColumn(event.index, change);
+            },
+            pinColumn: function(index, pinnedValue) {
+                if (index == undefined) return;
+                if (pinnedValue === false || this._leftPinnedColumns[index] !== undefined) {
+                    if (this._leftPinnedColumns[index] == undefined) return;
+                    this._setupPinnedColumn(index);
+                    delete this._leftPinnedColumns[index];
+                    var pinned = false;
+                } else if (pinnedValue || this._leftPinnedColumns[index] === undefined) {
+                    var colWidth = this.columns()[index]._dom.offsetWidth;
+                    this._leftPinnedColumns[index] = {
+                        width: colWidth,
+                        index: index
+                    };
+                    this._leftPinnedColumns[index].sequence = pinnedValue !== true && pinnedValue != undefined ? pinnedValue : Object.keys(this._leftPinnedColumns).length;
+                    this._setupPinnedColumn(index, null, true);
+                    var pinned = true;
+                }
+                this.trigger({
+                    type: "columnPin",
+                    column: this.columns()[index],
+                    pinned: pinned,
+                    columnIndex: index
+                });
+            },
+            _setupPinnedColumn: function(index, widthChange, pinned) {
+                if (!this._leftPinnedColumns[index]) return;
+                this.setColStyle(index, "z-index", pinned ? 1 : 0);
+                this.setColStyle(index, "position", pinned ? "absolute" : "initial");
+                this.setStyle("div.uki-dataTable-header-container td.uki-dataTable-col-" + index, "background-color", pinned ? "lightgray" : "initial");
+                this.setStyle("div.uki-dataTable-footer-container td.uki-dataTable-col-" + index, "background-color", pinned ? "#EFEFEF" : "initial");
+                var colWidth = this._leftPinnedColumns[index].width;
+                var pinnedCount = Object.keys(this._leftPinnedColumns).length;
+                if (!pinned) --pinnedCount;
+                var allSeq = {};
+                var highestSeq = 0;
+                var totalWidth = 0;
+                var orderedList = {};
+                var deletedSeq = this._leftPinnedColumns[index].sequence;
+                for (var i in this._leftPinnedColumns) {
+                    if (!this._leftPinnedColumns.hasOwnProperty(i)) continue;
+                    var seq = this._leftPinnedColumns[i].sequence;
+                    if (allSeq[seq]) {
+                        seq++;
+                        this._leftPinnedColumns[i].sequence = seq;
+                    }
+                    allSeq[seq] = this._leftPinnedColumns[i].index;
+                    if (highestSeq < seq) highestSeq = seq;
+                    if (!pinned) {
+                        if (this._leftPinnedColumns[i].sequence == deletedSeq) continue;
+                        if (this._leftPinnedColumns[i].sequence > deletedSeq) this._leftPinnedColumns[i].sequence--;
+                    }
+                    totalWidth += this._leftPinnedColumns[i].width;
+                    orderedList[this._leftPinnedColumns[i].sequence] = {
+                        width: this._leftPinnedColumns[i].width,
+                        index: this._leftPinnedColumns[i].index
+                    };
+                }
+                var offset = 0;
+                var gaps = 0;
+                for (var i = 1; i <= highestSeq; ++i) {
+                    if (!orderedList[i]) {
+                        for (var next = i; next <= highestSeq; ++next) {
+                            if (orderedList[next]) {
+                                this._leftPinnedColumns[orderedList[next].index].sequence = i;
+                                orderedList[i] = orderedList[next];
+                                delete orderedList[next];
+                                ++gaps;
+                                break;
+                            }
+                        }
+                    }
+                }
+                highestSeq -= gaps;
+                for (var i = highestSeq; i > 0; --i) {
+                    if (!orderedList[i]) continue;
+                    offset += orderedList[i].width;
+                    this._leftPinnedColumns[orderedList[i].index].offset = offset;
+                    this.setStyle("div.uki-dataList td.uki-dataTable-col-" + orderedList[i].index, "left", "-" + offset + "px");
+                }
+                var leftOffset = 0;
+                for (var i = 1; i <= highestSeq; ++i) {
+                    if (!orderedList[i]) continue;
+                    this.setStyle("div.uki-dataTable-header-container td.uki-dataTable-col-" + orderedList[i].index, "left", leftOffset + "px");
+                    this.setStyle("div.uki-dataTable-footer-container td.uki-dataTable-col-" + orderedList[i].index, "left", leftOffset + "px");
+                    leftOffset += orderedList[i].width;
+                }
+                if (this._parent._header._table.offset != "10px") {
+                    this.setStyle("uki-dataList-pack", "width", "10px");
+                    this._parent._footer._table.style.width = this._parent._header._table.style.width = "10px";
+                }
+                var headerMargin = this._parent._header._table.style.marginLeft;
+                headerMargin = !headerMargin ? 0 : parseInt(headerMargin);
+                var headerMarginLeft = pinned ? headerMargin + (widthChange || colWidth) : headerMargin - colWidth;
+                this._parent._footer._table.style.marginLeft = this._parent._header._table.style.marginLeft = headerMarginLeft + "px";
+                this.setStyle("uki-dataList-pack", "margin-left", totalWidth + "px");
             },
             _click: function(e) {
                 if (this._draggableColumn != -1) {
@@ -5268,17 +5561,16 @@
                     return;
                 }
                 var target = e.target;
-                while (target !== null && target.nodeName !== "TD") {
-                    target = target.parentNode;
-                }
                 if (target === null) {
                     return;
                 }
-                if (dom.hasClass(target, "uki-dataTable-header-cell")) {
-                    var index = target.className.match(/uki-dataTable-col-(\d+)/)[1];
+                if (dom.hasClass(target, "uki-dataTable-header-text")) {
+                    var index = target.className.match(/uki-dataTable-header-text-col-(\d+)/)[1];
                     var col = this.columns();
                     var sortedlist = "";
-                    if (e.ctrlKey) {} else {
+                    if (e.altKey) {
+                        this.pinColumn(index);
+                    } else {
                         if (this._sortable && col[index].sortable() !== false) {
                             if (!e.shiftKey) {
                                 for (var i = 0; i < col.length; i++) {
@@ -5317,6 +5609,19 @@
                             columnIndex: index
                         });
                     }
+                } else if (dom.hasClass(target, "uki-dataTable-pin")) {
+                    var index = target.className.match(/uki-dataTable-pin-col-(\d+)/)[1];
+                    var col = this.columns()[index];
+                    if (!dom.hasClass(target, "uki-dataTable-pinned")) {
+                        dom.removeClass(target, "uki-dataTable-unpinned");
+                        dom.addClass(target, "uki-dataTable-pinned");
+                    } else {
+                        dom.removeClass(target, "uki-dataTable-pinned");
+                        if ("ontouchstart" in window) {
+                            dom.addClass(target, "uki-dataTable-unpinned");
+                        }
+                    }
+                    this.pinColumn(index);
                 }
             },
             _filter: function(e) {
@@ -5454,59 +5759,176 @@
                 }
             },
             _dragEnd: function(e) {
-                this._drag(e);
-                try {
-                    this.trigger({
-                        type: "resizeColumnEnd",
-                        column: this.columns()[this._draggableColumn]
-                    });
-                } catch (err) {}
+                if (this._draggableColumn != -1) {
+                    this._drag(e);
+                    try {
+                        this.trigger({
+                            type: "resizeColumnEnd",
+                            column: this.columns()[this._draggableColumn]
+                        });
+                    } catch (err) {}
+                } else if (this._initialPosition != undefined) {
+                    var index = this._initialPosition;
+                    var cols = this.columns();
+                    var orderedIndex = [];
+                    for (var i = 0, count = cols.length; i < count; ++i) {
+                        if (i == index) continue;
+                        var col = cols[i];
+                        if (col._dom.style.borderLeftColor == "blue") {
+                            orderedIndex.push(parseInt(index));
+                            orderedIndex.push(i);
+                            this._turnOffLeftMovingColumnMarker(col);
+                        } else if (col._dom.style.borderRightColor == "blue") {
+                            orderedIndex.push(i);
+                            orderedIndex.push(parseInt(index));
+                            this._turnOffRightMovingColumnMarker(col);
+                        } else {
+                            orderedIndex.push(i);
+                        }
+                    }
+                    try {
+                        this.trigger({
+                            type: "columnsReordered",
+                            columnOrder: orderedIndex
+                        });
+                    } catch (err) {}
+                    var offset = 0;
+                    for (var i = 0, count = orderedIndex.length; i < count; ++i) {
+                        this.setColStyle(orderedIndex[i], "position", "absolute");
+                        this.setColStyle(orderedIndex[i], "left", offset + "px");
+                        offset += cols[orderedIndex[i]]._dom.offsetWidth;
+                    }
+                    this.setColStyle(index, "z-index", "0");
+                    this.setColStyle(index, "position", "absolute");
+                    this.setColStyle(index, "background-color", "initial");
+                }
                 this._draggableColumn = -1;
+                this._initialWidth = undefined;
+                this._initialLeft = undefined;
+                this._initialPosition = undefined;
             },
-            _dragStart: function(e) {
-                if (e.target.tagName && e.target.tagName == "INPUT") {
-                    e.isDefaultPrevented = fun.FT;
-                    return;
+            _isTargetMovable: function(target) {
+                var index;
+                if (dom.hasClass(target, "uki-dataTable-header-wrap")) {
+                    index = target.className.match(/uki-dataTable-header-wrap-col-(\d+)/)[1];
                 }
-                if (dom.hasClass(e.target, "uki-dataTable-resizer")) {
-                    e.draggbale = e.target;
-                    e.cursor = dom.computedStyle(e.target, null).cursor;
-                    var index = e.target.className.match(/uki-dataTable-resizer_pos-(\d+)/)[1];
-                    this._draggableColumn = index;
-                    this._initialWidth = this.columns()[index].width();
-                } else {
-                    e.preventDefault();
+                if (dom.hasClass(target, "uki-dataTable-header-text")) {
+                    index = target.className.match(/uki-dataTable-header-text-col-(\d+)/)[1];
                 }
+                if (dom.hasClass(target, "uki-dataTable-header-cell")) {
+                    var index = target.className.match(/uki-dataTable-col-(\d+)/)[1];
+                }
+                if (index == undefined) return false;
+                return index;
+            },
+            _setupAdjustingPositionColumn: function(index) {
+                this._initialPosition = index;
+                this._initialLeft = this.columns()[index]._dom.offsetLeft;
+                this.setColStyle(index, "z-index", "1");
+                this.setColStyle(index, "position", "absolute");
+                this.setColStyle(index, "background-color", "red");
             },
             _drag: function(e) {
-                if (this._draggableColumn == -1) {
-                    return;
+                var index;
+                if (this._draggableColumn != -1 || dom.hasClass(e.target, "uki-dataTable-resizer") && !this._initialPosition) {
+                    if (!this._draggableColumn || !this._initialWidth) {
+                        index = e.target.className.match(/uki-dataTable-resizer_pos-(\d+)/)[1];
+                        this._initialWidth = this.columns()[index].width();
+                        this._draggableColumn = index;
+                    }
+                    var width = this._initialWidth;
+                    if (e.dragOffset != null) {
+                        width += e.dragOffset.x;
+                    } else {
+                        width += e.clientX;
+                    }
+                    if (width < 10) {
+                        width = 10;
+                    }
+                    this._resizeColumn(this._draggableColumn, width);
+                    try {
+                        this.trigger({
+                            type: "resizeColumn",
+                            column: this.columns()[this._draggableColumn]
+                        });
+                    } catch (err) {}
+                } else if (this._initialPosition != undefined || (index = this._isTargetMovable(e.target)) != undefined && index != false && this._draggableColumn == -1) {
+                    if (index == undefined) index = this._initialPosition;
+                    var movement = e.dragOffset && e.dragOffset.x || e.clientX;
+                    var cols = this.columns();
+                    if (!this._initialLeft) {
+                        this._setupAdjustingPositionColumn(index);
+                    }
+                    var offset = this._initialLeft + movement;
+                    this.setColStyle(index, "left", offset + "px");
+                    var closestResizer;
+                    var blueBorder;
+                    var lastVisibleIndex;
+                    for (var i = 0, count = cols.length; i < count; ++i) {
+                        if (index == i || !cols[i]._visible) continue;
+                        var colDom = cols[i]._dom;
+                        if (colDom.style.borderLeftColor == "blue") blueBorder = i;
+                        var difference = Math.abs(offset - (isNaN(parseInt(colDom.offsetLeft)) ? 0 : parseInt(colDom.offsetLeft)));
+                        if (closestResizer == undefined || difference < closestResizer.distance) {
+                            closestResizer = {
+                                index: i,
+                                distance: difference
+                            };
+                        }
+                        lastVisibleIndex = i;
+                    }
+                    if (cols[lastVisibleIndex]._dom.style.borderRightColor == "blue") var rightBlueBorder = lastVisibleIndex;
+                    var totalWidth = this.totalWidth();
+                    if (Math.abs(offset - totalWidth) < closestResizer.distance || cols[index]._dom.offsetLeft > totalWidth) {
+                        var lastCol = cols[lastVisibleIndex];
+                        if (lastCol._dom.style.borderRightColor != "blue") {
+                            if (blueBorder) this._turnOffLeftMovingColumnMarker(cols[blueBorder]);
+                            if (rightBlueBorder) this._turnOffRightMovingColumnMarker(cols[rightBlueBorder]);
+                            this._turnOnRightMovingColumnMarker(lastCol);
+                        } else {
+                            this._turnOnRightMovingColumnMarker(cols[lastVisibleIndex]);
+                        }
+                    } else if (blueBorder !== closestResizer.index) {
+                        this._turnOnLeftMovingColumnMarker(cols[closestResizer.index]);
+                        if (blueBorder) this._turnOffLeftMovingColumnMarker(cols[blueBorder]);
+                        if (rightBlueBorder) this._turnOffRightMovingColumnMarker(cols[rightBlueBorder]);
+                    }
                 }
-                var width = this._initialWidth;
-                if (e.dragOffset != null) {
-                    width += e.dragOffset.x;
-                } else {
-                    width += e.clientX;
-                }
-                if (width < 10) {
-                    width = 10;
-                }
-                this._resizeColumn(this._draggableColumn, width);
-                try {
-                    this.trigger({
-                        type: "resizeColumn",
-                        column: this.columns()[this._draggableColumn]
-                    });
-                } catch (err) {}
+            },
+            _turnOffLeftMovingColumnMarker: function(col) {
+                col._dom.style.borderLeft = "";
+            },
+            _turnOnLeftMovingColumnMarker: function(col) {
+                col._dom.style.borderLeft = "4px solid blue";
+            },
+            _turnOffRightMovingColumnMarker: function(col) {
+                col._dom.style.borderRightColor = "rgb(204, 204,204)";
+                col._dom.style.borderRightWidth = "1px";
+            },
+            _turnOnRightMovingColumnMarker: function(col) {
+                col._dom.style.borderRightColor = "blue";
+                col._dom.style.borderRightWidth = "4px";
             },
             _resizeColumn: function(pos, width) {
                 var column = this.columns()[pos];
+                var prevWidth = column.width();
                 column.width(width);
-                try {
-                    this.trigger({
-                        type: "recalcTableSize"
-                    });
-                } catch (err) {}
+                var newWidth = column.width();
+                if (prevWidth !== newWidth) {
+                    try {
+                        this.trigger({
+                            type: "recalcTableSize"
+                        });
+                        if (this._leftPinnedColumns[column._pos]) {
+                            this.trigger({
+                                type: "resizedColumn",
+                                prevWidth: prevWidth,
+                                curWidth: newWidth,
+                                index: column._pos
+                            });
+                        }
+                    } catch (err) {}
+                }
             },
             _appendChildToDom: function(child) {
                 this._rowheader.appendChild(child.dom());
