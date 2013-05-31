@@ -187,12 +187,12 @@ var DataTable = view.newClass( 'DataTable', Container, {
     this._scrollBar = c.view('scrollBar');
     this._list = c.view( 'list' );
     if ('ontouchstart' in window) {
-      this._container._dom.addEventListener('touchstart', fun.bind(this._detectSwipe, this), false);
-      this._container._dom.addEventListener('touchmove', fun.bind(this._detectSwipe, this), false);
-      this._container._dom.addEventListener('touchend', fun.bind(this._detectSwipe, this), false);
-    } else {
-      this._container.on('mousewheel', fun.bindOnce(this._redirectHorizontalScroll, this));
-      this._container._dom.addEventListener('wheel', fun.bind(this._redirectHorizontalScroll, this), false); //FF
+      this._container.on('draggesturestart', fun.bind(this._detectSwipe, this), false);
+      this._container.on('draggesture', fun.bind(this._detectSwipe, this), false);
+      this._container.on('draggestureend', fun.bind(this._detectSwipe, this), false);
+     } else {
+      this._container.on('mousewheel', fun.bindOnce(this._detectSwipe, this));
+      this._container.on('wheel', fun.bind(this._detectSwipe, this)); //FF
     }
   },
 
@@ -214,33 +214,23 @@ var DataTable = view.newClass( 'DataTable', Container, {
     var scrollbarPos = this._scrollBar.pos();
     scrollbarPos.width = headerWidth + 'px';
     this._scrollBar.pos(scrollbarPos);
-
   },
-  _lastClientX: false,
+  //Using the drag events to catch the "scrolling" of the rows container. If we later determine that we want to drag any of the
+  // rows or cells, this will need to change
+  _dragging: false,
   _detectSwipe: function (event) {
-    if (event.type == 'touchstart') {
-      this._lastClientX = event.pageX;
-    } else if (event.type === 'touchend') {
-      this._lastClientX = false;
+    if (!event) return;
+    //console.log('type:' + event.type + ' offset:' + (event.dragOffset && (event.dragOffset.x + 'x' + event.dragOffset.y)) + ' wheel1:' + event.deltaX + 'x' + event.deltaY + ' wheel2:' + (event.baseEvent.wheelDelta && event.baseEvent.wheelDelta));
+    //console.log('clientX:', event.clientX, 'clientY:', event.clientX);
+    if (event.type == 'draggesturestart') {
+      this._dragging = true;
+    } else if (event.type === 'draggestureend') {
+      this._dragging = false;
     } else {
-      if (this._lastClientX !== false) {
-        var x = this._lastClientX - event.touches[0].clientX;
-        if (x) {
-          var left = this._scrollContainer.scrollLeft();
-          this._scrollContainer.scrollLeft(left+x);
-          this._lastClientX = event.touches[0].clientX;
-        }
-      }
-    }
-  },
-  _redirectHorizontalScroll: function (event) {
-    var x = event && (event.deltaX || (event.baseEvent && event.baseEvent.wheelDeltaX));
-    if (x) {
-      var left = this._scrollContainer.scrollLeft();
-      if ('ontouchstart' in window) {
-        this._scrollContainer.scrollLeft(left+x);
-      } else {
-        this._scrollContainer.scrollLeft(left-x);
+      var x = event.deltaX || (event.baseEvent && event.baseEvent.deltaX);
+      if (x == undefined)  x = this._dragging !== false && event.movementSinceLastEvent && event.movementSinceLastEvent.x;
+      if (x) {
+        this._scrollContainer.scrollLeft(this._scrollContainer.scrollLeft()-x);
       }
     }
   },
@@ -1710,8 +1700,9 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
   _resizePinnedColumn: function (event) {
     //console.log('resizePinnedColumn', event.curWidth, event.prevWidth, event.index);
     var change = event.curWidth - event.prevWidth;
+    //console.log('curWidth:', event.curWidth, 'prevWidth:', event.prevWidth, 'index:', event.index);
     this._leftPinnedColumns[event.index].width = this.columns()[event.index]._dom.offsetWidth;
-    this._setupPinnedColumn(event.index, change);
+    this._setupPinnedColumn(event.index, change, true);
   },
 
   //pinnedValue can be false, true (sequence will be assumed as 1) or a sequence number (1 based) if there are multiple columns pinned
@@ -2223,7 +2214,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
       if ( width < 10 ) {
         width = 10;
       }
-
+      //console.log('width:', width, 'initialWidth:', this._initialWidth, 'index:', index, 'offset:', e.dragOffset );
       this._resizeColumn( this._draggableColumn, width );
       try {
         this.trigger( {

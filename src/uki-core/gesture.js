@@ -65,6 +65,16 @@ function addOffset(e) {
     };
 }
 
+function addStartPosition(e) {
+  e.startPosition = gesture.position;
+}
+function addMovement(e) {
+  e.movementSinceLastEvent = {
+    x: e.pageX - ((gesture.lastPosition && gesture.lastPosition.x) || 0),
+    y: e.pageY - ((gesture.lastPosition && gesture.lastPosition.y) || 0)
+  }
+}
+
 function dragGestureStart (e) {
     e = evt.createEvent(e, { type: 'draggesturestart', simulatePropagation: true });
     e.dragOffset = {
@@ -76,21 +86,29 @@ function dragGestureStart (e) {
         gesture.position = { x: e.pageX, y: e.pageY };
         startGesture(this, e);
     }
+    gesture.lastPosition = {x: e.pageX, y: e.pageY};
     evt.destroyEvent(e);
 }
 
 function dragGesture (e) {
     e = evt.createEvent(e, { type: 'draggesture', simulatePropagation: true });
     addOffset(e);
+    addStartPosition(e);
+    addMovement(e);
     evt.trigger(gesture.draggable, e);
 
     if (e.isDefaultPrevented()) stopGesture(gesture.draggable);
+    gesture.lastPosition = {x: e.pageX, y: e.pageY};
+
     evt.destroyEvent(e);
 }
 
 function dragGestureEnd (e) {
     e = evt.createEvent(e, { type: 'draggestureend', simulatePropagation: true });
     addOffset(e);
+    addStartPosition(e);
+    addMovement(e);
+    e.lastOffset = gesture.lastOffset;
     evt.trigger(gesture.draggable, e);
 
     stopGesture(gesture.draggable);
