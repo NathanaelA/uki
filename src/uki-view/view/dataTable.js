@@ -1,19 +1,19 @@
 requireCss( './dataTable/dataTable.css' );
 
 var fun = require( '../../uki-core/function' ),
-    utils = require( '../../uki-core/utils' ),
-    env = require( '../../uki-core/env' ),
-    dom = require( '../../uki-core/dom' ),
-    view = require( '../../uki-core/view' ),
-    build = require( '../../uki-core/builder' ).build,
+  utils = require( '../../uki-core/utils' ),
+  env = require( '../../uki-core/env' ),
+  dom = require( '../../uki-core/dom' ),
+  view = require( '../../uki-core/view' ),
+  build = require( '../../uki-core/builder' ).build,
 
-    Pack = require( './dataTable/pack' ).Pack,
-    DataList = require( './dataList' ).DataList,
-    Mustache = require( '../../uki-core/mustache' ).Mustache,
-    Base = require( '../../uki-core/view/base' ).Base,
-    Container = require( '../../uki-core/view/container' ).Container,
-    evt = require( '../../uki-core/event' ),
-    Menu = require( './menu' ).Menu;
+  Pack = require( './dataTable/pack' ).Pack,
+  DataList = require( './dataList' ).DataList,
+  Mustache = require( '../../uki-core/mustache' ).Mustache,
+  Base = require( '../../uki-core/view/base' ).Base,
+  Container = require( '../../uki-core/view/container' ).Container,
+  evt = require( '../../uki-core/event' ),
+  Menu = require( './menu' ).Menu;
 
 // This is to allow all defined Tables to have a unique class assigned to them
 // The Table will generate CSS for its own Table, and we want to make sure we don't
@@ -160,7 +160,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
         on: { scroll: fun.bind( this._scrolledScrollbar, this ) },
         childViews:  [
           {view: Container, pos: 'h:15',
-           addClass: 'uki-dataTable-scrollbar', as: 'scrollBar' }
+            addClass: 'uki-dataTable-scrollbar', as: 'scrollBar' }
         ]
       },
 
@@ -187,10 +187,70 @@ var DataTable = view.newClass( 'DataTable', Container, {
     this._scrollBar = c.view('scrollBar');
     this._list = c.view( 'list' );
     if ('ontouchstart' in window) {
-      this._container.on('draggesturestart', fun.bind(this._detectSwipe, this), false);
-      this._container.on('draggesture', fun.bind(this._detectSwipe, this), false);
-      this._container.on('draggestureend', fun.bind(this._detectSwipe, this), false);
-     } else {
+      this._container._dom.addEventListener('touchstart', fun.bind(this._detectSwipe, this), false);
+      this._container._dom.addEventListener('touchmove', fun.bind(this._detectSwipe, this), false);
+      this._container._dom.addEventListener('touchend', fun.bind(this._detectSwipe, this), false);
+    } else {
+      this._container.on('mousewheel', fun.bindOnce(this._redirectHorizontalScroll, this));
+      this._container._dom.addEventListener('wheel', fun.bind(this._redirectHorizontalScroll, this), false); //FF
+    }
+  },
+
+  destruct: function () {
+    Container.prototype.destruct.call( this );
+    this._menudom = null;
+    this._list = null;
+    this._container = null;
+    this._scrollContainer = null;
+    this._header = null;
+    this._footer = null;
+    this._styler = null;
+    this._stylerfunction = null;
+  },
+  _recalculateTableSizes: function () {
+    var headerWidth = this._header.totalWidth();
+    this._footer._table.style.width = this._header._table.style.width = headerWidth + "px";
+    headerWidth = (this._header._table && this._header._table && this._header._table.offsetWidth);
+    var scrollbarPos = this._scrollBar.pos();
+    scrollbarPos.width = headerWidth + 'px';
+    this._scrollBar.pos(scrollbarPos);
+
+  },
+  _lastClientX: false,
+  _detectSwipe: function (event) {
+    if (event.type == 'touchstart') {
+      this._lastClientX = event.pageX;
+    } else if (event.type === 'touchend') {
+      this._lastClientX = false;
+    } else {
+      if (this._lastClientX !== false) {
+        var x = this._lastClientX - event.touches[0].clientX;
+        if (x) {
+          var left = this._scrollContainer.scrollLeft();
+          this._scrollContainer.scrollLeft(left+x);
+          this._lastClientX = event.touches[0].clientX;
+        }
+      }
+    }
+  },
+  _redirectHorizontalScroll: function (event) {
+    var x = event && (event.deltaX || (event.baseEvent && event.baseEvent.wheelDeltaX));
+    if (x) {
+      var left = this._scrollContainer.scrollLeft();
+      if ('ontouchstart' in window) {
+        this._scrollContainer.scrollLeft(left+x);
+      } else {
+        this._scrollContainer.scrollLeft(left-x);
+      }
+    }
+  },
+
+    /*
+    if ('ontouchstart' in window) {
+      this._container.on('draggesturestart', fun.bind(this._detectSwipe, this));
+      this._container.on('draggesture', fun.bind(this._detectSwipe, this));
+      this._container.on('draggestureend', fun.bind(this._detectSwipe, this));
+    } else {
       this._container.on('mousewheel', fun.bindOnce(this._detectSwipe, this));
       this._container.on('wheel', fun.bind(this._detectSwipe, this)); //FF
     }
@@ -220,6 +280,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
   _dragging: false,
   _detectSwipe: function (event) {
     if (!event) return;
+    console.log(event.baseEvent.type);
     //console.log('type:' + event.type + ' offset:' + (event.dragOffset && (event.dragOffset.x + 'x' + event.dragOffset.y)) + ' wheel1:' + event.deltaX + 'x' + event.deltaY + ' wheel2:' + (event.baseEvent.wheelDelta && event.baseEvent.wheelDelta));
     //console.log('clientX:', event.clientX, 'clientY:', event.clientX);
     if (event.type == 'draggesturestart') {
@@ -233,7 +294,9 @@ var DataTable = view.newClass( 'DataTable', Container, {
         this._scrollContainer.scrollLeft(this._scrollContainer.scrollLeft()-x);
       }
     }
+    this._EIPClick(event);
   },
+  */
   pinColumn: function (index) {
     this._header.pinColumn(index);
   },
@@ -677,7 +740,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
     var parent = this.parent();
 
     if ( event.keyCode === 9 || event.keyCode === 13 || event.keyCode === 27 ||
-        event.keyCode === this._editInPlaceHotkey ) {
+      event.keyCode === this._editInPlaceHotkey ) {
       event.preventDefault();
       event.stopPropagation();
       if ( event.keyCode === 9 || event.keyCode === 13 ) {
@@ -1115,9 +1178,9 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
     var className = 'uki-dataTable-header-cell uki-dataTable-col-' + this._pos;
 
     this._labelElement =
-        dom.createElement( 'div', {className: "uki-dataTable-header-text uki-dataTable-header-text-col-" + this._pos} );
+      dom.createElement( 'div', {className: "uki-dataTable-header-text uki-dataTable-header-text-col-" + this._pos} );
     this._resizer =
-        dom.createElement( 'div', {className: "uki-dataTable-resizer uki-dataTable-resizer_pos-" + this._pos} );
+      dom.createElement( 'div', {className: "uki-dataTable-resizer uki-dataTable-resizer_pos-" + this._pos} );
 
     var pinClasses = "uki-dataTable-pin uki-dataTable-pin-col-" + this._pos;
     if ( 'ontouchstart' in window ) {
@@ -1132,9 +1195,9 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
     this._pin = dom.createElement( 'div', {className: pinClasses  } );
 
     this._filter =
-        dom.createElement( 'input', {className: "uki-dataTable-filter" +
-            (initArgs.initfocus ? ' initfocus' : ''), tabIndex: 1, autocomplete: "off", name: "_filter_" +
-            this._name, style: filterStyle} );
+      dom.createElement( 'input', {className: "uki-dataTable-filter" +
+        (initArgs.initfocus ? ' initfocus' : ''), tabIndex: 1, autocomplete: "off", name: "_filter_" +
+        this._name, style: filterStyle} );
     // The focus/blur events keep track of the last focused filter.
     this.on( 'focus', function () {
       this.parent()._lastFocusedFilter && dom.removeClass( this.parent()._lastFocusedFilter, 'initfocus' );
@@ -1145,11 +1208,11 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
     } );
 
     this._wrapper =
-        dom.createElement( 'div', {className: "uki-dataTable-header-wrap uki-dataTable-header-wrap-col-" + this._pos}, [
-          this._labelElement, this._filter, this._pin, this._resizer
-        ] );
+      dom.createElement( 'div', {className: "uki-dataTable-header-wrap uki-dataTable-header-wrap-col-" + this._pos}, [
+        this._labelElement, this._filter, this._pin, this._resizer
+      ] );
     this._dom =
-        dom.createElement( 'td', {className: className}, [this._wrapper] );
+      dom.createElement( 'td', {className: className}, [this._wrapper] );
     fun.deferOnce( fun.bindOnce( this._finishSetup, this ) );
     if ('ontouchstart' in window) {
       this._pin.style.width = '25px';
@@ -1305,9 +1368,9 @@ var DataTableFooter = view.newClass( 'DataTableFooter', Container, {
 
   _render: function () {
     this._dom.innerHTML = Mustache.to_html(
-        this._template, {
-          columns: this._columns.map( this._formatColumn, this )
-        } );
+      this._template, {
+        columns: this._columns.map( this._formatColumn, this )
+      } );
 
     // IE does not allow you to change the innerHTML of a table; so we have to regenerate the entire table and then
     // relink our variable to the new _table so that we can update the width dynamically when need be
@@ -1500,7 +1563,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
   _setupMenuOptions: function () {
     var lmenu = [];
     lmenu[0] = {html: '<img src="' + this._menuImage +
-        '" draggable=false width="12px" height="12px" border=0 ondragstart="return false;">', options: this._menuOptions};
+      '" draggable=false width="12px" height="12px" border=0 ondragstart="return false;">', options: this._menuOptions};
     this._menu.options( lmenu );
   },
 
@@ -1608,18 +1671,21 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     }
     return id;
   },
+  getCSSRule: function (id) {
+    if ( this._styleSheet.cssRules ) {
+      var rules = this._styleSheet.cssRules;
+    } else {
+      var rules = this._styleSheet.rules;
+    }
+    return rules && rules[id];
+  },
   getStyle: function (styleName, name) {
     var id = this.getStyleId(styleName);
-    var theRules;
-    if ( this._styleSheet.cssRules ) {
-      theRules = this._styleSheet.cssRules;
+    var theRule = this.getCSSRule(id);
+    if (theRule && theRule.style.getPropertyValue) {
+      var ret = theRule.style.getPropertyValue(name);
     } else {
-      theRules = this._styleSheet.rules;
-    }
-    if (theRules[id].style.getPropertyValue) {
-      var ret = theRules[id].style.getPropertyValue(name);
-    } else {
-      var ret = theRules[id].style[name];
+      var ret = theRule.style[name];
     }
     return ret;
   },
@@ -1627,7 +1693,12 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     var id = this.getStyleId(styleName);
     this.updateCSSRules( id, name, value );
   },
-
+  deleteStyle: function (styleName, name) {
+    var theRule = this.getCSSRule(this.getStyleId(styleName));
+    if (theRule.style.removeProperty) {
+      theRule.style.removeProperty(name);
+    }
+  },
   deleteAllCSSRules: function () {
     var count = 0;
 
@@ -1657,25 +1728,20 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
   },
 
   updateCSSRules: function ( id, name, value ) {
-    var theRules;
-
-    if ( this._styleSheet.cssRules ) {
-      theRules = this._styleSheet.cssRules;
-    } else {
-      theRules = this._styleSheet.rules;
-    }
+    var theRule = this.getCSSRule(id);
+    if (!theRule) return;
     //Check the previous value and see if it needs to be set
-    if (theRules[id].style.getPropertyValue) {
-      var prevVal = theRules[id].style.getPropertyValue(name);
+    if (theRule.style.getPropertyValue) {
+      var prevVal = theRule.style.getPropertyValue(name);
     } else {
-      var prevVal = theRules[id].style[name];
+      var prevVal = theRule.style[name];
     }
 
     if (prevVal !== value) {
-      if ( theRules[id].style.setProperty ) {
-        theRules[id].style.setProperty( name, value, null );
+      if ( theRule.style.setProperty ) {
+        theRule.style.setProperty( name, value, null );
       } else {
-        theRules[id].style[name] = value;
+        theRule.style[name] = value;
       }
 
       if ( this._styleSheet.getInnerHTML ) {
@@ -1730,7 +1796,15 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     } );
 
   },
-
+  getTotalPinnedWidth: function () {
+    var totalPinnedWidth = 0;
+    var cols = this.columns();
+    for (var i in this._leftPinnedColumns) {
+      if (!this._leftPinnedColumns.hasOwnProperty(i)) continue;
+      totalPinnedWidth += cols[this._leftPinnedColumns[i].index]._dom.offsetWidth;
+    };
+    return totalPinnedWidth;
+  },
   _setupPinnedColumn: function (index, widthChange, pinned) {
     //console.log('setupPinnedColumnSize', index, widthChange, pinned);
     if (!this._leftPinnedColumns[index]) return;
@@ -1764,7 +1838,6 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     }
 
     //console.log('width:', colWidth, 'pinnedCount:', pinnedCount, 'totalWidth:', totalWidth);
-    var offset = 0;
     //Do a fixup if there are some holes in the sequence
     var gaps = 0;
     for (var i = 1; i <= highestSeq; ++i) {
@@ -1782,6 +1855,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
       }
     }
     highestSeq -= gaps;
+    var offset = 0;
     for (var i = highestSeq; i > 0; --i) {
       if (!orderedList[i]) continue;
       offset += orderedList[i].width;
@@ -1797,9 +1871,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
       leftOffset += orderedList[i].width;
     }
     //console.log('offsetWidth', this._parent._header._table.offsetWidth)
-    if (this._parent._header._table.offset != '10px') {
-    //if (pinned) {
-      //var headerTableWidth = this._parent._header._table.offsetWidth - totalWidth;
+    if (this._parent._header._table.offsetWidth != '10px') {
       this.setStyle('uki-dataList-pack', 'width', '10px');
       this._parent._footer._table.style.width = this._parent._header._table.style.width = "10px";
     }
@@ -1849,44 +1921,44 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
       } else {
 
         if ( this._sortable && col[index].sortable() !== false ) {
-        // Handle Sorting
-        if ( !e.shiftKey ) {
-          for ( var i = 0; i < col.length; i++ ) {
-            if ( i == index ) {
-              continue;
+          // Handle Sorting
+          if ( !e.shiftKey ) {
+            for ( var i = 0; i < col.length; i++ ) {
+              if ( i == index ) {
+                continue;
+              }
+              if ( col[i].sort() != 0 && col[i].sortable() !== false ) {
+                col[i].sort( 0 );
+              }
             }
-            if ( col[i].sort() != 0 && col[i].sortable() !== false ) {
-              col[i].sort( 0 );
+          }
+
+          col[index].sort( col[index].sort() + 1 );
+
+          var sortfields = [];
+          sortedlist = '';
+          for ( i = 0; i < col.length; i++ ) {
+            if ( col[i].sort() > 0 ) {
+              sortfields.push( {name: col[i].name(), direction: col[i].sort(), clickTime: col[i].getLastClicked()} );
+              sortedlist += col[i].sort() + ",";
+            } else {
+              sortedlist += "0,";
             }
           }
         }
 
-        col[index].sort( col[index].sort() + 1 );
-
-        var sortfields = [];
-        sortedlist = '';
-        for ( i = 0; i < col.length; i++ ) {
-          if ( col[i].sort() > 0 ) {
-            sortfields.push( {name: col[i].name(), direction: col[i].sort(), clickTime: col[i].getLastClicked()} );
-            sortedlist += col[i].sort() + ",";
-          } else {
-            sortedlist += "0,";
-          }
-        }
-      }
-
-      // remove last ","
+        // remove last ","
         if ( sortedlist.length > 0 ) {
-        sortedlist = sortedlist.substring( 0, sortedlist.length - 1 );
-      }
+          sortedlist = sortedlist.substring( 0, sortedlist.length - 1 );
+        }
 
         this.trigger( {
-        type: "columnClick",
-        column: this.columns()[index],
-        sort: sortfields,
-        sortedlist: sortedlist,
-        columnIndex: index
-      } );
+          type: "columnClick",
+          column: this.columns()[index],
+          sort: sortfields,
+          sortedlist: sortedlist,
+          columnIndex: index
+        } );
       }
     } else if (dom.hasClass(target, 'uki-dataTable-pin')) {
       var index = target.className.match( /uki-dataTable-pin-col-(\d+)/ )[1];
@@ -1970,13 +2042,13 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
 
     self._clearfilterInterval();
     self._intervalId = setInterval(
-        (function ( self, target ) {
-          return function () {
-            self._clearfilterInterval();
-            self._filterpresstimeout( target );
-          }
-        })( self, myTarget ),
-        self._filterTimeout );
+      (function ( self, target ) {
+        return function () {
+          self._clearfilterInterval();
+          self._filterpresstimeout( target );
+        }
+      })( self, myTarget ),
+      self._filterTimeout );
   },
 
   _filterkeydown: function ( e ) {
@@ -2009,16 +2081,16 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     else if ( e.keyCode == 8 || e.keyCode == 46 ) {
       self._clearfilterInterval();
       self._intervalId = setInterval(
-          (function ( self, target ) {
-            return function () {
-              self._clearfilterInterval();
-              self._filterpresstimeout( target );
-            }
-          })( self, myTarget ),
-          self._filterTimeout );
+        (function ( self, target ) {
+          return function () {
+            self._clearfilterInterval();
+            self._filterpresstimeout( target );
+          }
+        })( self, myTarget ),
+        self._filterTimeout );
     }
     else if ( e.keyCode == 40 || e.keyCode == 38 || e.keyCode == 33 || e.keyCode == 34 || e.keyCode == 35 ||
-        e.keyCode == 36 ) {
+      e.keyCode == 36 ) {
       // this "grid" variable is the _list element not the actual "Grid"
       var grid = self.parent().childViews()[1].childViews()[0];
       var data = grid.data();
@@ -2100,26 +2172,28 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
         } );
       } catch( err ) {}
     } else if (this._initialPosition != undefined) {
-
-      var index = this._initialPosition;
-      var cols = this.columns();
+      //get an ordered array with the new column positions
+      var index = parseInt(this._initialPosition);
+      var orderedList = this.getColumnsOrderedByActualPosition(index);
+      console.log('orderedList', orderedList, 'index:', index);
       var orderedIndex = [];
-      for (var i = 0, count = cols.length; i < count; ++i) {
-        if (i == index) continue;
-        var col = cols[i];
+      var cols = this.columns();
+      for (var i = 0, count = orderedList.length; i < count; ++i) {
+        if (orderedList[i].index == index) continue;
+        var col = cols[orderedList[i].index];
         if (col._dom.style.borderLeftColor == 'blue' ) {
-          orderedIndex.push(parseInt(index));
-          orderedIndex.push(i);
+          orderedIndex.push(index);
+          orderedIndex.push(orderedList[i].index);
           this._turnOffLeftMovingColumnMarker(col);
         } else if (col._dom.style.borderRightColor == 'blue') {
-          orderedIndex.push(i);
-          orderedIndex.push(parseInt(index));
+          orderedIndex.push(orderedList[i].index);
+          orderedIndex.push(index);
           this._turnOffRightMovingColumnMarker(col);
         } else {
-          orderedIndex.push(i);
+          orderedIndex.push(orderedList[i].index);
         }
       }
-      //console.log('orderedIndex', orderedIndex);
+      //Send off the info as soon as possible
       try {
         this.trigger( {
           type: 'columnsReordered',
@@ -2127,6 +2201,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
         } );
       } catch( err ) {}
 
+      //Now make the table look right even though it will be refreshed shortly
       var offset = 0;
       for (var i = 0, count = orderedIndex.length; i < count; ++i) {
         this.setColStyle(orderedIndex[i], 'position', 'absolute');
@@ -2135,7 +2210,6 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
         offset += cols[orderedIndex[i]]._dom.offsetWidth;
       }
       this.setColStyle(index, 'z-index', '0');
-      this.setColStyle(index, 'position', 'absolute');
       this.setColStyle(index, 'background-color', 'initial');
     }
     this._draggableColumn = -1;
@@ -2157,46 +2231,65 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     if (index == undefined) return false;
     return index;
   },
-/*
-  _dragStart: function ( e ) {
-    console.log('dragStart', e.target);
-    if ( (e.target.tagName && e.target.tagName == "INPUT") ) {
-      e.isDefaultPrevented = fun.FT;
-      return;
-    }
+  /*
+   _dragStart: function ( e ) {
+   console.log('dragStart', e.target);
+   if ( (e.target.tagName && e.target.tagName == "INPUT") ) {
+   e.isDefaultPrevented = fun.FT;
+   return;
+   }
 
-    if ( dom.hasClass( e.target, 'uki-dataTable-resizer' ) ) {
-      e.draggable = e.target;
-      e.cursor = dom.computedStyle( e.target, null ).cursor;
-      var index =
-          e.target.className.match( /uki-dataTable-resizer_pos-(\d+)/ )[1];
-      this._draggableColumn = index;
-      this._initialWidth = this.columns()[index].width();
+   if ( dom.hasClass( e.target, 'uki-dataTable-resizer' ) ) {
+   e.draggable = e.target;
+   e.cursor = dom.computedStyle( e.target, null ).cursor;
+   var index =
+   e.target.className.match( /uki-dataTable-resizer_pos-(\d+)/ )[1];
+   this._draggableColumn = index;
+   this._initialWidth = this.columns()[index].width();
 
-    } else if (dom.hasClass(e.target, "uki-dataTable-header-wrap")) {
-      console.log('dragStart position drag');
-      var index = e.target.className.match( /uki-dataTable-header-wrap-col-(\d+)/ )[1];
-      this._setupAdjustingPositionColumn(index);
-    } else if (dom.hasClass(e.target, "uki-dataTable-header-text")) {
-      console.log('dragStart position drag2');
-      var index = e.target.className.match( /uki-dataTable-header-text-col-(\d+)/ )[1];
-      this._setupAdjustingPositionColumn(index);
+   } else if (dom.hasClass(e.target, "uki-dataTable-header-wrap")) {
+   console.log('dragStart position drag');
+   var index = e.target.className.match( /uki-dataTable-header-wrap-col-(\d+)/ )[1];
+   this._setupAdjustingPositionColumn(index);
+   } else if (dom.hasClass(e.target, "uki-dataTable-header-text")) {
+   console.log('dragStart position drag2');
+   var index = e.target.className.match( /uki-dataTable-header-text-col-(\d+)/ )[1];
+   this._setupAdjustingPositionColumn(index);
 
-    } else {
-      console.log('dragStart preventing default');
-      e.preventDefault();
-    }
-  },
-  */
+   } else {
+   console.log('dragStart preventing default');
+   e.preventDefault();
+   }
+   },
+   */
   _setupAdjustingPositionColumn: function (index) {
     //console.log('adjusting position', index);
     this._initialPosition = index;
     this._initialLeft = this.columns()[index]._dom.offsetLeft;
     this.setColStyle(index, 'z-index', '1');
     this.setColStyle(index, 'position', 'absolute');
-    this.setColStyle(index, 'background-color', 'red');
+    this.setColStyle(index, 'background-color', 'lightgray');
   },
-
+  getColumnsOrderedByActualPosition: function (indexToSkip) {
+    var cols = this.columns();
+    var totalPinnedWidth = this.getTotalPinnedWidth();
+    var colList = [];
+    for (var i = 0, count = cols.length; i < count; ++i) {
+      if (i == indexToSkip || !cols[i].visible()) continue; //skip the moving column and non visible columns
+      var colLeft = this._leftPinnedColumns[i] ? cols[i]._dom.offsetLeft : cols[i]._dom.offsetLeft + totalPinnedWidth;
+      colList.push({index:i, leftPos:colLeft, name:cols[i].name()})
+    }
+    colList.sort(function (colA, colB) {
+      return colA.leftPos - colB.leftPos;
+    });
+    //Now that it is sorted, get the actual left position for each column
+    var calcOffset = 0;
+    for (var i = 0, count = colList.length; i < count; ++i) {
+      colList[i].leftPos = calcOffset;
+      calcOffset += cols[colList[i].index]._dom.offsetWidth;
+    }
+    return colList;
+  },
   _drag: function ( e ) {
     var index;
     if (this._draggableColumn != -1 || (dom.hasClass( e.target, 'uki-dataTable-resizer' ) && !this._initialPosition)) {
@@ -2222,21 +2315,51 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
           column: this.columns()[this._draggableColumn]
         } );
       } catch( err ) { }
-    } else if (this._initialPosition != undefined || ((index = this._isTargetMovable(e.target)) != undefined && index != false && this._draggableColumn == -1)) {
-      if (index == undefined) index = this._initialPosition;
-      var movement = (e.dragOffset && e.dragOffset.x) || e.clientX;
+    }
+    else if (this._initialPosition != undefined ||
+          ((index = this._isTargetMovable(e.target)) != undefined && index != false && this._draggableColumn == -1)) {
       var cols = this.columns();
-      //console.log('_initialLeft', this._initialLeft);
-      if (!this._initialLeft) {
-        this._setupAdjustingPositionColumn(index);
-      };
+      if (index == undefined) {
+        index = this._initialPosition;
+      } else if (this._leftPinnedColumns && Object.keys(this._leftPinnedColumns).length) {
+        if (this._leftPinnedColumns[index]) return;
+        //This is the first time we are in here so lets get the columns set up standard if there are pinned columns
+        //Get the totalWidth of the pinnedColumns
+        var totalPinnedWidth = this.getTotalPinnedWidth();
+        var movingColumnLeft = cols[index]._dom.offsetLeft + totalPinnedWidth;
+        this._initialPosition = index;
+        this._initialLeft = movingColumnLeft;
+        this.setColStyle(index, 'z-index', '1');
+        this.setColStyle(index, 'position', 'absolute');
+        this.setColStyle(index, 'background-color', 'lightgray');
+        var colList = this.getColumnsOrderedByActualPosition(index);
+
+        for (var i = 0, count = colList.length; i < count; ++i) {
+          this.setColStyle(colList[i].index, 'position', 'absolute');
+          this.setColStyle(colList[i].index, 'left', colList[i].leftPos + 'px');
+        }
+
+        //Get rid of the rows left margin
+        this.deleteStyle('uki-dataList-pack', 'margin-left');
+        for (var i in this._leftPinnedColumns) {
+          if (!this._leftPinnedColumns.hasOwnProperty(i)) continue;
+          var pinnedIndex = this._leftPinnedColumns[i].index;
+          this.deleteStyle('div.uki-dataTable-header-container td.uki-dataTable-col-' + pinnedIndex, 'left');
+          this.deleteStyle('div.uki-dataTable-footer-container td.uki-dataTable-col-' + pinnedIndex, 'left');
+          this.deleteStyle('div.uki-dataList td.uki-dataTable-col-' + pinnedIndex, 'left');
+        }
+      }
+
+
+
+      var movement = (e.dragOffset && e.dragOffset.x) || e.clientX;
       var offset = this._initialLeft + movement;
       this.setColStyle(index, 'left', offset + 'px');
       var closestResizer;
       var blueBorder;
       var lastVisibleIndex;
       for (var i = 0, count = cols.length; i< count; ++i) {
-        if (index == i || !cols[i]._visible) continue;
+        if (index == i || !cols[i]._visible || this._leftPinnedColumns[cols[i]]) continue;
         var colDom = cols[i]._dom;
         if (colDom.style.borderLeftColor == 'blue') blueBorder = i;
         var difference = Math.abs(offset - (isNaN(parseInt(colDom.offsetLeft)) ? 0 : parseInt(colDom.offsetLeft)));
@@ -2773,21 +2896,21 @@ var DataTableList = view.newClass( 'DataTableList', DataList, {
 
   /**
    * {
-     *   key: 'propName',        // optional=index, propName to read from object
-     *   className: 'mycls',     // optional='', className to add to a cell
-     *   width: 200,             // optional=200, default width in px
-     *   minWidth: 100,          // optional=100, minWidth in px
-     *   maxWidth: 300,          // optional=-1, maxWidth in px, -1 for now
-     *                              maxWidth
-     *   visible: true,          // optional=true, should you show the column or
-     *                              not
-     *   label: 'My Label',      // optional='', used by header
-     *   formatter: function(){} // optional, formats value before rendering
-     *   sort: 0                 // optional, sort (1 = Asc, 2 = Desc, 0 = none)
-     *   sortable: true          // optional, sets sortable on column if sorting is enabled
-     *   filterable: true        // optional, sets filterable on column is filtering is enabled
-     *                           // (ex: numberFormatter, dateFormatter)
-     * }
+   *   key: 'propName',        // optional=index, propName to read from object
+   *   className: 'mycls',     // optional='', className to add to a cell
+   *   width: 200,             // optional=200, default width in px
+   *   minWidth: 100,          // optional=100, minWidth in px
+   *   maxWidth: 300,          // optional=-1, maxWidth in px, -1 for now
+   *                              maxWidth
+   *   visible: true,          // optional=true, should you show the column or
+   *                              not
+   *   label: 'My Label',      // optional='', used by header
+   *   formatter: function(){} // optional, formats value before rendering
+   *   sort: 0                 // optional, sort (1 = Asc, 2 = Desc, 0 = none)
+   *   sortable: true          // optional, sets sortable on column if sorting is enabled
+   *   filterable: true        // optional, sets filterable on column is filtering is enabled
+   *                           // (ex: numberFormatter, dateFormatter)
+   * }
    */
   columns: fun.newProp( 'columns' ),
   _columns: [],
