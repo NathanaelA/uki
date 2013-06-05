@@ -1914,6 +1914,15 @@
                 y: e.pageY - gesture.position.y
             };
         }
+        function addStartPosition(e) {
+            e.startPosition = gesture.position;
+        }
+        function addMovement(e) {
+            e.movementSinceLastEvent = {
+                x: e.pageX - (gesture.lastPosition && gesture.lastPosition.x || 0),
+                y: e.pageY - (gesture.lastPosition && gesture.lastPosition.y || 0)
+            };
+        }
         function dragGestureStart(e) {
             e = evt.createEvent(e, {
                 type: "draggesturestart",
@@ -1931,6 +1940,10 @@
                 };
                 startGesture(this, e);
             }
+            gesture.lastPosition = {
+                x: e.pageX,
+                y: e.pageY
+            };
             evt.destroyEvent(e);
         }
         function dragGesture(e) {
@@ -1939,8 +1952,14 @@
                 simulatePropagation: true
             });
             addOffset(e);
+            addStartPosition(e);
+            addMovement(e);
             evt.trigger(gesture.draggable, e);
             if (e.isDefaultPrevented()) stopGesture(gesture.draggable);
+            gesture.lastPosition = {
+                x: e.pageX,
+                y: e.pageY
+            };
             evt.destroyEvent(e);
         }
         function dragGestureEnd(e) {
@@ -1949,6 +1968,9 @@
                 simulatePropagation: true
             });
             addOffset(e);
+            addStartPosition(e);
+            addMovement(e);
+            e.lastOffset = gesture.lastOffset;
             evt.trigger(gesture.draggable, e);
             stopGesture(gesture.draggable);
             evt.destroyEvent(e);
@@ -4050,7 +4072,7 @@
                     }
                 }, {
                     view: Container,
-                    pos: "t:0 l:0 r:0 b:0",
+                    pos: "top:0 left:0 right:0 bottom:0",
                     addClass: "uki-dataTable-container",
                     as: "container",
                     childViews: [ {
@@ -4062,7 +4084,7 @@
                     } ]
                 }, {
                     view: Container,
-                    pos: "l:0 r:0 b:0 h:15",
+                    pos: "left:0 right:0 bottom:0 height:15",
                     addClass: "uki-dataTable-scrollbar-container",
                     as: "scrollContainer",
                     on: {
@@ -4070,7 +4092,7 @@
                     },
                     childViews: [ {
                         view: Container,
-                        pos: "h:15",
+                        pos: "height:15",
                         addClass: "uki-dataTable-scrollbar",
                         as: "scrollBar"
                     } ]
@@ -4118,12 +4140,18 @@
                 this._stylerfunction = null;
             },
             _recalculateTableSizes: function() {
-                var headerWidth = this._header.totalWidth();
-                this._footer._table.style.width = this._header._table.style.width = headerWidth + "px";
-                headerWidth = this._header._table && this._header._table && this._header._table.offsetWidth;
+                var headerUnpinnedWidth = this._header.getTotalUnpinnedWidth();
+                if (headerUnpinnedWidth == 0) return;
+                var headerPinnedWidth = this._header.getTotalPinnedWidth();
+                this._footer._table.style.width = this._header._table.style.width = this._header.totalWidth() - headerPinnedWidth + "px";
+                this.setStyle("uki-dataList-pack", "width", headerUnpinnedWidth + "px");
                 var scrollbarPos = this._scrollBar.pos();
-                scrollbarPos.width = headerWidth + "px";
-                this._scrollBar.pos(scrollbarPos);
+                var totalWidth = headerPinnedWidth + headerUnpinnedWidth + "px";
+                if (scrollbarPos.width != totalWidth) {
+                    scrollbarPos.width = totalWidth;
+                    this._scrollBar.pos(scrollbarPos);
+                }
+                console.log("recalculateTableSizes headerUnpinnedWidth:", headerUnpinnedWidth, "headerPinnedWidth:", headerPinnedWidth);
             },
             _lastClientX: false,
             _detectSwipe: function(event) {
@@ -5369,24 +5397,33 @@
                 }
                 return id;
             },
+            getCSSRule: function(id) {
+                if (this._styleSheet.cssRules) {
+                    var rules = this._styleSheet.cssRules;
+                } else {
+                    var rules = this._styleSheet.rules;
+                }
+                return rules && rules[id];
+            },
             getStyle: function(styleName, name) {
                 var id = this.getStyleId(styleName);
-                var theRules;
-                if (this._styleSheet.cssRules) {
-                    theRules = this._styleSheet.cssRules;
+                var theRule = this.getCSSRule(id);
+                if (theRule && theRule.style.getPropertyValue) {
+                    var ret = theRule.style.getPropertyValue(name);
                 } else {
-                    theRules = this._styleSheet.rules;
-                }
-                if (theRules[id].style.getPropertyValue) {
-                    var ret = theRules[id].style.getPropertyValue(name);
-                } else {
-                    var ret = theRules[id].style[name];
+                    var ret = theRule.style[name];
                 }
                 return ret;
             },
             setStyle: function(styleName, name, value) {
                 var id = this.getStyleId(styleName);
                 this.updateCSSRules(id, name, value);
+            },
+            deleteStyle: function(styleName, name) {
+                var theRule = this.getCSSRule(this.getStyleId(styleName));
+                if (theRule.style.removeProperty) {
+                    theRule.style.removeProperty(name);
+                }
             },
             deleteAllCSSRules: function() {
                 var count = 0;
@@ -5412,22 +5449,18 @@
                 return index;
             },
             updateCSSRules: function(id, name, value) {
-                var theRules;
-                if (this._styleSheet.cssRules) {
-                    theRules = this._styleSheet.cssRules;
+                var theRule = this.getCSSRule(id);
+                if (!theRule) return;
+                if (theRule.style.getPropertyValue) {
+                    var prevVal = theRule.style.getPropertyValue(name);
                 } else {
-                    theRules = this._styleSheet.rules;
-                }
-                if (theRules[id].style.getPropertyValue) {
-                    var prevVal = theRules[id].style.getPropertyValue(name);
-                } else {
-                    var prevVal = theRules[id].style[name];
+                    var prevVal = theRule.style[name];
                 }
                 if (prevVal !== value) {
-                    if (theRules[id].style.setProperty) {
-                        theRules[id].style.setProperty(name, value, null);
+                    if (theRule.style.setProperty) {
+                        theRule.style.setProperty(name, value, null);
                     } else {
-                        theRules[id].style[name] = value;
+                        theRule.style[name] = value;
                     }
                     if (this._styleSheet.getInnerHTML) {
                         this._styleSheetElement.innerHTML = this._styleSheet.getInnerHTML();
@@ -5441,38 +5474,71 @@
                     return 0;
                 }
                 for (var i = 0; i < this._columns.length; i++) {
-                    tw += this._columns[i].visible() ? this._columns[i].width() : 0;
+                    tw += this._columns[i].visible() && !this._columns[i]._isColumnMoving ? this._columns[i].width() : 0;
                 }
                 return tw;
             },
             _resizePinnedColumn: function(event) {
                 var change = event.curWidth - event.prevWidth;
                 this._leftPinnedColumns[event.index].width = this.columns()[event.index]._dom.offsetWidth;
-                this._setupPinnedColumn(event.index, change);
+                this._setupPinnedColumn(event.index, change, true);
             },
             pinColumn: function(index, pinnedValue) {
                 if (index == undefined) return;
                 if (pinnedValue === false || this._leftPinnedColumns[index] !== undefined) {
                     if (this._leftPinnedColumns[index] == undefined) return;
+                    var colName = this._leftPinnedColumns[index].name;
+                    var colSeq = this._leftPinnedColumns[index].sequence;
                     this._setupPinnedColumn(index);
                     delete this._leftPinnedColumns[index];
                     var pinned = false;
                 } else if (pinnedValue || this._leftPinnedColumns[index] === undefined) {
-                    var colWidth = this.columns()[index]._dom.offsetWidth;
+                    var col = this.columns()[index];
+                    var colWidth = col._dom.offsetWidth;
+                    var colName = col.name();
                     this._leftPinnedColumns[index] = {
                         width: colWidth,
-                        index: index
+                        index: index,
+                        name: colName
                     };
                     this._leftPinnedColumns[index].sequence = pinnedValue !== true && pinnedValue != undefined ? pinnedValue : Object.keys(this._leftPinnedColumns).length;
+                    var colSeq = this._leftPinnedColumns[index].sequence;
                     this._setupPinnedColumn(index, null, true);
                     var pinned = true;
                 }
-                this.trigger({
-                    type: "columnPin",
-                    column: this.columns()[index],
-                    pinned: pinned,
-                    columnIndex: index
-                });
+                try {
+                    this.trigger({
+                        type: "columnPinned",
+                        name: colName,
+                        pinned: pinned,
+                        index: index,
+                        sequence: colSeq,
+                        allPinnedColumns: this._leftPinnedColumns
+                    });
+                    this.trigger({
+                        type: "recalcTableSize"
+                    });
+                } catch (err) {}
+            },
+            getTotalPinnedWidth: function() {
+                var totalPinnedWidth = 0;
+                var cols = this.columns();
+                for (var i in this._leftPinnedColumns) {
+                    if (!this._leftPinnedColumns.hasOwnProperty(i)) continue;
+                    totalPinnedWidth += cols[this._leftPinnedColumns[i].index]._dom.offsetWidth;
+                }
+                return totalPinnedWidth;
+            },
+            getTotalUnpinnedWidth: function() {
+                var cols = this.columns();
+                if (!cols) return 0;
+                var totalWidth = 0;
+                for (var i = 0, count = cols.length; i < count; ++i) {
+                    if (this._leftPinnedColumns[i]) continue;
+                    totalWidth += cols[i]._dom && cols[i]._dom.offsetWidth;
+                }
+                console.log("getTotalUnpinnedWidth:", totalWidth);
+                return totalWidth;
             },
             _setupPinnedColumn: function(index, widthChange, pinned) {
                 if (!this._leftPinnedColumns[index]) return;
@@ -5480,6 +5546,11 @@
                 this.setColStyle(index, "position", pinned ? "absolute" : "initial");
                 this.setStyle("div.uki-dataTable-header-container td.uki-dataTable-col-" + index, "background-color", pinned ? "lightgray" : "initial");
                 this.setStyle("div.uki-dataTable-footer-container td.uki-dataTable-col-" + index, "background-color", pinned ? "#EFEFEF" : "initial");
+                if (!pinned) {
+                    this.deleteStyle("div.uki-dataTable-header-container td.uki-dataTable-col-" + index, "left");
+                    this.deleteStyle("div.uki-dataTable-footer-container td.uki-dataTable-col-" + index, "left");
+                    this.deleteStyle("div.uki-dataList td.uki-dataTable-col-" + index, "left");
+                }
                 var colWidth = this._leftPinnedColumns[index].width;
                 var pinnedCount = Object.keys(this._leftPinnedColumns).length;
                 if (!pinned) --pinnedCount;
@@ -5507,7 +5578,6 @@
                         index: this._leftPinnedColumns[i].index
                     };
                 }
-                var offset = 0;
                 var gaps = 0;
                 for (var i = 1; i <= highestSeq; ++i) {
                     if (!orderedList[i]) {
@@ -5523,6 +5593,7 @@
                     }
                 }
                 highestSeq -= gaps;
+                var offset = 0;
                 for (var i = highestSeq; i > 0; --i) {
                     if (!orderedList[i]) continue;
                     offset += orderedList[i].width;
@@ -5536,10 +5607,6 @@
                     this.setStyle("div.uki-dataTable-footer-container td.uki-dataTable-col-" + orderedList[i].index, "left", leftOffset + "px");
                     leftOffset += orderedList[i].width;
                 }
-                if (this._parent._header._table.offset != "10px") {
-                    this.setStyle("uki-dataList-pack", "width", "10px");
-                    this._parent._footer._table.style.width = this._parent._header._table.style.width = "10px";
-                }
                 var headerMargin = this._parent._header._table.style.marginLeft;
                 headerMargin = !headerMargin ? 0 : parseInt(headerMargin);
                 var headerMarginLeft = pinned ? headerMargin + (widthChange || colWidth) : headerMargin - colWidth;
@@ -5547,7 +5614,8 @@
                 this.setStyle("uki-dataList-pack", "margin-left", totalWidth + "px");
             },
             _click: function(e) {
-                if (this._draggableColumn != -1) {
+                console.log("_click", this._draggableColumn, "initialPosition", this._initialPosition);
+                if (this._draggableColumn != -1 || this._initialPosition != undefined) {
                     return;
                 }
                 e.isDefaultPrevented = fun.FF;
@@ -5567,6 +5635,7 @@
                 if (dom.hasClass(target, "uki-dataTable-header-text")) {
                     var index = target.className.match(/uki-dataTable-header-text-col-(\d+)/)[1];
                     var col = this.columns();
+                    if (col[index]._hasMoved) return;
                     var sortedlist = "";
                     if (e.altKey) {
                         this.pinColumn(index);
@@ -5768,24 +5837,42 @@
                         });
                     } catch (err) {}
                 } else if (this._initialPosition != undefined) {
-                    var index = this._initialPosition;
-                    var cols = this.columns();
+                    var index = parseInt(this._initialPosition);
+                    var orderedList = this.getColumnsOrderedByActualPosition(index);
+                    console.log("orderedList", orderedList, "index:", index);
                     var orderedIndex = [];
-                    for (var i = 0, count = cols.length; i < count; ++i) {
-                        if (i == index) continue;
-                        var col = cols[i];
-                        if (col._dom.style.borderLeftColor == "blue") {
-                            orderedIndex.push(parseInt(index));
-                            orderedIndex.push(i);
+                    var cols = this.columns();
+                    for (var i = 0, count = orderedList.length; i < count; ++i) {
+                        if (orderedList[i].index == index) continue;
+                        var col = cols[orderedList[i].index];
+                        if (col._dom.style.borderLeftColor == this.movingMarkerColor) {
+                            orderedIndex.push({
+                                index: index,
+                                name: cols[index].name()
+                            });
+                            orderedIndex.push({
+                                index: orderedList[i].index,
+                                name: cols[orderedList[i].index].name()
+                            });
                             this._turnOffLeftMovingColumnMarker(col);
-                        } else if (col._dom.style.borderRightColor == "blue") {
-                            orderedIndex.push(i);
-                            orderedIndex.push(parseInt(index));
+                        } else if (col._dom.style.borderRightColor == this.movingMarkerColor) {
+                            orderedIndex.push({
+                                index: orderedList[i].index,
+                                name: cols[orderedList[i].index].name()
+                            });
+                            orderedIndex.push({
+                                index: index,
+                                name: cols[index].name()
+                            });
                             this._turnOffRightMovingColumnMarker(col);
                         } else {
-                            orderedIndex.push(i);
+                            orderedIndex.push({
+                                index: orderedList[i].index,
+                                name: cols[orderedList[i].index].name()
+                            });
                         }
                     }
+                    cols[index]._hasMoved = true;
                     try {
                         this.trigger({
                             type: "columnsReordered",
@@ -5799,8 +5886,12 @@
                         offset += cols[orderedIndex[i]]._dom.offsetWidth;
                     }
                     this.setColStyle(index, "z-index", "0");
-                    this.setColStyle(index, "position", "absolute");
                     this.setColStyle(index, "background-color", "initial");
+                    this.setColStyle(index, "opacity", "1");
+                    this.trigger({
+                        type: "recalcTableSize"
+                    });
+                    cols[index]._isColumnMoving = false;
                 }
                 this._draggableColumn = -1;
                 this._initialWidth = undefined;
@@ -5808,6 +5899,7 @@
                 this._initialPosition = undefined;
             },
             _isTargetMovable: function(target) {
+                if (dom.hasClass(target, "uki-dataTable-cell_resizable")) return false;
                 var index;
                 if (dom.hasClass(target, "uki-dataTable-header-wrap")) {
                     index = target.className.match(/uki-dataTable-header-wrap-col-(\d+)/)[1];
@@ -5818,15 +5910,32 @@
                 if (dom.hasClass(target, "uki-dataTable-header-cell")) {
                     var index = target.className.match(/uki-dataTable-col-(\d+)/)[1];
                 }
+                console.log("_isTargetMovable index:", index, target);
                 if (index == undefined) return false;
                 return index;
             },
-            _setupAdjustingPositionColumn: function(index) {
-                this._initialPosition = index;
-                this._initialLeft = this.columns()[index]._dom.offsetLeft;
-                this.setColStyle(index, "z-index", "1");
-                this.setColStyle(index, "position", "absolute");
-                this.setColStyle(index, "background-color", "red");
+            getColumnsOrderedByActualPosition: function(indexToSkip) {
+                var cols = this.columns();
+                var totalPinnedWidth = this.getTotalPinnedWidth();
+                var colList = [];
+                for (var i = 0, count = cols.length; i < count; ++i) {
+                    if (i == indexToSkip || !cols[i].visible()) continue;
+                    var colLeft = this._leftPinnedColumns[i] ? cols[i]._dom.offsetLeft : cols[i]._dom.offsetLeft + totalPinnedWidth;
+                    colList.push({
+                        index: i,
+                        leftPos: colLeft,
+                        name: cols[i].name()
+                    });
+                }
+                colList.sort(function(colA, colB) {
+                    return colA.leftPos - colB.leftPos;
+                });
+                var calcOffset = 0;
+                for (var i = 0, count = colList.length; i < count; ++i) {
+                    colList[i].leftPos = calcOffset;
+                    calcOffset += cols[colList[i].index]._dom.offsetWidth;
+                }
+                return colList;
             },
             _drag: function(e) {
                 var index;
@@ -5852,61 +5961,110 @@
                             column: this.columns()[this._draggableColumn]
                         });
                     } catch (err) {}
-                } else if (this._initialPosition != undefined || (index = this._isTargetMovable(e.target)) != undefined && index != false && this._draggableColumn == -1) {
-                    if (index == undefined) index = this._initialPosition;
+                } else if (this._initialPosition != undefined || (index = this._isTargetMovable(e.target)) != undefined && index != false && this._draggableColumn == -1 && !this._leftPinnedColumns[index]) {
+                    if (index == undefined) {
+                        index = this._initialPosition;
+                    } else {
+                        this._setupMovingColumn(index);
+                    }
+                    var x = e.movementSinceLastEvent.x;
+                    var columnWidth = this.columns()[index]._dom.offsetWidth;
+                    var viewingWidth = this._parent._dom.clientWidth;
+                    var scrollLeft = this._parent._scrollContainer.scrollLeft();
                     var movement = e.dragOffset && e.dragOffset.x || e.clientX;
-                    var cols = this.columns();
-                    if (!this._initialLeft) {
-                        this._setupAdjustingPositionColumn(index);
-                    }
                     var offset = this._initialLeft + movement;
-                    this.setColStyle(index, "left", offset + "px");
-                    var closestResizer;
-                    var blueBorder;
-                    var lastVisibleIndex;
-                    for (var i = 0, count = cols.length; i < count; ++i) {
-                        if (index == i || !cols[i]._visible) continue;
-                        var colDom = cols[i]._dom;
-                        if (colDom.style.borderLeftColor == "blue") blueBorder = i;
-                        var difference = Math.abs(offset - (isNaN(parseInt(colDom.offsetLeft)) ? 0 : parseInt(colDom.offsetLeft)));
-                        if (closestResizer == undefined || difference < closestResizer.distance) {
-                            closestResizer = {
-                                index: i,
-                                distance: difference
-                            };
-                        }
-                        lastVisibleIndex = i;
+                    if (x < 0 && offset < 0 && scrollLeft > 0) {
+                        this._parent._scrollContainer.scrollLeft(scrollLeft + x * 4);
+                    } else if (offset + columnWidth + 50 > viewingWidth && offset + scrollLeft + columnWidth < this._parent._scrollBar._dom.offsetWidth) {
+                        var amountToMove = offset + columnWidth + 50 - viewingWidth;
+                        if (amountToMove > 0) this._parent._scrollContainer.scrollLeft(scrollLeft + x * 4);
+                    } else {
+                        this.setColStyle(index, "left", offset + "px");
                     }
-                    if (cols[lastVisibleIndex]._dom.style.borderRightColor == "blue") var rightBlueBorder = lastVisibleIndex;
-                    var totalWidth = this.totalWidth();
-                    if (Math.abs(offset - totalWidth) < closestResizer.distance || cols[index]._dom.offsetLeft > totalWidth) {
-                        var lastCol = cols[lastVisibleIndex];
-                        if (lastCol._dom.style.borderRightColor != "blue") {
-                            if (blueBorder) this._turnOffLeftMovingColumnMarker(cols[blueBorder]);
-                            if (rightBlueBorder) this._turnOffRightMovingColumnMarker(cols[rightBlueBorder]);
-                            this._turnOnRightMovingColumnMarker(lastCol);
-                        } else {
-                            this._turnOnRightMovingColumnMarker(cols[lastVisibleIndex]);
-                        }
-                    } else if (blueBorder !== closestResizer.index) {
-                        this._turnOnLeftMovingColumnMarker(cols[closestResizer.index]);
+                    this._setMovingMarker(index, offset);
+                }
+            },
+            _setupMovingColumn: function(index) {
+                var cols = this.columns();
+                var totalPinnedWidth = this.getTotalPinnedWidth();
+                var movingColumnLeft = cols[index]._dom.offsetLeft + totalPinnedWidth;
+                this._initialPosition = index;
+                this._initialLeft = movingColumnLeft;
+                this.setColStyle(index, "z-index", "1");
+                this.setColStyle(index, "position", "absolute");
+                this.setColStyle(index, "background-color", "lightgray");
+                this.setColStyle(index, "opacity", ".6");
+                cols[index]._isColumnMoving = true;
+                if (this._leftPinnedColumns && Object.keys(this._leftPinnedColumns).length) {
+                    var colList = this.getColumnsOrderedByActualPosition(index);
+                    for (var i = 0, count = colList.length; i < count; ++i) {
+                        this.setColStyle(colList[i].index, "position", "absolute");
+                        this.setColStyle(colList[i].index, "left", colList[i].leftPos + "px");
+                    }
+                    this.deleteStyle("uki-dataList-pack", "margin-left");
+                    for (var i in this._leftPinnedColumns) {
+                        if (!this._leftPinnedColumns.hasOwnProperty(i)) continue;
+                        var pinnedIndex = this._leftPinnedColumns[i].index;
+                        this.deleteStyle("div.uki-dataTable-header-container td.uki-dataTable-col-" + pinnedIndex, "left");
+                        this.deleteStyle("div.uki-dataTable-footer-container td.uki-dataTable-col-" + pinnedIndex, "left");
+                        this.deleteStyle("div.uki-dataList td.uki-dataTable-col-" + pinnedIndex, "left");
+                    }
+                }
+                this.trigger({
+                    type: "recalcTableSize"
+                });
+            },
+            movingMarkerColor: "gray",
+            _setMovingMarker: function(index, offset) {
+                var cols = this.columns();
+                var columnWidth = cols[index].width();
+                var scrollLeft = this._parent._scrollContainer.scrollLeft();
+                var actualOffset = scrollLeft + offset;
+                var closestResizer;
+                var blueBorder;
+                var lastVisibleIndex;
+                for (var i = 0, count = cols.length; i < count; ++i) {
+                    if (index == i || !cols[i]._visible || this._leftPinnedColumns[cols[i]]) continue;
+                    var colDom = cols[i]._dom;
+                    if (colDom.style.borderLeftColor == this.movingMarkerColor) blueBorder = i;
+                    var difference = Math.abs(actualOffset + columnWidth / 2 - (isNaN(parseInt(colDom.offsetLeft)) ? 0 : parseInt(colDom.offsetLeft)));
+                    if (closestResizer == undefined || difference < closestResizer.distance) {
+                        closestResizer = {
+                            index: i,
+                            distance: difference
+                        };
+                    }
+                    lastVisibleIndex = i;
+                }
+                if (cols[lastVisibleIndex]._dom.style.borderRightColor == this.movingMarkerColor) var rightBlueBorder = lastVisibleIndex;
+                var totalWidth = this.totalWidth();
+                if (Math.abs(actualOffset - totalWidth) < closestResizer.distance || cols[index]._dom.offsetLeft > totalWidth) {
+                    var lastCol = cols[lastVisibleIndex];
+                    if (lastCol._dom.style.borderRightColor != this.movingMarkerColor) {
                         if (blueBorder) this._turnOffLeftMovingColumnMarker(cols[blueBorder]);
                         if (rightBlueBorder) this._turnOffRightMovingColumnMarker(cols[rightBlueBorder]);
+                        this._turnOnRightMovingColumnMarker(lastCol);
+                    } else {
+                        this._turnOnRightMovingColumnMarker(cols[lastVisibleIndex]);
                     }
+                } else if (blueBorder !== closestResizer.index) {
+                    this._turnOnLeftMovingColumnMarker(cols[closestResizer.index]);
+                    if (blueBorder) this._turnOffLeftMovingColumnMarker(cols[blueBorder]);
+                    if (rightBlueBorder) this._turnOffRightMovingColumnMarker(cols[rightBlueBorder]);
                 }
             },
             _turnOffLeftMovingColumnMarker: function(col) {
                 col._dom.style.borderLeft = "";
             },
             _turnOnLeftMovingColumnMarker: function(col) {
-                col._dom.style.borderLeft = "4px solid blue";
+                col._dom.style.borderLeft = "4px solid " + this.movingMarkerColor;
             },
             _turnOffRightMovingColumnMarker: function(col) {
                 col._dom.style.borderRightColor = "rgb(204, 204,204)";
                 col._dom.style.borderRightWidth = "1px";
             },
             _turnOnRightMovingColumnMarker: function(col) {
-                col._dom.style.borderRightColor = "blue";
+                col._dom.style.borderRightColor = this.movingMarkerColor;
                 col._dom.style.borderRightWidth = "4px";
             },
             _resizeColumn: function(pos, width) {
@@ -5914,6 +6072,7 @@
                 var prevWidth = column.width();
                 column.width(width);
                 var newWidth = column.width();
+                console.log("resizeColumn:", prevWidth, width, newWidth);
                 if (prevWidth !== newWidth) {
                     try {
                         this.trigger({
