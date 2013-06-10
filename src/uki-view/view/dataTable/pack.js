@@ -77,11 +77,12 @@ var Pack = fun.newClass(Base, {
 
         // Build the columns
         this.parent().columns().forEach(function(col, i) {
-            var val = col.key ? utils.prop(row, col.key) : row[i];
+            var originalPos = col.oPos != undefined ? col.oPos : i;
+            var val = col.key ? utils.prop(row, col.key) : row[originalPos];
             cols[i] = {
                 value: col.formatter(val || '', row, i, pos),
                 className: 'uki-dataTable-col-' + i +
-                    (col.className ? ' ' + col.className : ''),
+                    (col.className ? ' ' + col.className : '')
             };
         });
         return cols;

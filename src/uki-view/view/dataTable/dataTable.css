@@ -67,6 +67,7 @@
     overflow: hidden;
     cursor: default;
     background-color: inherit;
+    position: relative;
 }
 
 .uki-dataTable-row_selected {
@@ -179,6 +180,7 @@ table.uki-dataTable-header tr.uki-dataTable-header-row td {
     text-indent: 1em;
     cursor: ew-resize;
     cursor: col-resize;
+    padding-right: 4px;
 }
 
 

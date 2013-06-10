@@ -11,7 +11,7 @@
     }
     var require_modules = require.modules = [];
     var require_cache = require.cache = [];
-    var __requiredCss = ".uki-textSelectable_off {-moz-user-select: -moz-none; -webkit-user-select: none; -o-user-select: none; user-select: none;}\n.uki-textSelectable_off::selection {background: transparent;}\n.uki-draggable_off {-webkit-user-drag: none;}\n\n.uki-attaching {font-size: 12px; font-family: Arial, Helvetica, sans-serif;}\n.uki-attaching-relative {position: relative;}\n.uki-hidden {display: none;}\n\n.uki-button {border: 1px solid #999; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-bottom-color: #777; border-radius: 3px; background: #D7DAE4 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAADwCAIAAAB5d1ZWAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MzFBNzRBRjgzMUMxMTFFMDk4MTVBMTVDMDE2MEQyRTMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MzFBNzRBRjkzMUMxMTFFMDk4MTVBMTVDMDE2MEQyRTMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4OTY5QTk2MTMxQzAxMUUwOTgxNUExNUMwMTYwRDJFMyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4OTY5QTk2MjMxQzAxMUUwOTgxNUExNUMwMTYwRDJFMyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PipBo48AAAKSSURBVHja7N1BTsMwEAXQOun9DwQbJJZcBLFD7KBpuMKfxSiy9eYIT3/Gdpw243ieN5XVHVUB60Yrx9KFBazjgFDAopW3oT4srIbnk0LehrAKbWhmFbAky2rYkixYktWDZcBLlpllU2pTamZJlh08LFiwJsI6T09K82QxiGtDAAvW5TOLl2TBggULFiwEsGDBgrVmDc+zCmdDWLB6sLyAW8GSLMlqwnJlIVmSJVnzYB2SVUjWIVmSZWZZDSVLsmBJVo7lqUOOdUqWZPUkC1ZcrsJgwYIFa9XV8DYgxFhjo5VjiZaZBQsWLFiwFCxYsGCtedx5f3ulEJ8Nh7NhjLVtOhEWrKux9p1CirVvsArJ0oZ5srShNpQsWLYOkiVZBnxlNbTPsintwBoDVmFmwYKlDa/G8jJbAcvLbJU2hBVjCVYFi1ZclsLagFdmlpllZsGCBUvBggULFixYKq3x+e0DtvHZ0B/3aMOuZEGIsXRhAevXP+DmWA+LYaENGVSShSvH8p+uOdYBy2rYgvVnNSwk6yFZhWTBshpaDc2siZLFSrLMrOtXQ8nKsezgDfgWLJ+SqWCxisu9ISxY188sPzeULFiwYMGChQAWLFiw1qzx9eNRaXw29M3tCpbXlXMsV2GlZEGIsdwbVrAshjmWXJlZXW1Iy9ahZzWEYOugDQ14W4c12xCWNtSGsGY6SMOSrI5yFQYLFixYsJRXuytYPo6iDWHBggULFgJYsGDBWvS48/H+QiE/GzocOkh3YO2+I51jbR5o5Vj3faeQY2lDbagNtaE2XDNZd22YJ8sW3szShtpwpoO0NpQsyboaS7BKWLTMLMkys6YpS6E2lCxYsOyzlGTBggULFiwFCxYsWDPVvwADALDE/Hh4isZ/AAAAAElFTkSuQmCC) repeat-x 0 0; white-space: nowrap; vertical-align: top; text-align: center; font-size: 12px; font-family: Arial, Helvetica, sans-serif; color: #111; padding: 0; height: 22px; text-shadow: rgba(255, 255, 255, 0.5) 0 1px 0px; position: relative; z-index: 10; outline: 0; _zoom: 1; _display: inline; -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; *background-image: url(-view/view/button/button.png);}\n.uki-button::-moz-focus-inner {padding: 0; border: 0;}\n.uki-button:hover {background-color: #F5F7FD; background-position: 0 -40px;}\n.uki-button:active {border-color: #666; background-color: #C5C7CD; background-position: 0 -80px; -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset; -moz-box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset; box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset;}\n.uki-button__text {margin: 0 5px;}\n.uki-button:focus {border-color: #7594D2; -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px; -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px; box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px;}\n.uki-button__icon {vertical-align: top; margin-top: -1px; margin-bottom: -1px;}\n.uki-button_disabled,\n.uki-button_disabled:active,\n.uki-button_disabled:hover {color: #999; background-color: #eee; background-image: none; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; border-color: #AAA;}\n.uki-button_disabled .uki-button__icon {opacity: 0.5;}\n.uki-button_image-only .uki-button__text {display: none;}\n.uki-button_confirm {background-position: 0 -120px; border-color: #999; border-bottom-color: #779;}\n.uki-button_confirm:hover {background-position: 0 -160px;}\n.uki-button_confirm:active {background-position: 0 -200px; border-color: #77A;}\n.uki-button_confirm.uki-button_disabled,\n.uki-button_confirm.uki-button_disabled:active,\n.uki-button_confirm.uki-button_disabled:hover {background-color: #EEEEFA; border-color: #AAC;}\n\n.uki-flow {display: block; padding: 0; margin: 0;}\n.uki-flow-item {display: block; padding: 0; margin: 0;}\n.uki-flow_horizontal:after {clear: both; content: '.'; display: block; height: 0px; line-height: 0; visibility: hidden;}\n.uki-flow_horizontal {*zoom: 1;}\n.uki-flow_horizontal > .uki-flow-item {float: left;}\n.uki-flow_spacing-small {margin: 0;}\n.uki-flow_spacing-small > .uki-flow-item {margin: 5px 0 0 0;}\n.uki-flow_spacing-medium > .uki-flow-item {margin: 10px 0 0 0;}\n.uki-flow_spacing-large > .uki-flow-item {margin: 20px 0 0 0;}\n.uki-flow .uki-flow-item:first-child {margin-top: 0;}\n.uki-flow_horizontal.uki-flow_spacing-small > .uki-flow-item {margin: 0 0 0 5px;}\n.uki-flow_horizontal.uki-flow_spacing-medium > .uki-flow-item {margin: 0 0 0 10px;}\n.uki-flow_horizontal.uki-flow_spacing-large > .uki-flow-item {margin: 0 0 0 20px;}\n.uki-flow_horizontal.uki-flow > .uki-flow-item:first-child {margin-left: 0;}\n\n.uki-nc-select {margin: 0;}\n.uki-nc-svg-wrapper {overflow: hidden; display: inline-block; padding: 0px; margin-bottom: -4px;}\n.uki-nc-svg {overflow: visible !important; display: inline-block; border: #000 solid thin; margin-bottom: -3px;}\ninput:disabled,textarea:disabled {padding: 0px 0px;}\n.uki-nc-text, uki-nc-checkbox, .uki-nc-textarea {display: inline-block; *display: inline; *zoom: 1;}\n.uki-nc-text__input, .uki-nc-textarea__input {margin: 0; height: 100%; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; width: 100%; *width: auto;}\n.uki-nc-text_with-placeholder, .uki-nc-textarea_with-placeholder {position: relative;}\n.uki-nc-text__placholder, .uki-nc-textarea__placholder {position: absolute; color: #888; opacity: 0.5; padding: 0px 2px; pointer-events: none; text-align: right; bottom: 0; width: 100%;}\n.uki-nc-text__input {text-align: right;}\n.uki-nc-text__placholder {text-align: left;}\n\n.uki-text-p {line-height: 1.3; margin: 0 0 1em 0;}\n.uki-header {margin: 0 0 5px 0; font-weight: normal;}\n.uki-header_size_large {font-size: 18px;}\n.uki-header_size_medium {font-size: 15px;}\n.uki-header_size_small {font-size: 12px; font-weight: bold;}\n\n.uki-menu-horizontal {list-style: none; padding: 0; margin: 0; -webkit-user-drag: none;}\n.uki-menu-horizontal li {color: black; background-color: white; position: relative;}\n.uki-menu-horizontal li ul {z-index: 500; position: absolute; left: 0; min-width: 10em;}\n.uki-menu-horizontal ul {padding: 0; margin: 0px -1px; list-style: none; border: 1px solid black; background-color: white;}\n.uki-menu-horizontal > li {position: relative; float: left; text-align: left;}\n.uki-menu-horizontal a {display: block; padding: 0px 4px; color: black; text-decoration: none;}\n.uki-menu-horizontal-no-touch :hover > a {background-color: black; color: white;}\n.uki-menu-horizontal-no-touch :focus > a, a.uki-menu-focus, .uki-menu-focus {background-color: black; color: #FFFFFF;}\n.uki-menu-horizontal ul {display: none;}\n.uki-menu-horizontal ul.uki-menu-visible {display: block;}\n.uki-menu-horizontal-no-touch :hover > ul {display: block;}\n.uki-menu-horizontal ul ul {position: absolute; top: 0px; left: 10em;}\n.uki-menu-horizontal .uki-menu-submenu {background: url(data:image/gif;base64,R0lGODlhBwARALMAAAAAAP8AAP///////////////////////////////////////////////////////yH5BAEAAAEALAAAAAAHABEAAAQUMMhJq704AAs27Z4EhuAXilmqZhEAOw==) no-repeat 98% center; *background-image: url(-view/view/menu/horiz_arrow.gif);}\n.uki-menu-vertical .uki-menu-submenu {background: url(data:image/gif;base64,R0lGODlhEQAHAPMAAAAAAP8AAP///////////////////////////////////////////////////////yH5BAEAAAEALAAAAAARAAcAAwQTMMhJq714gs1Blp33gdtIieYYAQA7) no-repeat 98% center; *background-image: url(-view/view/menu/vert_arrow.gif);}\n\n.uki-splitPane-handle,\n.uki-splitPane-handle-bar {z-index: 200; position: absolute;}\n.uki-splitPane-handle {background: #999;}\n.uki-splitPane-handle-bar {display: none; background: #999; overflow: hidden;}\n.uki-splitPane-handle-ext {background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAyCAYAAACZDmG3AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMTIvMjEvMTCej/OTAAAAJklEQVQokWMoLi7+////f4b///8zMPHw8DDAABMDEhjljHJozAEAwzEI2ZZEXDIAAAAASUVORK5CYII=); position: absolute; *background-image: url(-view/view/splitPane/extv.png);}\n.uki-splitPane-handle_h {cursor: row-resize; width: 100%;}\n.uki-splitPane-handle-bar_h {width: 100%; height: 1px; left: 0px; top: 2px;}\n.uki-splitPane-handle_v {cursor: col-resize; height: 100%;}\n.uki-splitPane-handle-bar_v {height: 100%; width: 1px; top: 0px; left: 2px;}\n.uki-splitPane-handle_thin .uki-splitPane-handle-bar {display: block;}\n.uki-splitPane-handle_thin.uki-splitPane-handle {background: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEHAAEALAAAAAABAAEAAAICTAEAOw==); *background-image: url(-view/view/splitPane/x.gif);}\n.uki-splitPane-handle_thin.uki-splitPane-handle_v {width: 5px !important; margin-left: -2px;}\n.uki-splitPane-handle_thin.uki-splitPane-handle_h {height: 5px !important; margin-top: -2px;}\n\n.uki-dataList {outline: none; outline-offset: 0; background-color: #FFFFFF;}\n.uki-dataList-pack {left: 0; width: 100%; display: block; list-style: none; position: relative; padding: 0; margin: 0;}\n.uki-dataList-column {cursor: default; padding: 5px; margin: 0; font-size: 11px; line-height: 14px; text-overflow: ellipsis; white-space: nowrap;}\n.uki-dataList-row {display: block; height: 14px; overflow: hidden; background-color: #FFFFFF;}\n.uki-dataList-row_odd {background-color: #EDF3FE;}\n.uki-dataList-row_selected {background-color: #3875D7; color: #FFF; padding-top: 4px; padding-bottom: 4px; border: 1px solid #2760C0; border-left: none; border-right: none;}\n.uki-dataList-row_selected + .uki-dataList-row_selected {border-top: none; padding-top: 5px;}\n.uki-dataList_blured .uki-dataList-row_selected {background-color: #CCC; border-color: #AAA; color: #000;}\n.uki-dataList-placeholder {display: none;}\n\n.uki-dataTable-container {overflow-y: auto; overflow-x: hidden; background-color: #ffffff;}\n.uki-dataTable {position: relative; height: 100%; width: 100%;}\n.uki-menu-w1 {}\n.uki-menu-w2 {}\n.uki-dataTable-menu {margin-left: 0px; margin-top: 2px; width: 12px; height: 12px; cursor: pointer; position: absolute; top: 0; left: 0; z-index: 1;}\n.uki-dataTable-menu .uki-menu-primary, .uki-dataTable-menu .uki-menu-primary > a {background-color: transparent;}\n.uki-dataTable-sort-down {background: url(data:image/gif;base64,R0lGODlhCgAJAIABAF9fX////yH5BAEAAAEALAAAAAAKAAkAAAINjI+py50AI0ByPsgsKgA7) no-repeat 100% center; *background-image: url(-view/view/dataTable/down.gif);}\n.uki-dataTable-sort-up {background: url(data:image/gif;base64,R0lGODlhCgAJAIABAF9fX////yH5BAEAAAEALAAAAAAKAAkAAAINjGGZwHrcFoSu2ovzLQA7) no-repeat 100% center; *background-image: url(-view/view/dataTable/up.gif);}\n.uki-dataTable-pack, .uki-dataTable-header, .uki-dataTable-footer {border-spacing: 0; width: 100%; overflow: hidden; table-layout: fixed;}\n.uki-dataTable-row {display: table-row;}\n.uki-dataTable-cell {border: none; padding: 2px 5px; margin: 0; height: 14px; font-size: 11px; line-height: 14px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; cursor: default; background-color: inherit;}\n.uki-dataTable-row_selected {background-color: #3875D7; color: #FFF;}\n.uki-dataTable-row_selected .uki-dataTable-cell {padding-top: 1px; padding-bottom: 1px; border-top: 1px solid #2760C0; border-bottom: 1px solid #2760C0;}\n.uki-dataTable-row_selected + .uki-dataTable-row_selected .uki-dataTable-cell {border-top: none; padding-top: 2px;}\n.uki-dataList_blured .uki-dataTable-row_selected {background-color: #CCC; color: #000;}\n.uki-dataList_blured .uki-dataTable-row_selected .uki-dataTable-cell {border-color: #AAA;}\n.uki-dataTable-wrap {width: 100%;}\n.uki-dataTable-cell_number {text-align: right;}\n.uki-dataTable-header-container, .uki-dataTable-footer-container {box-shadow: 0 1px 0 rgba(0, 0, 0, .1); -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, .1); -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .1); position: relative; background-color: #EFEFEF; overflow: hidden; cursor: default;}\n.uki-dataTable-header-container {border-bottom: 1px solid #999;}\n.uki-dataTable-footer-container {border-top: 1px solid #999;}\n.uki-dataTable-footer-container {position: absolute; bottom: 0px; left: 0px; right: 0px;}\ntable.uki-dataTable-header tr.uki-dataTable-header-row td {text-align: left;}\n.uki-dataTable-header-cell, .uki-dataTable-footer-cell {margin: 0; vertical-align: top; border-right: 1px solid #CCC; padding: 0 5px 0 4px;}\n.uki-dataTable-header-wrap, .uki-dataTable-footer-wrap {position: relative; margin-right: 3px;}\n.uki-dataTable-header-text {text-overflow: ellipsis; white-space: nowrap; overflow: hidden; padding: 2px 0; height: 14px; font-size: 11px; line-height: 14px;}\n.uki-dataTable-footer-text {text-overflow: ellipsis; white-space: nowrap; overflow: hidden; padding: 2px 0; height: 14px; font-size: 10px; font-weight: bolder; line-height: 14px; text-align: right;}\n.uki-dataTable-resizer {display: none; overflow: hidden; position: absolute; width: 5px; top: 0; right: -12px; height: 100%; text-indent: 1em; cursor: col-resize;}\n.uki-dataTable-header-cell_resizable .uki-dataTable-resizer {display: block;}\n.uki-dataTable-spacer {padding-left: 0; padding-right: 0;}\n.uki-dataTable-pin {width: 16px; height: 16px; position: absolute; right: -7px; bottom: 0px;}\n.uki-dataTable-unpinned {background: url(data:image/gif;base64,R0lGODlhCwANAIABALGxsdPT0yH5BAEKAAEALAAAAAALAA0AAAIUDI5oye0Po5xpuYAvznVv5XlAWAAAOw==) no-repeat center; *background-image: url(-view/view/dataTable/unpinned.gif);}\n.uki-dataTable-pinned {background: url(data:image/gif;base64,R0lGODlhCwANAIAAAIWFhYWFhSH5BAEKAAEALAAAAAALAA0AAAIUDI5oye0Po5xpuYAvznVv5XlAWAAAOw==) no-repeat center; *background-image: url(-view/view/dataTable/pinned.gif);}\n.uki-dataTable-filter, .uki-dataTable-footer-field {margin-left: -2px; padding: 1px;}\n.uki-dataTable-footer-field {background-color: #CCC;}\n.uki-dataTable-scrollbar-container {overflow-x: scroll; -webkit-overflow-scrolling: touch;}\n";
+    var __requiredCss = ".uki-textSelectable_off {-moz-user-select: -moz-none; -webkit-user-select: none; -o-user-select: none; user-select: none;}\n.uki-textSelectable_off::selection {background: transparent;}\n.uki-draggable_off {-webkit-user-drag: none;}\n\n.uki-attaching {font-size: 12px; font-family: Arial, Helvetica, sans-serif;}\n.uki-attaching-relative {position: relative;}\n.uki-hidden {display: none;}\n\n.uki-button {border: 1px solid #999; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-bottom-color: #777; border-radius: 3px; background: #D7DAE4 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAADwCAIAAAB5d1ZWAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MzFBNzRBRjgzMUMxMTFFMDk4MTVBMTVDMDE2MEQyRTMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MzFBNzRBRjkzMUMxMTFFMDk4MTVBMTVDMDE2MEQyRTMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4OTY5QTk2MTMxQzAxMUUwOTgxNUExNUMwMTYwRDJFMyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4OTY5QTk2MjMxQzAxMUUwOTgxNUExNUMwMTYwRDJFMyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PipBo48AAAKSSURBVHja7N1BTsMwEAXQOun9DwQbJJZcBLFD7KBpuMKfxSiy9eYIT3/Gdpw243ieN5XVHVUB60Yrx9KFBazjgFDAopW3oT4srIbnk0LehrAKbWhmFbAky2rYkixYktWDZcBLlpllU2pTamZJlh08LFiwJsI6T09K82QxiGtDAAvW5TOLl2TBggULFiwEsGDBgrVmDc+zCmdDWLB6sLyAW8GSLMlqwnJlIVmSJVnzYB2SVUjWIVmSZWZZDSVLsmBJVo7lqUOOdUqWZPUkC1ZcrsJgwYIFa9XV8DYgxFhjo5VjiZaZBQsWLFiwFCxYsGCtedx5f3ulEJ8Nh7NhjLVtOhEWrKux9p1CirVvsArJ0oZ5srShNpQsWLYOkiVZBnxlNbTPsintwBoDVmFmwYKlDa/G8jJbAcvLbJU2hBVjCVYFi1ZclsLagFdmlpllZsGCBUvBggULFixYKq3x+e0DtvHZ0B/3aMOuZEGIsXRhAevXP+DmWA+LYaENGVSShSvH8p+uOdYBy2rYgvVnNSwk6yFZhWTBshpaDc2siZLFSrLMrOtXQ8nKsezgDfgWLJ+SqWCxisu9ISxY188sPzeULFiwYMGChQAWLFiw1qzx9eNRaXw29M3tCpbXlXMsV2GlZEGIsdwbVrAshjmWXJlZXW1Iy9ahZzWEYOugDQ14W4c12xCWNtSGsGY6SMOSrI5yFQYLFixYsJRXuytYPo6iDWHBggULFgJYsGDBWvS48/H+QiE/GzocOkh3YO2+I51jbR5o5Vj3faeQY2lDbagNtaE2XDNZd22YJ8sW3szShtpwpoO0NpQsyboaS7BKWLTMLMkys6YpS6E2lCxYsOyzlGTBggULFiwFCxYsWDPVvwADALDE/Hh4isZ/AAAAAElFTkSuQmCC) repeat-x 0 0; white-space: nowrap; vertical-align: top; text-align: center; font-size: 12px; font-family: Arial, Helvetica, sans-serif; color: #111; padding: 0; height: 22px; text-shadow: rgba(255, 255, 255, 0.5) 0 1px 0px; position: relative; z-index: 10; outline: 0; _zoom: 1; _display: inline; -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset; *background-image: url(-view/view/button/button.png);}\n.uki-button::-moz-focus-inner {padding: 0; border: 0;}\n.uki-button:hover {background-color: #F5F7FD; background-position: 0 -40px;}\n.uki-button:active {border-color: #666; background-color: #C5C7CD; background-position: 0 -80px; -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset; -moz-box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset; box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px inset;}\n.uki-button__text {margin: 0 5px;}\n.uki-button:focus {border-color: #7594D2; -webkit-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px; -moz-box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px; box-shadow: rgba(255, 255, 255, 0.3) 0px -1px 1px inset, #7594D2 0 0 3px;}\n.uki-button__icon {vertical-align: top; margin-top: -1px; margin-bottom: -1px;}\n.uki-button_disabled,\n.uki-button_disabled:active,\n.uki-button_disabled:hover {color: #999; background-color: #eee; background-image: none; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; border-color: #AAA;}\n.uki-button_disabled .uki-button__icon {opacity: 0.5;}\n.uki-button_image-only .uki-button__text {display: none;}\n.uki-button_confirm {background-position: 0 -120px; border-color: #999; border-bottom-color: #779;}\n.uki-button_confirm:hover {background-position: 0 -160px;}\n.uki-button_confirm:active {background-position: 0 -200px; border-color: #77A;}\n.uki-button_confirm.uki-button_disabled,\n.uki-button_confirm.uki-button_disabled:active,\n.uki-button_confirm.uki-button_disabled:hover {background-color: #EEEEFA; border-color: #AAC;}\n\n.uki-flow {display: block; padding: 0; margin: 0;}\n.uki-flow-item {display: block; padding: 0; margin: 0;}\n.uki-flow_horizontal:after {clear: both; content: '.'; display: block; height: 0px; line-height: 0; visibility: hidden;}\n.uki-flow_horizontal {*zoom: 1;}\n.uki-flow_horizontal > .uki-flow-item {float: left;}\n.uki-flow_spacing-small {margin: 0;}\n.uki-flow_spacing-small > .uki-flow-item {margin: 5px 0 0 0;}\n.uki-flow_spacing-medium > .uki-flow-item {margin: 10px 0 0 0;}\n.uki-flow_spacing-large > .uki-flow-item {margin: 20px 0 0 0;}\n.uki-flow .uki-flow-item:first-child {margin-top: 0;}\n.uki-flow_horizontal.uki-flow_spacing-small > .uki-flow-item {margin: 0 0 0 5px;}\n.uki-flow_horizontal.uki-flow_spacing-medium > .uki-flow-item {margin: 0 0 0 10px;}\n.uki-flow_horizontal.uki-flow_spacing-large > .uki-flow-item {margin: 0 0 0 20px;}\n.uki-flow_horizontal.uki-flow > .uki-flow-item:first-child {margin-left: 0;}\n\n.uki-nc-select {margin: 0;}\n.uki-nc-svg-wrapper {overflow: hidden; display: inline-block; padding: 0px; margin-bottom: -4px;}\n.uki-nc-svg {overflow: visible !important; display: inline-block; border: #000 solid thin; margin-bottom: -3px;}\ninput:disabled,textarea:disabled {padding: 0px 0px;}\n.uki-nc-text, uki-nc-checkbox, .uki-nc-textarea {display: inline-block; *display: inline; *zoom: 1;}\n.uki-nc-text__input, .uki-nc-textarea__input {margin: 0; height: 100%; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; width: 100%; *width: auto;}\n.uki-nc-text_with-placeholder, .uki-nc-textarea_with-placeholder {position: relative;}\n.uki-nc-text__placholder, .uki-nc-textarea__placholder {position: absolute; color: #888; opacity: 0.5; padding: 0px 2px; pointer-events: none; text-align: right; bottom: 0; width: 100%;}\n.uki-nc-text__input {text-align: right;}\n.uki-nc-text__placholder {text-align: left;}\n\n.uki-text-p {line-height: 1.3; margin: 0 0 1em 0;}\n.uki-header {margin: 0 0 5px 0; font-weight: normal;}\n.uki-header_size_large {font-size: 18px;}\n.uki-header_size_medium {font-size: 15px;}\n.uki-header_size_small {font-size: 12px; font-weight: bold;}\n\n.uki-menu-horizontal {list-style: none; padding: 0; margin: 0; -webkit-user-drag: none;}\n.uki-menu-horizontal li {color: black; background-color: white; position: relative;}\n.uki-menu-horizontal li ul {z-index: 500; position: absolute; left: 0; min-width: 10em;}\n.uki-menu-horizontal ul {padding: 0; margin: 0px -1px; list-style: none; border: 1px solid black; background-color: white;}\n.uki-menu-horizontal > li {position: relative; float: left; text-align: left;}\n.uki-menu-horizontal a {display: block; padding: 0px 4px; color: black; text-decoration: none;}\n.uki-menu-horizontal-no-touch :hover > a {background-color: black; color: white;}\n.uki-menu-horizontal-no-touch :focus > a, a.uki-menu-focus, .uki-menu-focus {background-color: black; color: #FFFFFF;}\n.uki-menu-horizontal ul {display: none;}\n.uki-menu-horizontal ul.uki-menu-visible {display: block;}\n.uki-menu-horizontal-no-touch :hover > ul {display: block;}\n.uki-menu-horizontal ul ul {position: absolute; top: 0px; left: 10em;}\n.uki-menu-horizontal .uki-menu-submenu {background: url(data:image/gif;base64,R0lGODlhBwARALMAAAAAAP8AAP///////////////////////////////////////////////////////yH5BAEAAAEALAAAAAAHABEAAAQUMMhJq704AAs27Z4EhuAXilmqZhEAOw==) no-repeat 98% center; *background-image: url(-view/view/menu/horiz_arrow.gif);}\n.uki-menu-vertical .uki-menu-submenu {background: url(data:image/gif;base64,R0lGODlhEQAHAPMAAAAAAP8AAP///////////////////////////////////////////////////////yH5BAEAAAEALAAAAAARAAcAAwQTMMhJq714gs1Blp33gdtIieYYAQA7) no-repeat 98% center; *background-image: url(-view/view/menu/vert_arrow.gif);}\n\n.uki-splitPane-handle,\n.uki-splitPane-handle-bar {z-index: 200; position: absolute;}\n.uki-splitPane-handle {background: #999;}\n.uki-splitPane-handle-bar {display: none; background: #999; overflow: hidden;}\n.uki-splitPane-handle-ext {background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAyCAYAAACZDmG3AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMTIvMjEvMTCej/OTAAAAJklEQVQokWMoLi7+////f4b///8zMPHw8DDAABMDEhjljHJozAEAwzEI2ZZEXDIAAAAASUVORK5CYII=); position: absolute; *background-image: url(-view/view/splitPane/extv.png);}\n.uki-splitPane-handle_h {cursor: row-resize; width: 100%;}\n.uki-splitPane-handle-bar_h {width: 100%; height: 1px; left: 0px; top: 2px;}\n.uki-splitPane-handle_v {cursor: col-resize; height: 100%;}\n.uki-splitPane-handle-bar_v {height: 100%; width: 1px; top: 0px; left: 2px;}\n.uki-splitPane-handle_thin .uki-splitPane-handle-bar {display: block;}\n.uki-splitPane-handle_thin.uki-splitPane-handle {background: url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEHAAEALAAAAAABAAEAAAICTAEAOw==); *background-image: url(-view/view/splitPane/x.gif);}\n.uki-splitPane-handle_thin.uki-splitPane-handle_v {width: 5px !important; margin-left: -2px;}\n.uki-splitPane-handle_thin.uki-splitPane-handle_h {height: 5px !important; margin-top: -2px;}\n\n.uki-dataList {outline: none; outline-offset: 0; background-color: #FFFFFF;}\n.uki-dataList-pack {left: 0; width: 100%; display: block; list-style: none; position: relative; padding: 0; margin: 0;}\n.uki-dataList-column {cursor: default; padding: 5px; margin: 0; font-size: 11px; line-height: 14px; text-overflow: ellipsis; white-space: nowrap;}\n.uki-dataList-row {display: block; height: 14px; overflow: hidden; background-color: #FFFFFF;}\n.uki-dataList-row_odd {background-color: #EDF3FE;}\n.uki-dataList-row_selected {background-color: #3875D7; color: #FFF; padding-top: 4px; padding-bottom: 4px; border: 1px solid #2760C0; border-left: none; border-right: none;}\n.uki-dataList-row_selected + .uki-dataList-row_selected {border-top: none; padding-top: 5px;}\n.uki-dataList_blured .uki-dataList-row_selected {background-color: #CCC; border-color: #AAA; color: #000;}\n.uki-dataList-placeholder {display: none;}\n\n.uki-dataTable-container {overflow-y: auto; overflow-x: hidden; background-color: #ffffff;}\n.uki-dataTable {position: relative; height: 100%; width: 100%;}\n.uki-menu-w1 {}\n.uki-menu-w2 {}\n.uki-dataTable-menu {margin-left: 0px; margin-top: 2px; width: 12px; height: 12px; cursor: pointer; position: absolute; top: 0; left: 0; z-index: 1;}\n.uki-dataTable-menu .uki-menu-primary, .uki-dataTable-menu .uki-menu-primary > a {background-color: transparent;}\n.uki-dataTable-sort-down {background: url(data:image/gif;base64,R0lGODlhCgAJAIABAF9fX////yH5BAEAAAEALAAAAAAKAAkAAAINjI+py50AI0ByPsgsKgA7) no-repeat 100% center; *background-image: url(-view/view/dataTable/down.gif);}\n.uki-dataTable-sort-up {background: url(data:image/gif;base64,R0lGODlhCgAJAIABAF9fX////yH5BAEAAAEALAAAAAAKAAkAAAINjGGZwHrcFoSu2ovzLQA7) no-repeat 100% center; *background-image: url(-view/view/dataTable/up.gif);}\n.uki-dataTable-pack, .uki-dataTable-header, .uki-dataTable-footer {border-spacing: 0; width: 100%; overflow: hidden; table-layout: fixed;}\n.uki-dataTable-row {display: table-row;}\n.uki-dataTable-cell {border: none; padding: 2px 5px; margin: 0; height: 14px; font-size: 11px; line-height: 14px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; cursor: default; background-color: inherit; position: relative;}\n.uki-dataTable-row_selected {background-color: #3875D7; color: #FFF;}\n.uki-dataTable-row_selected .uki-dataTable-cell {padding-top: 1px; padding-bottom: 1px; border-top: 1px solid #2760C0; border-bottom: 1px solid #2760C0;}\n.uki-dataTable-row_selected + .uki-dataTable-row_selected .uki-dataTable-cell {border-top: none; padding-top: 2px;}\n.uki-dataList_blured .uki-dataTable-row_selected {background-color: #CCC; color: #000;}\n.uki-dataList_blured .uki-dataTable-row_selected .uki-dataTable-cell {border-color: #AAA;}\n.uki-dataTable-wrap {width: 100%;}\n.uki-dataTable-cell_number {text-align: right;}\n.uki-dataTable-header-container, .uki-dataTable-footer-container {box-shadow: 0 1px 0 rgba(0, 0, 0, .1); -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, .1); -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .1); position: relative; background-color: #EFEFEF; overflow: hidden; cursor: default;}\n.uki-dataTable-header-container {border-bottom: 1px solid #999;}\n.uki-dataTable-footer-container {border-top: 1px solid #999;}\n.uki-dataTable-footer-container {position: absolute; bottom: 0px; left: 0px; right: 0px;}\ntable.uki-dataTable-header tr.uki-dataTable-header-row td {text-align: left;}\n.uki-dataTable-header-cell, .uki-dataTable-footer-cell {margin: 0; vertical-align: top; border-right: 1px solid #CCC; padding: 0 5px 0 4px;}\n.uki-dataTable-header-wrap, .uki-dataTable-footer-wrap {position: relative; margin-right: 3px;}\n.uki-dataTable-header-text {text-overflow: ellipsis; white-space: nowrap; overflow: hidden; padding: 2px 0; height: 14px; font-size: 11px; line-height: 14px;}\n.uki-dataTable-footer-text {text-overflow: ellipsis; white-space: nowrap; overflow: hidden; padding: 2px 0; height: 14px; font-size: 10px; font-weight: bolder; line-height: 14px; text-align: right;}\n.uki-dataTable-resizer {display: none; overflow: hidden; position: absolute; width: 5px; top: 0; right: -12px; height: 100%; text-indent: 1em; cursor: col-resize; padding-right: 4px;}\n.uki-dataTable-header-cell_resizable .uki-dataTable-resizer {display: block;}\n.uki-dataTable-spacer {padding-left: 0; padding-right: 0;}\n.uki-dataTable-pin {width: 16px; height: 16px; position: absolute; right: -7px; bottom: 0px;}\n.uki-dataTable-unpinned {background: url(data:image/gif;base64,R0lGODlhCwANAIABALGxsdPT0yH5BAEKAAEALAAAAAALAA0AAAIUDI5oye0Po5xpuYAvznVv5XlAWAAAOw==) no-repeat center; *background-image: url(-view/view/dataTable/unpinned.gif);}\n.uki-dataTable-pinned {background: url(data:image/gif;base64,R0lGODlhCwANAIAAAIWFhYWFhSH5BAEKAAEALAAAAAALAA0AAAIUDI5oye0Po5xpuYAvznVv5XlAWAAAOw==) no-repeat center; *background-image: url(-view/view/dataTable/pinned.gif);}\n.uki-dataTable-filter, .uki-dataTable-footer-field {margin-left: -2px; padding: 1px;}\n.uki-dataTable-footer-field {background-color: #CCC;}\n.uki-dataTable-scrollbar-container {overflow-x: scroll; -webkit-overflow-scrolling: touch;}\n";
     require_modules[0] = function(global, module, require) {
         var exports = this;
         global.uki = require(1);
@@ -4104,6 +4104,7 @@
                         scroll: fun.bind(this._scrolledFooter, this)
                     }
                 } ]).appendTo(this);
+                this._list = c.view("list");
                 this._footer = c.view("footer");
                 this._footer.on("render", fun.bindOnce(this._updateContainerHeight, this));
                 this._footer.on("render", fun.bindOnce(this._recalculateTableSizes, this));
@@ -4151,7 +4152,6 @@
                     scrollbarPos.width = totalWidth;
                     this._scrollBar.pos(scrollbarPos);
                 }
-                console.log("recalculateTableSizes headerUnpinnedWidth:", headerUnpinnedWidth, "headerPinnedWidth:", headerPinnedWidth);
             },
             _lastClientX: false,
             _detectSwipe: function(event) {
@@ -4771,6 +4771,12 @@
                                 type: "recalcTableSize"
                             });
                         }
+                    } else if (!this._filter.style.width) {
+                        var pinWidth = 15;
+                        if ("ontouchstart" in window) {
+                            pinWidth = 35;
+                        }
+                        this._filter.style.width = newWidth - pinWidth + "px";
                     }
                 }
                 return this.width;
@@ -4923,6 +4929,7 @@
             }),
             _pinned: false,
             _pos: 0,
+            _aPos: undefined,
             _cssRule: -1,
             _sizeable: true,
             domForEvent: function() {
@@ -4930,7 +4937,7 @@
             },
             _createDom: function(initArgs) {
                 if (initArgs.pos != null) {
-                    this._pos = initArgs.pos;
+                    this._pos = this._aPos = initArgs.pos;
                 }
                 if (initArgs.cssRule != null) {
                     this._cssRule = initArgs.cssRule;
@@ -5384,6 +5391,25 @@
                 }
                 this.updateCSSRules(id, name, value);
             },
+            getColStyle: function(col, name) {
+                var Key = "C" + col, id;
+                if (this._cssRuleTracking[Key] == null) {
+                    var parentId = this.parent().CSSTableId();
+                    var CSSKey = "div.uki-dataTable" + parentId + " td.uki-dataTable-col-" + col;
+                    id = this.addCSSRule(CSSKey);
+                    this._cssRuleTracking[Key] = id;
+                } else {
+                    id = this._cssRuleTracking[Key];
+                }
+                var theRule = this.getCSSRule(id);
+                if (theRule) {
+                    if (theRule.style.getPropertyValue) {
+                        return theRule.style.getPropertyValue(name);
+                    } else {
+                        return theRule.style[name];
+                    }
+                }
+            },
             getStyleId: function(styleName) {
                 var id;
                 if (this._cssRuleTracking[styleName] == null) {
@@ -5409,11 +5435,10 @@
                 var id = this.getStyleId(styleName);
                 var theRule = this.getCSSRule(id);
                 if (theRule && theRule.style.getPropertyValue) {
-                    var ret = theRule.style.getPropertyValue(name);
+                    return theRule.style.getPropertyValue(name);
                 } else {
-                    var ret = theRule.style[name];
+                    return theRule.style[name];
                 }
-                return ret;
             },
             setStyle: function(styleName, name, value) {
                 var id = this.getStyleId(styleName);
@@ -5478,6 +5503,34 @@
                 }
                 return tw;
             },
+            _orderedColumnList: [],
+            getOrderedColumnList: function() {
+                if (this._orderedColumnList.length) {
+                    return this._orderedColumnList;
+                }
+                var cols = this.columns();
+                var orderedList = [];
+                for (var i = 0, count = cols.length; i < count; ++i) {
+                    var col = cols[i];
+                    var newObj = {
+                        index: col._pos,
+                        actualPos: col._aPos || col._pos,
+                        name: col._name
+                    };
+                    orderedList.push(newObj);
+                }
+                orderedList.sort(function(colA, colB) {
+                    if (colA.actualPos < colB.actualPos) return -1;
+                    if (colA.actualPos > colB.actualPos) return 1;
+                    return 0;
+                });
+                for (var i = 0, count = orderedList.length; i < count; ++i) {
+                    orderedList[i].actualPos = i;
+                    cols[orderedList[i].index]._aPos = i;
+                }
+                this._orderedColumnList = orderedList;
+                return orderedList;
+            },
             _resizePinnedColumn: function(event) {
                 var change = event.curWidth - event.prevWidth;
                 this._leftPinnedColumns[event.index].width = this.columns()[event.index]._dom.offsetWidth;
@@ -5490,7 +5543,7 @@
                     var colName = this._leftPinnedColumns[index].name;
                     var colSeq = this._leftPinnedColumns[index].sequence;
                     this._setupPinnedColumn(index);
-                    delete this._leftPinnedColumns[index];
+                    this.columns()[index]._pinned = false;
                     var pinned = false;
                 } else if (pinnedValue || this._leftPinnedColumns[index] === undefined) {
                     var col = this.columns()[index];
@@ -5504,6 +5557,7 @@
                     this._leftPinnedColumns[index].sequence = pinnedValue !== true && pinnedValue != undefined ? pinnedValue : Object.keys(this._leftPinnedColumns).length;
                     var colSeq = this._leftPinnedColumns[index].sequence;
                     this._setupPinnedColumn(index, null, true);
+                    this.columns()[index]._pinned = colSeq;
                     var pinned = true;
                 }
                 try {
@@ -5535,9 +5589,10 @@
                 var totalWidth = 0;
                 for (var i = 0, count = cols.length; i < count; ++i) {
                     if (this._leftPinnedColumns[i]) continue;
-                    totalWidth += cols[i]._dom && cols[i]._dom.offsetWidth;
+                    var col = cols[i];
+                    if (col._isColumnMoving) continue;
+                    totalWidth += col._dom && col._dom.offsetWidth;
                 }
-                console.log("getTotalUnpinnedWidth:", totalWidth);
                 return totalWidth;
             },
             _setupPinnedColumn: function(index, widthChange, pinned) {
@@ -5607,14 +5662,12 @@
                     this.setStyle("div.uki-dataTable-footer-container td.uki-dataTable-col-" + orderedList[i].index, "left", leftOffset + "px");
                     leftOffset += orderedList[i].width;
                 }
-                var headerMargin = this._parent._header._table.style.marginLeft;
-                headerMargin = !headerMargin ? 0 : parseInt(headerMargin);
-                var headerMarginLeft = pinned ? headerMargin + (widthChange || colWidth) : headerMargin - colWidth;
-                this._parent._footer._table.style.marginLeft = this._parent._header._table.style.marginLeft = headerMarginLeft + "px";
-                this.setStyle("uki-dataList-pack", "margin-left", totalWidth + "px");
+                if (!pinned) delete this._leftPinnedColumns[index];
+                var pinnedWidth = this.getTotalPinnedWidth();
+                this._parent._footer._table.style.marginLeft = this._parent._header._table.style.marginLeft = pinnedWidth + "px";
+                this.setStyle("uki-dataList-pack", "margin-left", pinnedWidth + "px");
             },
             _click: function(e) {
-                console.log("_click", this._draggableColumn, "initialPosition", this._initialPosition);
                 if (this._draggableColumn != -1 || this._initialPosition != undefined) {
                     return;
                 }
@@ -5827,6 +5880,48 @@
                     }
                 }
             },
+            _copyColumns: function() {
+                var newCols = [];
+                var cols = this.columns();
+                var keysToDrop = {
+                    _cssRule: 1,
+                    _labelElement: 1,
+                    _resizer: 1,
+                    _pin: 1,
+                    _dom: 1,
+                    _eventNames: 1,
+                    _wrapper: 1,
+                    _lastClicked: 1,
+                    _isColumnMoving: 1,
+                    _parent: 1,
+                    _layoutBefore: 1,
+                    _viewIndex: 1
+                };
+                for (var i = 0, count = cols.length; i < count; ++i) {
+                    var col = cols[i];
+                    if (typeof col != "object") continue;
+                    var colKeys = Object.keys(col);
+                    var newCol = {};
+                    for (var j = 0, jCount = colKeys.length; j < jCount; ++j) {
+                        var key = colKeys[j];
+                        if (keysToDrop[key] || key.substr(0, 2) == "__") continue;
+                        var newKey = key;
+                        if (newKey.substr(0, 1) == "_") newKey = newKey.substr(1);
+                        newCol[newKey] = col[key];
+                    }
+                    if (!Object.keys(newCol).length) return;
+                    newCol.oPos = newCol.oPos || newCol.pos;
+                    newCol.pos = newCol.aPos;
+                    delete newCol.aPos;
+                    newCols.push(newCol);
+                }
+                newCols.sort(function(aCol, bCol) {
+                    if (aCol.pos < bCol.pos) return -1;
+                    if (aCol.pos > bCol.pos) return 1;
+                    return 0;
+                });
+                return newCols;
+            },
             _dragEnd: function(e) {
                 if (this._draggableColumn != -1) {
                     this._drag(e);
@@ -5838,65 +5933,38 @@
                     } catch (err) {}
                 } else if (this._initialPosition != undefined) {
                     var index = parseInt(this._initialPosition);
-                    var orderedList = this.getColumnsOrderedByActualPosition(index);
-                    console.log("orderedList", orderedList, "index:", index);
-                    var orderedIndex = [];
+                    var orderedList = this.getOrderedColumnList();
                     var cols = this.columns();
                     for (var i = 0, count = orderedList.length; i < count; ++i) {
                         if (orderedList[i].index == index) continue;
                         var col = cols[orderedList[i].index];
                         if (col._dom.style.borderLeftColor == this.movingMarkerColor) {
-                            orderedIndex.push({
-                                index: index,
-                                name: cols[index].name()
-                            });
-                            orderedIndex.push({
-                                index: orderedList[i].index,
-                                name: cols[orderedList[i].index].name()
-                            });
+                            cols[index]._aPos = col._aPos - .1;
                             this._turnOffLeftMovingColumnMarker(col);
                         } else if (col._dom.style.borderRightColor == this.movingMarkerColor) {
-                            orderedIndex.push({
-                                index: orderedList[i].index,
-                                name: cols[orderedList[i].index].name()
-                            });
-                            orderedIndex.push({
-                                index: index,
-                                name: cols[index].name()
-                            });
+                            cols[index]._aPos = col._aPos + .1;
                             this._turnOffRightMovingColumnMarker(col);
-                        } else {
-                            orderedIndex.push({
-                                index: orderedList[i].index,
-                                name: cols[orderedList[i].index].name()
-                            });
                         }
                     }
-                    cols[index]._hasMoved = true;
+                    this._orderedColumnList = [];
+                    orderedList = this.getOrderedColumnList();
+                    cols[index]._isColumnMoving = false;
                     try {
                         this.trigger({
                             type: "columnsReordered",
-                            columnOrder: orderedIndex
+                            columnOrder: orderedList
                         });
                     } catch (err) {}
-                    var offset = 0;
-                    for (var i = 0, count = orderedIndex.length; i < count; ++i) {
-                        this.setColStyle(orderedIndex[i], "position", "absolute");
-                        this.setColStyle(orderedIndex[i], "left", offset + "px");
-                        offset += cols[orderedIndex[i]]._dom.offsetWidth;
-                    }
-                    this.setColStyle(index, "z-index", "0");
-                    this.setColStyle(index, "background-color", "initial");
-                    this.setColStyle(index, "opacity", "1");
-                    this.trigger({
-                        type: "recalcTableSize"
-                    });
-                    cols[index]._isColumnMoving = false;
+                    this._leftPinnedColumns = {};
+                    var newColumns = this._copyColumns();
+                    this._parent.columns(newColumns);
+                    this._parent._list.dataReload(this._parent._list._data);
                 }
                 this._draggableColumn = -1;
                 this._initialWidth = undefined;
                 this._initialLeft = undefined;
                 this._initialPosition = undefined;
+                this._movingColumnCache = undefined;
             },
             _isTargetMovable: function(target) {
                 if (dom.hasClass(target, "uki-dataTable-cell_resizable")) return false;
@@ -5913,29 +5981,6 @@
                 console.log("_isTargetMovable index:", index, target);
                 if (index == undefined) return false;
                 return index;
-            },
-            getColumnsOrderedByActualPosition: function(indexToSkip) {
-                var cols = this.columns();
-                var totalPinnedWidth = this.getTotalPinnedWidth();
-                var colList = [];
-                for (var i = 0, count = cols.length; i < count; ++i) {
-                    if (i == indexToSkip || !cols[i].visible()) continue;
-                    var colLeft = this._leftPinnedColumns[i] ? cols[i]._dom.offsetLeft : cols[i]._dom.offsetLeft + totalPinnedWidth;
-                    colList.push({
-                        index: i,
-                        leftPos: colLeft,
-                        name: cols[i].name()
-                    });
-                }
-                colList.sort(function(colA, colB) {
-                    return colA.leftPos - colB.leftPos;
-                });
-                var calcOffset = 0;
-                for (var i = 0, count = colList.length; i < count; ++i) {
-                    colList[i].leftPos = calcOffset;
-                    calcOffset += cols[colList[i].index]._dom.offsetWidth;
-                }
-                return colList;
             },
             _drag: function(e) {
                 var index;
@@ -5967,78 +6012,140 @@
                     } else {
                         this._setupMovingColumn(index);
                     }
-                    var x = e.movementSinceLastEvent.x;
-                    var columnWidth = this.columns()[index]._dom.offsetWidth;
-                    var viewingWidth = this._parent._dom.clientWidth;
-                    var scrollLeft = this._parent._scrollContainer.scrollLeft();
-                    var movement = e.dragOffset && e.dragOffset.x || e.clientX;
-                    var offset = this._initialLeft + movement;
-                    if (x < 0 && offset < 0 && scrollLeft > 0) {
-                        this._parent._scrollContainer.scrollLeft(scrollLeft + x * 4);
-                    } else if (offset + columnWidth + 50 > viewingWidth && offset + scrollLeft + columnWidth < this._parent._scrollBar._dom.offsetWidth) {
-                        var amountToMove = offset + columnWidth + 50 - viewingWidth;
-                        if (amountToMove > 0) this._parent._scrollContainer.scrollLeft(scrollLeft + x * 4);
+                    var x = e.movementSinceLastEvent && e.movementSinceLastEvent.x;
+                    var options = {};
+                    options.scrolledLeft = this._parent._scrollContainer.scrollLeft();
+                    var curHeaderLeft = undefined;
+                    var hasPinnedColumns = false;
+                    if (this._leftPinnedColumns && Object.keys(this._leftPinnedColumns).length) {
+                        curHeaderLeft = this.getStyle("div.uki-dataTable-header-container td.uki-dataTable-col-" + index, "left") || 0;
+                        curHeaderLeft = parseInt(curHeaderLeft) + x;
+                        hasPinnedColumns = true;
                     } else {
-                        this.setColStyle(index, "left", offset + "px");
+                        curHeaderLeft = this.columns()[index]._dom.offsetLeft + x;
                     }
-                    this._setMovingMarker(index, offset);
+                    options.hasPinnedColumns = hasPinnedColumns;
+                    options.colOffsetLeft = curHeaderLeft;
+                    if (x > 0) {
+                        this._startRightScrollIfNeeded(index, options);
+                    } else if (x < 0) {
+                        this._startLeftScrollIfNeeded(index, options);
+                    }
+                    this._setMovingMarker(index, options);
+                    var curColLeft = this.getColStyle(index, "left") || 0;
+                    this.setColStyle(index, "left", parseInt(curColLeft) + x + "px");
+                    if (hasPinnedColumns) {
+                        this.setStyle("div.uki-dataTable-header-container td.uki-dataTable-col-" + index, "left", curHeaderLeft + "px");
+                        this.setStyle("div.uki-dataTable-footer-container td.uki-dataTable-col-" + index, "left", curHeaderLeft + "px");
+                    }
                 }
             },
-            _setupMovingColumn: function(index) {
-                var cols = this.columns();
-                var totalPinnedWidth = this.getTotalPinnedWidth();
-                var movingColumnLeft = cols[index]._dom.offsetLeft + totalPinnedWidth;
+            _startLeftScrollIfNeeded: function(index, options) {
+                var scrolledLeft = options && options.scrolledLeft || this._parent._scrollContainer.scrollLeft();
+                if (scrolledLeft == 0) return;
+                if (!this._movingColumnCache) {
+                    this._movingColumnCache = {};
+                }
+                var cache = this._movingColumnCache;
+                var colOffsetLeft = options && options.colOffsetLeft || this.columns()[index]._dom.offsetLeft;
+                var distance = colOffsetLeft - 30;
+                if (distance < 0) {
+                    this._parent._scrollContainer.scrollLeft(scrolledLeft - 4);
+                    setTimeout(uki.bind(function() {
+                        this._startLeftScrollIfNeeded(index);
+                    }, this), 100);
+                }
+            },
+            _startRightScrollIfNeeded: function(index, options) {
+                if (!this._movingColumnCache) {
+                    this._movingColumnCache = {};
+                }
+                var cache = this._movingColumnCache;
+                if (!cache.scrollWidth) cache.scrollWidth = this._dom.scrollWidth;
+                if (!cache.clientWidth) cache.clientWidth = this._dom.offsetWidth;
+                if (cache.scrollWidth <= cache.clientWidth) return;
+                var scrolledLeft = options && options.scrolledLeft || this._parent._scrollContainer.scrollLeft();
+                if (scrolledLeft + cache.clientWidth >= cache.scrollWidth) return;
+                if (!cache.columnWidth) cache.columnWidth = this.columns()[index]._dom.offsetWidth;
+                var colOffsetLeft = options && options.colOffsetLeft || this.columns()[index]._dom.offsetLeft;
+                var distance = cache.clientWidth - (colOffsetLeft + cache.columnWidth + 30);
+                if (distance < 0) {
+                    this._parent._scrollContainer.scrollLeft(scrolledLeft + 4);
+                    setTimeout(uki.bind(function() {
+                        this._startRightScrollIfNeeded(index);
+                    }, this), 100);
+                }
+            },
+            _setupMovingColumn: function(index, options) {
+                var movingCol = this.columns()[index];
                 this._initialPosition = index;
-                this._initialLeft = movingColumnLeft;
+                this._initialLeft = this.columns()[index]._dom.offsetLeft - this._parent._scrollContainer.scrollLeft();
                 this.setColStyle(index, "z-index", "1");
-                this.setColStyle(index, "position", "absolute");
                 this.setColStyle(index, "background-color", "lightgray");
                 this.setColStyle(index, "opacity", ".6");
-                cols[index]._isColumnMoving = true;
+                this.setColStyle(index, "position", "absolute");
+                this.setColStyle(index, "left", this._initialLeft + "px");
                 if (this._leftPinnedColumns && Object.keys(this._leftPinnedColumns).length) {
-                    var colList = this.getColumnsOrderedByActualPosition(index);
-                    for (var i = 0, count = colList.length; i < count; ++i) {
-                        this.setColStyle(colList[i].index, "position", "absolute");
-                        this.setColStyle(colList[i].index, "left", colList[i].leftPos + "px");
-                    }
-                    this.deleteStyle("uki-dataList-pack", "margin-left");
-                    for (var i in this._leftPinnedColumns) {
-                        if (!this._leftPinnedColumns.hasOwnProperty(i)) continue;
-                        var pinnedIndex = this._leftPinnedColumns[i].index;
-                        this.deleteStyle("div.uki-dataTable-header-container td.uki-dataTable-col-" + pinnedIndex, "left");
-                        this.deleteStyle("div.uki-dataTable-footer-container td.uki-dataTable-col-" + pinnedIndex, "left");
-                        this.deleteStyle("div.uki-dataList td.uki-dataTable-col-" + pinnedIndex, "left");
-                    }
+                    var pinnedWidth = this.getTotalPinnedWidth();
+                    var leftOffset = pinnedWidth + this._initialLeft;
+                    this.setStyle("div.uki-dataTable-header-container td.uki-dataTable-col-" + index, "left", leftOffset + "px");
+                    this.setStyle("div.uki-dataTable-footer-container td.uki-dataTable-col-" + index, "left", leftOffset + "px");
                 }
+                movingCol._isColumnMoving = true;
                 this.trigger({
                     type: "recalcTableSize"
                 });
             },
             movingMarkerColor: "gray",
-            _setMovingMarker: function(index, offset) {
+            _setMovingMarker: function(index, options) {
                 var cols = this.columns();
-                var columnWidth = cols[index].width();
-                var scrollLeft = this._parent._scrollContainer.scrollLeft();
-                var actualOffset = scrollLeft + offset;
-                var closestResizer;
+                if (!this._movingColumnCache) {
+                    this._movingColumnCache = {};
+                }
+                var cache = this._movingColumnCache;
+                if (!cache.columnWidth) cache.columnWidth = cols[index]._dom.offsetWidth;
+                if (!cache.totalWidth) cache.totalWidth = this.totalWidth();
+                if (!cache.visibleOrderedList) {
+                    var orderedList = this.getOrderedColumnList();
+                    var visibleOrderedList = [];
+                    for (var i = 0, count = orderedList.length; i < count; ++i) {
+                        var oIndex = orderedList[i].index;
+                        if (index == oIndex || !cols[oIndex]._visible || this._leftPinnedColumns[oIndex]) continue;
+                        visibleOrderedList.push(orderedList[i]);
+                    }
+                    cache.visibleOrderedList = visibleOrderedList;
+                }
+                var scrolledLeft = options && options.scrolledLeft || this._parent._scrollContainer.scrollLeft();
+                var colOffsetLeft = options && options.colOffsetLeft || cols[index]._dom.offsetLeft;
+                var actualOffset = scrolledLeft + colOffsetLeft;
+                var closestResizer = {
+                    distance: undefined
+                };
                 var blueBorder;
                 var lastVisibleIndex;
-                for (var i = 0, count = cols.length; i < count; ++i) {
-                    if (index == i || !cols[i]._visible || this._leftPinnedColumns[cols[i]]) continue;
-                    var colDom = cols[i]._dom;
-                    if (colDom.style.borderLeftColor == this.movingMarkerColor) blueBorder = i;
-                    var difference = Math.abs(actualOffset + columnWidth / 2 - (isNaN(parseInt(colDom.offsetLeft)) ? 0 : parseInt(colDom.offsetLeft)));
-                    if (closestResizer == undefined || difference < closestResizer.distance) {
+                var hasPinnedColumns = !!(this._leftPinnedColumns && Object.keys(this._leftPinnedColumns).length);
+                if (hasPinnedColumns) {
+                    var pinnedWidth = this.getTotalPinnedWidth();
+                }
+                for (var i = 0, count = cache.visibleOrderedList.length; i < count; ++i) {
+                    var oIndex = cache.visibleOrderedList[i].index;
+                    var col = cols[oIndex];
+                    if (col._dom.style.borderLeftColor == this.movingMarkerColor) blueBorder = oIndex;
+                    var left = parseInt(col._dom.offsetLeft) || 0;
+                    if (hasPinnedColumns) {
+                        left += pinnedWidth;
+                    }
+                    var difference = Math.abs(actualOffset + cache.columnWidth / 2 - left);
+                    if (closestResizer.distance == undefined || difference < closestResizer.distance) {
                         closestResizer = {
-                            index: i,
+                            index: oIndex,
                             distance: difference
                         };
                     }
-                    lastVisibleIndex = i;
+                    lastVisibleIndex = oIndex;
                 }
                 if (cols[lastVisibleIndex]._dom.style.borderRightColor == this.movingMarkerColor) var rightBlueBorder = lastVisibleIndex;
-                var totalWidth = this.totalWidth();
-                if (Math.abs(actualOffset - totalWidth) < closestResizer.distance || cols[index]._dom.offsetLeft > totalWidth) {
+                if (Math.abs(actualOffset - cache.totalWidth) < closestResizer.distance || colOffsetLeft > cache.totalWidth) {
                     var lastCol = cols[lastVisibleIndex];
                     if (lastCol._dom.style.borderRightColor != this.movingMarkerColor) {
                         if (blueBorder) this._turnOffLeftMovingColumnMarker(cols[blueBorder]);
@@ -6072,7 +6179,6 @@
                 var prevWidth = column.width();
                 column.width(width);
                 var newWidth = column.width();
-                console.log("resizeColumn:", prevWidth, width, newWidth);
                 if (prevWidth !== newWidth) {
                     try {
                         this.trigger({
@@ -6365,7 +6471,8 @@
                 if (this.parent() == null) return;
                 if (parentGrid) parentGrid.styleColumn(row, pos, parentGrid);
                 this.parent().columns().forEach(function(col, i) {
-                    var val = col.key ? utils.prop(row, col.key) : row[i];
+                    var originalPos = col.oPos != undefined ? col.oPos : i;
+                    var val = col.key ? utils.prop(row, col.key) : row[originalPos];
                     cols[i] = {
                         value: col.formatter(val || "", row, i, pos),
                         className: "uki-dataTable-col-" + i + (col.className ? " " + col.className : "")
