@@ -5606,7 +5606,6 @@
                     this.deleteStyle("div.uki-dataTable-footer-container td.uki-dataTable-col-" + index, "left");
                     this.deleteStyle("div.uki-dataList td.uki-dataTable-col-" + index, "left");
                 }
-                var colWidth = this._leftPinnedColumns[index].width;
                 var pinnedCount = Object.keys(this._leftPinnedColumns).length;
                 if (!pinned) --pinnedCount;
                 var allSeq = {};
@@ -5664,7 +5663,8 @@
                 }
                 if (!pinned) delete this._leftPinnedColumns[index];
                 var pinnedWidth = this.getTotalPinnedWidth();
-                this._parent._footer._table.style.marginLeft = this._parent._header._table.style.marginLeft = pinnedWidth + "px";
+                var scrolledLeft = this._parent._scrollContainer.scrollLeft();
+                this._parent._footer._table.style.marginLeft = this._parent._header._table.style.marginLeft = pinnedWidth - scrolledLeft + "px";
                 this.setStyle("uki-dataList-pack", "margin-left", pinnedWidth + "px");
             },
             _click: function(e) {
@@ -5948,7 +5948,7 @@
                     }
                     this._orderedColumnList = [];
                     orderedList = this.getOrderedColumnList();
-                    cols[index]._isColumnMoving = false;
+                    delete cols[index]._isColumnMoving;
                     try {
                         this.trigger({
                             type: "columnsReordered",
@@ -5959,6 +5959,7 @@
                     var newColumns = this._copyColumns();
                     this._parent.columns(newColumns);
                     this._parent._list.dataReload(this._parent._list._data);
+                    this._parent._handleScroll(this._parent._scrollContainer.scrollLeft());
                 }
                 this._draggableColumn = -1;
                 this._initialWidth = undefined;
@@ -5978,7 +5979,6 @@
                 if (dom.hasClass(target, "uki-dataTable-header-cell")) {
                     var index = target.className.match(/uki-dataTable-col-(\d+)/)[1];
                 }
-                console.log("_isTargetMovable index:", index, target);
                 if (index == undefined) return false;
                 return index;
             },
@@ -6047,9 +6047,10 @@
                     this._movingColumnCache = {};
                 }
                 var cache = this._movingColumnCache;
+                if (cache.totalPinnedWidth == undefined) cache.totalPinnedWidth = this.getTotalPinnedWidth();
                 var colOffsetLeft = options && options.colOffsetLeft || this.columns()[index]._dom.offsetLeft;
                 var distance = colOffsetLeft - 30;
-                if (distance < 0) {
+                if (distance < cache.totalPinnedWidth) {
                     this._parent._scrollContainer.scrollLeft(scrolledLeft - 4);
                     setTimeout(uki.bind(function() {
                         this._startLeftScrollIfNeeded(index);
@@ -6080,7 +6081,7 @@
                 var movingCol = this.columns()[index];
                 this._initialPosition = index;
                 this._initialLeft = this.columns()[index]._dom.offsetLeft - this._parent._scrollContainer.scrollLeft();
-                this.setColStyle(index, "z-index", "1");
+                this.setColStyle(index, "z-index", "2");
                 this.setColStyle(index, "background-color", "lightgray");
                 this.setColStyle(index, "opacity", ".6");
                 this.setColStyle(index, "position", "absolute");
@@ -6123,8 +6124,7 @@
                 };
                 var blueBorder;
                 var lastVisibleIndex;
-                var hasPinnedColumns = !!(this._leftPinnedColumns && Object.keys(this._leftPinnedColumns).length);
-                if (hasPinnedColumns) {
+                if (options && options.hasPinnedColumns) {
                     var pinnedWidth = this.getTotalPinnedWidth();
                 }
                 for (var i = 0, count = cache.visibleOrderedList.length; i < count; ++i) {
@@ -6132,7 +6132,7 @@
                     var col = cols[oIndex];
                     if (col._dom.style.borderLeftColor == this.movingMarkerColor) blueBorder = oIndex;
                     var left = parseInt(col._dom.offsetLeft) || 0;
-                    if (hasPinnedColumns) {
+                    if (options && options.hasPinnedColumns) {
                         left += pinnedWidth;
                     }
                     var difference = Math.abs(actualOffset + cache.columnWidth / 2 - left);

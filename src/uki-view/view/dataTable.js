@@ -1863,7 +1863,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
       this.deleteStyle('div.uki-dataTable-footer-container td.uki-dataTable-col-' + index, 'left');
       this.deleteStyle('div.uki-dataList td.uki-dataTable-col-' + index, 'left');
     }
-    var colWidth = this._leftPinnedColumns[index].width;
+    //var colWidth = this._leftPinnedColumns[index].width;
     var pinnedCount = Object.keys(this._leftPinnedColumns).length;
     if (!pinned) --pinnedCount;
     var allSeq = {};
@@ -1922,23 +1922,12 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
       leftOffset += orderedList[i].width;
     }
 
-    /*
-    var headerMargin = this._parent._header._table.style.marginLeft;
-    headerMargin = !headerMargin ? 0 : parseInt(headerMargin);
-    var headerMarginLeft = pinned ? headerMargin + (widthChange || colWidth) : headerMargin - colWidth;
-    var pinnedWidth = this.getTotalPinnedWidth();
-    console.log('headerMargin', headerMargin, 'pinned', pinned, 'colWidth', colWidth, 'headerMarginLeft', headerMarginLeft, 'pinnedWidth:', pinnedWidth);
-    this._parent._footer._table.style.marginLeft = this._parent._header._table.style.marginLeft = headerMarginLeft + "px";
-    //console.log('setting rows:', totalWidth);
-    this.setStyle('uki-dataList-pack', 'margin-left', totalWidth + 'px');
-    //console.log('setupPinnedColumn', orderedList, this._leftPinnedColumns);
-    */
     if (!pinned) delete this._leftPinnedColumns[index];
     var pinnedWidth = this.getTotalPinnedWidth();
+    var scrolledLeft = this._parent._scrollContainer.scrollLeft();
     //console.log('pinnedWidth:', pinnedWidth);
-    this._parent._footer._table.style.marginLeft = this._parent._header._table.style.marginLeft = pinnedWidth + "px";
-    this.setStyle('uki-dataList-pack', 'margin-left', pinnedWidth + 'px');
-
+    this._parent._footer._table.style.marginLeft = this._parent._header._table.style.marginLeft = (pinnedWidth - scrolledLeft) + "px";
+    this.setStyle('uki-dataList-pack', 'margin-left', (pinnedWidth ) + 'px');
   },
 
   _click: function ( e ) {
@@ -2220,14 +2209,12 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
   _copyColumns: function () {
     var newCols = [];
     var cols = this.columns();
-    //var keys = Object.keys(cols);
     var keysToDrop = {'_cssRule':1, '_labelElement':1, '_resizer':1, '_pin':1, '_dom':1,
       '_eventNames':1, '_wrapper':1, '_lastClicked':1, '_isColumnMoving':1, '_parent':1,
       '_layoutBefore':1, '_viewIndex':1};
 
     for (var i = 0, count = cols.length; i < count; ++i) {
       var col = cols[i];
-
       if (typeof col != 'object') continue;
       var colKeys = Object.keys(col);
       var newCol = {};
@@ -2271,9 +2258,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
       var index = parseInt(this._initialPosition);
       var orderedList = this.getOrderedColumnList()
       //console.log('orderedList', orderedList, 'index:', index);
-      //var orderedIndex = [];
       var cols = this.columns();
-      //var prevAPos = cols[index]._aPos;
       for (var i = 0, count = orderedList.length; i < count; ++i) {
         if (orderedList[i].index == index) continue;
         var col = cols[orderedList[i].index];
@@ -2287,10 +2272,8 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
       }
       this._orderedColumnList = [];
       orderedList = this.getOrderedColumnList();
-      cols[index]._isColumnMoving = false;
+      delete cols[index]._isColumnMoving;
 
-      //Set a property on the column so that it is known that it moved (for _click)
-      //cols[index]._hasMoved = true;
       //Send off the info as soon as possible
       try {
         this.trigger( {
@@ -2303,45 +2286,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
       var newColumns = this._copyColumns();
       this._parent.columns(newColumns);
       this._parent._list.dataReload(this._parent._list._data);
-      /*
-      var cols = this.columns();
-      for (var i = 0, count = cols.length; i < count; ++i) {
-        console.log('pinned', cols[i]._pinned, cols[i].pinned());
-        var pinned = cols[i]._pinned;
-        if (pinned != undefined && pinned !== false) this.pinColumn(i,pinned);
-      }
-
-      //Set the fields that had to move as a result of this field moving
-      /*
-      var curAPos = cols[index]._aPos;
-      var columnWidth = cols[index]._dom.offsetWidth;
-      for (var i = curAPos + 1; i < orderedList.length; ++i) {
-        var prevLeft = parseInt(this.getColStyle(orderedList[i].index, 'left')) || 0;
-        this.setColStyle(orderedList[i].index, 'left', (prevLeft + columnWidth) + 'px');
-      }
-
-      //Adjust the positioning of the moved field
-      var newLeft = 0;
-      if (cols[index]._aPos == cols[index]._pos) {
-        this.setColStyle(index, 'left', '0px');
-      } else if (cols[index]._aPos > cols[index]._pos) {
-        for (var i = cols[index]._pos; i < cols[index]._aPos; ++i) {
-          newLeft += cols[orderedList[i].index]._dom.offsetWidth;
-        }
-        this.setColStyle(index, 'left', newLeft + 'px');
-      } else {
-        for (var i = cols[index]._aPos+1; i <= cols[index]._pos; ++i) {
-          newLeft -= cols[orderedList[i].index]._dom.offsetWidth;
-        }
-        this.setColStyle(index, 'left', newLeft + 'px');
-      }
-      this.setColStyle(index, 'position', 'relative');
-      this.setColStyle(index, 'z-index', '0');
-      this.setColStyle(index, 'background-color', 'initial');
-      this.setColStyle(index, 'opacity', '1');
-      this.trigger({type:'recalcTableSize'});
-      cols[index]._isColumnMoving = false;
-      */
+      this._parent._handleScroll(this._parent._scrollContainer.scrollLeft());
     }
     this._draggableColumn = -1;
     this._initialWidth = undefined;
@@ -2361,7 +2306,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     if (dom.hasClass( target, 'uki-dataTable-header-cell' )) {
       var index = target.className.match( /uki-dataTable-col-(\d+)/ )[1];
     }
-    console.log('_isTargetMovable index:', index, target)
+    //console.log('_isTargetMovable index:', index, target)
     if (index == undefined) return false;
     return index;
   },
@@ -2389,7 +2334,6 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
       }
       //console.log('width:', width, 'initialWidth:', this._initialWidth, 'index:', index, 'offset:', e.dragOffset );
       this._resizeColumn( this._draggableColumn, width );
-      //this._alterColumnSpace(this.columns()[this._draggableColumn]._aPos + 1, e.movementSinceLastEvent.x);
       try {
         this.trigger( {
           type: 'resizeColumn',
@@ -2447,19 +2391,12 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
       this._movingColumnCache = {};
     }
     var cache = this._movingColumnCache;
+    if (cache.totalPinnedWidth == undefined) cache.totalPinnedWidth = this.getTotalPinnedWidth();
     //We know there is room to scroll left so let's see how close we are
     var colOffsetLeft = (options && options.colOffsetLeft) || this.columns()[index]._dom.offsetLeft;
     var distance = (colOffsetLeft - 30);
-    if (distance < 0) {
-      //var curColLeft = this.getColStyle(index, 'left');
+    if (distance < cache.totalPinnedWidth) {
       this._parent._scrollContainer.scrollLeft(scrolledLeft - 4);
-      //this.setColStyle(index, 'left', (parseInt(curColLeft) - 4) + 'px');
-      /*
-      if (options.hasPinnedColumns) {
-        this.setStyle('div.uki-dataTable-header-container td.uki-dataTable-col-' + index, 'left', (colOffsetLeft - 4) + 'px');
-        this.setStyle('div.uki-dataTable-footer-container td.uki-dataTable-col-' + index, 'left', (colOffsetLeft - 4) + 'px');
-      }
-      */
       setTimeout(uki.bind(function() {this._startLeftScrollIfNeeded(index)}, this), 100);
     }
   },
@@ -2498,7 +2435,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     //this._initialLeft = parseInt(this.getColStyle(index, 'left')) || 0;
     this._initialLeft = this.columns()[index]._dom.offsetLeft - this._parent._scrollContainer.scrollLeft();
 
-    this.setColStyle(index, 'z-index', '1');
+    this.setColStyle(index, 'z-index', '2');
     this.setColStyle(index, 'background-color', 'lightgray');
     this.setColStyle(index, 'opacity', '.6');
     this.setColStyle(index, 'position', 'absolute');
@@ -2564,8 +2501,8 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     var closestResizer = {distance:undefined};
     var blueBorder;
     var lastVisibleIndex;
-    var hasPinnedColumns = !!(this._leftPinnedColumns && Object.keys(this._leftPinnedColumns).length);
-    if (hasPinnedColumns) {
+    //var hasPinnedColumns = !!(this._leftPinnedColumns && Object.keys(this._leftPinnedColumns).length);
+    if (options && options.hasPinnedColumns) {
       var pinnedWidth = this.getTotalPinnedWidth();
     }
     for (var i = 0, count = cache.visibleOrderedList.length; i< count; ++i) {
@@ -2573,7 +2510,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
       var col = cols[oIndex];
       if (col._dom.style.borderLeftColor == this.movingMarkerColor) blueBorder = oIndex;
       var left = (parseInt(col._dom.offsetLeft) || 0);
-      if (hasPinnedColumns) {
+      if (options && options.hasPinnedColumns) {
         left += pinnedWidth;
       }
       //console.log('looping', col._name, 'actualOffset:', actualOffset, 'left:', left, 'scrolledLeft:', scrolledLeft);
@@ -2587,7 +2524,6 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     //console.log(window.performance.now() - startTime);
     if (cols[lastVisibleIndex]._dom.style.borderRightColor == this.movingMarkerColor) var rightBlueBorder = lastVisibleIndex;
 
-    //var totalWidth = this.totalWidth();
     //console.log('marking:', closestResizer, 'actualOffset:', actualOffset, 'cache.totalWidth:', cache.totalWidth, 'colOffsetLeft:', colOffsetLeft);
     if (Math.abs(actualOffset - cache.totalWidth) < closestResizer.distance || colOffsetLeft > cache.totalWidth) {
       //console.log('---1',window.performance.now() - startTime);
@@ -2609,14 +2545,10 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
   },
 
   _turnOffLeftMovingColumnMarker: function (col) {
-    //var startTime = window.performance.now();
     col._dom.style.borderLeft = '';
-    //console.log('Left Off', window.performance.now() - startTime);
   },
   _turnOnLeftMovingColumnMarker: function (col) {
-    //var startTime = window.performance.now();
     col._dom.style.borderLeft = '4px solid ' + this.movingMarkerColor;
-    //console.log('left On', window.performance.now() - startTime);
   },
   _turnOffRightMovingColumnMarker: function (col) {
     col._dom.style.borderRightColor = 'rgb(204, 204,204)';
