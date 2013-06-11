@@ -1,10 +1,7 @@
 .uki-dataTable-container {
-    /*overflow: auto;*/
-
     overflow-y: auto;
     overflow-x: hidden;
 
-   /*-webkit-overflow-scrolling: touch;*/
 	 background-color: #ffffff;
 }
 
