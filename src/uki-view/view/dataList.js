@@ -270,7 +270,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
             height = parentRect.height - Math.max(0, topOffset),
             top = -Math.min(0, topOffset);
 
-        return { from: top, to: top + height };
+        return { from: Math.floor(top), to: Math.floor(top + height) };
     },
 
     _renderingRange: function() {
@@ -438,7 +438,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
     * Warning! This method will use #slice even for async data
     */
     selectedRow: function() {
-        var index = this.selection().index();
+        var index = Math.floor(this.selection().index());
         return index > -1 && this._data.slice(index, index+1)[0];
     },
 

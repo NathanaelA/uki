@@ -170,14 +170,14 @@ table.uki-dataTable-header tr.uki-dataTable-header-row td {
     display: none;
     overflow: hidden;
     position: absolute;
-    width: 5px;
+    width: 10px;
     top: 0;
     right: -12px;
     height: 100%;
     text-indent: 1em;
     cursor: ew-resize;
     cursor: col-resize;
-    padding-right: 4px;
+    padding-right: 2px;
 }
 
 

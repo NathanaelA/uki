@@ -30,7 +30,7 @@ var Pack = fun.newClass(Base, {
     },
 
     setSelected: function(position, state) {
-        var row = this._rowAt(position);
+        var row = this._rowAt(Math.floor(position));
         if (row) { dom.toggleClass(row, 'uki-dataTable-row_selected', state); }
     },
 
