@@ -2270,7 +2270,8 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
       newCol.oPos = newCol.oPos || newCol.pos;
       newCol.pos = newCol.aPos;
       delete newCol.aPos;
-      newCol.filterValue = col.filterValue();
+      newCol.filtervalue = col.filterValue();
+      newCol.footervalue = col.footerValue();
       //console.log(col, newCol);
 
       newCols.push(newCol);
@@ -2295,12 +2296,12 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
        index = e.target.className.match( /uki-dataTable-resizer_pos-(\d+)/ )[1];
        this._draggableColumn = index;
        this._initialWidth = this.columns()[index].width();
-     } else if ((index = this._isTargetMovable(e.target)) != undefined && index != false &&
-                 this._draggableColumn == -1 && !this._leftPinnedColumns[index]) {
-       this._setupMovingColumn(index);
-     } else {
-       e.preventDefault();
-     }
+     } //else /*if ((index = this._isTargetMovable(e.target)) != undefined && index != false &&
+              //   this._draggableColumn == -1 && !this._leftPinnedColumns[index]) {
+       //this._setupMovingColumn(index);
+     //} //else*/ //{
+       //e.preventDefault();
+     //}
 
   },
   _drag: function ( e ) {
@@ -2318,10 +2319,15 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
         } );
       } catch( err ) { }
     }
-    else if (this._initialPosition != undefined) {
+    else if (this._initialPosition != undefined || ((index = this._isTargetMovable(e.target)) != undefined && index != false &&
+      this._draggableColumn == -1 && !this._leftPinnedColumns[index])) {
       var x = e.movementSinceLastEvent && e.movementSinceLastEvent.x;
       if (x) {
-        index = this._initialPosition;
+        if (index == undefined) {
+          index = this._initialPosition;
+        } else {
+          this._setupMovingColumn(index);
+        }
         var options = {};
         options.scrolledLeft = this._parent._scrollContainer.scrollLeft();
         var hasPinnedColumns = false;
