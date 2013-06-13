@@ -4667,7 +4667,7 @@
                     var hc = this._header.columns();
                     var found = false;
                     for (var i = 0; i < hc.length && !found; i++) {
-                        if (hc[i].visible() && hc[i].filterable() && dom.hasClass(hc[i]._filter, "initfocus")) {
+                        if (hc[i].visible() && hc[i].filterable() && hc[i]._filter && dom.hasClass(hc[i]._filter, "initfocus")) {
                             hc[i].focus();
                             found = true;
                         }
@@ -4714,7 +4714,7 @@
         fun.delegateCall(DataTable.prototype, [ "setRowColStyle", "setRowStyle", "setColStyle", "columnIdByName", "columnIdByLabel", "pinColumn" ], "header");
         var DataTableHeaderColumn = view.newClass("DataTableHeaderColumn", Base, {
             className: fun.newProp("className", function(v) {
-                if (arguments.length) {
+                if (arguments.length && this._dom) {
                     if (this._className === v) {
                         return v;
                     }
@@ -4839,7 +4839,7 @@
                     if (this.parent() == null) {
                         return this._sort;
                     }
-                    if (this.parent().sortable()) {
+                    if (this.parent().sortable() && this._labelElement) {
                         dom.removeClass(this._labelElement, "uki-dataTable-sort-down uki-dataTable-sort-up");
                         if (v === 1) {
                             dom.addClass(this._labelElement, "uki-dataTable-sort-down");
@@ -5002,14 +5002,15 @@
                 this._formatter = null;
             },
             _showPin: function() {
-                if (dom.hasClass(this._pin, "uki-dataTable-pinned")) return;
+                if (this._pin && dom.hasClass(this._pin, "uki-dataTable-pinned")) return;
                 dom.addClass(this._pin, "uki-dataTable-unpinned");
             },
             _removePin: function() {
-                if (dom.hasClass(this._pin, "uki-dataTable-pinned")) return;
+                if (!this._pin || dom.hasClass(this._pin, "uki-dataTable-pinned")) return;
                 dom.removeClass(this._pin, "uki-dataTable-unpinned");
             },
             _setupResizeable: function() {
+                if (!this._dom) return;
                 if (this._resizable && this._sizeable) {
                     this._resizer.style.display = "";
                     dom.addClass(this._dom, "uki-dataTable-header-cell_resizable");
@@ -5053,7 +5054,7 @@
                 this.label(this._label);
                 this.pinned(this._pinned);
                 var pinned = this.pinned && this.pinned();
-                if (pinned) {
+                if (pinned && this._pin) {
                     this._parent.pinColumn(this._pos, pinned);
                     dom.addClass(this._pin, "uki-dataTable-pinned");
                     dom.removeClass(this._pin, "uki-dataTable-unpinned");
@@ -5102,7 +5103,7 @@
                 fun.deferOnce(fun.bindOnce(this._render, this));
             }),
             visible: fun.newProp("visible", function(vis) {
-                if (arguments.length && (vis === true || vis === false) && vis !== this._visible) {
+                if (arguments.length && (vis === true || vis === false) && vis !== this._visible && this._dom) {
                     this._visible = vis;
                     if (this._visible) {
                         dom.removeClass(this._dom, "uki-hidden");
@@ -5713,7 +5714,7 @@
                 if (e.target.nodeName === "INPUT") {
                     return;
                 }
-                if (dom.hasClass(e.target, "uki-dataTable-resizer")) {
+                if (e.target && dom.hasClass(e.target, "uki-dataTable-resizer")) {
                     return;
                 }
                 if (this._parent.isEditing()) {
@@ -5723,7 +5724,7 @@
                 if (target === null) {
                     return;
                 }
-                if (dom.hasClass(target, "uki-dataTable-header-text")) {
+                if (target && dom.hasClass(target, "uki-dataTable-header-text")) {
                     var index = target.className.match(/uki-dataTable-header-text-col-(\d+)/)[1];
                     var col = this.columns();
                     if (col[index]._hasMoved) return;
@@ -5769,7 +5770,7 @@
                             columnIndex: index
                         });
                     }
-                } else if (dom.hasClass(target, "uki-dataTable-pin")) {
+                } else if (target && dom.hasClass(target, "uki-dataTable-pin")) {
                     var index = target.className.match(/uki-dataTable-pin-col-(\d+)/)[1];
                     var col = this.columns()[index];
                     if (!dom.hasClass(target, "uki-dataTable-pinned")) {
@@ -5949,7 +5950,8 @@
                     newCol.oPos = newCol.oPos || newCol.pos;
                     newCol.pos = newCol.aPos;
                     delete newCol.aPos;
-                    newCol.filterValue = col.filterValue();
+                    newCol.filtervalue = col.filterValue();
+                    newCol.footervalue = col.footerValue();
                     newCols.push(newCol);
                 }
                 newCols.sort(function(aCol, bCol) {
@@ -5965,16 +5967,12 @@
                     return;
                 }
                 var index;
-                if (dom.hasClass(e.target, "uki-dataTable-resizer")) {
+                if (e.target && dom.hasClass(e.target, "uki-dataTable-resizer")) {
                     e.draggbale = e.target;
                     e.cursor = dom.computedStyle(e.target, null).cursor;
                     index = e.target.className.match(/uki-dataTable-resizer_pos-(\d+)/)[1];
                     this._draggableColumn = index;
                     this._initialWidth = this.columns()[index].width();
-                } else if ((index = this._isTargetMovable(e.target)) != undefined && index != false && this._draggableColumn == -1 && !this._leftPinnedColumns[index]) {
-                    this._setupMovingColumn(index);
-                } else {
-                    e.preventDefault();
                 }
             },
             _drag: function(e) {
@@ -5988,10 +5986,14 @@
                             column: this.columns()[this._draggableColumn]
                         });
                     } catch (err) {}
-                } else if (this._initialPosition != undefined) {
+                } else if (this._initialPosition != undefined || (index = this._isTargetMovable(e.target)) != undefined && index != false && this._draggableColumn == -1 && !this._leftPinnedColumns[index]) {
                     var x = e.movementSinceLastEvent && e.movementSinceLastEvent.x;
                     if (x) {
-                        index = this._initialPosition;
+                        if (index == undefined) {
+                            index = this._initialPosition;
+                        } else {
+                            this._setupMovingColumn(index);
+                        }
                         var options = {};
                         options.scrolledLeft = this._parent._scrollContainer.scrollLeft();
                         var hasPinnedColumns = false;
@@ -6073,6 +6075,7 @@
                             columnOrder: orderedList
                         });
                     } catch (err) {}
+                    delete this.packMarginLeftId;
                     this._leftPinnedColumns = {};
                     var newColumns = this._copyColumns();
                     this._parent.columns(newColumns);
@@ -6086,6 +6089,7 @@
                 this._movingColumnCache = undefined;
             },
             _isTargetMovable: function(target) {
+                if (!target) return false;
                 if (dom.hasClass(target, "uki-dataTable-cell_resizable")) return false;
                 if (dom.hasClass(target, "uki-dataTable-header-wrap")) {
                     return target.className.match(/uki-dataTable-header-wrap-col-(\d+)/)[1];
