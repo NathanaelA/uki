@@ -4278,12 +4278,7 @@
                 if (this._header._menu != null) {
                     this._header._menu.dom().style.marginLeft = -newLocation + "px";
                 }
-                if (this._header.packMarginLeftId == undefined) this._header.packMarginLeftId = this._header.getStyleId("table.uki-dataTable-pack", "margin-left");
-                if (this._header.packMarginLeftId) {
-                    this._header.forceUpdateCSSRules(this._header.packMarginLeftId, "margin-left", "-" + newLocation + "px");
-                } else {
-                    this._header.setStyle("table.uki-dataTable-pack", "margin-left", "-" + newLocation + "px");
-                }
+                this._header.setStyle("table.uki-dataTable-pack", "margin-left", "-" + newLocation + "px");
                 var totalPinnedWidth = this._header.getTotalPinnedWidth();
                 this._footer._table.style.marginLeft = this._header._table.style.marginLeft = totalPinnedWidth - newLocation + "px";
             },
