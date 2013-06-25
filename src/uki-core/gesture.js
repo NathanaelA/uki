@@ -53,6 +53,9 @@ function stopGesture () {
     gesture.draggable = null;
     env.doc.body.style.cursor = gesture.cursor;
     gesture.cursor = null;
+    gesture.position = null;
+    gesture.lastPosition = null;
+    gesture.lastOffset = null;
     evt.removeListener(env.doc, 'mousemove scroll touchmove', dragGesture);
     evt.removeListener(env.doc, 'mouseup dragend touchend touchcancel', dragGestureEnd);
     evt.removeListener(env.doc, 'selectstart mousedown touchstart', evt.preventDefaultHandler);

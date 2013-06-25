@@ -1904,14 +1904,17 @@
             gesture.draggable = null;
             env.doc.body.style.cursor = gesture.cursor;
             gesture.cursor = null;
+            gesture.position = null;
+            gesture.lastPosition = null;
+            gesture.lastOffset = null;
             evt.removeListener(env.doc, "mousemove scroll touchmove", dragGesture);
             evt.removeListener(env.doc, "mouseup dragend touchend touchcancel", dragGestureEnd);
             evt.removeListener(env.doc, "selectstart mousedown touchstart", evt.preventDefaultHandler);
         }
         function addOffset(e) {
             e.dragOffset = {
-                x: e.pageX - gesture.position.x,
-                y: e.pageY - gesture.position.y
+                x: e.pageX - (gesture.position && gesture.position.x),
+                y: e.pageY - (gesture.position && gesture.position.y)
             };
         }
         function addStartPosition(e) {
@@ -4120,7 +4123,7 @@
                 this._scrollContainer = c.view("scrollContainer");
                 this._scrollBar = c.view("scrollBar");
                 this._list = c.view("list");
-                if ("ontouchstart" in window) {
+                if (typeof window.ontouchstart !== "undefined") {
                     this._container._dom.addEventListener("touchstart", fun.bind(this._detectSwipe, this), false);
                     this._container._dom.addEventListener("touchmove", fun.bind(this._detectSwipe, this), false);
                     this._container._dom.addEventListener("touchend", fun.bind(this._detectSwipe, this), false);
@@ -4184,7 +4187,7 @@
             _isTouchDevice: undefined,
             isTouchDevice: function() {
                 if (this._isTouchDevice == undefined) {
-                    this._isTouchDevice = !!("onTouchStart" in window);
+                    this._isTouchDevice = !!(typeof window.ontouchstart !== "undefined");
                 }
                 return this._isTouchDevice;
             },
@@ -4226,7 +4229,7 @@
                     if (this._footer._rectHeight) {
                         footerHeight = this._footer._rectHeight;
                     } else {
-                        footerHeight = this._footer.clientRect().height;
+                        footerHeight = this._footer.clientRect().height - 1;
                         if (footerHeight > 1) {
                             this._footer._rectHeight = footerHeight;
                         }
@@ -4243,7 +4246,7 @@
                         scrolledPos.height = "15px";
                         scrollChange = true;
                     }
-                    if ("ontouchstart" in window) {
+                    if (typeof window.ontouchstart !== "undefined") {
                         if (scrolledPos.bottom !== "0px") {
                             scrolledPos.bottom = "0px";
                             if (!scrollChange) scrollChange = true;
@@ -4761,8 +4764,7 @@
                     var newWidth = Math.min(Math.max(v, this._minWidth), this._maxWidth == 0 ? v : this._maxWidth);
                     if (newWidth != this._width) {
                         this._width = newWidth;
-                        var pinWidth = "ontouchstart" in window ? 35 : 15;
-                        this._filter.style.width = newWidth - pinWidth + "px";
+                        this._filter.style.width = newWidth - this.pinWidth() + "px";
                         if (this.parent() != null) {
                             this._parent.setColStyle(this._pos, "width", this._width + "px");
                             this.parent().trigger({
@@ -4770,12 +4772,23 @@
                             });
                         }
                     } else if (!this._filter.style.width) {
-                        var pinWidth = "ontouchstart" in window ? 35 : 15;
-                        this._filter.style.width = newWidth - pinWidth + "px";
+                        this._filter.style.width = newWidth - this.pinWidth() + "px";
                     }
                 }
-                return this.width;
+                return this._width;
             }),
+            pinWidth: function() {
+                if (this._parent) {
+                    var showAdvanced = this._parent._showAdvancedLayoutCustomization;
+                } else {
+                    var showAdvanced = typeof window.ontouchstart === "undefined";
+                }
+                if (showAdvanced) {
+                    return typeof window.ontouchstart !== "undefined" ? 35 : 15;
+                } else {
+                    return typeof window.ontouchstart !== "undefined" ? 10 : 0;
+                }
+            },
             _width: 200,
             minWidth: fun.newProp("minWidth", function(v) {
                 if (arguments.length) {
@@ -4947,7 +4960,7 @@
                     className: "uki-dataTable-resizer uki-dataTable-resizer_pos-" + this._pos
                 });
                 var pinClasses = "uki-dataTable-pin uki-dataTable-pin-col-" + this._pos;
-                if ("ontouchstart" in window) {
+                if (typeof window.ontouchstart !== "undefined") {
                     this._resizer.innerHTML = "&nbsp;<br>&nbsp;";
                     this._resizer.style.width = "20px";
                     this._resizer.style.right = "-14px";
@@ -4979,7 +4992,7 @@
                     className: className
                 }, [ this._wrapper ]);
                 fun.deferOnce(fun.bindOnce(this._finishSetup, this));
-                if ("ontouchstart" in window) {
+                if (typeof window.ontouchstart !== "undefined") {
                     this._pin.style.width = "25px";
                     this._pin.style.height = "25px";
                     this._pin.style.right = "0px";
@@ -5041,6 +5054,7 @@
                 if (!this._visible) {
                     this._parent.setColStyle(this._pos, "display", "none");
                 }
+                this._parent.showAdvancedLayoutCustomization(this._parent._showAdvancedLayoutCustomization);
                 this._parent.setColStyle(this._pos, "width", this._width + "px");
                 this._parseStyle();
                 this.resizable(this._resizable);
@@ -5237,6 +5251,25 @@
                 return this._menuOptions;
             }),
             _menuOptions: null,
+            _showAdvancedLayoutCustomization: typeof window.ontouchstart === "undefined",
+            showAdvancedLayoutCustomization: function(show) {
+                if (arguments.length) {
+                    var cols = this._columns;
+                    this._showAdvancedLayoutCustomization = show;
+                    if (cols && cols.length) {
+                        for (var i = 0, count = cols.length; i < count; ++i) {
+                            var col = cols[i];
+                            if (show) {
+                                col._pin.style.display = "block";
+                            } else {
+                                col._pin.style.display = "none";
+                            }
+                            col._filter.style.width = col._width - col.pinWidth() + "px";
+                        }
+                    }
+                }
+                return this._showAdvancedLayoutCustomization;
+            },
             _styleSheetElement: null,
             _styleSheet: null,
             _columns: null,
@@ -5268,7 +5301,7 @@
                 this.on("draggesturestart", this._dragStart);
                 this.on("draggesture", this._drag);
                 this.on("draggestureend", this._dragEnd);
-                if ("ontouchstart" in window) {
+                if (typeof window.ontouchstart !== "undefined") {
                     this.on("touchend", this._click);
                 } else {
                     this.on("click", this._click);
@@ -5279,7 +5312,7 @@
             _isTouchDevice: undefined,
             isTouchDevice: function() {
                 if (this._isTouchDevice == undefined) {
-                    this._isTouchDevice = !!("onTouchStart" in window);
+                    this._isTouchDevice = !!(typeof window.ontouchstart !== "undefined");
                 }
                 return this._isTouchDevice;
             },
@@ -5356,7 +5389,6 @@
                 return true;
             },
             setRowStyle: function(row, name, value) {
-                var startTime = window.performance.now();
                 var Key = "R" + row, id;
                 if (this._cssRuleTracking[Key] == null) {
                     if (value == undefined || value === "") return;
@@ -5773,7 +5805,7 @@
                         dom.addClass(target, "uki-dataTable-pinned");
                     } else {
                         dom.removeClass(target, "uki-dataTable-pinned");
-                        if ("ontouchstart" in window) {
+                        if (typeof window.ontouchstart !== "undefined") {
                             dom.addClass(target, "uki-dataTable-unpinned");
                         }
                     }
@@ -5963,7 +5995,7 @@
                 }
                 var index;
                 if (e.target && dom.hasClass(e.target, "uki-dataTable-resizer")) {
-                    e.draggbale = e.target;
+                    e.draggable = e.target;
                     e.cursor = dom.computedStyle(e.target, null).cursor;
                     index = e.target.className.match(/uki-dataTable-resizer_pos-(\d+)/)[1];
                     this._draggableColumn = index;
@@ -5981,7 +6013,7 @@
                             column: this.columns()[this._draggableColumn]
                         });
                     } catch (err) {}
-                } else if (this._initialPosition != undefined || (index = this._isTargetMovable(e.target)) != undefined && index != false && this._draggableColumn == -1 && !this._leftPinnedColumns[index]) {
+                } else if (this._showAdvancedLayoutCustomization && (this._initialPosition != undefined || (index = this._isTargetMovable(e.target)) != undefined && index != false && this._draggableColumn == -1 && !this._leftPinnedColumns[index])) {
                     var x = e.movementSinceLastEvent && e.movementSinceLastEvent.x;
                     if (x) {
                         if (index == undefined) {
@@ -6070,12 +6102,14 @@
                             columnOrder: orderedList
                         });
                     } catch (err) {}
+                    var showAdvancedLayout = this._showAdvancedLayoutCustomization;
                     delete this.packMarginLeftId;
                     this._leftPinnedColumns = {};
                     var newColumns = this._copyColumns();
                     this._parent.columns(newColumns);
                     this._parent._list.dataReload(this._parent._list._data);
                     this._parent._handleScroll(this._parent._scrollContainer.scrollLeft());
+                    this.showAdvancedLayoutCustomization(showAdvancedLayout);
                 }
                 this._draggableColumn = -1;
                 this._initialWidth = undefined;
