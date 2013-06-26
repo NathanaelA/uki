@@ -6,6 +6,8 @@
     <script src="dataTable.js"></script>
 */
 
+var Header = null;
+
 // custom formatter for duration column
 function formatTime (t) {
    if (isNaN(t)) return ('');
@@ -15,8 +17,7 @@ function formatTime (t) {
     return m + ':' + (s > 9 ? s : '0' + s);
 }
 
-function unformatTime(t)
-{
+function unformatTime(t) {
   if (t == '' || t == null) return 0;
   var times = t.match(/(\d+):(\d+)/);
   var nt = 0;
@@ -28,11 +29,25 @@ function unformatTime(t)
   return (nt);
 }
 
+function styler(row, pos, tbl) {
+  if (row[2] > 1200000) {
+    Header.setRowStyle(pos, "background-color", "red");
+  } else {
+    Header.setRowStyle(pos, "background-color", "");
+  }
+}
+
+function selection(data) {
+  "use strict";
+  console.log("Selection",data);
+}
+
+function buildUki() {
 var views = uki([
     { view: 'DataTable', as: 'table', debounce: 1, hasFooter: true,
       filterable: true, sortable: true, hasMenu: true, editInPlace: true, editInPlaceHotkey: 113, styler: styler,
-      menuOptions: [ 'Row Count', 'Reset Sort', 'Reset Filters', 'Reset All', 'Redraw Row', 'Edit Grid [F2]', "Insert Row", { text: 'Menu 3', options: ['test', 'test2', 'test3']}, { text: 'Menu 4', options: ['test', 'test2', 'test3'] }],
-      on: {columnClick: sortit, columnFilter: filterit, menuClick: menuClick, editInPlaceChange: editInPlace, touchstart: DoubleTapEvent, dblclick: dblclicker },
+      menuOptions: [ 'Row Count', 'renderSize', 'Reset Sort', 'Reset Filters', 'Reset All', 'Redraw Row', 'Reload', 'Edit Grid [F2]', "Insert Row", "Leak Check", { text: 'Menu 3', options: ['test', 'test2', 'test3']}, { text: 'Menu 4', options: ['test', 'test2', 'test3'] }],
+      on: {columnClick: sortit, columnFilter: filterit, menuClick: menuClick, editInPlaceChange: editInPlace, touchstart: DoubleTapEvent, dblclick: dblclicker, destroy: destruct, built: built, selection: selection},
       pos: 't:0 l:0 w:700 h:500', columns: [
         { label: 'ID', width: 40, visible: false },
         { label: 'Name', minWidth: 100, width: 250, maxWidth: 500, resizable: true, editor: {view: "nativeControl.Text"}, footervalue: 'hi' },
@@ -45,37 +60,94 @@ var views = uki([
     ], multiselect: true },
 
     { view: 'Text', as: 'loading', pos: 't:80px l:85px', text: 'Loading...' }
-]).attach();
-var Header = views.view("table" ).header();
-function styler(row, pos, tbl)
-{
-  if (row[2] > 1200000) {
-    //console.log(tbl);
-    Header.setRowStyle(pos, "background-color", "red");
-  } else {
-    Header.setRowStyle(pos, "background-color", "");
-  }
+  ]);
+  views.attach();
+  Header = views.view("table" ).header();
+ // console.log("Views: ",views);
+
+  return views;
 }
+
+var views = buildUki();
+
 
 var raw_data = null, filtered_data = null, last_sort='';
 // dynamicly load library json
+
+var async_emulator = function(data) {
+  "use strict";
+  this._data = data;
+  this.length = data.length;
+  this._saved = [];
+};
+async_emulator.prototype.loadRange = function(s, e, callback) {
+  "use strict";
+   console.log("Loading Range:",s,e);
+   var dta = {cb: callback, s: s, e:e};
+   if (1) {
+     callback(this._data.slice(s,e));
+  } else {
+     if (this._saved.length <= 2) {
+       this._saved.push(dta);
+     } else {
+       console.log("Returning Rows", s, e, this._data[s]);
+       callback(this._data.slice(s,e));
+       while (this._saved.length > 0) {
+         if (this._saved.length % 2 === 0) {
+           dta = this._saved.pop();
+         } else {
+           dta = this._saved.shift();
+  }
+         console.log("Returning Rows", dta.s, dta.e, this._data[dta.s]);
+         dta.cb(this._data.slice(dta.s, dta.e));
+}
+     }
+   }
+};
+
 window.onLibraryLoad = function(data) {
     views.view('loading').visible(false);
-    views.view('table').data(data);
+    var dta = new async_emulator(data);
+    console.log(dta);
+    views.view('table').data(dta);
     raw_data = data;
     views.view('table').focus();
+    console.log("ODL");
  //   views.view("table").setRowColStyle(2,2,"background-color","#FFD396");
  //   views.view("table").setRowStyle(10,"background-color","#8AF7DD");
  //   views.view("table").setColStyle(5, "background-color","#0DC8E5");
 
 };
 
-function dblclicker(e)
-{
+function destruct(e) {
+  console.log("%c Destruction", 'background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(245,246,246,1)), color-stop(21%,rgba(219,220,226,1)), color-stop(49%,rgba(57,134,229,1)), color-stop(80%,rgba(221,223,227,1)), color-stop(100%,rgba(245,246,246,1)));',
+      e._targetView.typeName, e);
+
+//      '-webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(30,87,153,0)), color-stop(15%,rgba(30,87,153,0.8)), color-stop(19%,rgba(30,87,153,1)), color-stop(20%,rgba(30,87,153,1)), color-stop(50%,rgba(41,137,216,1)), color-stop(80%,rgba(30,87,153,1)), color-stop(81%,rgba(30,87,153,1)), color-stop(85%,rgba(30,87,153,0.8)), color-stop(100%,rgba(30,87,153,0)));', e._targetView.typeName, e);
+}
+
+function init(e) {
+  "use strict";
+  console.log("Inited", e._targetView.typeName);
+}
+
+function built(e) {
+  "use strict";
+  console.log("Built", e._targetView.typeName);
+}
+
+function dblclicker(e) {
   alert("Double Click");
 }
 
-
+function rebuild() {
+  views.destruct();
+  filtered_data = null;
+  last_sort='';
+  views = null;
+  //views = buildUki();
+  //views.view('table').data(raw_data);
+}
 
 var _lastTouchTime;
 function DoubleTapEvent(event) {
@@ -122,21 +194,18 @@ function timeEditor (name) {
   return (editor);
 }
 
-function editInPlace(data)
-{
+function editInPlace(data) {
  console.log("Edit in Place",data);
 }
 
-function validate(row, col, data)
-{
+function validate(row, col, data) {
   console.log("Validate",data);
   return (true);
 }
 
 // Simple Menu code.  :)
-function menuClick(e)
-{
-  console.log("Menu Click",e);
+function menuClick(e) {
+  console.log("Menu Click");
   var hc = views.view('table').header().columns();
   switch(e.name) {
     case 'Row Count':
@@ -145,6 +214,11 @@ function menuClick(e)
       } else {
         alert("Row Count is "+filtered_data.length);
       }
+      break;
+
+    case 'renderSize':
+      var a = views.view('table').renderingRows();
+      alert(a);
       break;
 
     case 'Reset Sort':
@@ -173,6 +247,16 @@ function menuClick(e)
       }
       break;
 
+    case 'Leak Check':
+      setTimeout(rebuild, 1000);
+      break;
+
+    case 'Reload':
+        var sI = views.view('table' ).selectedIndexes();
+        console.log(sI);
+        reload(sI);
+      break;
+
     case 'Redraw Row':
       var i = views.view('table' ).list().selectedIndex();
       views.view('table').redrawRow(i);
@@ -197,6 +281,16 @@ function menuClick(e)
       alert("You clicked on "+e.name);
       break;
   }
+}
+
+function reload()
+{
+  "use strict";
+  var dta = new async_emulator(raw_data);
+  console.log(dta);
+  console.log(views.view('table'));
+  views.view('table').dataReload(dta);
+
 }
 
 // Simple Stupid Sort routine
@@ -233,7 +327,8 @@ function sortit(e)
   }
 
   if (sorter.length == 0) {
-    views.view('table').data(data);
+    var dta = new async_emulator(data);
+    views.view('table').data(dta);
     return;
   }
 
@@ -252,7 +347,8 @@ function sortit(e)
     return (0);
   });
 
-  views.view('table').data(data);
+  var dta = new async_emulator(data);
+  views.view('table').data(dta);
 }
 
 // Simple, stupid Filter routine

@@ -187,12 +187,12 @@ var DataTable = view.newClass( 'DataTable', Container, {
     this._scrollBar = c.view('scrollBar');
     this._list = c.view( 'list' );
     if (typeof window.ontouchstart !== 'undefined') {
-      this._container._dom.addEventListener('touchstart', fun.bind(this._detectSwipe, this), false);
-      this._container._dom.addEventListener('touchmove', fun.bind(this._detectSwipe, this), false);
-      this._container._dom.addEventListener('touchend', fun.bind(this._detectSwipe, this), false);
+      this._container.on('draggesturestart', fun.bind(this._detectSwipe, this), false);
+      this._container.on('draggesture', fun.bind(this._detectSwipe, this), false);
+      this._container.on('draggestureend', fun.bind(this._detectSwipe, this), false);
     } else {
       this._container.on('mousewheel', fun.bindOnce(this._redirectHorizontalScroll, this));
-      this._container._dom.addEventListener('wheel', fun.bind(this._redirectHorizontalScroll, this), false); //FF
+      this._container.on('wheel', fun.bind(this._redirectHorizontalScroll, this), false); //FF
     }
   },
 
@@ -209,7 +209,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
   },
   _recalculateTableSizes: function () {
     var headerUnpinnedWidth = this._header.getTotalUnpinnedWidth();
-    if (headerUnpinnedWidth == 0) return;
+    if (headerUnpinnedWidth == 0) { return; }
     var headerPinnedWidth = this._header.getTotalPinnedWidth();
     this._footer._table.style.width = this._header._table.style.width = (this._header.totalWidth() - headerPinnedWidth) + "px";
     this.setStyle('uki-dataList-pack', 'width', headerUnpinnedWidth + 'px');

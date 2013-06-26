@@ -8,45 +8,81 @@
 
 //var uki = require('uki');
 
-    var Menu_Structure = [
-  { html: '<img border=0 src="../button/settings.png">', options: [ 'Hi', 'Hello'] },
-  { text: 'Menu 2', options: [
-    { html: '<font color=red>Red</font>', name: 'red'},
-    { html: '<font color=blue>Blue</font>', name: 'blue'},
-    { html: '<font color=green>Green</font>', name: 'green'}
-  ]},
-  { text: 'Menu 3', options: [
-    { text: 'Menu 3-1', options: [
-      {text: 'Menu 3-1-1', name: 'Menu311'},
-      {text: 'Menu 3-1-2', accessKey: 'c'},
-      {text: 'Menu 3-1-3'}] },
-    { text: 'Menu 3-2', params: {Data: "I'm a Param"} },
-    { text: 'Menu 3-3', options: [
-      {text: 'Menu 3-3-1'},
-      {text: 'Menu 3-3-2'},
-      {text: 'Menu 3-3-3', options: [
-        {text: 'Menu 3-3-3-1'},
-        {text: 'Menu 3-3-3-2'},
-        {text: 'Menu 3-3-3-3'}
 
+
+var menu;
+
+
+function setup_menu() {
+
+  var Menu_Structure = [
+    { html: '<img border=0 src="../button/settings.png">', options: [ 'Hi', 'Hello'] },
+    { text: 'Menu 2', options: [
+      { html: '<font color=red>Red</font>', name: 'red'},
+      { html: '<font color=blue>Blue</font>', name: 'blue'},
+      { html: '<font color=green>Green</font>', name: 'green'}
+    ]},
+    { text: 'Menu 3', options: [
+      { text: 'Menu 3-1', options: [
+        {text: 'Menu 3-1-1', name: 'Menu311'},
+        {text: 'Menu 3-1-2', accessKey: 'c'},
+        {text: 'Menu 3-1-3'}] },
+      { text: 'Menu 3-2', params: {Data: "I'm a Param"} },
+      { text: 'Menu 3-3', options: [
+        {text: 'Menu 3-3-1'},
+        {text: 'Menu 3-3-2'},
+        {text: 'Menu 3-3-3', options: [
+          {text: 'Menu 3-3-3-1'},
+          {text: 'Menu 3-3-3-2'},
+          {text: 'Menu 3-3-3-3'}
+
+        ]}
       ]}
-    ]}
-  ]},
-  { text: 'Click to Change', name: 'ChangeName' },
-  { text: 'Back to Examples', url: '../../' },
-  {text: 'Change Structure', params: {a:1}}
-];
+    ]},
+    { text: 'Click to Change', name: 'ChangeName' },
+    { text: 'Back to Examples', url: '../../' },
+    { text: 'Reload Menu', name: 'ReloadMenu'},
+    { text: 'Clear Menu', name: 'ClearMenu'},
+    {text: 'Change Structure', params: {a:1}}
+  ];
 
-var menu = uki(
+  var menu = uki(
     { view: 'Menu', on: { menuClick: menuClicker}, options: Menu_Structure}
-).attach();
+  ).attach();
+  return menu;
+}
 
+
+menu = setup_menu();
+
+function reloadmenu()
+{
+  menu.destruct();
+ // delete this['menu'];
+  menu = null;
+ // console.log("Menu Structure After", JSON.parse(JSON.stringify(menu)));
+
+  menu = setup_menu();
+}
+
+function deleteMenu()
+{
+  "use strict";
+   menu.destruct();
+   menu = null;
+}
 
 function menuClicker(event)
 {
 
   if (event.name == "ChangeName") {
     event.menu.options()[3].setText("The name changed!");
+  }
+  else if (event.name == "ReloadMenu") {
+    setTimeout(reloadmenu, 0);
+  }
+  else if (event.name == "ClearMenu") {
+    setTimeout(deleteMenu, 0);
   }
   else if (event.params != null) {
     if (event.params.Data != null) {
@@ -62,5 +98,5 @@ function menuClicker(event)
     alert("You clicked on the "+event.name+" menu item");
   }
 }
-var options = menu[0].options();
+//var options = menu[0].options();
 
