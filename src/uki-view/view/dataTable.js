@@ -950,7 +950,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
     if (this._parent) {
       var showAdvanced = this._parent._showAdvancedLayoutCustomization;
     } else {
-      var showAdvanced = (typeof window.ontouchstart === 'undefined');
+      var showAdvanced = false;
     }
     if (showAdvanced) {
       return ((typeof window.ontouchstart !== 'undefined') ? 35 : 15);
@@ -1456,7 +1456,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     return (this._menuOptions);
   } ),
   _menuOptions: null,
-  _showAdvancedLayoutCustomization : (typeof window.ontouchstart === 'undefined'),
+  _showAdvancedLayoutCustomization : false,
   showAdvancedLayoutCustomization: function (show) {
     if (arguments.length) {
       var cols = this._columns;
