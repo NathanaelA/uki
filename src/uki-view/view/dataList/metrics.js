@@ -1,5 +1,5 @@
 var fun = require('../../../uki-core/function'),
-    utils = require('../../../uki-core/utils'),
+    //utils = require('../../../uki-core/utils'),
     
     Observable = require('../../../uki-core/observable').Observable;
 

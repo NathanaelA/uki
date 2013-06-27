@@ -64,8 +64,9 @@ var DataTable = view.newClass( 'DataTable', Container, {
     if ( !arguments.length ) {
       return this._header.columns();
     }
+    var _hasFocus = false;
     if ( this.hasFocus() ) {
-      var _hasFocus = true;
+      _hasFocus = true;
     }
     //        this._stylerfunction = fun.bindOnce(this._styler, this);
 
@@ -192,7 +193,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
       this._container.on('draggestureend', fun.bind(this._detectSwipe, this), false);
     } else {
       this._container.on('mousewheel', fun.bindOnce(this._redirectHorizontalScroll, this));
-      this._container.on('wheel', fun.bind(this._redirectHorizontalScroll, this), false); //FF
+      this._container.on('wheel', fun.bind(this._redirectHorizontalScroll, this), false); // FF on Mac
     }
   },
 
@@ -222,7 +223,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
   },
   _lastClientX: false,
   _detectSwipe: function (event) {
-    if (event.type == 'touchstart') {
+    if (event.type === 'touchstart') {
       this._lastClientX = event.pageX;
     } else if (event.type === 'touchend') {
       this._lastClientX = false;
@@ -259,10 +260,18 @@ var DataTable = view.newClass( 'DataTable', Container, {
   pinColumn: function (index) {
     this._header.pinColumn(index);
   },
-  setStyle: function (styleName, name, value ) {if (this._header && this._header.setStyle) return this._header.setStyle(styleName, name, value);},
-  getStyle: function (styleName, name ) {if (this._header && this._header.getStyle) return this._header.getStyle(styleName, name); },
+  setStyle: function (styleName, name, value ) {
+    if (this._header && this._header.setStyle) {
+      return this._header.setStyle(styleName, name, value);
+    }
+  },
+  getStyle: function (styleName, name ) {
+    if (this._header && this._header.getStyle) {
+      return this._header.getStyle(styleName, name);
+    }
+  },
   _updateContainerHeight: function () {
-    if (!this._dom.clientHeight && !this._dom.clientWidth) return;
+    if (!this._dom.clientHeight && !this._dom.clientWidth) { return; }
     var pos = this._container.pos();
     // .clientRect() is very expensive; so we are going to cache the results once we have valid results
     var headerHeight = 0;
@@ -317,16 +326,16 @@ var DataTable = view.newClass( 'DataTable', Container, {
       if (typeof window.ontouchstart !== 'undefined') {
         if (scrolledPos.bottom !== '0px') {
           scrolledPos.bottom = '0px';
-          if (!scrollChange) scrollChange = true;
-        };
+          if (!scrollChange) { scrollChange = true; }
+        }
       } else {
         if (scrolledPos.bottom !== footerHeightPx) {
           scrolledPos.bottom = footerHeightPx;
-          if (!scrollChange) scrollChange = true;
+          if (!scrollChange) { scrollChange = true; }
         }
         scrollbarHeight = 15;
       }
-      if (scrollChange) this._scrollContainer.pos(scrolledPos);
+      if (scrollChange) { this._scrollContainer.pos(scrolledPos); }
     }
 
     //force the height of the footer since when a column is moved and all the columns are set to position:absolute
@@ -339,9 +348,9 @@ var DataTable = view.newClass( 'DataTable', Container, {
 
     if (pos.bottom !== (footerHeight + scrollbarHeight ) + 'px') {
       pos.bottom = (footerHeight + scrollbarHeight ) + 'px';
-      if (!posChange) posChange = true;
+      if (!posChange) { posChange = true; }
     }
-    if (posChange) this._container.pos( pos );
+    if (posChange) { this._container.pos( pos ); }
 
     if ( this._deferFocus === true ) {
       this.focus();
@@ -393,7 +402,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
       return;
     }
 
-    if ( event.keyCode == parent._editInPlaceHotkey ) {
+    if ( event.keyCode === parent._editInPlaceHotkey ) {
       parent.startEditInPlace( parent._list.selectedIndex(), 0 );
     }
   },
@@ -534,7 +543,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
       while ( col >= 0 && (columns[col].visible() === false || this._Editors[col] === null) ) {
         col--;
       }
-      if ( col == -1 ) {
+      if ( col === -1 ) {
         col = columns.length - 1;
         row--;
         while ( col >= 0 && (columns[col].visible() === false || this._Editors[col] === null) ) {
@@ -549,7 +558,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
 
     if ( this._inEditInPlace ) {
       if ( this._EIP_ClearEditor() === false ) {
-        if ( this._list.selectedIndex() != this._EIPCurrentRow ) {
+        if ( this._list.selectedIndex() !== this._EIPCurrentRow ) {
           this._list.selectedIndex( this._EIPCurrentRow );
           this._list.triggerSelection();
         }
@@ -561,7 +570,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
     this._inEditInPlace = true;
     this._EIPCurrentColumn = col;
     this._EIPCurrentRow = row;
-    if ( this._list.selectedIndex() != row ) {
+    if ( this._list.selectedIndex() !== row ) {
       this._list.selectedIndex( row );
       this._list.triggerSelection();
     }
@@ -675,7 +684,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
     var target = event.srcElement ? event.srcElement : event.target;
     var pos = target.className.indexOf( "uki-dataTable-col-" );
     if ( pos === -1 ) {
-      if ( parent.list().selectedIndex() != parent._EIPCurrentRow ) {
+      if ( parent.list().selectedIndex() !== parent._EIPCurrentRow ) {
         parent.list().selectedIndex( parent._EIPCurrentRow );
         parent.list().triggerSelection();
       }
@@ -797,13 +806,13 @@ var DataTable = view.newClass( 'DataTable', Container, {
     if ( !this._inEditInPlace ) {
       return;
     }
-    if ( this._EIPCurrentRow == row ) {
+    if ( this._EIPCurrentRow === row ) {
       this._EIPMove( this._EIPCurrentRow, this._EIPCurrentColumn, true, true );
     }
   },
 
   focus: function () {
-    if ( this._list.columns().length == 0 ) {
+    if ( this._list.columns().length === 0 ) {
       this._deferFocus = true;
       return;
     }
@@ -923,7 +932,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
   maxWidth: fun.newProp( 'maxWidth', function ( v ) {
     if ( arguments.length ) {
       this._maxWidth = Math.max( v, this._width );
-      this._sizeable = this._minWidth != this._maxWidth;
+      this._sizeable = this._minWidth !== this._maxWidth;
       this._setupResizeable();
     }
     return this._maxWidth;
@@ -932,7 +941,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
   width: fun.newProp( 'width', function ( v ) {
     if ( arguments.length ) {
       var newWidth = Math.min( Math.max( v, this._minWidth ), this._maxWidth == 0 ? v : this._maxWidth );
-      if ( newWidth != this._width ) {
+      if ( newWidth !== this._width ) {
         this._width = newWidth;
         this._filter.style.width = (newWidth - this.pinWidth()) + 'px';
         if ( this.parent() != null ) {
@@ -962,7 +971,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
   minWidth: fun.newProp( 'minWidth', function ( v ) {
     if ( arguments.length ) {
       this._minWidth = Math.min( v, this._width );
-      this._sizeable = this._minWidth != this._maxWidth;
+      this._sizeable = this._minWidth !== this._maxWidth;
       this._setupResizeable();
     }
     return this._minWidth;
@@ -1226,7 +1235,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
       var exp = this._style.split( ';' );
       for ( var i = 0; i < exp.length; i++ ) {
         var parts = exp[i].split( ':' );
-        if ( parts[0].length == 0 || parts.length != 2 ) {
+        if ( parts[0].length === 0 || parts.length !== 2 ) {
           continue;
         }
         this.parent().setColStyle( this._pos, parts[0], parts[1] );
@@ -1237,7 +1246,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
   // due to the fact that .parent() is not assigned right away; we need to finish setting up
   // all the rules after the object is fully built
   _finishSetup: function () {
-    if(this.destructed) return;
+    if(this.destructed) {return;}
     if ( !this._visible ) {
       this._parent.setColStyle(this._pos, 'display', 'none');
     }
@@ -1266,7 +1275,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
   },
 
   hasFocus: function () {
-    return this._filter == env.doc.activeElement;
+    return this._filter === env.doc.activeElement;
   },
 
   blur: function () {
@@ -1342,7 +1351,7 @@ var DataTableFooter = view.newClass( 'DataTableFooter', Container, {
   },
 
   footervalue: function ( pos, v ) {
-    if ( arguments.length == 2 ) {
+    if ( arguments.length === 2 ) {
       if ( this._columns[pos].footervalue !== v ) {
         this._columns[pos].footervalue = v;
         this._render();
@@ -1352,7 +1361,7 @@ var DataTableFooter = view.newClass( 'DataTableFooter', Container, {
   },
 
   footervisible: function ( pos, v ) {
-    if ( arguments.length == 2 && (v === true || v === false) ) {
+    if ( arguments.length === 2 && (v === true || v === false) ) {
       if ( this._columns[pos].footer !== v ) {
         this._columns[pos].footer = v;
         this._render();
@@ -1427,7 +1436,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
   /* Menu Related Code */
   hasMenu: fun.newProp( 'hasMenu', function ( v ) {
     if ( arguments.length ) {
-      if ( this._hasMenu == v ) {
+      if ( this._hasMenu === v ) {
         return (v);
       }
       this._hasMenu = v;
@@ -1607,7 +1616,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     var Key = "R" + row, id;
     if ( this._cssRuleTracking[Key] == null ) {
       //if the style does not exist and has not been set before then ignore it
-      if (value == undefined || value === '') return;
+      if (value == undefined || value === '') {return;}
       var parentId = this.parent().CSSTableId();
       var CSSKey = 'div.uki-dataTable' + parentId + ' tr.uki-dataTable-row-' + row;
       id = this.addCSSRule( CSSKey, name, value );
@@ -1627,7 +1636,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
 
     if ( this._cssRuleTracking[Key] == null ) {
       //if the style does not exist and has not been set before then ignore it
-      if (value == undefined || value === '') return;
+      if (value == undefined || value === '') {return;}
       var parentId = this.parent().CSSTableId();
       var CSSKey = 'div.uki-dataTable' + parentId + ' tr.uki-dataTable-row-' + row + ' td.uki-dataTable-col-' + col;
       id = this.addCSSRule( CSSKey, name, value );

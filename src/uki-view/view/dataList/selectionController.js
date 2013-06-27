@@ -1,8 +1,9 @@
 var fun = require('../../../uki-core/function'),
-    evt = require('../../../uki-core/event'),
+//    evt = require('../../../uki-core/event'),
     env = require('../../../uki-core/env'),
 
     Observable = require('../../../uki-core/observable').Observable;
+
 
 
 var SelectionController = fun.newClass(Observable, {
@@ -82,7 +83,7 @@ var SelectionController = fun.newClass(Observable, {
                 }
             }
             return;
-        };
+        }
 
         if (this._view.lastClickIndex() === index &&
             selection.isSelected(index)) {
@@ -100,7 +101,7 @@ var SelectionController = fun.newClass(Observable, {
 
     _onkeydown: function(e) {
         if (this._view.multiselect() && // Ctrl + A
-            (e.which == 97 || e.which == 65) && e.metaKey) {
+            (e.which === 97 || e.which === 65) && e.metaKey) {
             this._view.selection()
                 .clear().addRange(0, this._view.data().length);
             this._triggerSelection();
@@ -108,22 +109,22 @@ var SelectionController = fun.newClass(Observable, {
     },
 
     _onkeyrepeat: function(e) {
-        if (!this._view.hasFocus()) return;
+        if (!this._view.hasFocus()) { return; }
 
         var selection = this._view.selection(),
-            indexes = selection.indexes(),
+            //indexes = selection.indexes(),
             nextIndex = -1;
 
-        if (e.which == 38 || e.keyCode == 38) { // UP
+        if (e.which === 38 || e.keyCode === 38) { // UP
             nextIndex = Math.max(0, this._view.lastClickIndex() - 1);
             e.preventDefault();
-        } else if (e.which == 40 || e.keyCode == 40) { // DOWN
+        } else if (e.which === 40 || e.keyCode === 40) { // DOWN
             nextIndex =
                 Math.min(this._view.data().length - 1,
                     this._view.lastClickIndex() + 1);
             e.preventDefault();
         }
-        if (nextIndex > -1 && nextIndex != this._view.lastClickIndex()) {
+        if (nextIndex > -1 && nextIndex !== this._view.lastClickIndex()) {
             if (e.shiftKey && this._view.multiselect()) {
                 if (selection.isSelected(nextIndex)) {
                     selection.toggle(this._view.lastClickIndex());

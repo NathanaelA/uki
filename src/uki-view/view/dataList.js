@@ -4,7 +4,7 @@ var fun   = require('../../uki-core/function'),
     utils = require('../../uki-core/utils'),
     dom   = require('../../uki-core/dom'),
     view  = require('../../uki-core/view'),
-    build = require('../../uki-core/builder').build,
+   // build = require('../../uki-core/builder').build,
 
     Metrics    = require('./dataList/metrics').Metrics,
     Selection  = require('./dataList/selection').Selection,
@@ -203,7 +203,9 @@ var DataList = view.newClass('DataList', Container, Focusable, {
             pack = this._createPack();
 
         // Pack Render below will render a blank '' line to be a lesser offsetHeight than proper
-        if (sample.length === 0) sample = "sampleRow";
+        if (sample.length === 0) {
+          sample = "sampleRow";
+        }
 
         this.appendChild(pack);
         pack.render([sample], [], 0);
@@ -218,14 +220,14 @@ var DataList = view.newClass('DataList', Container, Focusable, {
         var pack = this._packFor(index);
         if (pack) {
 
-          function rerender(rows) {
+          var rerender = function(rows) {
             if (pack.destructed) { return; }
              pack.updateRow(
                 index - pack.from,
                 rows,
                 index);
             pack.setSelected(index - pack.from, this.isSelected(index));
-          }
+          };
 
           if (this.data().loadRange) {
             this.data().loadRange(
@@ -270,7 +272,8 @@ var DataList = view.newClass('DataList', Container, Focusable, {
             height = parentRect.height - Math.max(0, topOffset),
             top = -Math.min(0, topOffset);
 
-        return { from: Math.floor(top), to: Math.floor(top + height) };
+//        return { from: Math.floor(top), to: Math.floor(top + height) };
+      return { from: top, to: top + height };
     },
 
     _renderingRange: function() {
@@ -335,11 +338,17 @@ var DataList = view.newClass('DataList', Container, Focusable, {
 
         if (range.to > range.from) {
             var rowsRange = this.metrics().rowsForRange(range),
-                pack = this._scheduleRenderPack(rowsRange),
-                d = this.metrics().rowDimensions(rowsRange.to - 1);
+                pack = this._scheduleRenderPack(rowsRange);
 
-            pack.fromPX = this.metrics().rowDimensions(rowsRange.from).top;
-            pack.toPX = d.top + d.height;
+            // The Following "fromPX / toPX" code is not calculating properly; so a pack that is
+            // position "relative", will be offset wrong.   If you switch the "pack" to render "absolute"
+            // You will see it render properly; but the mousedown events will not process properly on the pack and all
+            // "selection" events will be lost in Firefox.
+            // TODO: figure the proper calculation for the packs to be rendered as relative so that we can leave a couple packs in the dom at a time.
+
+            // var d = this.metrics().rowDimensions(rowsRange.to - 1);
+            // pack.fromPX = this.metrics().rowDimensions(rowsRange.from).top;
+            // pack.toPX = d.top + d.height;
             packs.push(pack);
 
             this._childViews = packs.sort(function(a, b) {
@@ -354,10 +363,10 @@ var DataList = view.newClass('DataList', Container, Focusable, {
         pack.to = range.to;
         this.appendChild(pack);
 
-        function render(rows) {
+        var render = function(rows) {
             if (pack.destructed) { return; }
             this._renderPack(pack, range, rows);
-        }
+        };
 
         if (this.data().loadRange) {
             this.data().loadRange(
@@ -438,7 +447,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
     * Warning! This method will use #slice even for async data
     */
     selectedRow: function() {
-        var index = Math.floor(this.selection().index());
+        var index = this.selection().index(); // Math.floor(this.selection().index());
         return index > -1 && this._data.slice(index, index+1)[0];
     },
 
@@ -453,7 +462,9 @@ var DataList = view.newClass('DataList', Container, Focusable, {
 
         for (var i=0, l = indexes.length; i < l; i++) {
             var item = this._data.slice(indexes[i], indexes[i]+1)[0];
-            if (item) result.push(item);
+            if (item) {
+              result.push(item);
+            }
         }
         return result;
     },
@@ -463,7 +474,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
             from = packs[0] ? packs[0].from : -1,
             to = packs.length ? packs[packs.length - 1].to :
                 this.data().length,
-            state = e.action == 'add';
+            state = e.action === 'add';
 
         from = Math.max(from, e.from);
         to = Math.min(to, e.to);
