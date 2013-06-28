@@ -338,17 +338,11 @@ var DataList = view.newClass('DataList', Container, Focusable, {
 
         if (range.to > range.from) {
             var rowsRange = this.metrics().rowsForRange(range),
-                pack = this._scheduleRenderPack(rowsRange);
+                pack = this._scheduleRenderPack(rowsRange ),
+                d = this.metrics().rowDimensions(rowsRange.to - 1);
 
-            // The Following "fromPX / toPX" code is not calculating properly; so a pack that is
-            // position "relative", will be offset wrong.   If you switch the "pack" to render "absolute"
-            // You will see it render properly; but the mousedown events will not process properly on the pack and all
-            // "selection" events will be lost in Firefox.
-            // TODO: figure the proper calculation for the packs to be rendered as relative so that we can leave a couple packs in the dom at a time.
-
-            // var d = this.metrics().rowDimensions(rowsRange.to - 1);
-            // pack.fromPX = this.metrics().rowDimensions(rowsRange.from).top;
-            // pack.toPX = d.top + d.height;
+            pack.fromPX = this.metrics().rowDimensions(rowsRange.from).top;
+            pack.toPX = d.top + d.height;
             packs.push(pack);
 
             this._childViews = packs.sort(function(a, b) {

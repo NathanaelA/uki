@@ -1,4 +1,5 @@
 .uki-dataList {
+    position: relative;
     outline: none;
     outline-offset: 0;
 		background-color: #FFFFFF;
@@ -9,7 +10,7 @@
     width: 100%;
     display: block;
     list-style: none;
-    position: relative;
+    position: absolute;
     padding: 0;
     margin: 0;
 }
