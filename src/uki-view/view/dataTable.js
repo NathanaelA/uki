@@ -1091,6 +1091,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
       if ( this._filter.value === v ) {
         return;
       }
+      this._prevFilterValue = this._filter.value;
       this._filter.value = v;
       if ( this.parent() != null ) {
         this.parent()._handleFilterNotify();
@@ -1170,6 +1171,22 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
     this.on( 'focus', function () {
       this.parent()._lastFocusedFilter && dom.removeClass( this.parent()._lastFocusedFilter, 'initfocus' );
       dom.addClass( this._filter, 'initfocus' );
+      var advHeader = this.parent();
+      var mainContainer = advHeader && advHeader.parent();
+      if (mainContainer) {
+        var visWidth = mainContainer._dom.clientWidth;
+        var colLeft = this._dom.offsetLeft;
+        var colWidth = this.width();
+        var right = colLeft + colWidth;
+        if (right > visWidth) {
+          mainContainer._scrollContainer && mainContainer._scrollContainer.scrollLeft(right - visWidth + 20);
+        } else {
+          var scrolledLeft = mainContainer._scrollContainer.scrollLeft();
+          if (colLeft < scrolledLeft) {
+            mainContainer._scrollContainer && mainContainer._scrollContainer.scrollLeft(colLeft - scrolledLeft - 20);
+          }
+        }
+      }
     } );
     this.on( 'blur', function () {
       this.parent()._lastFocusedFilter = this._filter;
