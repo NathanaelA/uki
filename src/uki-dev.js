@@ -4495,7 +4495,7 @@
                 beditor.value(columns[this._EIPCurrentColumn].formatter(value ? value : ""));
                 htmlcol.innerHTML = "";
                 htmlcol.appendChild(beditor._dom);
-                fun.deferOnce(fun.bindOnce(this._EIPFocus, this));
+                this._EIPFocus();
             },
             _inEditInPlace: false,
             _EIPCurrentColumn: -1,
@@ -4645,7 +4645,7 @@
                 }
                 this.list()._update();
                 this.scrollToIndex(rownum);
-                fun.deferOnce(fun.bindOnce(this._delayedMoveForInsert, this));
+                this._delayedMoveForInsert();
             },
             _delayedMoveForInsert: function() {
                 var rownum = this.data().length - 1;
@@ -5033,7 +5033,7 @@
                 this._dom = dom.createElement("td", {
                     className: className
                 }, [ this._wrapper ]);
-                fun.deferOnce(fun.bindOnce(this._finishSetup, this));
+                this._finishSetup();
                 if (typeof window.ontouchstart !== "undefined") {
                     this._pin.style.width = "25px";
                     this._pin.style.height = "25px";
@@ -5095,23 +5095,12 @@
                 if (this.destructed) {
                     return;
                 }
-                if (!this._visible) {
-                    this._parent.setColStyle(this._pos, "display", "none");
-                }
-                this._parent.showAdvancedLayoutCustomization(this._parent._showAdvancedLayoutCustomization);
-                this._parent.setColStyle(this._pos, "width", this._width + "px");
                 this._parseStyle();
                 this.resizable(this._resizable);
                 this.filterable(this._filterable);
                 this.sort(this._sort);
                 this.label(this._label);
                 this.pinned(this._pinned);
-                var pinned = this.pinned && this.pinned();
-                if (pinned && this._pin) {
-                    this._parent.pinColumn(this._pos, pinned);
-                    dom.addClass(this._pin, "uki-dataTable-pinned");
-                    dom.removeClass(this._pin, "uki-dataTable-unpinned");
-                }
             },
             focus: function() {
                 try {
@@ -5153,7 +5142,7 @@
             columns: fun.newProp("columns", function(cols) {
                 this._columns = cols;
                 this._table.style.width = table.totalWidth(this._columns) + "px";
-                fun.deferOnce(fun.bindOnce(this._render, this));
+                this._render();
             }),
             visible: fun.newProp("visible", function(vis) {
                 if (arguments.length && (vis === true || vis === false) && vis !== this._visible && this._dom) {
@@ -5332,11 +5321,14 @@
                     this._styleSheet = new FauxCSSStyleSheet;
                 }
                 this._cssRuleTracking = {};
-                this._menu = build([ {
-                    view: "Menu",
-                    as: "DataTable-Menu",
-                    addClass: "uki-dataTable-menu"
-                } ]);
+                if (this._hasMenu) {
+                    this._menu = build([ {
+                        view: "Menu",
+                        as: "DataTable-Menu",
+                        addClass: "uki-dataTable-menu"
+                    } ]);
+                    this._setupMenu();
+                }
                 this._draggableColumn = -1;
                 this.on("draggesturestart", this._dragStart);
                 this.on("draggesture", this._drag);
@@ -5347,7 +5339,6 @@
                     this.on("click", this._click);
                 }
                 this.on("resizedColumn", this._resizePinnedColumn);
-                this._setupMenu();
             },
             _isTouchDevice: undefined,
             isTouchDevice: function() {
@@ -6328,10 +6319,11 @@
                 this._rowheader.appendChild(child.dom());
             },
             columns: fun.newProp("columns", function(cols) {
+                var self = this;
                 if (arguments.length) {
                     this._clearfilterInterval();
                     this.deleteAllCSSRules();
-                    this._menu.remove();
+                    this._menu && this._menu.remove();
                     if (this._columns && this._columns.length) {
                         for (var i = 0; i < this._columns.length; i++) {
                             this._columns[i].destruct();
@@ -6339,16 +6331,33 @@
                         }
                     }
                     for (var i = 0; i < cols.length; i++) {
-                        cols[i]["view"] = "DataTableHeaderColumn";
-                        cols[i]["init"] = {
+                        var col = cols[i];
+                        col.view = "DataTableHeaderColumn";
+                        col.init = {
                             pos: cols[i].pos,
                             filterable: this._filterable,
                             initfocus: cols[i].initfocus
                         };
+                        col.on = Object.append(col.on || {}, {
+                            built: function() {
+                                var parent = self;
+                                if (!this._visible) {
+                                    parent.setColStyle(this._pos, "display", "none");
+                                }
+                                parent.setColStyle(this._pos, "width", this._width + "px");
+                                var pinned = this.pinned && this.pinned();
+                                if (pinned && this._pin) {
+                                    parent.pinColumn(this._pos, pinned);
+                                    dom.addClass(this._pin, "uki-dataTable-pinned");
+                                    dom.removeClass(this._pin, "uki-dataTable-unpinned");
+                                }
+                            }
+                        });
                     }
                     this._childViews = [];
                     this._columns = build(cols);
                     this._columns.appendTo(this);
+                    this.showAdvancedLayoutCustomization(this._showAdvancedLayoutCustomization);
                     this._table.style.width = this.totalWidth() + "px";
                     this._setupFilters();
                     if (this._hasMenu) {
