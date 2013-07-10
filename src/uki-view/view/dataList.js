@@ -84,7 +84,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
         this.selectedIndexes([]);
         this._layoutBefore = false;
         this.scrollableParent(null);
-        fun.deferOnce(fun.bindOnce(this.layoutIfVisible, this));
+        this.layoutIfVisible();
     },
 
     /**
