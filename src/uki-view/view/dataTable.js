@@ -1493,6 +1493,8 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
   _styleSheet: null,
   _columns: null,
   _leftPinnedColumns: {},
+  _filteredColumnCount: 0,
+  filteredColumnCount: function() { return this._filteredColumnCount; },
 
   _createDom: function ( initArgs ) {
     Container.prototype._createDom.call( this, initArgs );
@@ -2103,18 +2105,21 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
 
     var values = {};
     var valueid = [];
+    var count = 0;
 
     for ( var i = 0; i < this._columns.length; i++ ) {
       var fieldvalue = this._columns[i].filterValue();
       values[this._columns[i].name()] = fieldvalue;
       valueid[i] = fieldvalue;
+      if (fieldvalue.length > 0) { count++; }
     }
-
+    this._filteredColumnCount = count;
     try {
       this.trigger( {
         type: "columnFilter",
         fields: values,
-        byfieldid: valueid
+        byfieldid: valueid,
+        filteredCount: count
       } );
     }
     catch( err ) {
