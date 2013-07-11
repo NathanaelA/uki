@@ -188,9 +188,11 @@ var DataTable = view.newClass( 'DataTable', Container, {
     this._scrollBar = c.view('scrollBar');
     this._list = c.view( 'list' );
     if (typeof window.ontouchstart !== 'undefined') {
-      this._container.on('draggesturestart', fun.bind(this._detectSwipe, this), false);
-      this._container.on('draggesture', fun.bind(this._detectSwipe, this), false);
-      this._container.on('draggestureend', fun.bind(this._detectSwipe, this), false);
+      // THESE MUST BE TOUCHxxxx and not dragGesture events; the DG system does not allow the event to propagate down to the lower
+      // html elements which are needed for scrolling up/down and selecting items.
+      this._container.on('touchstart', fun.bind(this._detectSwipe, this), false);
+      this._container.on('touchmove', fun.bind(this._detectSwipe, this), false);
+      this._container.on('touchend', fun.bind(this._detectSwipe, this), false);
     } else {
       this._container.on('mousewheel', fun.bindOnce(this._redirectHorizontalScroll, this));
       this._container.on('wheel', fun.bind(this._redirectHorizontalScroll, this), false); // FF on Mac

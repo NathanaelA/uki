@@ -1898,7 +1898,7 @@
             }
             evt.on(env.doc, "mousemove scroll touchmove", dragGesture);
             evt.on(env.doc, "mouseup dragend touchend touchcancel", dragGestureEnd);
-            evt.on(env.doc, "selectstart mousedown", evt.preventDefaultHandler);
+            evt.on(env.doc, "selectstart mousedown touchstart", evt.preventDefaultHandler);
         }
         function stopGesture() {
             gesture.draggable = null;
@@ -1909,7 +1909,7 @@
             gesture.lastOffset = null;
             evt.removeListener(env.doc, "mousemove scroll touchmove", dragGesture);
             evt.removeListener(env.doc, "mouseup dragend touchend touchcancel", dragGestureEnd);
-            evt.removeListener(env.doc, "selectstart mousedown", evt.preventDefaultHandler);
+            evt.removeListener(env.doc, "selectstart mousedown touchstart", evt.preventDefaultHandler);
         }
         function addOffset(e) {
             e.dragOffset = {
@@ -4131,9 +4131,9 @@
                 this._scrollBar = c.view("scrollBar");
                 this._list = c.view("list");
                 if (typeof window.ontouchstart !== "undefined") {
-                    this._container.on("draggesturestart", fun.bind(this._detectSwipe, this), false);
-                    this._container.on("draggesture", fun.bind(this._detectSwipe, this), false);
-                    this._container.on("draggestureend", fun.bind(this._detectSwipe, this), false);
+                    this._container.on("touchstart", fun.bind(this._detectSwipe, this), false);
+                    this._container.on("touchmove", fun.bind(this._detectSwipe, this), false);
+                    this._container.on("touchend", fun.bind(this._detectSwipe, this), false);
                 } else {
                     this._container.on("mousewheel", fun.bindOnce(this._redirectHorizontalScroll, this));
                     this._container.on("wheel", fun.bind(this._redirectHorizontalScroll, this), false);
