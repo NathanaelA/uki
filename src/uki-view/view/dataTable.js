@@ -190,9 +190,9 @@ var DataTable = view.newClass( 'DataTable', Container, {
     if (typeof window.ontouchstart !== 'undefined') {
       // THESE MUST BE TOUCHxxxx and not dragGesture events; the DG system does not allow the event to propagate down to the lower
       // html elements which are needed for scrolling up/down and selecting items.
-      this._container.on('touchstart', fun.bind(this._detectSwipe, this), false);
-      this._container.on('touchmove', fun.bind(this._detectSwipe, this), false);
-      this._container.on('touchend', fun.bind(this._detectSwipe, this), false);
+      this._container.on('touchstart', fun.bind(this._detectSwipeStart, this), false);
+      this._container.on('touchmove', fun.bind(this._detectSwipeMove, this), false);
+      this._container.on('touchend', fun.bind(this._detectSwipeEnd, this), false);
     } else {
       this._container.on('mousewheel', fun.bindOnce(this._redirectHorizontalScroll, this));
       this._container.on('wheel', fun.bind(this._redirectHorizontalScroll, this), false); // FF on Mac
@@ -224,21 +224,28 @@ var DataTable = view.newClass( 'DataTable', Container, {
     }
   },
   _lastClientX: false,
-  _detectSwipe: function (event) {
-    if (event.type === 'touchstart') {
+  _detectSwipeStart: function (event) {
       this._lastClientX = event.pageX;
-    } else if (event.type === 'touchend') {
+      this._lastClientY = event.pageY;
+  },
+  _detectSwipeEnd: function() {
       this._lastClientX = false;
-    } else {
+      this._lastClientY = false;
+  },
+  _detectSwipeMove: function (event) {
       if (this._lastClientX !== false) {
-        var x = this._lastClientX - event.touches[0].clientX;
-        if (x) {
+        var x = this._lastClientX - event.baseEvent.touches[0].clientX;
+        var y = this._lastClientY - event.baseEvent.touches[0].clientY;
+        if (Math.abs(x) > Math.abs(y)) {
           var left = this._scrollContainer.scrollLeft();
           this._scrollContainer.scrollLeft(left+x);
-          this._lastClientX = event.touches[0].clientX;
+          event.preventDefault();
+          event.stopPropagation();
         }
+        this._lastClientX = event.baseEvent.touches[0].clientX;
+        this._lastClientY = event.baseEvent.touches[0].clientY;
+
       }
-    }
   },
   _redirectHorizontalScroll: function (event) {
     var x = event && (event.deltaX || (event.baseEvent && event.baseEvent.wheelDeltaX));
