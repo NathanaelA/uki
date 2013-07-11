@@ -1197,8 +1197,7 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
         this._labelElement, this._filter, this._pin, this._resizer
       ] );
     this._dom =
-      dom.createElement( 'td', {className: className}, [this._wrapper] );
-
+    dom.createElement( 'td', {className: className}, [this._wrapper] );
     this._finishSetup();
 
     if (typeof window.ontouchstart !== 'undefined') {
@@ -1496,6 +1495,15 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
   _filteredColumnCount: 0,
   filteredColumnCount: function() { return this._filteredColumnCount; },
 
+  _buildMenu: function() {
+    "use strict";
+      this._menu = build( [
+        { view: 'Menu', as: 'DataTable-Menu',
+          addClass: 'uki-dataTable-menu' }
+      ] );
+      this._setupMenu();
+  },
+
   _createDom: function ( initArgs ) {
     Container.prototype._createDom.call( this, initArgs );
     this._rowheader = dom.createElement( 'tr', {className: 'uki-dataTable-header-row'} );
@@ -1512,11 +1520,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     this._cssRuleTracking = {};
 
     if(this._hasMenu) {
-      this._menu = build( [
-        { view: 'Menu', as: 'DataTable-Menu',
-          addClass: 'uki-dataTable-menu' }
-      ] );
-      this._setupMenu();
+      this._buildMenu();
     }
 
     this._draggableColumn = -1;
@@ -1570,6 +1574,9 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     var lmenu = [];
     lmenu[0] = {html: '<img src="' + this._menuImage +
       '" draggable=false width="12px" height="12px" border=0 ondragstart="return false;">', options: this._menuOptions};
+    if (this._menu == null) {
+      this._buildMenu();
+    }
     this._menu.options( lmenu );
   },
 
@@ -2635,8 +2642,8 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
         var col = cols[i];
         col.view = 'DataTableHeaderColumn';
         col.init = {pos: cols[i].pos, filterable: this._filterable, initfocus: cols[i].initfocus};
-        col.on = Object.append(col.on || {}, {
-          built: function() {
+        col.on = col.on || {};
+        col.on.built = function() {
             var parent = self;
             if ( !this._visible ) {
               parent.setColStyle(this._pos, 'display', 'none');
@@ -2648,8 +2655,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
               dom.addClass(this._pin, 'uki-dataTable-pinned');
               dom.removeClass(this._pin, 'uki-dataTable-unpinned');
             }
-          }
-        });
+        };
       }
       this._childViews = [];
 

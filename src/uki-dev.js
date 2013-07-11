@@ -5307,6 +5307,15 @@
             filteredColumnCount: function() {
                 return this._filteredColumnCount;
             },
+            _buildMenu: function() {
+                "use strict";
+                this._menu = build([ {
+                    view: "Menu",
+                    as: "DataTable-Menu",
+                    addClass: "uki-dataTable-menu"
+                } ]);
+                this._setupMenu();
+            },
             _createDom: function(initArgs) {
                 Container.prototype._createDom.call(this, initArgs);
                 this._rowheader = dom.createElement("tr", {
@@ -5326,12 +5335,7 @@
                 }
                 this._cssRuleTracking = {};
                 if (this._hasMenu) {
-                    this._menu = build([ {
-                        view: "Menu",
-                        as: "DataTable-Menu",
-                        addClass: "uki-dataTable-menu"
-                    } ]);
-                    this._setupMenu();
+                    this._buildMenu();
                 }
                 this._draggableColumn = -1;
                 this.on("draggesturestart", this._dragStart);
@@ -5382,6 +5386,9 @@
                     html: '<img src="' + this._menuImage + '" draggable=false width="12px" height="12px" border=0 ondragstart="return false;">',
                     options: this._menuOptions
                 };
+                if (this._menu == null) {
+                    this._buildMenu();
+                }
                 this._menu.options(lmenu);
             },
             destruct: function() {
@@ -6348,21 +6355,20 @@
                             filterable: this._filterable,
                             initfocus: cols[i].initfocus
                         };
-                        col.on = Object.append(col.on || {}, {
-                            built: function() {
-                                var parent = self;
-                                if (!this._visible) {
-                                    parent.setColStyle(this._pos, "display", "none");
-                                }
-                                parent.setColStyle(this._pos, "width", this._width + "px");
-                                var pinned = this.pinned && this.pinned();
-                                if (pinned && this._pin) {
-                                    parent.pinColumn(this._pos, pinned);
-                                    dom.addClass(this._pin, "uki-dataTable-pinned");
-                                    dom.removeClass(this._pin, "uki-dataTable-unpinned");
-                                }
+                        col.on = col.on || {};
+                        col.on.built = function() {
+                            var parent = self;
+                            if (!this._visible) {
+                                parent.setColStyle(this._pos, "display", "none");
                             }
-                        });
+                            parent.setColStyle(this._pos, "width", this._width + "px");
+                            var pinned = this.pinned && this.pinned();
+                            if (pinned && this._pin) {
+                                parent.pinColumn(this._pos, pinned);
+                                dom.addClass(this._pin, "uki-dataTable-pinned");
+                                dom.removeClass(this._pin, "uki-dataTable-unpinned");
+                            }
+                        };
                     }
                     this._childViews = [];
                     this._columns = build(cols);
@@ -6481,7 +6487,7 @@
             },
             columns: fun.newProp("columns"),
             _columns: [],
-            _template: '<table class="uki-dataTable-pack uki-textSelectable_off"><tbody>{{#rows}}<tr class="uki-dataList-row uki-dataTable-row-{{index}} uki-dataTable-row{{^even}} uki-dataList-row_odd{{/even}}">{{#columns}}<td class="uki-dataTable-cell {{className}}" style="{{style}}">{{{value}}}</td>{{/columns}}<td class="uki-dataTable-cell uki-dataTable-spacer"></td></tr>{{/rows}}</tbody></table>',
+            _template: '<table class="uki-dataTable-pack"><tbody>{{#rows}}<tr class="uki-dataList-row uki-dataTable-row-{{index}} uki-dataTable-row{{^even}} uki-dataList-row_odd{{/even}}">{{#columns}}<td class="uki-dataTable-cell {{className}}" style="{{style}}">{{{value}}}</td>{{/columns}}<td class="uki-dataTable-cell uki-dataTable-spacer"></td></tr>{{/rows}}</tbody></table>',
             _createDom: function(initArgs) {
                 DataList.prototype._createDom.call(this, initArgs);
                 this.addClass("uki-dataTable-list");
