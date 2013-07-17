@@ -2144,6 +2144,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
 
   _filterpresstimeout: function ( target ) {
     this._clearfilterInterval();
+    this._enterFiltered = false;
     var hasFocus = false;
     if ( document.activeElement && document.activeElement == target ) {
       hasFocus = true;
@@ -2155,7 +2156,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
   },
   _clearfilterInterval: function () {
     if ( this._intervalId ) {
-      clearInterval( this._intervalId );
+      clearTimeout( this._intervalId );
       this._intervalId = null;
     }
   },
@@ -2163,12 +2164,13 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     if ( e.charCode == 0 ) {
       return;
     }
+
     var self = e.target.self;
     // We handle normal keys here, Chome doesn't pass "special" keys to onkeypress event
     var myTarget = e.target;
-
+    self._enterFiltered = true;
     self._clearfilterInterval();
-    self._intervalId = setInterval(
+    self._intervalId = setTimeout(
       (function ( self, target ) {
         return function () {
           self._clearfilterInterval();
@@ -2192,11 +2194,8 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
         self._clearfilterInterval();
         self._filterpresstimeout( myTarget );
         e.preventDefault();
+        e.stopPropagation();
         e.cancelBubble = true;
-      } else {
-        // Simulates pressing enter on the browse
-        e.target = self._parent._dom;
-        self._parent.trigger( e );
       }
     }
     // Tab Key
@@ -2206,7 +2205,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     // Delete / Backspace key
     else if ( e.keyCode == 8 || e.keyCode == 46 ) {
       self._clearfilterInterval();
-      self._intervalId = setInterval(
+      self._intervalId = setTimeout(
         (function ( self, target ) {
           return function () {
             self._clearfilterInterval();

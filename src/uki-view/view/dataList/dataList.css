@@ -60,3 +60,9 @@
 .uki-dataList-placeholder {
     display: none;
 }
+
+.uki-dataList-messages {
+    width: 100%;
+    line-height: 2em;
+    text-align: center;
+}

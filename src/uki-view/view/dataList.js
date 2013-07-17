@@ -4,7 +4,7 @@ var fun   = require('../../uki-core/function'),
     utils = require('../../uki-core/utils'),
     dom   = require('../../uki-core/dom'),
     view  = require('../../uki-core/view'),
-   // build = require('../../uki-core/builder').build,
+    build = require('../../uki-core/builder').build,
 
     Metrics    = require('./dataList/metrics').Metrics,
     Selection  = require('./dataList/selection').Selection,
@@ -85,6 +85,24 @@ var DataList = view.newClass('DataList', Container, Focusable, {
         this._layoutBefore = false;
         this.scrollableParent(null);
         this.layoutIfVisible();
+    },
+
+    _showLoading: function() {
+      var view = build({view: 'Container', className: 'uki-dataList-messages', html: 'Loading...'});
+      this.insertChild(view);
+      var cleanup = function(){
+        this.parent().removeChild(view);
+      }.bind(this);
+      return cleanup;
+    },
+
+    _showNoResults: function() {
+      var view = build({view: 'Container', className: 'uki-dataList-messages', html: 'No Results'});
+      this.insertChild(view);
+      var cleanup = function(){
+        this.parent().removeChild(view);
+      }.bind(this);
+      return cleanup;
     },
 
     /**
@@ -353,16 +371,26 @@ var DataList = view.newClass('DataList', Container, Focusable, {
 
     _scheduleRenderPack: function(range) {
         var pack = this._createPack();
+        var showLoadingCleanup;
         pack.from = range.from;
         pack.to = range.to;
         this.appendChild(pack);
 
+
         var render = function(rows) {
+            showLoadingCleanup && showLoadingCleanup();
+            if(!rows.length) {
+              this._showNoResults();
+            }
             if (pack.destructed) { return; }
             this._renderPack(pack, range, rows);
         };
 
         if (this.data().loadRange) {
+            if(this.childViews().length == 1) {
+              showLoadingCleanup = this._showLoading();
+            }
+
             this.data().loadRange(
                 range.from, range.to,
                 fun.bind(render, this)
