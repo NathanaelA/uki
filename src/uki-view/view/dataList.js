@@ -339,8 +339,10 @@ var DataList = view.newClass('DataList', Container, Focusable, {
         } else if (packs.length && fromPX <= range.from) {
             i = 0;
             while (packs[i] && packs[i].toPX < range.from) {
-                this.removeChild(packs[i]);
-                packs[i].destruct();
+                setTimeout(function(pack){
+                  this.removeChild(pack);
+                  pack.destruct();
+                }.bind(this, packs[i]), 1000);
                 i++;
             }
             packs = packs.slice(i);
@@ -350,9 +352,11 @@ var DataList = view.newClass('DataList', Container, Focusable, {
         } else if (packs.length && toPX >= range.to) {
             i = packs.length - 1;
             while (packs[i] && packs[i].fromPX > range.to) {
-                this.removeChild(packs[i]);
-                packs[i].destruct();
-                i--;
+              setTimeout(function(pack){
+                this.removeChild(pack);
+                pack.destruct();
+              }.bind(this, packs[i]), 1000);
+              i--;
             }
             packs = packs.slice(0, i + 1);
             range.to = packs.length ? packs[0].fromPX : range.to;
@@ -360,8 +364,10 @@ var DataList = view.newClass('DataList', Container, Focusable, {
         } else {
             i = 0;
             while (packs[i]) {
-                this.removeChild(packs[i]);
-                packs[i].destruct();
+                setTimeout(function(pack){
+                  this.removeChild(pack);
+                  pack.destruct();
+                }.bind(this, packs[i]), 1000);
                 i++;
             }
             packs = [];

@@ -3544,8 +3544,10 @@
                 } else if (packs.length && fromPX <= range.from) {
                     i = 0;
                     while (packs[i] && packs[i].toPX < range.from) {
-                        this.removeChild(packs[i]);
-                        packs[i].destruct();
+                        setTimeout(function(pack) {
+                            this.removeChild(pack);
+                            pack.destruct();
+                        }.bind(this, packs[i]), 1e3);
                         i++;
                     }
                     packs = packs.slice(i);
@@ -3554,8 +3556,10 @@
                 } else if (packs.length && toPX >= range.to) {
                     i = packs.length - 1;
                     while (packs[i] && packs[i].fromPX > range.to) {
-                        this.removeChild(packs[i]);
-                        packs[i].destruct();
+                        setTimeout(function(pack) {
+                            this.removeChild(pack);
+                            pack.destruct();
+                        }.bind(this, packs[i]), 1e3);
                         i--;
                     }
                     packs = packs.slice(0, i + 1);
@@ -3564,8 +3568,10 @@
                 } else {
                     i = 0;
                     while (packs[i]) {
-                        this.removeChild(packs[i]);
-                        packs[i].destruct();
+                        setTimeout(function(pack) {
+                            this.removeChild(pack);
+                            pack.destruct();
+                        }.bind(this, packs[i]), 1e3);
                         i++;
                     }
                     packs = [];
