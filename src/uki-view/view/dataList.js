@@ -88,7 +88,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
     },
 
     _showLoading: function() {
-      var view = build({view: 'Container', className: 'uki-dataList-messages', html: 'Loading...'});
+      var view = build({view: 'Text', className: 'uki-dataList-messages', html: 'Loading...'})[0];
       this.insertChild(view);
       var cleanup = function(){
         this.parent().removeChild(view);
@@ -97,7 +97,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
     },
 
     _showNoResults: function() {
-      var view = build({view: 'Container', className: 'uki-dataList-messages', html: 'No Results'});
+      var view = build({view: 'Text', className: 'uki-dataList-messages', html: 'No Results'})[0];
       this.insertChild(view);
       var cleanup = function(){
         this.parent().removeChild(view);
@@ -118,6 +118,19 @@ var DataList = view.newClass('DataList', Container, Focusable, {
     */
     data: fun.newProp('data', function(data) {
         this._data = data;
+
+        // This allows dynamic setting of the length.
+        if(this._data.loadRange) {
+          var length = data.length; // Default
+          this._data._list = this;
+          Object.defineProperty(this._data, 'length', {
+            get: function(){return this.__length || length;},
+            set: function(value) {
+              this.__length = value;
+              this._list.metrics().update();
+            }
+          });
+        }
         this._reset();
     }),
 
