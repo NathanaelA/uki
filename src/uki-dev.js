@@ -5049,7 +5049,7 @@
                     this._resizer.style.right = "-14px";
                     pinClasses += " uki-dataTable-unpinned";
                 } else {
-                    this._resizer.innerHTML = "|";
+                    this._resizer.innerHTML = "";
                 }
                 this._pin = dom.createElement("div", {
                     className: pinClasses
