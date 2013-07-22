@@ -5090,7 +5090,6 @@
                 this._dom = dom.createElement("td", {
                     className: className
                 }, [ this._wrapper ]);
-                this._finishSetup();
                 if (typeof window.ontouchstart !== "undefined") {
                     this._pin.style.width = "25px";
                     this._pin.style.height = "25px";
@@ -5126,33 +5125,10 @@
                     dom.removeClass(this._dom, "uki-dataTable-header-cell_resizable");
                 }
             },
-            _parseStyle: function() {
-                if (this._style == null) {
-                    return;
-                }
-                if (typeof this._style === "object") {
-                    for (var key in this._style) {
-                        if (!this._style.hasOwnProperty(key)) {
-                            continue;
-                        }
-                        this.parent().setColStyle(this._pos, key, this._style[key]);
-                    }
-                } else {
-                    var exp = this._style.split(";");
-                    for (var i = 0; i < exp.length; i++) {
-                        var parts = exp[i].split(":");
-                        if (parts[0].length === 0 || parts.length !== 2) {
-                            continue;
-                        }
-                        this.parent().setColStyle(this._pos, parts[0], parts[1]);
-                    }
-                }
-            },
-            _finishSetup: function() {
+            _built: function() {
                 if (this.destructed) {
                     return;
                 }
-                this._parseStyle();
                 this.resizable(this._resizable);
                 this.filterable(this._filterable);
                 this.sort(this._sort);
@@ -6424,6 +6400,25 @@
                                 parent.pinColumn(this._pos, pinned);
                                 dom.addClass(this._pin, "uki-dataTable-pinned");
                                 dom.removeClass(this._pin, "uki-dataTable-unpinned");
+                            }
+                            if (!this._style) {
+                                if (typeof this._style === "object") {
+                                    for (var key in this._style) {
+                                        if (!this._style.hasOwnProperty(key)) {
+                                            continue;
+                                        }
+                                        parent.setColStyle(this._pos, key, this._style[key]);
+                                    }
+                                } else {
+                                    var exp = this._style.split(";");
+                                    for (var i = 0; i < exp.length; i++) {
+                                        var parts = exp[i].split(":");
+                                        if (parts[0].length === 0 || parts.length !== 2) {
+                                            continue;
+                                        }
+                                        parent.setColStyle(this._pos, parts[0], parts[1]);
+                                    }
+                                }
                             }
                         };
                     }

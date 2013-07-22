@@ -1207,7 +1207,6 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
       ] );
     this._dom =
     dom.createElement( 'td', {className: className}, [this._wrapper] );
-    this._finishSetup();
 
     if (typeof window.ontouchstart !== 'undefined') {
       this._pin.style.width = '25px';
@@ -1247,34 +1246,8 @@ var DataTableHeaderColumn = view.newClass( 'DataTableHeaderColumn', Base, {
     }
   },
 
-  _parseStyle: function () {
-    if ( this._style == null ) {
-      return;
-    }
-    if ( typeof this._style === "object" ) {
-      for ( var key in this._style ) {
-        if ( !this._style.hasOwnProperty( key ) ) {
-          continue;
-        }
-        this.parent().setColStyle( this._pos, key, this._style[key]);
-      }
-    } else {
-      var exp = this._style.split( ';' );
-      for ( var i = 0; i < exp.length; i++ ) {
-        var parts = exp[i].split( ':' );
-        if ( parts[0].length === 0 || parts.length !== 2 ) {
-          continue;
-        }
-        this.parent().setColStyle( this._pos, parts[0], parts[1] );
-      }
-    }
-  },
-
-  // due to the fact that .parent() is not assigned right away; we need to finish setting up
-  // all the rules after the object is fully built
-  _finishSetup: function () {
+  _built: function () {
     if(this.destructed) {return;}
-    this._parseStyle();
     this.resizable( this._resizable );
     this.filterable( this._filterable );
     this.sort( this._sort );
@@ -2652,17 +2625,44 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
         col.init = {pos: cols[i].pos, filterable: this._filterable, initfocus: cols[i].initfocus};
         col.on = col.on || {};
         col.on.built = function() {
-            var parent = self;
-            if ( !this._visible ) {
-              parent.setColStyle(this._pos, 'display', 'none');
+          var parent = self;
+
+          // Visibility
+          if ( !this._visible ) {
+            parent.setColStyle(this._pos, 'display', 'none');
+          }
+
+          // Width
+          parent.setColStyle(this._pos, 'width', this._width + 'px');
+
+          // Pin
+          var pinned = this.pinned && this.pinned();
+          if (pinned && this._pin) {
+            parent.pinColumn(this._pos, pinned);
+            dom.addClass(this._pin, 'uki-dataTable-pinned');
+            dom.removeClass(this._pin, 'uki-dataTable-unpinned');
+          }
+
+          // Handle any custom styles
+          if (!this._style) {
+            if ( typeof this._style === "object" ) {
+              for ( var key in this._style ) {
+                if ( !this._style.hasOwnProperty( key ) ) {
+                  continue;
+                }
+                parent.setColStyle( this._pos, key, this._style[key]);
+              }
+            } else {
+              var exp = this._style.split( ';' );
+              for ( var i = 0; i < exp.length; i++ ) {
+                var parts = exp[i].split( ':' );
+                if ( parts[0].length === 0 || parts.length !== 2 ) {
+                  continue;
+                }
+                parent.setColStyle( this._pos, parts[0], parts[1] );
+              }
             }
-            parent.setColStyle(this._pos, 'width', this._width + 'px');
-            var pinned = this.pinned && this.pinned();
-            if (pinned && this._pin) {
-              parent.pinColumn(this._pos, pinned);
-              dom.addClass(this._pin, 'uki-dataTable-pinned');
-              dom.removeClass(this._pin, 'uki-dataTable-unpinned');
-            }
+          }
         };
       }
       this._childViews = [];
