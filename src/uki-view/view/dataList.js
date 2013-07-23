@@ -247,7 +247,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
         return rowHeight;
     },
 
-    redrawRow: function(index) {
+    redrawRow: function(index, cb) {
         var pack = this._packFor(index);
         if (pack) {
 
@@ -258,6 +258,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
                 rows,
                 index);
             pack.setSelected(index - pack.from, this.isSelected(index));
+            cb && cb.call(this);
           };
 
           if (this.data().loadRange) {
@@ -267,6 +268,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
             );
           } else {
             rerender.call(this, this.data().slice(index, index+1));
+            cb && cb.call(this);
           }
 
         }

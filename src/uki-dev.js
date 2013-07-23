@@ -3481,7 +3481,7 @@
                 pack.destruct();
                 return rowHeight;
             },
-            redrawRow: function(index) {
+            redrawRow: function(index, cb) {
                 var pack = this._packFor(index);
                 if (pack) {
                     var rerender = function(rows) {
@@ -3490,11 +3490,13 @@
                         }
                         pack.updateRow(index - pack.from, rows, index);
                         pack.setSelected(index - pack.from, this.isSelected(index));
+                        cb && cb.call(this);
                     };
                     if (this.data().loadRange) {
                         this.data().loadRange(index, index + 1, fun.bind(rerender, this));
                     } else {
                         rerender.call(this, this.data().slice(index, index + 1));
+                        cb && cb.call(this);
                     }
                 }
             },
@@ -4730,13 +4732,14 @@
                 return this._Editors[this._EIPCurrentColumn].value();
             },
             redrawRow: function(row) {
-                this._list.redrawRow(row);
-                if (!this._inEditInPlace) {
-                    return;
-                }
-                if (this._EIPCurrentRow === row) {
-                    this._EIPMove(this._EIPCurrentRow, this._EIPCurrentColumn, true, true);
-                }
+                this._list.redrawRow(row, function() {
+                    if (!this._inEditInPlace) {
+                        return;
+                    }
+                    if (this._EIPCurrentRow === row) {
+                        this._EIPMove(this._EIPCurrentRow, this._EIPCurrentColumn, true, true);
+                    }
+                }.bind(this));
             },
             focus: function() {
                 if (this._list.columns().length === 0) {

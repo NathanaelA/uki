@@ -811,13 +811,14 @@ var DataTable = view.newClass( 'DataTable', Container, {
   },
 
   redrawRow: function ( row ) {
-    this._list.redrawRow( row );
-    if ( !this._inEditInPlace ) {
-      return;
-    }
-    if ( this._EIPCurrentRow === row ) {
-      this._EIPMove( this._EIPCurrentRow, this._EIPCurrentColumn, true, true );
-    }
+    this._list.redrawRow( row , function() {
+      if ( !this._inEditInPlace ) {
+        return;
+      }
+      if ( this._EIPCurrentRow === row ) {
+        this._EIPMove( this._EIPCurrentRow, this._EIPCurrentColumn, true, true );
+      }
+    }.bind(this));
   },
 
   focus: function () {
