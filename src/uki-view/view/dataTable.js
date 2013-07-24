@@ -2645,7 +2645,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
           }
 
           // Handle any custom styles
-          if (!this._style) {
+          if (this._style) {
             if ( typeof this._style === "object" ) {
               for ( var key in this._style ) {
                 if ( !this._style.hasOwnProperty( key ) ) {

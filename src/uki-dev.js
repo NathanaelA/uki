@@ -6404,7 +6404,7 @@
                                 dom.addClass(this._pin, "uki-dataTable-pinned");
                                 dom.removeClass(this._pin, "uki-dataTable-unpinned");
                             }
-                            if (!this._style) {
+                            if (this._style) {
                                 if (typeof this._style === "object") {
                                     for (var key in this._style) {
                                         if (!this._style.hasOwnProperty(key)) {
