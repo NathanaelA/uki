@@ -81,6 +81,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
 
     _reset: function() {
         this.childViews([]);
+        this._removeAllMessages();
         this.selectedIndexes([]);
         this._layoutBefore = false;
         this.scrollableParent(null);
@@ -89,6 +90,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
 
     _showLoading: function() {
       var view = build({view: 'Text', className: 'uki-dataList-messages', html: 'Loading...'})[0];
+      this._showLoadingView = view;
       this.insertChild(view);
       var cleanup = function(){
         this.removeChild(view);
@@ -98,12 +100,18 @@ var DataList = view.newClass('DataList', Container, Focusable, {
 
     _showNoResults: function() {
       var view = build({view: 'Text', className: 'uki-dataList-messages', html: 'No Results'})[0];
+      this._showNoResultsView = view;
       this.insertChild(view);
       var cleanup = function(){
         this.removeChild(view);
       }.bind(this);
       return cleanup;
     },
+
+  _removeAllMessages: function() {
+    this._showLoadingView && this._removeChildFromDom(this._showLoadingView);
+    this._showNoResultsView && this._removeChildFromDom(this._showNoResultsView);
+  },
 
     /**
     * Data to render. Data should provide one of the following simple API's:

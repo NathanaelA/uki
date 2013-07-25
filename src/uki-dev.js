@@ -3382,6 +3382,7 @@
             },
             _reset: function() {
                 this.childViews([]);
+                this._removeAllMessages();
                 this.selectedIndexes([]);
                 this._layoutBefore = false;
                 this.scrollableParent(null);
@@ -3393,6 +3394,7 @@
                     className: "uki-dataList-messages",
                     html: "Loading..."
                 })[0];
+                this._showLoadingView = view;
                 this.insertChild(view);
                 var cleanup = function() {
                     this.removeChild(view);
@@ -3405,11 +3407,16 @@
                     className: "uki-dataList-messages",
                     html: "No Results"
                 })[0];
+                this._showNoResultsView = view;
                 this.insertChild(view);
                 var cleanup = function() {
                     this.removeChild(view);
                 }.bind(this);
                 return cleanup;
+            },
+            _removeAllMessages: function() {
+                this._showLoadingView && this._removeChildFromDom(this._showLoadingView);
+                this._showNoResultsView && this._removeChildFromDom(this._showNoResultsView);
             },
             data: fun.newProp("data", function(data) {
                 this._data = data;
