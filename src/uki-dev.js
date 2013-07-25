@@ -3395,7 +3395,7 @@
                 })[0];
                 this.insertChild(view);
                 var cleanup = function() {
-                    this.parent().removeChild(view);
+                    this.removeChild(view);
                 }.bind(this);
                 return cleanup;
             },
@@ -3407,7 +3407,7 @@
                 })[0];
                 this.insertChild(view);
                 var cleanup = function() {
-                    this.parent().removeChild(view);
+                    this.removeChild(view);
                 }.bind(this);
                 return cleanup;
             },

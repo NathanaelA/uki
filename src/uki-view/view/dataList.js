@@ -91,7 +91,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
       var view = build({view: 'Text', className: 'uki-dataList-messages', html: 'Loading...'})[0];
       this.insertChild(view);
       var cleanup = function(){
-        this.parent().removeChild(view);
+        this.removeChild(view);
       }.bind(this);
       return cleanup;
     },
@@ -100,7 +100,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
       var view = build({view: 'Text', className: 'uki-dataList-messages', html: 'No Results'})[0];
       this.insertChild(view);
       var cleanup = function(){
-        this.parent().removeChild(view);
+        this.removeChild(view);
       }.bind(this);
       return cleanup;
     },
