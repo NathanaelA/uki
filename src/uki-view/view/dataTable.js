@@ -197,6 +197,18 @@ var DataTable = view.newClass( 'DataTable', Container, {
       this._container.on('mousewheel', fun.bindOnce(this._redirectHorizontalScroll, this));
       this._container.on('wheel', fun.bind(this._redirectHorizontalScroll, this), false); // FF on Mac
     }
+
+    this.on('keyup', function(event){
+      if([13,38,40].contains(event.keyCode)) {
+        event.stopPropagation();
+      }
+    });
+
+    this.on('keydown', function(event){
+      if([13,38,40].contains(event.keyCode)) {
+        event.stopPropagation();
+      }
+    });
   },
 
   destruct: function () {

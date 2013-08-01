@@ -36,7 +36,7 @@ var NativeControl = view.newClass('NativeControl', Base, Focusable, {
 
 });
 fun.delegateProp(NativeControl.prototype,
-    ['name', 'checked', 'disabled', 'value', 'type', 'accessKey', 'id', 'autocomplete', 'autofocus', 'required', 'pattern', 'readonly', 'maxLength', 'spellcheck'], '_input');
+    ['name', 'checked', 'disabled', 'value', 'type', 'accessKey', 'id', 'autocomplete', 'autofocus', 'required', 'pattern', 'readOnly', 'maxLength', 'spellcheck'], '_input');
 fun.delegateProp(NativeControl.prototype, ['width','height'], '_input', ['style.width','style.height']);
 
 

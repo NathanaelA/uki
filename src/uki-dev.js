@@ -2433,7 +2433,7 @@
                 this._label = null;
             }
         });
-        fun.delegateProp(NativeControl.prototype, [ "name", "checked", "disabled", "value", "type", "accessKey", "id", "autocomplete", "autofocus", "required", "pattern", "readonly", "maxLength", "spellcheck" ], "_input");
+        fun.delegateProp(NativeControl.prototype, [ "name", "checked", "disabled", "value", "type", "accessKey", "id", "autocomplete", "autofocus", "required", "pattern", "readOnly", "maxLength", "spellcheck" ], "_input");
         fun.delegateProp(NativeControl.prototype, [ "width", "height" ], "_input", [ "style.width", "style.height" ]);
         var Output = view.newClass("nativeControl.Output", NativeControl, {
             _createDom: function(initArgs) {
@@ -4198,6 +4198,16 @@
                     this._container.on("mousewheel", fun.bindOnce(this._redirectHorizontalScroll, this));
                     this._container.on("wheel", fun.bind(this._redirectHorizontalScroll, this), false);
                 }
+                this.on("keyup", function(event) {
+                    if ([ 13, 38, 40 ].contains(event.keyCode)) {
+                        event.stopPropagation();
+                    }
+                });
+                this.on("keydown", function(event) {
+                    if ([ 13, 38, 40 ].contains(event.keyCode)) {
+                        event.stopPropagation();
+                    }
+                });
             },
             destruct: function() {
                 Container.prototype.destruct.call(this);
