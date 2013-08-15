@@ -183,7 +183,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
     this._container = c.view( 'container' );
     this._container.on( "keydown", this._keyDown );
     this._container.dom().tabIndex = -1; // Remove tab focusablity
-    this._container.on( "mousedown", this._EIPClick );
+    this._container.on( "click", this._EIPClick );
     this._scrollContainer = c.view('scrollContainer');
     this._scrollBar = c.view('scrollBar');
     this._list = c.view( 'list' );
