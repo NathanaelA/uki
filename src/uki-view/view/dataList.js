@@ -132,6 +132,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
           var length = data.length; // Default
           this._data._list = this;
           Object.defineProperty(this._data, 'length', {
+            configurable: true,
             get: function(){return this.__length || length;},
             set: function(value) {
               this.__length = value;
