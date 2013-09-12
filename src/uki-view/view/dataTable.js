@@ -68,10 +68,9 @@ var DataTable = view.newClass( 'DataTable', Container, {
     if ( this.hasFocus() ) {
       _hasFocus = true;
     }
-    //        this._stylerfunction = fun.bindOnce(this._styler, this);
 
     cols = table.addColumnDefaults( cols );
-    //        cols[0].styler = this._stylerfunction;
+
     this._list.columns( cols );
     this._header.columns( cols );
     this._footer.columns( cols );
@@ -220,7 +219,6 @@ var DataTable = view.newClass( 'DataTable', Container, {
     this._header = null;
     this._footer = null;
     this._styler = null;
-    this._stylerfunction = null;
   },
   _recalculateTableSizes: function () {
     var headerUnpinnedWidth = this._header.getTotalUnpinnedWidth();
@@ -2128,8 +2126,8 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     }
   },
 
-  _filterpresstimeout: function ( target ) {
-    this._clearfilterInterval();
+  _filterPressTimeout: function ( target ) {
+    this._clearFilterInterval();
     this._enterFiltered = false;
     var hasFocus = false;
     if ( document.activeElement && document.activeElement == target ) {
@@ -2140,32 +2138,45 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
       target.focus();
     }
   },
-  _clearfilterInterval: function () {
+
+  _clearFilterInterval: function () {
     if ( this._intervalId ) {
       clearTimeout( this._intervalId );
       this._intervalId = null;
     }
   },
-  _filterpress: function ( e ) {
+
+  _filterPress: function ( e ) {
     if ( e.charCode == 0 ) {
       return;
     }
 
     var self = e.target.self;
     // We handle normal keys here, Chome doesn't pass "special" keys to onkeypress event
-    var myTarget = e.target;
+    //var myTarget = e.target;
+    self._filterStartTimer( e.target )
+  },
+
+  _filterPaste: function(e) {
+    var self = e.target.self;
+    self._filterStartTimer( e.target );
+  },
+
+  _filterStartTimer: function(myTarget) {
+    var self = this;
     self._enterFiltered = true;
-    self._clearfilterInterval();
+    self._clearFilterInterval();
     self._intervalId = setTimeout(
       (function ( self, target ) {
         return function () {
-          self._clearfilterInterval();
-          self._filterpresstimeout( target );
+          self._clearFilterInterval();
+          self._filterPressTimeout( target );
         }
       })( self, myTarget ),
       self._filterTimeout );
   },
-  _filterkeydown: function ( e ) {
+
+  _filterKeyDown: function ( e ) {
     // We handle "special" keys here because of Chrome doesn't pass them to onkeypress
     if ( e.charCode != 0 ) {
       return;
@@ -2177,8 +2188,8 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
 
     if ( e.keyCode == 13 ) {
       if ( self._enterFiltered ) {
-        self._clearfilterInterval();
-        self._filterpresstimeout( myTarget );
+        self._clearFilterInterval();
+        self._filterPressTimeout( myTarget );
         e.preventDefault();
         e.stopPropagation();
         e.cancelBubble = true;
@@ -2186,16 +2197,16 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     }
     // Tab Key
     else if ( e.keyCode == 9 ) {
-      self._clearfilterInterval();
+      self._clearFilterInterval();
     }
     // Delete / Backspace key
     else if ( e.keyCode == 8 || e.keyCode == 46 ) {
-      self._clearfilterInterval();
+      self._clearFilterInterval();
       self._intervalId = setTimeout(
         (function ( self, target ) {
           return function () {
-            self._clearfilterInterval();
-            self._filterpresstimeout( target );
+            self._clearFilterInterval();
+            self._filterPressTimeout( target );
           }
         })( self, myTarget ),
         self._filterTimeout );
@@ -2618,7 +2629,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
   columns: fun.newProp( 'columns', function ( cols ) {
     var self = this;
     if ( arguments.length ) {
-      this._clearfilterInterval();
+      this._clearFilterInterval();
       this.deleteAllCSSRules();
       this._menu && this._menu.remove();
 
@@ -2745,9 +2756,11 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     var eles = this._dom.getElementsByClassName( "uki-dataTable-filter" );
     for ( var i = 0; i < eles.length; i++ ) {
       eles[i].self = this;
+      evt.addListener( eles[i], "cut", this._filterPaste);
+      evt.addListener( eles[i], "paste", this._filterPaste);
       evt.addListener( eles[i], "change", this._filter );
-      evt.addListener( eles[i], "keypress", this._filterpress );
-      evt.addListener( eles[i], "keydown", this._filterkeydown );
+      evt.addListener( eles[i], "keypress", this._filterPress );
+      evt.addListener( eles[i], "keydown", this._filterKeyDown );
     }
   },
 
