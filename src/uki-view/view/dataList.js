@@ -131,6 +131,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
         if(this._data.loadRange) {
           var length = data.length; // Default
           this._data._list = this;
+          this._data.__length = length;
           Object.defineProperty(this._data, 'length', {
             configurable: true,
             get: function(){return this.__length || length;},
@@ -261,7 +262,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
         if (pack) {
 
           var rerender = function(rows) {
-            if (pack.destructed) { return; }
+             if (pack.destructed) { return; }
              pack.updateRow(
                 index - pack.from,
                 rows,
@@ -408,7 +409,10 @@ var DataList = view.newClass('DataList', Container, Focusable, {
 
 
         var render = function(rows) {
-            showLoadingCleanup && showLoadingCleanup();
+
+            if (showLoadingCleanup) {
+              showLoadingCleanup();
+            }
             if(!rows.length) {
               this._showNoResults();
             }
@@ -417,7 +421,7 @@ var DataList = view.newClass('DataList', Container, Focusable, {
         };
 
         if (this.data().loadRange) {
-            if(this.childViews().length == 1) {
+            if(this.childViews().length === 1) {
               showLoadingCleanup = this._showLoading();
             }
 

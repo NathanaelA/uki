@@ -1,3 +1,4 @@
+
 requireCss( './dataTable/dataTable.css' );
 
 var fun = require( '../../uki-core/function' ),
@@ -183,6 +184,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
     this._container.on( "keydown", this._keyDown );
     this._container.dom().tabIndex = -1; // Remove tab focusablity
     this._container.on( "click", this._EIPClick );
+    this._container.on( "focus", fun.bindOnce(this.focusOnList, this));
     this._scrollContainer = c.view('scrollContainer');
     this._scrollBar = c.view('scrollBar');
     this._list = c.view( 'list' );
@@ -197,17 +199,21 @@ var DataTable = view.newClass( 'DataTable', Container, {
       this._container.on('wheel', fun.bind(this._redirectHorizontalScroll, this), false); // FF on Mac
     }
 
-    this.on('keyup', function(event){
-      if([13,38,40].contains(event.keyCode)) {
-        event.stopPropagation();
-      }
-    });
+    this.on('keyup', this._keyboardStopPropogation);
+    this.on('keydown', this._keyboardStopPropogation);
 
-    this.on('keydown', function(event){
-      if([13,38,40].contains(event.keyCode)) {
-        event.stopPropagation();
-      }
-    });
+/*   this._container.on('selection', function(e) {
+          "use strict";
+           var sel = e._targetView.selectedIndex();
+           var dta = e._targetView._dataRows;
+           var id = e._targetView.data().id;
+           if (sel >= dta.from && sel <= dta.to) {
+             console.nja("#NJA0FF", "UKI Selection", sel, id, "From:", dta.from, "To:", dta.to, dta.rows[sel-dta.from]);
+           } else {
+             console.nja("#NJA0FF", "UKI Selection", sel, id, "Data is out of range, why?   Range:", dta.from, dta.to);
+           }
+        }
+    ); */
   },
 
   destruct: function () {
@@ -220,6 +226,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
     this._footer = null;
     this._styler = null;
   },
+
   _recalculateTableSizes: function () {
     var headerUnpinnedWidth = this._header.getTotalUnpinnedWidth();
     if (headerUnpinnedWidth == 0) { return; }
@@ -274,6 +281,13 @@ var DataTable = view.newClass( 'DataTable', Container, {
       this._isTouchDevice = !!(typeof window.ontouchstart !== 'undefined');
     }
     return this._isTouchDevice;
+  },
+
+  _keyboardStopPropogation: function(event) {
+    "use strict";
+    if (event.keyCode === 13 || event.keyCode === 38 || event.keyCode === 40) {
+      event.stopPropagation();
+    }
   },
 
   pinColumn: function (index) {
@@ -402,11 +416,13 @@ var DataTable = view.newClass( 'DataTable', Container, {
   },
 
   _scrolledHeader: function () {
+    "use strict";
     var newHeader = this._header.scrollLeft();
     this._handleScroll( newHeader );
   },
 
   _keyDown: function ( event ) {
+    "use strict";
 
     // This event is called from a Child of DataTable, so we have to link back to the parent
     var parent = this.parent();
@@ -427,6 +443,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
   },
 
   startEditInPlace: function ( row, col ) {
+    "use strict";
     if ( !this._editInPlace ) {
       return;
     }
@@ -450,6 +467,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
   },
 
   stopEditInPlace: function () {
+    "use strict";
     if ( this._EIP_ClearEditor() ) {
       this._inEditInPlace = false;
       this.focus();
@@ -460,6 +478,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
    * Returns TRUE, if the MoveNext/MoveNearest is allowed to continue moving the editor, returns FALSE to stop from moving editor.
    */
   _EIP_ClearEditor: function () {
+    "use strict";
     if ( this._EIPCurrentColumn === -1 || this._EIPCurrentRow === -1 ) {
       return (true);
     }
@@ -521,6 +540,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
   },
 
   _EIP_getDomElement: function ( row, col ) {
+    "use strict";
     var htmlrow = this._list.dom().querySelector( "tr.uki-dataTable-row-" + row );
     if ( htmlrow == null ) {
       return (null);
@@ -531,6 +551,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
   },
 
   _EIPMove: function ( row, col, nearest, forward ) {
+    "use strict";
     var columns = this._header.columns();
     if ( !nearest && col === -1 ) {
       col = columns.length;
@@ -603,6 +624,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
   },
 
   _EIPStartEditor: function ( row ) {
+    "use strict";
     var columns = this._header.columns();
     var htmlcol = this._EIP_getDomElement( this._EIPCurrentRow, this._EIPCurrentColumn );
     //console.log("EIPS: ",row);
@@ -624,6 +646,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
   _EIPCurrentRowData: null,
 
   _EIPFocus: function () {
+    "use strict";
     if ( this._Editors[this._EIPCurrentColumn].focus ) {
       this._Editors[this._EIPCurrentColumn].focus();
     } else if ( this._Editors[this._EIPCurrentColumn]._input && this._Editors[this._EIPCurrentColumn]._input.focus ) {
@@ -669,6 +692,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
     }
 
     this._Editors = [];
+    var editor;
     for ( var i = 0; i < cols.length; i++ ) {
 
       if ( cols[i].editor === false || cols[i].editor == null ) {
@@ -676,11 +700,11 @@ var DataTable = view.newClass( 'DataTable', Container, {
         continue;
       }
       if ( cols[i].editor === true ) {
-        var editor = {view: "nativeControl.Text"};
+        editor = {view: "nativeControl.Text"};
       } else {
-        var editor = cols[i].editor;
+        editor = cols[i].editor;
       }
-      editor["pos"] = "width:100% height:14pt position:relative";
+      editor.pos = "width:100% height:14pt position:relative";
       try {
         var beditor = build( editor );
         beditor[0].on( "keydown", this._EIPKeyDown );
@@ -744,7 +768,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
 
         parent._EIPMove( parent._EIPCurrentRow - 1, parent._EIPCurrentColumn, false, true );
 
-      } else if ( event.keyCode == 40 ) { // Down Arrow
+      } else if ( event.keyCode === 40 ) { // Down Arrow
         var data = parent.data();
         if ( data.length <= parent._EIPCurrentRow + 1 ) {
           parent.EIPInsertRow();
@@ -831,7 +855,18 @@ var DataTable = view.newClass( 'DataTable', Container, {
     }.bind(this));
   },
 
+  focusOnList: function() {
+    "use strict";
+    if (this._list && this._list.focus) {
+      this._list.focus();
+      if (this._inEditInPlace) {
+        this._EIPMove( this._EIPCurrentRow, this._EIPCurrentColumn, true, true );
+      }
+    }
+  },
+
   focus: function () {
+
     if ( this._list.columns().length === 0 ) {
       this._deferFocus = true;
       return;
@@ -2227,7 +2262,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
       var size = grid.metrics()._rowHeight;
       var vrows = 1;
       if ( size > 0 ) {
-        vrows = (range.to - range.from) / size;
+        vrows = parseInt((range.to - range.from) / size);
       }
       var idx = grid.selectedIndex();
       if ( idx == null ) {
@@ -2273,6 +2308,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
       }
       if ( idx != oldIdx ) {
         grid.selectedIndex( idx );
+        grid.lastClickIndex( idx );
         grid.scrollToIndex( idx );
         // This triggers the selection event.
         grid.triggerSelection();
