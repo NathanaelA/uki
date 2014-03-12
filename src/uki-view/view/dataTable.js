@@ -1,4 +1,4 @@
-
+"use strict";
 requireCss( './dataTable/dataTable.css' );
 
 var fun = require( '../../uki-core/function' ),
@@ -22,12 +22,10 @@ var fun = require( '../../uki-core/function' ),
 var _DataTableCounter = 0;
 
 var FauxCSSStyleSheet = function () {
-  "use strict";
   this.cssRules = [];
 };
 
 FauxCSSStyleSheet.prototype.addRule = function ( name, value, index ) {
-  "use strict";
   var newRule = {name: name, value: value, style: []};
   if ( index < 0 ) {
     index = this.cssRules.push( newRule ) - 1;
@@ -38,12 +36,10 @@ FauxCSSStyleSheet.prototype.addRule = function ( name, value, index ) {
 };
 
 FauxCSSStyleSheet.prototype.removeRule = function ( index ) {
-  "use strict";
   this.cssRules.splice( index, 1 );
 };
 
 FauxCSSStyleSheet.prototype.getInnerHTML = function () {
-  "use strict";
   var finalText = '';
   for ( var i = 0; i < this.cssRules.length; i++ ) {
     var rule = this.cssRules[i];
@@ -61,7 +57,6 @@ FauxCSSStyleSheet.prototype.getInnerHTML = function () {
 
 var DataTable = view.newClass( 'DataTable', Container, {
   columns: function ( cols ) {
-    "use strict";
     if ( !arguments.length ) {
       return this._header.columns();
     }
@@ -104,6 +99,24 @@ var DataTable = view.newClass( 'DataTable', Container, {
     return this._styler( row, col, grid );
   },
 
+  _border: null,
+  border: fun.newProp("border", function(val) {
+    "use strict";
+    if (arguments.length) {
+      this._border = val;
+      if (val === null || val === '') {
+        this._dom.style.border = "";
+      } else {
+        if (val.indexOf(' ') === -1) {
+          this._dom.style.border = "1px solid "+val;
+        } else {
+          this._dom.style.border = val;
+        }
+      }
+    }
+    return this._border;
+  }),
+
   styler: fun.newProp( "styler" ),
   _styler: fun.FF,
 
@@ -131,10 +144,10 @@ var DataTable = view.newClass( 'DataTable', Container, {
     return this._menudom;
   },
 
-  _createDom: function ( initArgs ) {
+  _createDom: function( initArgs ) {
     _DataTableCounter++;
     this._CSSTableId = _DataTableCounter;
-    this._dom = dom.createElement( 'div', {className: 'uki-dataTable uki-dataTable' + this._CSSTableId} );
+    this._dom = dom.createElement( 'div', {className: 'uki-dataTable uki-dataTable' + this._CSSTableId});
     this._stylesheet = dom.createStylesheet( ' ', this._dom );
     var w1 = dom.createElement( 'div', {className: 'uki-menu-w1'} );
     this._menudom = dom.createElement( 'div', {className: 'uki-menu-w2'} );
@@ -201,22 +214,9 @@ var DataTable = view.newClass( 'DataTable', Container, {
 
     this.on('keyup', this._keyboardStopPropogation);
     this.on('keydown', this._keyboardStopPropogation);
-
-/*   this._container.on('selection', function(e) {
-          "use strict";
-           var sel = e._targetView.selectedIndex();
-           var dta = e._targetView._dataRows;
-           var id = e._targetView.data().id;
-           if (sel >= dta.from && sel <= dta.to) {
-             console.nja("#NJA0FF", "UKI Selection", sel, id, "From:", dta.from, "To:", dta.to, dta.rows[sel-dta.from]);
-           } else {
-             console.nja("#NJA0FF", "UKI Selection", sel, id, "Data is out of range, why?   Range:", dta.from, dta.to);
-           }
-        }
-    ); */
   },
 
-  destruct: function () {
+  destruct: function() {
     Container.prototype.destruct.call( this );
     this._menudom = null;
     this._list = null;
@@ -704,7 +704,7 @@ var DataTable = view.newClass( 'DataTable', Container, {
       } else {
         editor = cols[i].editor;
       }
-      editor.pos = "width:100% height:14pt position:relative";
+      editor["pos"] = "width:100% height:14pt position:relative";
       try {
         var beditor = build( editor );
         beditor[0].on( "keydown", this._EIPKeyDown );
@@ -935,7 +935,7 @@ fun.delegateCall( DataTable.prototype, ['summary'], 'footer' );
 
 fun.delegateProp( DataTable.prototype, [
   'filterable', 'filterTimeout', 'sortable', 'hasMenu',
-  'menuOptions', 'menu', 'menuImage'
+  'menuOptions', 'menu', 'menuImage', 'title'
 ], 'header' );
 
 fun.delegateCall( DataTable.prototype, [
@@ -1516,6 +1516,21 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
     return this._showAdvancedLayoutCustomization;
   },
 
+  _title: null,
+  title: fun.newProp('title', function (v) {
+     if (arguments.length) {
+       if (v === null || v === '') {
+         this._titleValue.style.display = "none";
+       } else {
+         this._titleValue.style.display = "";
+         this._titleValue.innerHTML = dom.escapeHTML(v);
+       }
+       this._title = v;
+     }
+    return this._title;
+  }),
+
+
   _styleSheetElement: null,
   _styleSheet: null,
   _columns: null,
@@ -1534,9 +1549,12 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
 
   _createDom: function ( initArgs ) {
     Container.prototype._createDom.call( this, initArgs );
-    this._rowheader = dom.createElement( 'tr', {className: 'uki-dataTable-header-row'} );
-    this._table = dom.createElement( 'table', { className: 'uki-dataTable-header' }, [this._rowheader] );
-    this._dom = dom.createElement( 'div', null, [this._table] );
+    this._titleValue = dom.createElement('div', {className: 'uki-dataTable-header-title'});
+    this._titleValue.style.display = 'none';
+
+    this._rowHeader = dom.createElement( 'tr', {className: 'uki-dataTable-header-row'} );
+    this._table = dom.createElement( 'table', { className: 'uki-dataTable-header' }, [this._rowHeader] );
+    this._dom = dom.createElement( 'div', null, [this._titleValue, this._table] );
     this._styleSheetElement = initArgs.stylesheet || dom.createStylesheet( ' ' );
     if ( this._styleSheetElement.sheet && this._styleSheetElement.sheet.cssRules ) {
       this._styleSheet = this._styleSheetElement.sheet;
@@ -1629,7 +1647,8 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
 
     this._table = null;
     this._dom = null;
-    this._rowheader = null;
+    this._rowHeader = null;
+    this._titleValue = null;
     this._lastFocusedFilter = null;
     this._menuOptions = null;
     this._columns = null;
@@ -2659,7 +2678,7 @@ var DataTableAdvancedHeader = view.newClass( 'DataTableAdvancedHeader', Containe
   },
 
   _appendChildToDom: function ( child ) {
-    this._rowheader.appendChild( child.dom() );
+    this._rowHeader.appendChild( child.dom() );
   },
 
   columns: fun.newProp( 'columns', function ( cols ) {

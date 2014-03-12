@@ -9,6 +9,8 @@
     position: relative;
     height: 100%;
     width: 100%;
+    box-sizing: border-box;
+   -moz-box-sizing: border-box;
 }
 
 .uki-menu-w1 {
@@ -46,6 +48,12 @@
     width: 100%; /* should only be necessary for the pack, but webkit has a bug that makes this necessary for any fixed table-layout element. */
 		overflow: hidden; /* fixes webkit not honoring 0 width columns */
 		table-layout: fixed;
+}
+
+.uki-dataTable-header-title {
+  font-weight:bold;
+  border-bottom: 1px solid grey;
+  text-align: center;
 }
 
 .uki-dataTable-row {

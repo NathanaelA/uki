@@ -44,11 +44,11 @@ function selection(data) {
 
 function buildUki() {
 var views = uki([
-    { view: 'DataTable', as: 'table', debounce: 1, hasFooter: true,
+    { view: 'DataTable', as: 'table', debounce: 1, hasFooter: true,  border: 'red', title: 'hello all',
       filterable: true, sortable: true, hasMenu: true, editInPlace: true, editInPlaceHotkey: 113, styler: styler,
       menuOptions: [ 'Row Count', 'renderSize', 'Reset Sort', 'Reset Filters', 'Reset All', 'Redraw Row', 'Reload', 'Edit Grid [F2]', "Insert Row", "Leak Check", { text: 'Menu 3', options: ['test', 'test2', 'test3']}, { text: 'Menu 4', options: ['test', 'test2', 'test3'] }],
       on: {columnClick: sortit, columnFilter: filterit, menuClick: menuClick, editInPlaceChange: editInPlace, touchstart: DoubleTapEvent, dblclick: dblclicker, destroy: destruct, built: built, selection: selection},
-      pos: 't:0 l:0 w:700 h:500', columns: [
+      pos: 't:50 l:50 w:500 h:500', columns: [
         { label: 'ID', width: 40, visible: false },
         { label: 'Name', minWidth: 100, width: 250, maxWidth: 500, resizable: true, editor: {view: "nativeControl.Text"}, footervalue: 'hi' },
         { label: 'Time', width: 50, style: 'text-align:right;', formatter: formatTime, unformatter: unformatTime, validation: validate, filterable: false, resizable: false, sortable: false, editor: true, footer: false, footervalue: 'I am not visible' },
