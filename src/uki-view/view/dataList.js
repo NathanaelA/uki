@@ -98,19 +98,8 @@ var DataList = view.newClass('DataList', Container, Focusable, {
       return cleanup;
     },
 
-    _showNoResults: function() {
-      var view = build({view: 'Text', className: 'uki-dataList-messages', html: 'No Results'})[0];
-      this._showNoResultsView = view;
-      this.insertChild(view);
-      var cleanup = function(){
-        this.removeChild(view);
-      }.bind(this);
-      return cleanup;
-    },
-
   _removeAllMessages: function() {
     this._showLoadingView && this._removeChildFromDom(this._showLoadingView);
-    this._showNoResultsView && this._removeChildFromDom(this._showNoResultsView);
   },
 
     /**
@@ -409,14 +398,15 @@ var DataList = view.newClass('DataList', Container, Focusable, {
 
 
         var render = function(rows) {
-
             if (showLoadingCleanup) {
               showLoadingCleanup();
             }
-            if(!rows.length) {
-              this._showNoResults();
-            }
             if (pack.destructed) { return; }
+
+            if(!rows.length) {
+              pack = pack.template('<table class="uki-dataTable-pack"><tbody>{{#rows}}<tr><td><div class="uki-dataList-messages">{{row}}</div></td></tr>{{/rows}}<tbody></table>').formatter(this.formatter()).key(null);
+              rows.push(['No Results']);
+            }
             this._renderPack(pack, range, rows);
         };
 
