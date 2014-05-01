@@ -3585,7 +3585,7 @@
             },
             _scheduleRenderPack: function(range) {
                 var pack = this._createPack();
-                var showLoadingCleanup;
+                var showLoadingCleanup, initial;
                 pack.from = range.from;
                 pack.to = range.to;
                 this.appendChild(pack);
@@ -3601,10 +3601,16 @@
                         rows.push([ "No Results" ]);
                     }
                     this._renderPack(pack, range, rows);
+                    this.trigger({
+                        type: "dl",
+                        initial: initial
+                    });
                 };
                 if (this.data().loadRange) {
+                    initial = false;
                     if (this.childViews().length === 1) {
                         showLoadingCleanup = this._showLoading();
+                        initial = true;
                     }
                     this.data().loadRange(range.from, range.to, fun.bind(render, this));
                 } else {
