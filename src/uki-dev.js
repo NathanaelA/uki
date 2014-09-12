@@ -3630,6 +3630,9 @@
                     this.selectedIndex(0);
                     this.triggerSelection();
                 }
+
+								this.dataloaded();
+
                 return pack;
             },
             domForEvent: function(type) {
