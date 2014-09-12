@@ -3631,7 +3631,7 @@
                     this.triggerSelection();
                 }
 
-								this.dataloaded();
+		this.dataloaded();
 
                 return pack;
             },
